@@ -1,6 +1,5 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
-import { useAuth } from '@/contexts/AuthContext'
 import { Button, Input, Card } from '@/components/common'
 import PasswordStrengthIndicator from '@/components/common/PasswordStrengthIndicator'
 import { INPUT_LIMITS } from '@/utils/inputValidation'
@@ -17,7 +16,6 @@ const REGISTER_INPUT_LIMITS = {
 
 const StudentSignupPage = () => {
   const navigate = useNavigate()
-  const { register } = useAuth()
 
   const [formData, setFormData] = useState({
     email: '',
@@ -38,7 +36,17 @@ const StudentSignupPage = () => {
   })
   const [isLoading, setIsLoading] = useState(false)
   const [apiError, setApiError] = useState('')
-  const [passwordValidation, setPasswordValidation] = useState(validatePassword(''))
+
+  // 이메일 인증 관련 상태
+  const [showVerificationModal, setShowVerificationModal] = useState(false)
+  const [isEmailVerified, setIsEmailVerified] = useState(false)
+  const [isSendingCode, setIsSendingCode] = useState(false)
+  const [verificationCode, setVerificationCode] = useState(['', '', '', '', '', ''])
+  const [verificationError, setVerificationError] = useState('')
+  const [timeLeft, setTimeLeft] = useState(600) // 10분
+  const [canResend, setCanResend] = useState(false)
+  const [resendCooldown, setResendCooldown] = useState(30)
+  const [attemptsLeft, setAttemptsLeft] = useState(5)
 
   // 필수 필드 입력 확인 (회원가입 버튼 활성화 조건)
   const isFormValid = () => {
@@ -135,17 +143,34 @@ const StudentSignupPage = () => {
     setIsLoading(true)
 
     try {
-      const user = await register(
-        formData.email,
-        formData.name,
-        formData.password,
-        'student'
-      )
+      // 이메일 인증 코드 발송 요청
+      const response = await fetch('/api/auth/send-verification', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: formData.email })
+      })
 
-      // 학생 대시보드로 리다이렉트
-      navigate('/student/dashboard')
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.message || '인증번호 발송에 실패했습니다')
+      }
+
+      // 이메일 인증 페이지로 이동하면서 회원가입 데이터 전달
+      navigate('/verify-email', {
+        state: {
+          signupData: {
+            email: formData.email,
+            name: formData.name,
+            password: formData.password,
+            studentId: formData.studentId,
+            role: 'student',
+            agreedToTerms: formData.agreedToTerms,
+            agreedToPrivacy: formData.agreedToPrivacy
+          }
+        }
+      })
     } catch (error: any) {
-      setApiError(error.message || '회원가입에 실패했습니다')
+      setApiError(error.message || '인증번호 발송에 실패했습니다')
     } finally {
       setIsLoading(false)
     }
@@ -215,8 +240,9 @@ const StudentSignupPage = () => {
                 value={formData.email}
                 onChange={handleChange}
                 error={errors.email}
-                placeholder="example@eduverse.com"
+                placeholder="이메일 주소를 입력하세요"
                 maxLength={REGISTER_INPUT_LIMITS.email}
+                autoComplete="email"
                 leftIcon={
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
@@ -232,8 +258,9 @@ const StudentSignupPage = () => {
                 value={formData.name}
                 onChange={handleChange}
                 error={errors.name}
-                placeholder="홍길동"
+                placeholder="실명을 입력하세요"
                 maxLength={REGISTER_INPUT_LIMITS.name}
+                autoComplete="name"
                 leftIcon={
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
@@ -250,7 +277,7 @@ const StudentSignupPage = () => {
                 onChange={handleStudentIdChange}
                 error={errors.studentId}
                 maxLength={REGISTER_INPUT_LIMITS.studentId}
-                placeholder="24123456 or st24123456"
+                placeholder="2024123456"
                 leftIcon={
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14" />
@@ -260,18 +287,20 @@ const StudentSignupPage = () => {
 
               {/* 비밀번호 입력 */}
               <div>
+                <div className="mb-2">
+                  <label className="block text-sm font-medium text-gray-700">
+                    비밀번호 <span className="text-error-500">*</span> <span className="text-gray-500 font-normal">(8-20자, 2가지 이상 조합)</span>
+                  </label>
+                </div>
                 <Input
-                  label={<span>비밀번호 <span className="text-error-500">*</span></span>}
                   type="password"
                   name="password"
                   value={formData.password}
-                  onChange={(e) => {
-                    handleChange(e)
-                    setPasswordValidation(validatePassword(e.target.value))
-                  }}
+                  onChange={handleChange}
                   maxLength={INPUT_LIMITS.password}
                   error={errors.password}
                   placeholder="********"
+                  autoComplete="new-password"
                   leftIcon={
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
@@ -279,44 +308,43 @@ const StudentSignupPage = () => {
                   }
                 />
                 {formData.password && (
-                  <div className="mt-3">
+                  <div className="mt-2">
                     <PasswordStrengthIndicator
                       password={formData.password}
                       showLabel={true}
-                      showPercentage={true}
+                      showPercentage={false}
                     />
                   </div>
                 )}
-                <div className="mt-3 p-3 bg-blue-50 rounded border border-blue-200 text-xs">
-                  <ul className="text-blue-600 space-y-1">
-                    <li className="flex items-center">
-                      <span className={`mr-2 ${formData.password.length >= 8 && formData.password.length <= 20 ? 'text-success-600' : 'text-gray-600'}`}>✓</span>
-                      8-20자 범위
-                    </li>
-                    <li className="flex items-center">
-                      <span className={`mr-2 ${passwordValidation.complexity.complexityCount >= 2 ? 'text-success-600' : 'text-gray-600'}`}>✓</span>
-                      영문 대소문자+숫자+특수문자 중 2가지 이상 조합 ({passwordValidation.complexity.complexityCount}/4)
-                    </li>
-                  </ul>
-                </div>
               </div>
 
               {/* 비밀번호 확인 입력 */}
-              <Input
-                label={<span>비밀번호 확인 <span className="text-error-500">*</span></span>}
-                type="password"
-                name="confirmPassword"
-                value={formData.confirmPassword}
-                onChange={handleChange}
-                maxLength={INPUT_LIMITS.password}
-                error={errors.confirmPassword}
-                placeholder="********"
-                leftIcon={
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                }
-              />
+              <div>
+                <Input
+                  label={<span>비밀번호 확인 <span className="text-error-500">*</span></span>}
+                  type="password"
+                  name="confirmPassword"
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
+                  maxLength={INPUT_LIMITS.password}
+                  error={errors.confirmPassword}
+                  placeholder="********"
+                  autoComplete="new-password"
+                  leftIcon={
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  }
+                />
+                {formData.confirmPassword && formData.password && formData.password === formData.confirmPassword && !errors.confirmPassword && (
+                  <p className="mt-2 text-sm text-success-600 flex items-center gap-1">
+                    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                    </svg>
+                    비밀번호가 일치합니다
+                  </p>
+                )}
+              </div>
 
               {/* 약관 동의 */}
               <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 space-y-3">
@@ -363,7 +391,7 @@ const StudentSignupPage = () => {
                 )}
               </div>
 
-              {/* 회원가입 버튼 */}
+              {/* 이메일 인증 받기 버튼 */}
               <Button
                 type="submit"
                 variant="primary"
@@ -372,7 +400,7 @@ const StudentSignupPage = () => {
                 loading={isLoading}
                 disabled={!isFormValid() || isLoading}
               >
-                회원가입
+                이메일 인증 받기
               </Button>
 
               {/* 로그인 링크 */}

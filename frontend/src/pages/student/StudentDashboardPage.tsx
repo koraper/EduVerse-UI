@@ -1,13 +1,24 @@
-import { useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import DashboardLayout from '@/components/layout/DashboardLayout'
 import Card from '@/components/common/Card'
 import Badge from '@/components/common/Badge'
+import Button from '@/components/common/Button'
+import Input from '@/components/common/Input'
 
 const StudentDashboardPage = () => {
   const navigate = useNavigate()
+  const location = useLocation()
   const { user, isLoading: authLoading } = useAuth()
+
+  // 신규 가입 여부 확인 (이메일 인증 페이지에서 넘어온 경우)
+  const [isNewUser, setIsNewUser] = useState(false)
+  const [inviteCode, setInviteCode] = useState('')
+  const [showWelcome, setShowWelcome] = useState(false)
+
+  // TODO: 실제로는 백엔드에서 수강 중인 수업이 0개인지 확인해야 함
+  const hasNoCourses = true // 임시
 
   useEffect(() => {
     // 인증 로딩 중이면 대기
@@ -30,11 +41,56 @@ const StudentDashboardPage = () => {
       navigate('/login')
       return
     }
-  }, [user, authLoading, navigate])
+
+    // 이메일 인증 완료 후 첫 방문인 경우 환영 메시지 표시
+    if (location.state?.fromEmailVerification) {
+      setIsNewUser(true)
+      setShowWelcome(true)
+      // 3초 후 환영 메시지 자동 숨김
+      setTimeout(() => setShowWelcome(false), 5000)
+    }
+  }, [user, authLoading, navigate, location])
+
+  const handleJoinClass = () => {
+    if (!inviteCode.trim()) {
+      alert('초대코드를 입력해주세요')
+      return
+    }
+    // TODO: 초대코드로 수업 참여 API 호출
+    console.log('초대코드:', inviteCode)
+    alert(`초대코드 "${inviteCode}"로 수업 참여 요청`)
+  }
 
   return (
     <DashboardLayout>
       <div className="space-y-6">
+        {/* 환영 메시지 (신규 가입자) */}
+        {showWelcome && (
+          <div className="bg-gradient-to-r from-primary-500 to-purple-600 rounded-lg shadow-lg p-6 text-white animate-fade-in">
+            <div className="flex items-start gap-4">
+              <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0">
+                <svg className="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                </svg>
+              </div>
+              <div className="flex-1">
+                <h2 className="text-xl font-bold mb-1">🎉 회원가입이 완료되었습니다!</h2>
+                <p className="text-white/90 text-sm">
+                  {user?.name}님, EduVerse에 오신 것을 환영합니다. 이제 초대코드를 입력하여 수업에 참여하실 수 있습니다.
+                </p>
+              </div>
+              <button
+                onClick={() => setShowWelcome(false)}
+                className="text-white/80 hover:text-white transition-colors"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        )}
+
         {/* 헤더 */}
         <div className="flex items-center justify-between">
           <div>
@@ -47,6 +103,52 @@ const StudentDashboardPage = () => {
           </div>
           <Badge variant="blue">학생</Badge>
         </div>
+
+        {/* 초대코드 입력 (수업이 없는 경우) */}
+        {hasNoCourses && (
+          <Card className="border-2 border-primary-200 bg-primary-50/30">
+            <div className="p-6">
+              <div className="flex items-start gap-4 mb-4">
+                <div className="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <svg className="w-6 h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                  </svg>
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-1">
+                    초대코드로 수업 참여하기
+                  </h3>
+                  <p className="text-sm text-gray-600">
+                    교수자에게 받은 초대코드를 입력하여 수업에 참여하세요
+                  </p>
+                </div>
+              </div>
+              <div className="flex gap-2">
+                <div className="flex-1">
+                  <Input
+                    type="text"
+                    placeholder="초대코드를 입력하세요 (예: ABC123)"
+                    value={inviteCode}
+                    onChange={(e) => setInviteCode(e.target.value.toUpperCase())}
+                    onKeyDown={(e) => e.key === 'Enter' && handleJoinClass()}
+                    className="text-center tracking-wider font-mono text-lg"
+                  />
+                </div>
+                <Button
+                  variant="primary"
+                  size="lg"
+                  onClick={handleJoinClass}
+                  disabled={!inviteCode.trim()}
+                >
+                  참여하기
+                </Button>
+              </div>
+              <p className="mt-3 text-xs text-gray-500 text-center">
+                초대코드는 교수자가 수업 생성 시 제공합니다
+              </p>
+            </div>
+          </Card>
+        )}
 
         {/* 통계 카드 */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -184,6 +286,22 @@ const StudentDashboardPage = () => {
           </Card>
         </div>
       </div>
+
+      <style>{`
+        @keyframes fade-in {
+          from {
+            opacity: 0;
+            transform: translateY(-10px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        .animate-fade-in {
+          animation: fade-in 0.5s ease-out;
+        }
+      `}</style>
     </DashboardLayout>
   )
 }
