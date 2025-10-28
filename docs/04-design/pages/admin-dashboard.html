@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>관리자 대시보드 - EduVerse</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-gray-100">
+    <div class="flex flex-col min-h-screen">
+        <!-- Header -->
+        <div class="bg-gray-800 border-b border-gray-700 px-6 py-4 flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+                <div class="w-8 h-8 bg-red-600 rounded-lg flex items-center justify-center text-white font-bold">A</div>
+                <span class="font-bold text-white">EduVerse Admin</span>
+            </div>
+            <div class="flex items-center space-x-4">
+                <button class="text-gray-400 hover:text-white">🔔</button>
+                <div class="flex items-center space-x-2 cursor-pointer group">
+                    <div class="w-8 h-8 bg-red-600 rounded-full flex items-center justify-center text-white">👨‍💼</div>
+                    <span class="text-sm text-gray-300 group-hover:text-white">관리자 ▼</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <main class="flex-1 overflow-auto p-6">
+            <div class="max-w-7xl mx-auto space-y-6">
+                <!-- Greeting -->
+                <div>
+                    <h1 class="text-3xl font-bold text-white">관리자 대시보드</h1>
+                </div>
+
+                <!-- Summary Stats -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="bg-gray-800 rounded-lg p-6 border border-gray-700">
+                        <p class="text-gray-400 text-sm mb-2">전체 사용자</p>
+                        <p class="text-3xl font-bold text-indigo-400">234명</p>
+                        <p class="text-xs text-gray-500 mt-2">+12명 (주)</p>
+                    </div>
+                    <div class="bg-gray-800 rounded-lg p-6 border border-gray-700">
+                        <p class="text-gray-400 text-sm mb-2">학생</p>
+                        <p class="text-3xl font-bold text-blue-400">200명</p>
+                        <p class="text-xs text-gray-500 mt-2">85.5%</p>
+                    </div>
+                    <div class="bg-gray-800 rounded-lg p-6 border border-gray-700">
+                        <p class="text-gray-400 text-sm mb-2">교수자</p>
+                        <p class="text-3xl font-bold text-purple-400">34명</p>
+                        <p class="text-xs text-gray-500 mt-2">14.5%</p>
+                    </div>
+                    <div class="bg-gray-800 rounded-lg p-6 border border-gray-700">
+                        <p class="text-gray-400 text-sm mb-2">신규 가입</p>
+                        <p class="text-3xl font-bold text-green-400">15명</p>
+                        <p class="text-xs text-gray-500 mt-2">(이번 주)</p>
+                    </div>
+                </div>
+
+                <!-- Signup Trends -->
+                <div class="bg-gray-800 rounded-lg p-6 border border-gray-700">
+                    <h2 class="text-lg font-bold text-white mb-4">📈 가입 추이 (최근 7일)</h2>
+                    <div class="space-y-3">
+                        <div>
+                            <div class="flex justify-between text-sm mb-1">
+                                <span class="text-gray-300">월</span>
+                                <span class="text-gray-400">5명</span>
+                            </div>
+                            <div class="w-full h-3 bg-gray-700 rounded-full overflow-hidden">
+                                <div class="h-full bg-indigo-600" style="width: 28%;"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-sm mb-1">
+                                <span class="text-gray-300">화</span>
+                                <span class="text-gray-400">8명</span>
+                            </div>
+                            <div class="w-full h-3 bg-gray-700 rounded-full overflow-hidden">
+                                <div class="h-full bg-indigo-600" style="width: 44%;"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-sm mb-1">
+                                <span class="text-gray-300">수</span>
+                                <span class="text-gray-400">3명</span>
+                            </div>
+                            <div class="w-full h-3 bg-gray-700 rounded-full overflow-hidden">
+                                <div class="h-full bg-indigo-600" style="width: 17%;"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-sm mb-1">
+                                <span class="text-gray-300">목</span>
+                                <span class="text-gray-400">7명</span>
+                            </div>
+                            <div class="w-full h-3 bg-gray-700 rounded-full overflow-hidden">
+                                <div class="h-full bg-indigo-600" style="width: 39%;"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-sm mb-1">
+                                <span class="text-gray-300">금</span>
+                                <span class="text-gray-400">12명</span>
+                            </div>
+                            <div class="w-full h-3 bg-gray-700 rounded-full overflow-hidden">
+                                <div class="h-full bg-indigo-600" style="width: 67%;"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-sm mb-1">
+                                <span class="text-gray-300">토</span>
+                                <span class="text-gray-400">4명</span>
+                            </div>
+                            <div class="w-full h-3 bg-gray-700 rounded-full overflow-hidden">
+                                <div class="h-full bg-indigo-600" style="width: 22%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="bg-gray-800 rounded-lg p-6 border border-gray-700">
+                    <h2 class="text-lg font-bold text-white mb-4">⚠️ 최근 활동</h2>
+                    <div class="space-y-3 text-sm">
+                        <p class="text-gray-300">• <span class="text-green-400">2분 전:</span> student123@edu.com 회원가입</p>
+                        <p class="text-gray-300">• <span class="text-yellow-400">5분 전:</span> 관리자가 test@edu.com 계정 정지</p>
+                        <p class="text-gray-300">• <span class="text-blue-400">10분 전:</span> prof@edu.com 새 수업 생성</p>
+                        <p class="text-gray-300">• <span class="text-purple-400">15분 전:</span> admin 로그인</p>
+                        <p class="text-gray-300">• <span class="text-indigo-400">30분 전:</span> teacher@edu.com 비활성 처리</p>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <a href="admin-users.html" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 px-6 rounded-lg transition text-center">
+                        👥 사용자 관리
+                    </a>
+                    <button class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-6 rounded-lg transition">
+                        📊 통계 보기
+                    </button>
+                    <button class="bg-green-600 hover:bg-green-700 text-white font-bold py-4 px-6 rounded-lg transition">
+                        📈 리포트
+                    </button>
+                    <button class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-4 px-6 rounded-lg transition">
+                        ⚙️ 시스템 설정
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Q&A 관리 - EduVerse</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-gray-100">
+    <div class="flex flex-col min-h-screen">
+        <!-- Header -->
+        <div class="bg-gray-800 border-b border-gray-700 px-6 py-4 flex items-center justify-between">
+            <h1 class="text-lg font-bold text-white">자료구조 및 알고리즘 | Q&A</h1>
+            <select class="bg-gray-700 text-gray-300 text-sm px-3 py-1 rounded">
+                <option>긴급도순</option>
+                <option>최신순</option>
+                <option>오래된순</option>
+            </select>
+        </div>
+
+        <!-- Tabs -->
+        <div class="bg-gray-800 border-b border-gray-700 px-6 py-3 flex items-center space-x-4 text-sm">
+            <button class="text-indigo-400 border-b-2 border-indigo-400 pb-2">모든 질문</button>
+            <button class="text-gray-400 hover:text-white pb-2">미답변 (5)</button>
+            <button class="text-gray-400 hover:text-white pb-2">답변완료</button>
+        </div>
+
+        <!-- Content -->
+        <main class="flex-1 overflow-auto p-6 space-y-4">
+            <!-- Question - Urgent -->
+            <div class="bg-gray-800 border border-red-600/50 rounded-lg p-6">
+                <div class="flex items-start justify-between mb-3">
+                    <div>
+                        <p class="font-bold text-white">🔴 긴급 | 이영희 | Week 1 - 첫 출근</p>
+                        <p class="text-xs text-gray-400 mt-1">3분 전</p>
+                    </div>
+                    <span class="text-red-400 text-sm">미답변</span>
+                </div>
+
+                <p class="text-gray-300 mb-4">
+                    greet() 함수에서 name 변수를 사용하는데 "NameError: name 'name' is not defined" 오류가 나와요. 어떻게 해결하나요?
+                </p>
+
+                <button class="text-indigo-400 hover:text-indigo-300 text-sm transition">
+                    ✏️ 답변하기
+                </button>
+            </div>
+
+            <!-- Question - Normal -->
+            <div class="bg-gray-800 border border-yellow-600/50 rounded-lg p-6">
+                <div class="flex items-start justify-between mb-3">
+                    <div>
+                        <p class="font-bold text-white">🟡 보통 | 김철수 | Week 2 - 자료구조</p>
+                        <p class="text-xs text-gray-400 mt-1">10분 전</p>
+                    </div>
+                    <span class="text-yellow-400 text-sm">미답변</span>
+                </div>
+
+                <p class="text-gray-300 mb-4">
+                    리스트와 튜플의 차이가 정확히 뭔가요?
+                </p>
+
+                <button class="text-indigo-400 hover:text-indigo-300 text-sm transition">
+                    ✏️ 답변하기
+                </button>
+            </div>
+
+            <!-- Question - Answered -->
+            <div class="bg-gray-800 border border-gray-700 rounded-lg p-6">
+                <div class="flex items-start justify-between mb-3">
+                    <div>
+                        <p class="font-bold text-white">✅ 답변완료 | 박지민 | Week 1</p>
+                        <p class="text-xs text-gray-400 mt-1">1시간 전</p>
+                    </div>
+                    <span class="text-green-400 text-sm">답변: 1개</span>
+                </div>
+
+                <p class="text-gray-300 mb-4">
+                    print() 함수 사용법 질문드립니다
+                </p>
+
+                <div class="bg-gray-900 rounded p-4 mb-4 border-l-4 border-indigo-500">
+                    <p class="text-sm text-gray-300 mb-2">
+                        <span class="font-bold text-white">📝 내 답변 (1시간 전):</span>
+                    </p>
+                    <p class="text-gray-300 text-sm">
+                        print() 함수는 문자열이나 변수의 값을 화면에 출력하는 함수입니다. 기본 문법은 다음과 같습니다:
+                    </p>
+                    <div class="mt-2 bg-gray-800 p-2 rounded text-xs font-mono text-gray-400">
+                        print("Hello, World!")
+                    </div>
+                </div>
+
+                <a href="#" class="text-gray-400 hover:text-white text-sm">👁️ 질문 보기</a>
+            </div>
+
+            <!-- Question - Answered -->
+            <div class="bg-gray-800 border border-gray-700 rounded-lg p-6">
+                <div class="flex items-start justify-between mb-3">
+                    <div>
+                        <p class="font-bold text-white">✅ 답변완료 | 최민수 | Week 2</p>
+                        <p class="text-xs text-gray-400 mt-1">2시간 전</p>
+                    </div>
+                    <span class="text-green-400 text-sm">답변: 2개</span>
+                </div>
+
+                <p class="text-gray-300 mb-4">
+                    딕셔너리에서 key 값이 없으면 어떻게 처리해야 하나요?
+                </p>
+
+                <a href="#" class="text-gray-400 hover:text-white text-sm">👁️ 질문 보기</a>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // 답변하기 버튼 클릭 시
+        document.querySelectorAll('button:contains("답변하기")').forEach(btn => {
+            btn.addEventListener('click', () => {
+                alert('답변 작성 모달이 열립니다\n(실제 구현 시)');
+            });
+        });
+    </script>
+</body>
+</html>

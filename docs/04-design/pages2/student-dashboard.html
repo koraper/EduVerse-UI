@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>학생 대시보드 - EduVerse</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <h1 class="text-2xl font-bold text-indigo-600">EduVerse</h1>
+                    <span class="ml-4 text-gray-600">학생</span>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="student-qna.html" class="text-gray-700 hover:text-indigo-600">Q&A</a>
+                    <a href="student-progress.html" class="text-gray-700 hover:text-indigo-600">성과</a>
+                    <button class="text-gray-700 hover:text-indigo-600">로그아웃</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Header -->
+        <div class="mb-8">
+            <h2 class="text-3xl font-bold text-gray-900">안녕하세요, 홍길동님! 👋</h2>
+            <p class="mt-2 text-gray-600">오늘도 열심히 학습해봐요!</p>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="bg-white p-6 rounded-lg shadow">
+                <div class="text-3xl mb-2">📚</div>
+                <h3 class="text-lg font-semibold mb-2">참여 중인 수업</h3>
+                <p class="text-3xl font-bold text-indigo-600">2개</p>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow">
+                <div class="text-3xl mb-2">📊</div>
+                <h3 class="text-lg font-semibold mb-2">평균 진도율</h3>
+                <p class="text-3xl font-bold text-green-600">78%</p>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow">
+                <div class="text-3xl mb-2">🎯</div>
+                <h3 class="text-lg font-semibold mb-2">완료한 과제</h3>
+                <p class="text-3xl font-bold text-blue-600">15개</p>
+            </div>
+        </div>
+
+        <!-- Join Class -->
+        <div class="bg-indigo-50 border-2 border-dashed border-indigo-300 rounded-lg p-8 mb-8 text-center">
+            <h3 class="text-xl font-bold text-indigo-900 mb-2">새로운 수업에 참여하시겠어요?</h3>
+            <p class="text-indigo-700 mb-4">교수님이 제공한 입장 코드나 QR 코드를 입력하세요</p>
+            <a href="join-class.html" class="inline-block bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700">
+                수업 참여하기
+            </a>
+        </div>
+
+        <!-- Class List -->
+        <div class="bg-white rounded-lg shadow">
+            <div class="px-6 py-4 border-b border-gray-200">
+                <h3 class="text-xl font-bold">참여 중인 수업</h3>
+            </div>
+            <div class="divide-y divide-gray-200">
+                <!-- Class 1 -->
+                <div class="p-6 hover:bg-gray-50">
+                    <div class="flex items-center justify-between">
+                        <div class="flex-1">
+                            <div class="flex items-center">
+                                <span class="px-3 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">진행 중</span>
+                                <h4 class="ml-3 text-lg font-semibold text-gray-900">C 프로그래밍 기초 2025 1학기</h4>
+                            </div>
+                            <p class="mt-2 text-sm text-gray-600">김교수 교수님 | 1주차 진행 중</p>
+                            <div class="mt-3">
+                                <div class="flex items-center">
+                                    <div class="flex-1 bg-gray-200 rounded-full h-2">
+                                        <div class="bg-indigo-600 h-2 rounded-full" style="width: 85%"></div>
+                                    </div>
+                                    <span class="ml-3 text-sm font-medium text-gray-700">85%</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ml-6">
+                            <a href="student-learning.html" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700">
+                                학습하기
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Class 2 -->
+                <div class="p-6 hover:bg-gray-50">
+                    <div class="flex items-center justify-between">
+                        <div class="flex-1">
+                            <div class="flex items-center">
+                                <span class="px-3 py-1 bg-gray-100 text-gray-800 text-xs font-medium rounded-full">대기</span>
+                                <h4 class="ml-3 text-lg font-semibold text-gray-900">Java 프로그래밍 기초 2025 1학기</h4>
+                            </div>
+                            <p class="mt-2 text-sm text-gray-600">박교수 교수님 | 아직 시작되지 않음</p>
+                            <div class="mt-3">
+                                <div class="flex items-center">
+                                    <div class="flex-1 bg-gray-200 rounded-full h-2">
+                                        <div class="bg-indigo-600 h-2 rounded-full" style="width: 0%"></div>
+                                    </div>
+                                    <span class="ml-3 text-sm font-medium text-gray-700">0%</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ml-6">
+                            <button class="bg-gray-300 text-gray-500 px-4 py-2 rounded-lg cursor-not-allowed" disabled>
+                                대기 중
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

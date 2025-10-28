@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>학습 분석 리포트 - EduVerse</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-green-600 text-white shadow-lg">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <h1 class="text-xl font-bold">EduVerse</h1>
+                    <span class="text-green-200">교수님</span>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <span>홍길동 교수</span>
+                    <button class="bg-green-700 px-4 py-2 rounded hover:bg-green-800">로그아웃</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mx-auto px-4 py-6">
+        <!-- Breadcrumb -->
+        <div class="mb-4 text-sm text-gray-600">
+            <a href="#" class="hover:text-green-600">내 수업</a> /
+            <a href="#" class="hover:text-green-600">웹 프로그래밍 기초</a> /
+            <span class="text-gray-900">학습 분석 리포트</span>
+        </div>
+
+        <!-- Header -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+            <div class="flex items-start justify-between">
+                <div>
+                    <h2 class="text-2xl font-bold text-gray-900 mb-2">학습 분석 리포트</h2>
+                    <p class="text-gray-600">웹 프로그래밍 기초 | 2024학년도 1학기</p>
+                </div>
+                <div class="flex space-x-2">
+                    <button class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">PDF 다운로드</button>
+                    <button class="bg-gray-200 text-gray-700 px-4 py-2 rounded hover:bg-gray-300">엑셀 내보내기</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Overall Statistics -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm text-gray-600 mb-1">전체 학생</p>
+                        <p class="text-3xl font-bold text-gray-900">45명</p>
+                    </div>
+                    <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm text-gray-600 mb-1">평균 완료율</p>
+                        <p class="text-3xl font-bold text-green-600">82%</p>
+                    </div>
+                    <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                        <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm text-gray-600 mb-1">평균 성공률</p>
+                        <p class="text-3xl font-bold text-purple-600">78%</p>
+                    </div>
+                    <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
+                        <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm text-gray-600 mb-1">평균 학습 시간</p>
+                        <p class="text-3xl font-bold text-orange-600">5.2시간</p>
+                    </div>
+                    <div class="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center">
+                        <svg class="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Weekly Progress Chart -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+            <h3 class="text-lg font-bold text-gray-900 mb-4">주차별 성공률 추이</h3>
+            <div class="h-64 flex items-end justify-between space-x-2">
+                <div class="flex-1 flex flex-col items-center">
+                    <div class="w-full bg-green-600 rounded-t" style="height: 92%"></div>
+                    <p class="text-sm mt-2 text-gray-700">1주차</p>
+                    <p class="text-xs text-gray-500">92%</p>
+                </div>
+                <div class="flex-1 flex flex-col items-center">
+                    <div class="w-full bg-green-600 rounded-t" style="height: 85%"></div>
+                    <p class="text-sm mt-2 text-gray-700">2주차</p>
+                    <p class="text-xs text-gray-500">85%</p>
+                </div>
+                <div class="flex-1 flex flex-col items-center">
+                    <div class="w-full bg-yellow-600 rounded-t" style="height: 67%"></div>
+                    <p class="text-sm mt-2 text-gray-700">3주차</p>
+                    <p class="text-xs text-gray-500">67%</p>
+                </div>
+                <div class="flex-1 flex flex-col items-center opacity-50">
+                    <div class="w-full bg-gray-300 rounded-t" style="height: 0%"></div>
+                    <p class="text-sm mt-2 text-gray-400">4주차</p>
+                    <p class="text-xs text-gray-400">-</p>
+                </div>
+                <div class="flex-1 flex flex-col items-center opacity-50">
+                    <div class="w-full bg-gray-300 rounded-t" style="height: 0%"></div>
+                    <p class="text-sm mt-2 text-gray-400">5주차</p>
+                    <p class="text-xs text-gray-400">-</p>
+                </div>
+                <div class="flex-1 flex flex-col items-center opacity-50">
+                    <div class="w-full bg-gray-300 rounded-t" style="height: 0%"></div>
+                    <p class="text-sm mt-2 text-gray-400">6주차</p>
+                    <p class="text-xs text-gray-400">-</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+            <!-- Completion Rate Distribution -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h3 class="text-lg font-bold text-gray-900 mb-4">학생별 완료율 분포</h3>
+                <div class="space-y-4">
+                    <div>
+                        <div class="flex justify-between text-sm mb-1">
+                            <span class="text-gray-700">90-100%</span>
+                            <span class="font-semibold text-green-600">18명 (40%)</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-6">
+                            <div class="bg-green-600 h-6 rounded-full flex items-center justify-end pr-2" style="width: 40%">
+                                <span class="text-white text-xs font-semibold">40%</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-sm mb-1">
+                            <span class="text-gray-700">80-89%</span>
+                            <span class="font-semibold text-blue-600">12명 (27%)</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-6">
+                            <div class="bg-blue-600 h-6 rounded-full flex items-center justify-end pr-2" style="width: 27%">
+                                <span class="text-white text-xs font-semibold">27%</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-sm mb-1">
+                            <span class="text-gray-700">70-79%</span>
+                            <span class="font-semibold text-yellow-600">9명 (20%)</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-6">
+                            <div class="bg-yellow-600 h-6 rounded-full flex items-center justify-end pr-2" style="width: 20%">
+                                <span class="text-white text-xs font-semibold">20%</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-sm mb-1">
+                            <span class="text-gray-700">60-69%</span>
+                            <span class="font-semibold text-orange-600">4명 (9%)</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-6">
+                            <div class="bg-orange-600 h-6 rounded-full flex items-center justify-end pr-2" style="width: 9%">
+                                <span class="text-white text-xs font-semibold">9%</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-sm mb-1">
+                            <span class="text-gray-700">60% 미만</span>
+                            <span class="font-semibold text-red-600">2명 (4%)</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-6">
+                            <div class="bg-red-600 h-6 rounded-full flex items-center justify-end pr-2" style="width: 4%">
+                                <span class="text-white text-xs font-semibold">4%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Average Attempt Count -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h3 class="text-lg font-bold text-gray-900 mb-4">주차별 평균 시도 횟수</h3>
+                <div class="h-64 flex items-end justify-between space-x-4">
+                    <div class="flex-1 flex flex-col items-center">
+                        <div class="text-center mb-2">
+                            <p class="text-2xl font-bold text-gray-900">2.4</p>
+                        </div>
+                        <div class="w-full bg-green-200 rounded-t" style="height: 48%"></div>
+                        <p class="text-sm mt-2 text-gray-700">1주차</p>
+                    </div>
+                    <div class="flex-1 flex flex-col items-center">
+                        <div class="text-center mb-2">
+                            <p class="text-2xl font-bold text-gray-900">3.1</p>
+                        </div>
+                        <div class="w-full bg-yellow-200 rounded-t" style="height: 62%"></div>
+                        <p class="text-sm mt-2 text-gray-700">2주차</p>
+                    </div>
+                    <div class="flex-1 flex flex-col items-center">
+                        <div class="text-center mb-2">
+                            <p class="text-2xl font-bold text-gray-900">4.2</p>
+                        </div>
+                        <div class="w-full bg-orange-200 rounded-t" style="height: 84%"></div>
+                        <p class="text-sm mt-2 text-gray-700">3주차</p>
+                    </div>
+                </div>
+                <div class="mt-4 bg-blue-50 border border-blue-200 rounded p-3">
+                    <p class="text-sm text-blue-800">
+                        3주차의 평균 시도 횟수가 증가했습니다. 난이도 조정이 필요할 수 있습니다.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Difficult Assignments Top 5 -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+            <h3 class="text-lg font-bold text-gray-900 mb-4">어려운 과제 Top 5</h3>
+            <div class="space-y-3">
+                <div class="border border-red-200 bg-red-50 rounded-lg p-4">
+                    <div class="flex items-center justify-between mb-2">
+                        <div class="flex items-center space-x-3">
+                            <span class="text-2xl font-bold text-red-600">1</span>
+                            <div>
+                                <h4 class="font-semibold text-gray-900">3주차 - 조건문 기초</h4>
+                                <p class="text-sm text-gray-600">if-else 문을 사용한 조건 분기</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-2xl font-bold text-red-600">56%</p>
+                            <p class="text-xs text-gray-600">성공률</p>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-3 gap-4 text-sm">
+                        <div>
+                            <p class="text-gray-600">평균 시도</p>
+                            <p class="font-semibold">5.2회</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-600">평균 시간</p>
+                            <p class="font-semibold">45분</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-600">완료 학생</p>
+                            <p class="font-semibold">25/45</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="border border-orange-200 bg-orange-50 rounded-lg p-4">
+                    <div class="flex items-center justify-between mb-2">
+                        <div class="flex items-center space-x-3">
+                            <span class="text-2xl font-bold text-orange-600">2</span>
+                            <div>
+                                <h4 class="font-semibold text-gray-900">3주차 - 반복문 활용</h4>
+                                <p class="text-sm text-gray-600">for 문을 사용한 합계 계산</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-2xl font-bold text-orange-600">62%</p>
+                            <p class="text-xs text-gray-600">성공률</p>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-3 gap-4 text-sm">
+                        <div>
+                            <p class="text-gray-600">평균 시도</p>
+                            <p class="font-semibold">4.1회</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-600">평균 시간</p>
+                            <p class="font-semibold">38분</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-600">완료 학생</p>
+                            <p class="font-semibold">28/45</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="border border-yellow-200 bg-yellow-50 rounded-lg p-4">
+                    <div class="flex items-center justify-between mb-2">
+                        <div class="flex items-center space-x-3">
+                            <span class="text-2xl font-bold text-yellow-600">3</span>
+                            <div>
+                                <h4 class="font-semibold text-gray-900">2주차 - CSS 레이아웃</h4>
+                                <p class="text-sm text-gray-600">Flexbox를 사용한 레이아웃</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-2xl font-bold text-yellow-600">71%</p>
+                            <p class="text-xs text-gray-600">성공률</p>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-3 gap-4 text-sm">
+                        <div>
+                            <p class="text-gray-600">평균 시도</p>
+                            <p class="font-semibold">3.8회</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-600">평균 시간</p>
+                            <p class="font-semibold">32분</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-600">완료 학생</p>
+                            <p class="font-semibold">32/45</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="border border-gray-200 rounded-lg p-4">
+                    <div class="flex items-center justify-between mb-2">
+                        <div class="flex items-center space-x-3">
+                            <span class="text-2xl font-bold text-gray-600">4</span>
+                            <div>
+                                <h4 class="font-semibold text-gray-900">2주차 - CSS 선택자</h4>
+                                <p class="text-sm text-gray-600">고급 선택자 활용</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-2xl font-bold text-gray-600">74%</p>
+                            <p class="text-xs text-gray-600">성공률</p>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-3 gap-4 text-sm">
+                        <div>
+                            <p class="text-gray-600">평균 시도</p>
+                            <p class="font-semibold">3.5회</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-600">평균 시간</p>
+                            <p class="font-semibold">28분</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-600">완료 학생</p>
+                            <p class="font-semibold">33/45</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="border border-gray-200 rounded-lg p-4">
+                    <div class="flex items-center justify-between mb-2">
+                        <div class="flex items-center space-x-3">
+                            <span class="text-2xl font-bold text-gray-600">5</span>
+                            <div>
+                                <h4 class="font-semibold text-gray-900">3주차 - 데이터 타입 변환</h4>
+                                <p class="text-sm text-gray-600">문자열과 숫자 변환</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-2xl font-bold text-gray-600">84%</p>
+                            <p class="text-xs text-gray-600">성공률</p>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-3 gap-4 text-sm">
+                        <div>
+                            <p class="text-gray-600">평균 시도</p>
+                            <p class="font-semibold">3.5회</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-600">평균 시간</p>
+                            <p class="font-semibold">25분</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-600">완료 학생</p>
+                            <p class="font-semibold">38/45</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Student Performance Table -->
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-bold text-gray-900">학생별 성적 현황 (상위 10명)</h3>
+                <button class="bg-gray-200 text-gray-700 px-4 py-2 rounded hover:bg-gray-300">전체 보기</button>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead class="bg-gray-100">
+                        <tr>
+                            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">순위</th>
+                            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">학생명</th>
+                            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">학번</th>
+                            <th class="px-4 py-3 text-center text-sm font-semibold text-gray-700">완료율</th>
+                            <th class="px-4 py-3 text-center text-sm font-semibold text-gray-700">성공률</th>
+                            <th class="px-4 py-3 text-center text-sm font-semibold text-gray-700">평균 시도</th>
+                            <th class="px-4 py-3 text-center text-sm font-semibold text-gray-700">학습 시간</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-4 py-3 text-sm">1</td>
+                            <td class="px-4 py-3 text-sm font-medium">김철수</td>
+                            <td class="px-4 py-3 text-sm">2021001234</td>
+                            <td class="px-4 py-3 text-sm text-center"><span class="text-green-600 font-semibold">100%</span></td>
+                            <td class="px-4 py-3 text-sm text-center"><span class="text-green-600 font-semibold">95%</span></td>
+                            <td class="px-4 py-3 text-sm text-center">2.1</td>
+                            <td class="px-4 py-3 text-sm text-center">8.5h</td>
+                        </tr>
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-4 py-3 text-sm">2</td>
+                            <td class="px-4 py-3 text-sm font-medium">이영희</td>
+                            <td class="px-4 py-3 text-sm">2021001235</td>
+                            <td class="px-4 py-3 text-sm text-center"><span class="text-green-600 font-semibold">98%</span></td>
+                            <td class="px-4 py-3 text-sm text-center"><span class="text-green-600 font-semibold">92%</span></td>
+                            <td class="px-4 py-3 text-sm text-center">2.3</td>
+                            <td class="px-4 py-3 text-sm text-center">7.8h</td>
+                        </tr>
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-4 py-3 text-sm">3</td>
+                            <td class="px-4 py-3 text-sm font-medium">최지훈</td>
+                            <td class="px-4 py-3 text-sm">2021001238</td>
+                            <td class="px-4 py-3 text-sm text-center"><span class="text-green-600 font-semibold">95%</span></td>
+                            <td class="px-4 py-3 text-sm text-center"><span class="text-green-600 font-semibold">90%</span></td>
+                            <td class="px-4 py-3 text-sm text-center">2.5</td>
+                            <td class="px-4 py-3 text-sm text-center">7.2h</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

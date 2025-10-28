@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>수업 생성 - EduVerse</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 min-h-screen flex items-center justify-center p-4">
+    <div class="w-full max-w-2xl bg-gray-800 rounded-xl p-8 border border-gray-700">
+        <!-- Header -->
+        <div class="flex items-center justify-between mb-6">
+            <h1 class="text-2xl font-bold text-white">새 수업 만들기</h1>
+            <button class="text-gray-400 hover:text-white text-2xl">×</button>
+        </div>
+
+        <!-- Form -->
+        <form class="space-y-6" id="createClassForm">
+            <!-- Class Name -->
+            <div>
+                <label for="className" class="block text-sm font-medium text-gray-400 mb-2">
+                    수업명 <span class="text-red-500">*</span>
+                </label>
+                <input
+                    type="text"
+                    id="className"
+                    placeholder="예: 자료구조 및 알고리즘"
+                    class="w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 outline-none transition"
+                    required>
+            </div>
+
+            <!-- Semester -->
+            <div>
+                <label for="semester" class="block text-sm font-medium text-gray-400 mb-2">
+                    학기 <span class="text-red-500">*</span>
+                </label>
+                <input
+                    type="text"
+                    id="semester"
+                    placeholder="예: 2025-1학기"
+                    class="w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 outline-none transition"
+                    required>
+            </div>
+
+            <!-- Duration -->
+            <div>
+                <label for="duration" class="block text-sm font-medium text-gray-400 mb-2">
+                    수업 기간 <span class="text-red-500">*</span>
+                </label>
+                <div class="flex items-center space-x-2">
+                    <input
+                        type="number"
+                        id="duration"
+                        value="16"
+                        min="1"
+                        max="52"
+                        class="w-24 px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg text-white focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 outline-none transition"
+                        required>
+                    <span class="text-gray-400">주</span>
+                </div>
+                <p class="text-xs text-gray-500 mt-1">LogiCore Tech 인턴십 시나리오 기간</p>
+            </div>
+
+            <!-- Description -->
+            <div>
+                <label for="description" class="block text-sm font-medium text-gray-400 mb-2">
+                    수업 설명
+                </label>
+                <textarea
+                    id="description"
+                    rows="4"
+                    placeholder="수업에 대한 상세한 설명을 입력하세요"
+                    class="w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 outline-none transition"
+                ></textarea>
+            </div>
+
+            <!-- Classroom Info -->
+            <div>
+                <label for="classroom" class="block text-sm font-medium text-gray-400 mb-2">
+                    강의실 정보 (선택)
+                </label>
+                <input
+                    type="text"
+                    id="classroom"
+                    placeholder="예: 공학관 301호"
+                    class="w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 outline-none transition">
+            </div>
+
+            <!-- Class Time -->
+            <div>
+                <label for="classTime" class="block text-sm font-medium text-gray-400 mb-2">
+                    수업 시간 (선택)
+                </label>
+                <input
+                    type="text"
+                    id="classTime"
+                    placeholder="예: 월/수 10:00-12:00"
+                    class="w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 outline-none transition">
+            </div>
+
+            <!-- Buttons -->
+            <div class="flex items-center justify-end space-x-3 pt-4 border-t border-gray-700">
+                <button
+                    type="button"
+                    onclick="window.history.back()"
+                    class="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-6 rounded-lg transition">
+                    취소
+                </button>
+                <button
+                    type="submit"
+                    class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-6 rounded-lg transition">
+                    수업 만들기
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="successModal" class="hidden fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50">
+        <div class="w-full max-w-md bg-gray-800 rounded-xl p-8 border border-gray-700 text-center space-y-6">
+            <p class="text-4xl">🎉</p>
+            <h2 class="text-2xl font-bold text-white">수업이 생성되었습니다!</h2>
+
+            <div class="bg-gray-900 rounded-lg p-4 text-left space-y-2 text-sm">
+                <p class="text-gray-300">
+                    <span class="font-bold">수업명:</span>
+                    <span id="modalClassName"></span>
+                </p>
+                <p class="text-gray-300">
+                    <span class="font-bold">학기:</span>
+                    <span id="modalSemester"></span>
+                </p>
+                <p class="text-gray-300">
+                    <span class="font-bold">기간:</span>
+                    <span id="modalDuration"></span>
+                </p>
+            </div>
+
+            <div class="bg-indigo-600/20 border border-indigo-600/50 rounded-lg p-4">
+                <p class="text-sm text-gray-300 mb-2">학생 초대 코드</p>
+                <p class="text-2xl font-bold text-white tracking-widest">A B C 1 2 3</p>
+                <button class="mt-3 text-indigo-400 hover:text-indigo-300 text-sm transition">
+                    📋 코드 복사
+                </button>
+            </div>
+
+            <p class="text-sm text-gray-400">
+                💡 학생들에게 이 코드를 알려주세요. 이 코드로 학생들이 수업에 참여할 수 있습니다.
+            </p>
+
+            <button
+                onclick="window.location.href='professor-dashboard.html'"
+                class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-lg transition">
+                수업 관리 페이지로
+            </button>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('createClassForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            // Get form values
+            const className = document.getElementById('className').value;
+            const semester = document.getElementById('semester').value;
+            const duration = document.getElementById('duration').value;
+
+            // Show success modal
+            document.getElementById('modalClassName').textContent = className;
+            document.getElementById('modalSemester').textContent = semester;
+            document.getElementById('modalDuration').textContent = duration + '주';
+
+            document.getElementById('successModal').classList.remove('hidden');
+        });
+    </script>
+</body>
+</html>

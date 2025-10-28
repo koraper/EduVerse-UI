@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>학습 분석 - EduVerse</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-gray-100">
+    <div class="flex flex-col min-h-screen">
+        <!-- Header -->
+        <div class="bg-gray-800 border-b border-gray-700 px-6 py-4">
+            <h1 class="text-lg font-bold text-white">자료구조 및 알고리즘 | 학습 분석 리포트</h1>
+        </div>
+
+        <!-- Content -->
+        <main class="flex-1 overflow-auto p-6 max-w-7xl mx-auto w-full space-y-6">
+            <!-- Summary Stats -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="bg-gray-800 rounded-lg p-6 border border-gray-700">
+                    <p class="text-gray-400 text-sm mb-2">평균 진도율</p>
+                    <p class="text-3xl font-bold text-indigo-400">68%</p>
+                </div>
+                <div class="bg-gray-800 rounded-lg p-6 border border-gray-700">
+                    <p class="text-gray-400 text-sm mb-2">완료 학생</p>
+                    <p class="text-3xl font-bold text-green-400">15/23명</p>
+                </div>
+                <div class="bg-gray-800 rounded-lg p-6 border border-gray-700">
+                    <p class="text-gray-400 text-sm mb-2">평균 시간</p>
+                    <p class="text-3xl font-bold text-blue-400">18시간</p>
+                </div>
+                <div class="bg-gray-800 rounded-lg p-6 border border-gray-700">
+                    <p class="text-gray-400 text-sm mb-2">질문 수</p>
+                    <p class="text-3xl font-bold text-purple-400">89개</p>
+                </div>
+            </div>
+
+            <!-- Weekly Progress -->
+            <div class="bg-gray-800 rounded-lg p-6 border border-gray-700">
+                <h2 class="text-lg font-bold text-white mb-4">📈 주차별 완료율</h2>
+                <div class="space-y-4">
+                    <div>
+                        <div class="flex justify-between text-sm mb-1">
+                            <span class="text-gray-300">Week 1</span>
+                            <span class="text-gray-400">95%</span>
+                        </div>
+                        <div class="w-full h-3 bg-gray-700 rounded-full overflow-hidden">
+                            <div class="h-full bg-green-600" style="width: 95%;"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-sm mb-1">
+                            <span class="text-gray-300">Week 2</span>
+                            <span class="text-gray-400">87%</span>
+                        </div>
+                        <div class="w-full h-3 bg-gray-700 rounded-full overflow-hidden">
+                            <div class="h-full bg-green-600" style="width: 87%;"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-sm mb-1">
+                            <span class="text-gray-300">Week 3 <span class="text-yellow-400">⚠️ 낮음</span></span>
+                            <span class="text-gray-400">62%</span>
+                        </div>
+                        <div class="w-full h-3 bg-gray-700 rounded-full overflow-hidden">
+                            <div class="h-full bg-yellow-600" style="width: 62%;"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-sm mb-1">
+                            <span class="text-gray-300">Week 4 <span class="text-red-400">⚠️ 매우 낮음</span></span>
+                            <span class="text-gray-400">34%</span>
+                        </div>
+                        <div class="w-full h-3 bg-gray-700 rounded-full overflow-hidden">
+                            <div class="h-full bg-red-600" style="width: 34%;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Difficult Tasks -->
+            <div class="bg-gray-800 rounded-lg p-6 border border-gray-700">
+                <h2 class="text-lg font-bold text-white mb-4">⚠️ 어려웠던 과제 Top 5</h2>
+                <ol class="space-y-3 text-sm">
+                    <li class="text-gray-300">
+                        <span class="font-bold">1. Week 3 - 정렬 알고리즘</span>
+                        <span class="text-red-400 ml-2">(테스트 실패율 68%)</span>
+                        <p class="text-gray-400 mt-1">💡 추천: 예제 코드 추가, 시각화 자료 제공</p>
+                    </li>
+                    <li class="text-gray-300">
+                        <span class="font-bold">2. Week 2 - 딕셔너리 활용</span>
+                        <span class="text-yellow-400 ml-2">(실패율 45%)</span>
+                    </li>
+                    <li class="text-gray-300">
+                        <span class="font-bold">3. Week 4 - 스택 구현</span>
+                        <span class="text-yellow-400 ml-2">(실패율 42%)</span>
+                    </li>
+                </ol>
+            </div>
+
+            <!-- Question Analysis -->
+            <div class="bg-gray-800 rounded-lg p-6 border border-gray-700">
+                <h2 class="text-lg font-bold text-white mb-4">💬 질문 분석</h2>
+                <div class="space-y-3 text-sm text-gray-300">
+                    <p>• 총 질문: <span class="font-bold">89개</span> (평균 답변 시간: 12분)</p>
+                    <p>• 가장 많은 질문: <span class="font-bold">"정렬 알고리즘"</span> (17개)</p>
+                    <p>• 긴급 질문: <span class="font-bold text-red-400">12개</span></p>
+                </div>
+            </div>
+
+            <!-- Download Report -->
+            <div class="flex items-center space-x-2">
+                <button class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-6 rounded-lg transition flex items-center space-x-2">
+                    <span>📊</span>
+                    <span>상세 리포트 다운로드 (Excel)</span>
+                </button>
+                <button class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg transition flex items-center space-x-2">
+                    <span>📧</span>
+                    <span>이메일로 전송</span>
+                </button>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>학습 화면 - EduVerse</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50">
+    <!-- Top Bar -->
+    <div class="bg-white border-b border-gray-200">
+        <div class="max-w-full mx-auto px-4 py-3">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <a href="student-dashboard.html" class="text-gray-600 hover:text-gray-900">← 대시보드</a>
+                    <h1 class="text-lg font-bold">C 프로그래밍 기초 | 1주차</h1>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div class="text-sm text-gray-600">진도: <span class="font-bold text-indigo-600">85%</span></div>
+                    <button class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700">제출하기</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="flex h-screen">
+        <!-- Left Panel: Scenario & Instructions -->
+        <div class="w-1/3 bg-white border-r border-gray-200 overflow-y-auto">
+            <div class="p-6">
+                <!-- Character -->
+                <div class="flex items-start mb-6">
+                    <div class="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center text-2xl">
+                        👨‍💼
+                    </div>
+                    <div class="ml-4 flex-1">
+                        <div class="bg-gray-100 rounded-lg p-4">
+                            <p class="font-bold text-gray-900 mb-1">Alex (팀장)</p>
+                            <p class="text-sm text-gray-700">
+                                안녕하세요! LogiCore Tech에 오신 것을 환영합니다.
+                                오늘은 첫 번째 미션으로 간단한 인사 프로그램을 만들어볼 거예요.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mission -->
+                <div class="mb-6">
+                    <h2 class="text-xl font-bold mb-3">🎯 미션: Hello World!</h2>
+                    <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-4">
+                        <p class="text-sm text-yellow-800">
+                            사용자의 이름을 입력받아 "Hello, [이름]!" 형식으로 인사하는 프로그램을 작성하세요.
+                        </p>
+                    </div>
+
+                    <h3 class="font-bold text-gray-900 mb-2">요구사항:</h3>
+                    <ul class="text-sm text-gray-700 space-y-1 ml-4">
+                        <li>• 표준 입력으로 이름 받기</li>
+                        <li>• "Hello, " + 이름 + "!" 형식으로 출력</li>
+                        <li>• 대소문자 구분 없음</li>
+                    </ul>
+                </div>
+
+                <!-- Hints -->
+                <div class="mb-4">
+                    <button class="w-full text-left bg-indigo-50 text-indigo-700 px-4 py-3 rounded-lg hover:bg-indigo-100">
+                        💡 힌트(강의보기)
+                    </button>
+                </div>
+
+                <!-- Q&A -->
+                <div>
+                    <button class="w-full text-left bg-green-50 text-green-700 px-4 py-3 rounded-lg hover:bg-green-100">
+                        💬 질문하기
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Panel: Code Editor & Output -->
+        <div class="flex-1 flex flex-col">
+            <!-- Editor -->
+            <div class="flex-1 bg-gray-900 text-white p-4 overflow-y-auto font-mono text-sm">
+                <pre class="text-green-400"># 여기에 코드를 작성하세요
+
+name = input()
+print(f"Hello, {name}!")
+</pre>
+            </div>
+
+            <!-- Actions -->
+            <div class="bg-gray-800 p-4 flex items-center space-x-4">
+                <button class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700">
+                    ▶ 실행
+                </button>
+                <button class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">
+                    ✓ 테스트
+                </button>
+                <button class="bg-gray-600 text-white px-6 py-2 rounded-lg hover:bg-gray-700">
+                    💾 저장
+                </button>
+            </div>
+
+            <!-- Output -->
+            <div class="h-48 bg-black text-green-400 p-4 overflow-y-auto font-mono text-sm">
+                <div class="mb-2 text-gray-400">// 실행 결과</div>
+                <div>Hello, 홍길동!</div>
+                <div class="mt-4 text-gray-400">// 테스트 결과: 3/3 통과 ✅</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

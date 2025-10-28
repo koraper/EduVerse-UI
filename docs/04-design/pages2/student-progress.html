@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>성과 대시보드 - EduVerse</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50">
+    <nav class="bg-white shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <a href="student-dashboard.html" class="text-2xl font-bold text-indigo-600">EduVerse</a>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="student-dashboard.html" class="text-gray-700 hover:text-indigo-600">대시보드</a>
+                    <a href="student-journal.html" class="text-gray-700 hover:text-indigo-600">업무일지</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <h2 class="text-3xl font-bold text-gray-900 mb-8">내 성장 기록 📈</h2>
+
+        <!-- Stats -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <div class="bg-white p-6 rounded-lg shadow">
+                <div class="text-sm text-gray-600 mb-1">전체 진도율</div>
+                <div class="text-3xl font-bold text-indigo-600">78%</div>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow">
+                <div class="text-sm text-gray-600 mb-1">완료한 미션</div>
+                <div class="text-3xl font-bold text-green-600">15개</div>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow">
+                <div class="text-sm text-gray-600 mb-1">평균 점수</div>
+                <div class="text-3xl font-bold text-blue-600">85점</div>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow">
+                <div class="text-sm text-gray-600 mb-1">학습 시간</div>
+                <div class="text-3xl font-bold text-purple-600">24시간</div>
+            </div>
+        </div>
+
+        <!-- Chart Placeholder -->
+        <div class="bg-white rounded-lg shadow p-6 mb-8">
+            <h3 class="text-xl font-bold mb-4">주차별 진도</h3>
+            <div class="h-64 bg-gray-100 rounded flex items-center justify-center text-gray-400">
+                [Chart.js 그래프 영역]
+            </div>
+        </div>
+
+        <!-- Recent Activities -->
+        <div class="bg-white rounded-lg shadow">
+            <div class="px-6 py-4 border-b">
+                <h3 class="text-xl font-bold">최근 활동</h3>
+            </div>
+            <div class="divide-y">
+                <div class="p-4 flex items-center">
+                    <div class="flex-1">
+                        <p class="font-medium">1주차 미션 3 완료</p>
+                        <p class="text-sm text-gray-600">점수: 90점</p>
+                    </div>
+                    <span class="text-sm text-gray-500">2시간 전</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

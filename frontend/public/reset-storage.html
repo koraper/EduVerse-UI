@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>localStorage 초기화 - EduVerse</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+      max-width: 600px;
+      margin: 50px auto;
+      padding: 20px;
+      background-color: #f5f5f5;
+    }
+    .container {
+      background: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    h1 {
+      color: #333;
+      margin-bottom: 20px;
+    }
+    button {
+      background-color: #dc2626;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+      margin: 10px 5px;
+    }
+    button:hover {
+      background-color: #b91c1c;
+    }
+    button.success {
+      background-color: #16a34a;
+    }
+    button.success:hover {
+      background-color: #15803d;
+    }
+    .info {
+      background-color: #eff6ff;
+      border-left: 4px solid #3b82f6;
+      padding: 15px;
+      margin: 20px 0;
+    }
+    .success-message {
+      background-color: #dcfce7;
+      border-left: 4px solid #16a34a;
+      padding: 15px;
+      margin: 20px 0;
+      display: none;
+    }
+    .storage-info {
+      font-family: monospace;
+      background-color: #f3f4f6;
+      padding: 15px;
+      border-radius: 4px;
+      margin: 15px 0;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🔧 EduVerse localStorage 관리</h1>
+
+    <div class="info">
+      <strong>주의:</strong> localStorage를 초기화하면 로그인 상태와 Mock 데이터베이스가 모두 초기화됩니다.
+    </div>
+
+    <div class="storage-info">
+      <div id="storageInfo">로딩 중...</div>
+    </div>
+
+    <button onclick="clearAuthOnly()">로그인 정보만 초기화</button>
+    <button onclick="clearMockDBOnly()">Mock DB만 초기화</button>
+    <button onclick="clearAll()">전체 초기화</button>
+    <button class="success" onclick="goHome()">홈으로 돌아가기</button>
+
+    <div class="success-message" id="successMessage"></div>
+  </div>
+
+  <script>
+    function showStorageInfo() {
+      const authToken = localStorage.getItem('auth_token');
+      const authUser = localStorage.getItem('auth_user');
+      const mockDB = localStorage.getItem('eduverse-mock-db');
+
+      let info = '<strong>현재 localStorage 상태:</strong><br><br>';
+
+      if (authToken) {
+        info += `✓ auth_token: ${authToken.substring(0, 30)}...<br>`;
+      } else {
+        info += '✗ auth_token: 없음<br>';
+      }
+
+      if (authUser) {
+        const user = JSON.parse(authUser);
+        info += `✓ auth_user: ${user.name} (${user.role})<br>`;
+      } else {
+        info += '✗ auth_user: 없음<br>';
+      }
+
+      if (mockDB) {
+        const data = JSON.parse(mockDB);
+        info += `✓ Mock DB: ${data.data.users.length}명의 사용자<br>`;
+      } else {
+        info += '✗ Mock DB: 없음<br>';
+      }
+
+      document.getElementById('storageInfo').innerHTML = info;
+    }
+
+    function showSuccess(message) {
+      const elem = document.getElementById('successMessage');
+      elem.textContent = message;
+      elem.style.display = 'block';
+      setTimeout(() => {
+        elem.style.display = 'none';
+      }, 3000);
+    }
+
+    function clearAuthOnly() {
+      if (confirm('로그인 정보만 초기화하시겠습니까?')) {
+        localStorage.removeItem('auth_token');
+        localStorage.removeItem('auth_user');
+        showSuccess('✓ 로그인 정보가 초기화되었습니다. 다시 로그인해주세요.');
+        showStorageInfo();
+      }
+    }
+
+    function clearMockDBOnly() {
+      if (confirm('Mock DB만 초기화하시겠습니까? (사용자 데이터가 시드 데이터로 리셋됩니다)')) {
+        localStorage.removeItem('eduverse-mock-db');
+        showSuccess('✓ Mock DB가 초기화되었습니다. 페이지를 새로고침하면 시드 데이터가 로드됩니다.');
+        showStorageInfo();
+      }
+    }
+
+    function clearAll() {
+      if (confirm('전체 localStorage를 초기화하시겠습니까?')) {
+        localStorage.clear();
+        showSuccess('✓ 전체 localStorage가 초기화되었습니다.');
+        showStorageInfo();
+      }
+    }
+
+    function goHome() {
+      window.location.href = '/';
+    }
+
+    // 페이지 로드 시 정보 표시
+    showStorageInfo();
+  </script>
+</body>
+</html>

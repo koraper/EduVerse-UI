@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Peek - EduVerse</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-gray-100">
+    <div class="flex flex-col h-screen">
+        <!-- Header -->
+        <div class="bg-gray-800 border-b border-gray-700 px-6 py-4 flex items-center justify-between">
+            <h1 class="text-lg font-bold text-white">학생 코드 보기: 이영희 | Week 1 - 첫 출근</h1>
+            <div class="flex items-center space-x-2">
+                <button class="text-indigo-400 hover:text-indigo-300 transition text-sm">🔄 새로고침</button>
+                <button onclick="window.history.back()" class="text-gray-400 hover:text-white text-2xl transition">×</button>
+            </div>
+        </div>
+
+        <!-- Content -->
+        <main class="flex-1 overflow-auto flex flex-col">
+            <div class="p-6 space-y-4 flex-1 overflow-auto">
+                <!-- Info -->
+                <div class="flex justify-between text-sm text-gray-400">
+                    <div>
+                        <p>과제: greet() 함수 작성</p>
+                        <p>마지막 저장: 2분 전 | 언어: Python</p>
+                    </div>
+                </div>
+
+                <!-- Code -->
+                <div class="bg-gray-800 rounded-lg border border-gray-700 p-4 font-mono text-sm">
+                    <div class="space-y-0">
+                        <p><span class="text-gray-600">1</span><span class="ml-4">def greet(name):</span></p>
+                        <p><span class="text-gray-600">2</span><span class="ml-4">    return "Hello" + name  <span class="text-red-500"># ❌ 문제: 띄어쓰기 누락</span></span></p>
+                        <p><span class="text-gray-600">3</span></p>
+                        <p><span class="text-gray-600">4</span><span class="ml-4"># 테스트</span></p>
+                        <p><span class="text-gray-600">5</span><span class="ml-4">print(greet("Alex"))</span></p>
+                    </div>
+                </div>
+
+                <!-- Test Results -->
+                <div class="bg-gray-800 rounded-lg border border-gray-700 p-4">
+                    <h3 class="font-bold text-white mb-3">📊 테스트 결과: 1/3 통과</h3>
+                    <div class="space-y-2 text-sm">
+                        <p class="text-green-400">✅ 테스트 1: 통과</p>
+                        <p class="text-red-400">❌ 테스트 2: 실패</p>
+                        <p class="text-gray-400">  기대: "Hello, Alex!"</p>
+                        <p class="text-gray-400">  출력: "HelloAlex!"</p>
+                        <p class="text-red-400">❌ 테스트 3: 실패</p>
+                    </div>
+                </div>
+
+                <!-- Execution History -->
+                <div class="bg-gray-800 rounded-lg border border-gray-700 p-4">
+                    <h3 class="font-bold text-white mb-3">🔄 실행 이력 (최근 5개)</h3>
+                    <div class="space-y-2 text-sm text-gray-400">
+                        <p>• 2분 전: 실행 성공 (0.12초)</p>
+                        <p>• 5분 전: 실행 성공 (0.10초)</p>
+                        <p>• 8분 전: 문법 오류 (SyntaxError: ...)</p>
+                    </div>
+                </div>
+
+                <!-- AI Analysis -->
+                <div class="bg-blue-900/20 border border-blue-600/50 rounded-lg p-4">
+                    <h3 class="font-bold text-blue-300 mb-2">💡 AI 분석</h3>
+                    <div class="text-sm text-gray-300 space-y-2">
+                        <p>• 띄어쓰기가 누락되어 테스트 2, 3이 실패하고 있습니다</p>
+                        <p>• 쉼표(,)를 추가해보세요</p>
+                    </div>
+                    <button class="mt-3 text-blue-400 hover:text-blue-300 text-sm transition">
+                        📝 피드백 보내기
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

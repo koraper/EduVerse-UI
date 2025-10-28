@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>수업 상세 - EduVerse</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-green-600 text-white shadow-lg">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <h1 class="text-xl font-bold">EduVerse</h1>
+                    <span class="text-green-200">교수님</span>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <span>홍길동 교수</span>
+                    <button class="bg-green-700 px-4 py-2 rounded hover:bg-green-800">로그아웃</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mx-auto px-4 py-6">
+        <!-- Breadcrumb -->
+        <div class="mb-4 text-sm text-gray-600">
+            <a href="#" class="hover:text-green-600">내 수업</a> / <span class="text-gray-900">웹 프로그래밍 기초</span>
+        </div>
+
+        <!-- Class Header -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+            <div class="flex items-start justify-between">
+                <div>
+                    <h2 class="text-2xl font-bold text-gray-900 mb-2">웹 프로그래밍 기초</h2>
+                    <p class="text-gray-600 mb-4">2024학년도 1학기 | 컴퓨터공학과</p>
+                    <div class="flex space-x-4">
+                        <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">진행 중</span>
+                        <span class="text-gray-600">학생: 45명</span>
+                        <span class="text-gray-600">주차: 12주</span>
+                    </div>
+                </div>
+                <div class="text-right">
+                    <button class="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 mb-2">수업 설정</button>
+                    <button class="bg-gray-200 text-gray-700 px-6 py-2 rounded hover:bg-gray-300 block w-full">수업 종료</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Entry Code Section -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+            <h3 class="text-lg font-bold text-gray-900 mb-4">수업 입장 정보</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="border border-gray-200 rounded-lg p-4">
+                    <p class="text-sm text-gray-600 mb-2">입장 코드</p>
+                    <div class="flex items-center justify-between">
+                        <span class="text-3xl font-mono font-bold text-green-600">WEB2024</span>
+                        <button class="bg-gray-100 px-4 py-2 rounded hover:bg-gray-200">복사</button>
+                    </div>
+                    <p class="text-xs text-gray-500 mt-2">학생들이 이 코드로 수업에 입장할 수 있습니다</p>
+                </div>
+                <div class="border border-gray-200 rounded-lg p-4 text-center">
+                    <p class="text-sm text-gray-600 mb-2">QR 코드</p>
+                    <div class="bg-gray-100 w-48 h-48 mx-auto flex items-center justify-center rounded">
+                        <svg class="w-40 h-40" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="0" y="0" width="100" height="100" fill="white"/>
+                            <rect x="5" y="5" width="10" height="10" fill="black"/>
+                            <rect x="20" y="5" width="10" height="10" fill="black"/>
+                            <rect x="35" y="5" width="10" height="10" fill="black"/>
+                            <rect x="5" y="20" width="10" height="10" fill="black"/>
+                            <rect x="35" y="20" width="10" height="10" fill="black"/>
+                            <rect x="5" y="35" width="10" height="10" fill="black"/>
+                            <rect x="20" y="35" width="10" height="10" fill="black"/>
+                            <rect x="35" y="35" width="10" height="10" fill="black"/>
+                        </svg>
+                    </div>
+                    <button class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 mt-2">QR 다운로드</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- Weeks List -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-bold text-gray-900">주차 목록</h3>
+                    <button class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">주차 추가</button>
+                </div>
+                <div class="space-y-3">
+                    <div class="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 cursor-pointer">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h4 class="font-semibold text-gray-900">1주차: HTML 기초</h4>
+                                <p class="text-sm text-gray-600">과제 5개 | 평균 완료율 92%</p>
+                            </div>
+                            <span class="bg-gray-100 text-gray-800 px-3 py-1 rounded-full text-sm">완료</span>
+                        </div>
+                    </div>
+                    <div class="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 cursor-pointer">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h4 class="font-semibold text-gray-900">2주차: CSS 스타일링</h4>
+                                <p class="text-sm text-gray-600">과제 6개 | 평균 완료율 85%</p>
+                            </div>
+                            <span class="bg-gray-100 text-gray-800 px-3 py-1 rounded-full text-sm">완료</span>
+                        </div>
+                    </div>
+                    <div class="border border-green-200 rounded-lg p-4 bg-green-50 cursor-pointer">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h4 class="font-semibold text-gray-900">3주차: JavaScript 기초</h4>
+                                <p class="text-sm text-gray-600">과제 7개 | 평균 완료율 67%</p>
+                            </div>
+                            <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">진행 중</span>
+                        </div>
+                        <div class="mt-2 text-xs text-gray-600">
+                            남은 시간: 18시간 23분
+                        </div>
+                    </div>
+                    <div class="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 cursor-pointer opacity-60">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h4 class="font-semibold text-gray-900">4주차: DOM 조작</h4>
+                                <p class="text-sm text-gray-600">과제 6개</p>
+                            </div>
+                            <span class="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm">대기</span>
+                        </div>
+                    </div>
+                    <div class="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 cursor-pointer opacity-60">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h4 class="font-semibold text-gray-900">5주차: 이벤트 처리</h4>
+                                <p class="text-sm text-gray-600">과제 5개</p>
+                            </div>
+                            <span class="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm">대기</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Students List -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-bold text-gray-900">학생 목록 (45명)</h3>
+                    <button class="bg-gray-200 text-gray-700 px-4 py-2 rounded hover:bg-gray-300">전체 보기</button>
+                </div>
+                <div class="mb-4">
+                    <input type="text" placeholder="학생 검색..." class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-green-500">
+                </div>
+                <div class="space-y-2">
+                    <div class="flex items-center justify-between p-3 border border-gray-200 rounded hover:bg-gray-50">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                                <span class="text-green-600 font-semibold">김</span>
+                            </div>
+                            <div>
+                                <p class="font-medium text-gray-900">김철수</p>
+                                <p class="text-sm text-gray-600">2021001234</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-sm text-gray-600">진도율</p>
+                            <p class="font-semibold text-green-600">95%</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between p-3 border border-gray-200 rounded hover:bg-gray-50">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                                <span class="text-blue-600 font-semibold">이</span>
+                            </div>
+                            <div>
+                                <p class="font-medium text-gray-900">이영희</p>
+                                <p class="text-sm text-gray-600">2021001235</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-sm text-gray-600">진도율</p>
+                            <p class="font-semibold text-green-600">88%</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between p-3 border border-gray-200 rounded hover:bg-gray-50">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center">
+                                <span class="text-purple-600 font-semibold">박</span>
+                            </div>
+                            <div>
+                                <p class="font-medium text-gray-900">박민수</p>
+                                <p class="text-sm text-gray-600">2021001236</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-sm text-gray-600">진도율</p>
+                            <p class="font-semibold text-yellow-600">72%</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between p-3 border border-gray-200 rounded hover:bg-gray-50">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center">
+                                <span class="text-red-600 font-semibold">정</span>
+                            </div>
+                            <div>
+                                <p class="font-medium text-gray-900">정수현</p>
+                                <p class="text-sm text-gray-600">2021001237</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-sm text-gray-600">진도율</p>
+                            <p class="font-semibold text-red-600">45%</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between p-3 border border-gray-200 rounded hover:bg-gray-50">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center">
+                                <span class="text-indigo-600 font-semibold">최</span>
+                            </div>
+                            <div>
+                                <p class="font-medium text-gray-900">최지훈</p>
+                                <p class="text-sm text-gray-600">2021001238</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-sm text-gray-600">진도율</p>
+                            <p class="font-semibold text-green-600">91%</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+            <button class="bg-white border-2 border-green-600 text-green-600 px-6 py-4 rounded-lg hover:bg-green-50 font-semibold">
+                실시간 모니터링
+            </button>
+            <button class="bg-white border-2 border-green-600 text-green-600 px-6 py-4 rounded-lg hover:bg-green-50 font-semibold">
+                학습 분석 리포트
+            </button>
+            <button class="bg-white border-2 border-green-600 text-green-600 px-6 py-4 rounded-lg hover:bg-green-50 font-semibold">
+                Q&A 관리
+            </button>
+        </div>
+    </div>
+</body>
+</html>

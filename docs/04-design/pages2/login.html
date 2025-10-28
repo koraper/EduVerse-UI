@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>로그인 - EduVerse</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50">
+    <div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-md w-full space-y-8">
+            <!-- Header -->
+            <div class="text-center">
+                <h1 class="text-3xl font-bold text-indigo-600 mb-2">EduVerse</h1>
+                <h2 class="text-2xl font-bold text-gray-900">로그인</h2>
+                <p class="mt-2 text-sm text-gray-600">
+                    계정이 없으신가요? <a href="signup.html" class="text-indigo-600 hover:text-indigo-500">회원가입</a>
+                </p>
+            </div>
+
+            <!-- Form -->
+            <form class="mt-8 space-y-6 bg-white p-8 rounded-lg shadow">
+                <!-- 이메일 -->
+                <div>
+                    <label for="email" class="block text-sm font-medium text-gray-700">이메일</label>
+                    <input type="email" id="email" name="email" required
+                           class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                           placeholder="hong@example.com">
+                </div>
+
+                <!-- 비밀번호 -->
+                <div>
+                    <label for="password" class="block text-sm font-medium text-gray-700">비밀번호</label>
+                    <input type="password" id="password" name="password" required
+                           class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                </div>
+
+                <!-- 옵션 -->
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <input id="remember" name="remember" type="checkbox"
+                               class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
+                        <label for="remember" class="ml-2 block text-sm text-gray-900">
+                            로그인 상태 유지 (30일)
+                        </label>
+                    </div>
+                    <div class="text-sm">
+                        <a href="reset-password.html" class="font-medium text-indigo-600 hover:text-indigo-500">
+                            비밀번호 찾기
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 제출 버튼 -->
+                <div>
+                    <button type="submit"
+                            class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        로그인
+                    </button>
+                </div>
+            </form>
+
+            <!-- Divider -->
+            <div class="relative">
+                <div class="absolute inset-0 flex items-center">
+                    <div class="w-full border-t border-gray-300"></div>
+                </div>
+                <div class="relative flex justify-center text-sm">
+                    <span class="px-2 bg-gray-50 text-gray-500">또는</span>
+                </div>
+            </div>
+
+            <!-- QR Login -->
+            <div class="text-center">
+                <p class="text-sm text-gray-600 mb-4">교수님이 제공한 QR 코드로 수업 참여</p>
+                <a href="join-class.html" class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                    QR 코드 스캔
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

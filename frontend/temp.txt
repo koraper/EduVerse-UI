@@ -1,0 +1,30 @@
+import { useState } from 'react'
+import { useNavigate, Link } from 'react-router-dom'
+import { useAuth } from '@/contexts/AuthContext'
+import { Button, Input, Select, Card } from '@/components/common'
+import PasswordStrengthIndicator from '@/components/common/PasswordStrengthIndicator'
+import { INPUT_LIMITS } from '@/utils/inputValidation'
+import { validatePassword } from '@/utils/passwordValidation'
+import { validateName, validateEmail, FORM_INPUT_LIMITS } from '@/utils/formValidation'
+import type { SelectOption } from '@/components/common'
+
+const RegisterPage = () => {
+  const navigate = useNavigate()
+  const { register } = useAuth()
+
+  const [formData, setFormData] = useState({
+    email: '',
+    name: '',
+    password: '',
+    confirmPassword: '',
+    role: '' as 'student' | 'professor' | '',
+  })
+  const [errors, setErrors] = useState({
+    email: '',
+    name: '',
+    password: '',
+    confirmPassword: '',
+    role: '',
+  })
+  const [isLoading, setIsLoading] = useState(false)
+  const [apiError, setApiError] = useState('')

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>초대 코드 입력 - EduVerse</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 min-h-screen flex items-center justify-center p-4">
+    <div class="w-full max-w-md bg-gray-800 rounded-xl p-8 border border-gray-700">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-white mb-2">수업에 참여하기</h1>
+            <p class="text-gray-400 text-sm">
+                선생님이 알려준 6자리 초대 코드를 입력해주세요
+            </p>
+        </div>
+
+        <!-- Form -->
+        <form class="space-y-6" id="inviteForm">
+            <!-- Code Input -->
+            <div>
+                <label class="block text-sm font-medium text-gray-400 mb-4">
+                    초대 코드 <span class="text-red-500">*</span>
+                </label>
+
+                <div class="flex justify-center space-x-2 mb-4" id="codeInputs">
+                    <input type="text" maxlength="1" class="code-input w-12 h-14 text-2xl text-center bg-gray-900 border-2 border-gray-700 rounded-lg focus:border-indigo-500 text-white font-mono" required>
+                    <input type="text" maxlength="1" class="code-input w-12 h-14 text-2xl text-center bg-gray-900 border-2 border-gray-700 rounded-lg focus:border-indigo-500 text-white font-mono" required>
+                    <input type="text" maxlength="1" class="code-input w-12 h-14 text-2xl text-center bg-gray-900 border-2 border-gray-700 rounded-lg focus:border-indigo-500 text-white font-mono" required>
+                    <input type="text" maxlength="1" class="code-input w-12 h-14 text-2xl text-center bg-gray-900 border-2 border-gray-700 rounded-lg focus:border-indigo-500 text-white font-mono" required>
+                    <input type="text" maxlength="1" class="code-input w-12 h-14 text-2xl text-center bg-gray-900 border-2 border-gray-700 rounded-lg focus:border-indigo-500 text-white font-mono" required>
+                    <input type="text" maxlength="1" class="code-input w-12 h-14 text-2xl text-center bg-gray-900 border-2 border-gray-700 rounded-lg focus:border-indigo-500 text-white font-mono" required>
+                </div>
+
+                <p class="text-center text-gray-500 text-sm">
+                    예시: ABC123
+                </p>
+            </div>
+
+            <!-- Submit Button -->
+            <button
+                type="submit"
+                class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-lg transition transform hover:scale-105">
+                참여하기
+            </button>
+
+            <!-- Cancel Button -->
+            <button
+                type="button"
+                onclick="window.location.href='student-dashboard.html'"
+                class="w-full text-gray-400 hover:text-white transition py-2">
+                취소
+            </button>
+        </form>
+
+        <!-- Error Message -->
+        <div id="errorMessage" class="hidden mt-4 p-4 bg-red-900/50 border border-red-500 rounded-lg text-red-400 text-sm"></div>
+
+        <!-- Success State -->
+        <div id="successMessage" class="hidden space-y-4">
+            <div class="text-center">
+                <p class="text-3xl mb-2">🎉</p>
+                <h2 class="text-2xl font-bold text-white mb-4">환영합니다!</h2>
+                <p class="text-gray-300 mb-6">
+                    자료구조 및 알고리즘 수업에 참여하셨습니다
+                </p>
+
+                <div class="bg-gray-700 rounded-lg p-4 mb-6 text-left">
+                    <div class="space-y-2 text-sm">
+                        <p class="text-gray-300">
+                            <span class="font-bold">수업명:</span> 자료구조 및 알고리즘
+                        </p>
+                        <p class="text-gray-300">
+                            <span class="font-bold">교수자:</span> 김교수님
+                        </p>
+                        <p class="text-gray-300">
+                            <span class="font-bold">기간:</span> 16주
+                        </p>
+                        <p class="text-gray-300">
+                            <span class="font-bold">참여 학생:</span> 23명
+                        </p>
+                    </div>
+                </div>
+
+                <a href="student-learning.html" class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-lg transition">
+                    학습 시작하기 →
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const codeInputs = document.querySelectorAll('.code-input');
+        const form = document.getElementById('inviteForm');
+        const errorMessage = document.getElementById('errorMessage');
+        const successMessage = document.getElementById('successMessage');
+
+        // Auto focus to next input
+        codeInputs.forEach((input, index) => {
+            input.addEventListener('input', (e) => {
+                // Convert to uppercase
+                e.target.value = e.target.value.toUpperCase();
+
+                // Move to next input
+                if (e.target.value && index < codeInputs.length - 1) {
+                    codeInputs[index + 1].focus();
+                }
+            });
+
+            input.addEventListener('keydown', (e) => {
+                // Backspace to previous input
+                if (e.key === 'Backspace' && !input.value && index > 0) {
+                    codeInputs[index - 1].focus();
+                }
+            });
+
+            input.addEventListener('paste', (e) => {
+                if (index === 0) {
+                    e.preventDefault();
+                    const pasted = e.clipboardData.getData('text').toUpperCase();
+                    const codes = pasted.slice(0, 6).split('');
+                    codes.forEach((code, i) => {
+                        if (i < codeInputs.length) {
+                            codeInputs[i].value = code;
+                        }
+                    });
+                    if (codes.length >= codeInputs.length) {
+                        codeInputs[codeInputs.length - 1].focus();
+                    }
+                }
+            });
+        });
+
+        // Auto focus first input on load
+        codeInputs[0].focus();
+
+        // Form submit
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const code = Array.from(codeInputs).map(input => input.value).join('');
+
+            // Validation
+            if (code.length !== 6) {
+                errorMessage.textContent = '6자리 코드를 모두 입력해주세요';
+                errorMessage.classList.remove('hidden');
+                return;
+            }
+
+            // Simulate API call
+            if (code === 'ABC123') {
+                // Success
+                form.classList.add('hidden');
+                successMessage.classList.remove('hidden');
+            } else {
+                errorMessage.textContent = '잘못된 초대 코드입니다. 다시 확인해주세요.';
+                errorMessage.classList.remove('hidden');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,135 @@
+{
+  "courseTitle": "LogiCore Tech 신입 개발자 과정",
+  "language": "HTML/CSS",
+  "languageVersion": "HTML5 & CSS3",
+  "installationGuide": {
+    "windows": "VS Code 설치 + Live Server 확장프로그램 설치 (웹 서버 로컬 실행용)",
+    "macos": "VS Code 설치 + Live Server 확장프로그램 설치 (웹 서버 로컬 실행용)",
+    "linux": "VS Code 설치 + Live Server 확장프로그램 설치 (웹 서버 로컬 실행용)"
+  },
+  "weeks": [
+    {
+      "week": 1,
+      "title": "웹 개발 기초 - HTML 구조 이해하기",
+      "cycles": [
+        {
+          "title": "첫 HTML 페이지 만들기",
+          "syntax_key": "html_basics",
+          "filename": "index.html",
+          "starterCode": "<!DOCTYPE html>\n<html lang=\"ko\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>LogiCore Tech - 환영합니다</title>\n</head>\n<body>\n    <!-- TODO: 아래에 다음을 추가하세요:\n         1. <h1> 태그로 \"LogiCore Tech에 오신 것을 환영합니다!\"\n         2. <p> 태그로 \"이것은 나의 첫 웹 페이지입니다.\"\n         3. <p> 태그로 \"HTML을 배우고 있습니다.\"\n    -->\n    \n</body>\n</html>",
+          "testCode": "const fs = require('fs');\nconst content = fs.readFileSync('index.html', 'utf-8');\nif (!content.includes('<h1>') || !content.includes('LogiCore Tech')) {\n  throw new Error('h1 태그와 LogiCore Tech 텍스트가 필요합니다.');\n}\nif (content.match(/<p>/g).length < 2) {\n  throw new Error('최소 2개의 p 태그가 필요합니다.');\n}",
+          "expectedPrintOutput": "HTML 구조 검증 완료!",
+          "task": {
+            "character": "alex",
+            "subtitle": "팀장 업무 지시",
+            "title": "첫 웹 페이지 제작",
+            "content": "웹 개발의 기초는 HTML입니다! <span class='font-bold text-yellow-300'>HTML은 웹 페이지의 구조를 만드는 마크업 언어</span>입니다. 간단한 HTML 페이지를 작성해서 웹 세상에 첫 발을 내디뎌봅시다."
+          },
+          "briefing": {
+            "character": "sena",
+            "subtitle": "직속 선임의 팁",
+            "title": "HTML 태그 기초",
+            "content": "HTML은 '태그'라는 명령어로 이루어져 있어요. <span class='font-bold text-teal-300'><h1>은 제목, <p>는 단락, <div>는 구역</span>을 나타낸답니다. 태그는 항상 열었다가 닫아야 하고 (예: <p></p>), 들여쓰기로 가독성을 좋게 만드는 게 좋습니다."
+          },
+          "lecture": {
+            "character": "profKim",
+            "title": "교수님의 강의: HTML의 역사와 구조",
+            "keyTakeaway": "HTML은 하이퍼텍스트 마크업 언어로, 웹 페이지의 콘텐츠와 구조를 정의합니다.",
+            "sections": [
+              {
+                "heading": "HTML의 개념",
+                "text": "HTML은 1989년 Tim Berners-Lee가 웹 문서를 만들기 위해 개발했습니다. 마크업 언어이므로 '프로그래밍'하는 것이 아니라 '구조를 표시'하는 것입니다."
+              },
+              {
+                "heading": "기본 구조",
+                "text": "모든 HTML 문서는 DOCTYPE, html, head, body 태그를 가져야 합니다.",
+                "code": "<!DOCTYPE html>\n<html lang=\"ko\">\n<head>\n    <meta charset=\"UTF-8\">\n    <title>페이지 제목</title>\n</head>\n<body>\n    <h1>제목</h1>\n    <p>내용</p>\n</body>\n</html>"
+              },
+              {
+                "heading": "자주 사용하는 태그",
+                "text": "h1~h6: 제목, p: 단락, div: 영역 구분, span: 인라인 텍스트, a: 링크, img: 이미지",
+                "code": "<h1>큰 제목</h1>\n<h2>중간 제목</h2>\n<p>단락 텍스트</p>\n<a href=\"https://example.com\">링크</a>\n<img src=\"image.jpg\" alt=\"이미지 설명\">"
+              }
+            ]
+          },
+          "feedback": {
+            "success": {
+              "character": "alex",
+              "subtitle": "업무 완료 피드백",
+              "title": "첫 웹 페이지 완성!",
+              "content": "<span class='font-bold text-green-300'>HTML 구조가 완벽합니다!</span> 축하합니다. 이제 우리의 첫 웹 페이지가 완성되었어요. 다음은 스타일링을 배워봅시다."
+            },
+            "failure_logical": {
+              "character": "sena",
+              "subtitle": "문제 해결 지원",
+              "title": "태그가 누락되었습니다",
+              "content": "{{ERROR_MESSAGE}} h1 태그와 최소 2개의 p 태그가 필요합니다. 요구사항을 다시 확인해보세요!"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "week": 2,
+      "title": "CSS로 웹 페이지 꾸미기 - 스타일링 기초",
+      "cycles": [
+        {
+          "title": "CSS 선택자와 기본 스타일",
+          "syntax_key": "css_selectors",
+          "filename": "style.css",
+          "starterCode": "/* TODO: 다음 CSS 규칙을 작성하세요:\n   1. h1: 색상을 파란색(blue), 텍스트 정렬을 중앙(center)\n   2. p: 글씨 크기를 16px, 색상을 회색(gray)\n   3. body: 배경색을 밝은 회색(#f5f5f5), 폰트 족을 Arial\n*/\n\n",
+          "testCode": "const fs = require('fs');\nconst content = fs.readFileSync('style.css', 'utf-8');\nif (!content.includes('h1') || !content.includes('color')) {\n  throw new Error('h1 선택자와 color 속성이 필요합니다.');\n}\nif (!content.includes('p') || !content.includes('font-size')) {\n  throw new Error('p 선택자와 font-size 속성이 필요합니다.');\n}\nif (!content.includes('body')) {\n  throw new Error('body 선택자가 필요합니다.');\n}",
+          "expectedPrintOutput": "CSS 스타일 검증 완료!",
+          "task": {
+            "character": "alex",
+            "subtitle": "팀장 업무 지시",
+            "title": "페이지 꾸미기 - CSS 작성",
+            "content": "이제 우리의 페이지를 더 예쁘게 꾸며봅시다! <span class='font-bold text-yellow-300'>CSS(Cascading Style Sheets)는 HTML 요소들을 스타일링하는 언어</span>입니다. 색상, 크기, 배치 등을 모두 제어할 수 있어요."
+          },
+          "briefing": {
+            "character": "sena",
+            "subtitle": "직속 선임의 팁",
+            "title": "CSS 작성 팁",
+            "content": "<span class='font-bold text-teal-300'>CSS의 기본은 선택자와 속성</span>이에요. 선택자로 어떤 요소를 선택할지 결정하고, 중괄호 안에 속성:값; 형태로 스타일을 지정합니다. 예를 들어 'color: blue;'라고 쓰면 텍스트 색상이 파란색이 되죠."
+          },
+          "lecture": {
+            "character": "profKim",
+            "title": "교수님의 강의: CSS의 기초",
+            "keyTakeaway": "CSS는 선택자, 속성, 값으로 이루어진 규칙 기반의 스타일 언어입니다.",
+            "sections": [
+              {
+                "heading": "CSS 문법",
+                "text": "CSS는 선택자를 통해 HTML 요소를 선택하고, 중괄호 안에 속성과 값의 쌍을 작성합니다.",
+                "code": "/* 선택자 { 속성: 값; } */\nh1 {\n  color: blue;\n  text-align: center;\n  font-size: 32px;\n}"
+              },
+              {
+                "heading": "선택자의 종류",
+                "text": "요소 선택자(h1, p), 클래스 선택자(.className), ID 선택자(#idName), 전체 선택자(*) 등이 있습니다.",
+                "code": "/* 요소 선택자 */\nh1 { color: blue; }\n\n/* 클래스 선택자 */\n.highlight { background-color: yellow; }\n\n/* ID 선택자 */\n#header { background-color: gray; }\n\n/* 전체 선택자 */\n* { margin: 0; padding: 0; }"
+              },
+              {
+                "heading": "자주 사용하는 속성",
+                "text": "color(글씨색), background-color(배경색), font-size(글씨크기), margin(바깥 여백), padding(안쪽 여백) 등",
+                "code": "p {\n  color: gray;           /* 글씨 색상 */\n  font-size: 16px;       /* 글씨 크기 */\n  margin: 10px;          /* 바깥 여백 */\n  padding: 5px;          /* 안쪽 여백 */\n  background-color: white; /* 배경색 */\n}"
+              }
+            ]
+          },
+          "feedback": {
+            "success": {
+              "character": "alex",
+              "subtitle": "업무 완료 피드백",
+              "title": "CSS 스타일 완성!",
+              "content": "<span class='font-bold text-green-300'>CSS 스타일이 완벽하게 작성되었습니다!</span> 이제 우리의 웹 페이지가 훨씬 더 예뻐 보일 거예요. HTML과 CSS의 조합으로 다양한 디자인을 만들 수 있답니다."
+            },
+            "failure_logical": {
+              "character": "sena",
+              "subtitle": "문제 해결 지원",
+              "title": "CSS 규칙이 누락되었습니다",
+              "content": "{{ERROR_MESSAGE}} h1, p, body 선택자를 확인하고, 필요한 속성들(color, font-size 등)이 모두 포함되었는지 확인해보세요!"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

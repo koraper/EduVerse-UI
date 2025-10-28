@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원가입 - EduVerse</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 min-h-screen flex items-center justify-center p-4">
+    <div class="w-full max-w-md">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <div class="flex items-center justify-center space-x-2 mb-4">
+                <div class="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center text-white font-bold">E</div>
+                <span class="text-xl font-bold text-white">EduVerse</span>
+            </div>
+            <h1 class="text-3xl font-bold text-white">회원가입</h1>
+        </div>
+
+        <!-- Form -->
+        <form class="bg-gray-800 rounded-xl p-8 space-y-6" id="signupForm">
+            <!-- Role Selection -->
+            <div>
+                <label class="block text-sm font-medium text-gray-400 mb-3">
+                    역할 선택 <span class="text-red-500">*</span>
+                </label>
+                <div class="grid grid-cols-2 gap-4">
+                    <button type="button" class="role-btn active p-4 rounded-lg border-2 transition-all duration-200 bg-indigo-600 border-indigo-500 text-white" data-role="student">
+                        <div class="text-3xl mb-2">📚</div>
+                        <div class="text-lg font-semibold mb-1">학생</div>
+                        <div class="text-xs opacity-80">초대코드를 받으셨나요?</div>
+                    </button>
+                    <button type="button" class="role-btn p-4 rounded-lg border-2 transition-all duration-200 bg-gray-800 border-gray-700 text-gray-300 hover:border-gray-600" data-role="professor">
+                        <div class="text-3xl mb-2">🎓</div>
+                        <div class="text-lg font-semibold mb-1">교수자</div>
+                        <div class="text-xs opacity-80">수업을 만들고 관리하기</div>
+                    </button>
+                </div>
+                <input type="hidden" id="role" name="role" value="student">
+            </div>
+
+            <!-- Email Field -->
+            <div>
+                <label for="email" class="block text-sm font-medium text-gray-400 mb-2">
+                    이메일 <span class="text-red-500">*</span>
+                </label>
+                <input
+                    type="email"
+                    id="email"
+                    placeholder="이메일 주소를 입력하세요"
+                    class="w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 outline-none transition"
+                    required>
+                <div class="mt-2 text-sm" id="emailFeedback"></div>
+            </div>
+
+            <!-- Name Field -->
+            <div>
+                <label for="name" class="block text-sm font-medium text-gray-400 mb-2">
+                    이름 <span class="text-red-500">*</span>
+                </label>
+                <input
+                    type="text"
+                    id="name"
+                    placeholder="실명을 입력하세요"
+                    class="w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 outline-none transition"
+                    required>
+            </div>
+
+            <!-- Password Field -->
+            <div>
+                <label for="password" class="block text-sm font-medium text-gray-400 mb-2">
+                    비밀번호 <span class="text-red-500">*</span>
+                    <span class="text-xs text-gray-500">(최소 8자, 영문+숫자)</span>
+                </label>
+                <div class="relative mb-2">
+                    <input
+                        type="password"
+                        id="password"
+                        placeholder="비밀번호를 입력하세요"
+                        class="w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 outline-none transition pr-12"
+                        required>
+                    <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white" onclick="togglePasswordVisibility('password')">
+                        👁️
+                    </button>
+                </div>
+
+                <!-- Password Strength Indicator -->
+                <div class="mb-2">
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="text-xs text-gray-500">비밀번호 강도:</span>
+                        <span class="text-xs font-medium" id="strengthLabel" style="color: #dc2626;">약함</span>
+                    </div>
+                    <div class="w-full h-2 bg-gray-700 rounded-full overflow-hidden">
+                        <div class="h-full bg-red-600 transition-all duration-300" id="strengthBar" style="width: 0%;"></div>
+                    </div>
+                </div>
+                <div class="text-xs" id="passwordHint"></div>
+            </div>
+
+            <!-- Password Confirm Field -->
+            <div>
+                <label for="passwordConfirm" class="block text-sm font-medium text-gray-400 mb-2">
+                    비밀번호 확인 <span class="text-red-500">*</span>
+                </label>
+                <div class="relative mb-2">
+                    <input
+                        type="password"
+                        id="passwordConfirm"
+                        placeholder="비밀번호를 다시 입력하세요"
+                        class="w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 outline-none transition pr-12"
+                        required>
+                    <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white" onclick="togglePasswordVisibility('passwordConfirm')">
+                        👁️
+                    </button>
+                </div>
+                <div class="text-sm" id="matchFeedback"></div>
+            </div>
+
+            <!-- Terms -->
+            <div class="flex items-start space-x-3">
+                <input
+                    type="checkbox"
+                    id="terms"
+                    class="w-4 h-4 rounded border-gray-600 text-indigo-600 focus:ring-indigo-500 mt-1"
+                    required>
+                <label for="terms" class="text-sm text-gray-400">
+                    <a href="#" class="text-indigo-500 hover:text-indigo-400">이용약관</a>에 동의합니다
+                    <span class="text-red-500">*</span>
+                </label>
+            </div>
+
+            <!-- Submit Button -->
+            <button
+                type="submit"
+                class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-lg transition transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed">
+                회원가입하기
+            </button>
+
+            <!-- Login Link -->
+            <div class="text-center text-sm text-gray-400">
+                이미 계정이 있으신가요?
+                <a href="login.html" class="text-indigo-500 hover:text-indigo-400 transition">로그인</a>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // Role Selection
+        document.querySelectorAll('.role-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                document.querySelectorAll('.role-btn').forEach(b => {
+                    b.classList.remove('active', 'bg-indigo-600', 'border-indigo-500', 'text-white');
+                    b.classList.add('bg-gray-800', 'border-gray-700', 'text-gray-300', 'hover:border-gray-600');
+                });
+                btn.classList.add('bg-indigo-600', 'border-indigo-500', 'text-white');
+                btn.classList.remove('bg-gray-800', 'border-gray-700', 'text-gray-300', 'hover:border-gray-600');
+                document.getElementById('role').value = btn.dataset.role;
+            });
+        });
+
+        // Password Strength Calculation
+        function calculatePasswordStrength(password) {
+            let strength = 0;
+            if (password.length >= 8) strength++;
+            if (/[a-z]/.test(password)) strength++;
+            if (/[A-Z]/.test(password)) strength++;
+            if (/[0-9]/.test(password)) strength++;
+            if (/[^a-zA-Z0-9]/.test(password)) strength++;
+            return strength;
+        }
+
+        // Password Strength Indicator
+        document.getElementById('password').addEventListener('input', (e) => {
+            const password = e.target.value;
+            const strength = calculatePasswordStrength(password);
+            const strengthLabel = document.getElementById('strengthLabel');
+            const strengthBar = document.getElementById('strengthBar');
+            const passwordHint = document.getElementById('passwordHint');
+
+            let label = '약함';
+            let color = '#dc2626';
+            let width = '33%';
+            let hint = '⚠️ 최소 8자 이상 입력하세요';
+
+            if (strength <= 2) {
+                label = '약함';
+                color = '#dc2626';
+                width = '33%';
+                hint = '⚠️ 최소 8자 이상 입력하세요';
+            } else if (strength === 3) {
+                label = '보통';
+                color = '#f59e0b';
+                width = '66%';
+                hint = '💡 영문과 숫자를 함께 사용하면 더 안전합니다';
+            } else {
+                label = '강함';
+                color = '#16a34a';
+                width = '100%';
+                hint = '✅ 안전한 비밀번호입니다';
+            }
+
+            strengthLabel.textContent = label;
+            strengthLabel.style.color = color;
+            strengthBar.style.width = width;
+            strengthBar.style.backgroundColor = color;
+            passwordHint.textContent = hint;
+            passwordHint.style.color = color;
+
+            // Check match
+            checkPasswordMatch();
+        });
+
+        // Password Match Check
+        function checkPasswordMatch() {
+            const password = document.getElementById('password').value;
+            const passwordConfirm = document.getElementById('passwordConfirm').value;
+            const matchFeedback = document.getElementById('matchFeedback');
+
+            if (passwordConfirm.length === 0) {
+                matchFeedback.textContent = '';
+                return;
+            }
+
+            if (password === passwordConfirm) {
+                matchFeedback.innerHTML = '✅ <span style="color: #22c55e;">비밀번호가 일치합니다</span>';
+            } else {
+                matchFeedback.innerHTML = '❌ <span style="color: #dc2626;">비밀번호가 일치하지 않습니다</span>';
+            }
+        }
+
+        document.getElementById('passwordConfirm').addEventListener('input', checkPasswordMatch);
+
+        // Toggle Password Visibility
+        function togglePasswordVisibility(fieldId) {
+            const field = document.getElementById(fieldId);
+            field.type = field.type === 'password' ? 'text' : 'password';
+        }
+
+        // Form Submit
+        document.getElementById('signupForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('✅ 회원가입 완료!\n(실제 구현 시 서버 연동)');
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>수업 생성 - EduVerse</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50">
+    <div class="min-h-screen py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-3xl mx-auto">
+            <div class="text-center mb-8">
+                <h1 class="text-3xl font-bold text-gray-900">새 수업 만들기</h1>
+                <p class="mt-2 text-gray-600">커리큘럼을 선택하고 수업 정보를 입력하세요</p>
+            </div>
+
+            <form class="bg-white rounded-lg shadow p-8 space-y-6">
+                <!-- Curriculum Selection -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-3">커리큘럼 선택</label>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="border-2 border-green-600 bg-green-50 p-4 rounded-lg cursor-pointer">
+                            <h4 class="font-bold text-green-900">C 프로그래밍 기초</h4>
+                            <p class="text-sm text-green-700 mt-1">12주 | C언어 기본 문법</p>
+                        </div>
+                        <div class="border-2 border-gray-300 p-4 rounded-lg cursor-pointer hover:border-green-600">
+                            <h4 class="font-bold">Java 프로그래밍 기초</h4>
+                            <p class="text-sm text-gray-600 mt-1">12주 | 객체지향</p>
+                        </div>
+                        <div class="border-2 border-gray-300 p-4 rounded-lg cursor-pointer hover:border-green-600">
+                            <h4 class="font-bold">JavaScript 기초</h4>
+                            <p class="text-sm text-gray-600 mt-1">12주 | 웹 개발</p>
+                        </div>
+                        <div class="border-2 border-gray-300 p-4 rounded-lg cursor-pointer hover:border-green-600">
+                            <h4 class="font-bold">C# 프로그래밍 기초</h4>
+                            <p class="text-sm text-gray-600 mt-1">12주 | .NET</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Class Name -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">수업 이름</label>
+                    <input type="text" value="C 프로그래밍 기초 2025 1학기"
+                           class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md">
+                </div>
+
+                <!-- Year & Semester -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">연도</label>
+                        <input type="number" value="2025"
+                               class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">학기</label>
+                        <select class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md">
+                            <option>1학기</option>
+                            <option>2학기</option>
+                            <option>여름학기</option>
+                            <option>겨울학기</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Submit -->
+                <div class="flex justify-end space-x-4 pt-6">
+                    <a href="professor-dashboard.html" class="px-6 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">취소</a>
+                    <button type="submit" class="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">
+                        수업 만들기
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>사용자 관리 - EduVerse</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-gray-100">
+    <div class="flex flex-col min-h-screen">
+        <!-- Header -->
+        <div class="bg-gray-800 border-b border-gray-700 px-6 py-4">
+            <h1 class="text-2xl font-bold text-white">사용자 관리</h1>
+        </div>
+
+        <!-- Stats -->
+        <div class="bg-gray-800 border-b border-gray-700 px-6 py-3 flex items-center space-x-6 text-sm">
+            <p class="text-gray-300"><span class="font-bold text-indigo-400">전체:</span> 234명</p>
+            <p class="text-gray-300"><span class="font-bold text-blue-400">학생:</span> 200명</p>
+            <p class="text-gray-300"><span class="font-bold text-purple-400">교수자:</span> 34명</p>
+        </div>
+
+        <!-- Filters -->
+        <div class="bg-gray-800 border-b border-gray-700 px-6 py-4 space-y-3">
+            <div class="flex flex-wrap items-center gap-4">
+                <div class="flex items-center space-x-2">
+                    <label class="text-sm text-gray-400">역할:</label>
+                    <select class="bg-gray-700 text-gray-300 text-sm px-3 py-1 rounded">
+                        <option>전체</option>
+                        <option>학생</option>
+                        <option>교수자</option>
+                    </select>
+                </div>
+
+                <div class="flex items-center space-x-2">
+                    <label class="text-sm text-gray-400">상태:</label>
+                    <select class="bg-gray-700 text-gray-300 text-sm px-3 py-1 rounded">
+                        <option>전체</option>
+                        <option>활성</option>
+                        <option>비활성</option>
+                        <option>정지</option>
+                    </select>
+                </div>
+
+                <input
+                    type="text"
+                    placeholder="이메일 또는 이름 검색..."
+                    class="flex-1 px-3 py-1 bg-gray-700 text-gray-300 text-sm rounded border border-gray-600 focus:border-indigo-500 outline-none transition">
+                <button class="text-gray-400 hover:text-white">🔍</button>
+            </div>
+        </div>
+
+        <!-- Table -->
+        <main class="flex-1 overflow-auto">
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm">
+                    <thead class="bg-gray-800 border-b border-gray-700 sticky top-0">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-gray-300 font-bold">ID</th>
+                            <th class="px-6 py-3 text-left text-gray-300 font-bold">이메일</th>
+                            <th class="px-6 py-3 text-left text-gray-300 font-bold">이름</th>
+                            <th class="px-6 py-3 text-left text-gray-300 font-bold">역할</th>
+                            <th class="px-6 py-3 text-left text-gray-300 font-bold">상태</th>
+                            <th class="px-6 py-3 text-left text-gray-300 font-bold">가입일</th>
+                            <th class="px-6 py-3 text-left text-gray-300 font-bold">액션</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-700">
+                        <!-- User 1 -->
+                        <tr class="hover:bg-gray-800/50 transition">
+                            <td class="px-6 py-3 text-gray-300">234</td>
+                            <td class="px-6 py-3 text-gray-300">student@edu.com</td>
+                            <td class="px-6 py-3 text-gray-300">김철수</td>
+                            <td class="px-6 py-3">
+                                <span class="bg-blue-900 text-blue-300 text-xs px-2 py-1 rounded-full">학생</span>
+                            </td>
+                            <td class="px-6 py-3">
+                                <span class="bg-green-900 text-green-300 text-xs px-2 py-1 rounded-full">활성</span>
+                            </td>
+                            <td class="px-6 py-3 text-gray-400">2025-10-15</td>
+                            <td class="px-6 py-3">
+                                <button class="text-indigo-400 hover:text-indigo-300">편집</button>
+                            </td>
+                        </tr>
+
+                        <!-- User 2 -->
+                        <tr class="hover:bg-gray-800/50 transition">
+                            <td class="px-6 py-3 text-gray-300">233</td>
+                            <td class="px-6 py-3 text-gray-300">prof@edu.com</td>
+                            <td class="px-6 py-3 text-gray-300">이교수</td>
+                            <td class="px-6 py-3">
+                                <span class="bg-purple-900 text-purple-300 text-xs px-2 py-1 rounded-full">교수자</span>
+                            </td>
+                            <td class="px-6 py-3">
+                                <span class="bg-green-900 text-green-300 text-xs px-2 py-1 rounded-full">활성</span>
+                            </td>
+                            <td class="px-6 py-3 text-gray-400">2025-10-14</td>
+                            <td class="px-6 py-3">
+                                <button class="text-indigo-400 hover:text-indigo-300">편집</button>
+                            </td>
+                        </tr>
+
+                        <!-- User 3 -->
+                        <tr class="hover:bg-gray-800/50 transition">
+                            <td class="px-6 py-3 text-gray-300">232</td>
+                            <td class="px-6 py-3 text-gray-300">test@edu.com</td>
+                            <td class="px-6 py-3 text-gray-300">박학생</td>
+                            <td class="px-6 py-3">
+                                <span class="bg-blue-900 text-blue-300 text-xs px-2 py-1 rounded-full">학생</span>
+                            </td>
+                            <td class="px-6 py-3">
+                                <span class="bg-red-900 text-red-300 text-xs px-2 py-1 rounded-full">정지</span>
+                            </td>
+                            <td class="px-6 py-3 text-gray-400">2025-10-13</td>
+                            <td class="px-6 py-3">
+                                <button class="text-indigo-400 hover:text-indigo-300">편집</button>
+                            </td>
+                        </tr>
+
+                        <!-- User 4 -->
+                        <tr class="hover:bg-gray-800/50 transition">
+                            <td class="px-6 py-3 text-gray-300">231</td>
+                            <td class="px-6 py-3 text-gray-300">user@edu.com</td>
+                            <td class="px-6 py-3 text-gray-300">최학생</td>
+                            <td class="px-6 py-3">
+                                <span class="bg-blue-900 text-blue-300 text-xs px-2 py-1 rounded-full">학생</span>
+                            </td>
+                            <td class="px-6 py-3">
+                                <span class="bg-green-900 text-green-300 text-xs px-2 py-1 rounded-full">활성</span>
+                            </td>
+                            <td class="px-6 py-3 text-gray-400">2025-10-12</td>
+                            <td class="px-6 py-3">
+                                <button class="text-indigo-400 hover:text-indigo-300">편집</button>
+                            </td>
+                        </tr>
+
+                        <!-- User 5 -->
+                        <tr class="hover:bg-gray-800/50 transition">
+                            <td class="px-6 py-3 text-gray-300">230</td>
+                            <td class="px-6 py-3 text-gray-300">teacher@edu.com</td>
+                            <td class="px-6 py-3 text-gray-300">정교수</td>
+                            <td class="px-6 py-3">
+                                <span class="bg-purple-900 text-purple-300 text-xs px-2 py-1 rounded-full">교수자</span>
+                            </td>
+                            <td class="px-6 py-3">
+                                <span class="bg-gray-700 text-gray-300 text-xs px-2 py-1 rounded-full">비활성</span>
+                            </td>
+                            <td class="px-6 py-3 text-gray-400">2025-10-11</td>
+                            <td class="px-6 py-3">
+                                <button class="text-indigo-400 hover:text-indigo-300">편집</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            <div class="bg-gray-800 border-t border-gray-700 px-6 py-4 flex items-center justify-between">
+                <button class="text-gray-400 hover:text-white">◀ 이전</button>
+                <span class="text-gray-400 text-sm">페이지 1/5</span>
+                <button class="text-gray-400 hover:text-white">다음 ▶</button>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

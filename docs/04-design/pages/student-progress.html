@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>진도 확인 - EduVerse</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-gray-100">
+    <div class="flex h-screen">
+        <!-- Sidebar (동일) -->
+        <aside class="w-60 bg-gray-800 border-r border-gray-700 flex flex-col">
+            <div class="p-4 border-b border-gray-700">
+                <div class="flex items-center space-x-2">
+                    <div class="w-6 h-6 bg-indigo-600 rounded-lg flex items-center justify-center text-white text-sm font-bold">E</div>
+                    <span class="font-bold text-white">EduVerse</span>
+                </div>
+            </div>
+
+            <nav class="flex-1 p-4 space-y-2">
+                <a href="student-dashboard.html" class="flex items-center space-x-3 px-4 py-2 text-gray-400 hover:bg-gray-700 rounded-lg transition">
+                    <span>📚</span>
+                    <span>대시보드</span>
+                </a>
+                <a href="#" class="flex items-center space-x-3 px-4 py-2 bg-indigo-600 rounded-lg text-white transition">
+                    <span>📈</span>
+                    <span>진도</span>
+                </a>
+                <a href="student-qna.html" class="flex items-center space-x-3 px-4 py-2 text-gray-400 hover:bg-gray-700 rounded-lg transition">
+                    <span>💭</span>
+                    <span>질문</span>
+                    <span class="ml-auto bg-red-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">2</span>
+                </a>
+            </nav>
+
+            <div class="p-4 border-t border-gray-700">
+                <a href="landing.html" class="flex items-center space-x-3 px-4 py-2 text-gray-500 hover:text-gray-300 transition">
+                    <span>🚪</span>
+                    <span>로그아웃</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 overflow-auto">
+            <div class="bg-gray-800 border-b border-gray-700 px-6 py-4">
+                <h1 class="text-2xl font-bold text-white">자료구조 및 알고리즘 | 나의 학습 진도</h1>
+            </div>
+
+            <div class="p-6 space-y-6">
+                <!-- Overall Progress -->
+                <div class="bg-gray-800 rounded-lg p-6 border border-gray-700">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="font-bold text-white">전체 진도</h3>
+                        <span class="font-bold text-indigo-400">35%</span>
+                    </div>
+                    <div class="w-full h-4 bg-gray-700 rounded-full overflow-hidden mb-3">
+                        <div class="h-full bg-indigo-600" style="width: 35%;"></div>
+                    </div>
+                    <p class="text-sm text-gray-400">5/16 주차 완료</p>
+                </div>
+
+                <!-- Weekly Progress -->
+                <div class="space-y-4">
+                    <!-- Completed Week -->
+                    <div class="bg-gray-800 rounded-lg p-6 border border-gray-700">
+                        <div class="flex items-start justify-between mb-3">
+                            <div>
+                                <h4 class="font-bold text-white">✅ Week 1: 첫 출근 - Python 기초</h4>
+                                <p class="text-sm text-green-400 mt-1">[완료 100%]</p>
+                            </div>
+                        </div>
+                        <ul class="space-y-2 text-sm">
+                            <li class="text-green-400">✅ greet() 함수 작성</li>
+                            <li class="text-green-400">✅ 변수와 자료형</li>
+                            <li class="text-green-400">✅ 조건문 활용</li>
+                        </ul>
+                    </div>
+
+                    <!-- Completed Week -->
+                    <div class="bg-gray-800 rounded-lg p-6 border border-gray-700">
+                        <div class="flex items-start justify-between mb-3">
+                            <div>
+                                <h4 class="font-bold text-white">✅ Week 2: 자료구조 입문</h4>
+                                <p class="text-sm text-green-400 mt-1">[완료 100%]</p>
+                            </div>
+                        </div>
+                        <ul class="space-y-2 text-sm">
+                            <li class="text-green-400">✅ 리스트 다루기</li>
+                            <li class="text-green-400">✅ 딕셔너리 활용</li>
+                        </ul>
+                    </div>
+
+                    <!-- In Progress Week -->
+                    <div class="bg-gray-800 rounded-lg p-6 border border-yellow-600/50">
+                        <div class="flex items-start justify-between mb-3">
+                            <div>
+                                <h4 class="font-bold text-white">🔄 Week 3: 알고리즘 기초</h4>
+                                <p class="text-sm text-yellow-400 mt-1">[진행 중 60%]</p>
+                            </div>
+                        </div>
+                        <div class="w-full h-2 bg-gray-700 rounded-full overflow-hidden mb-3">
+                            <div class="h-full bg-yellow-500" style="width: 60%;"></div>
+                        </div>
+                        <ul class="space-y-2 text-sm">
+                            <li class="text-green-400">✅ 선형 탐색</li>
+                            <li class="text-green-400">✅ 이진 탐색</li>
+                            <li class="text-yellow-400">🔄 정렬 알고리즘 (진행 중) [테스트 2/3 통과]</li>
+                            <li class="text-gray-500">🔒 재귀 함수 (잠금)</li>
+                        </ul>
+                        <a href="student-learning.html" class="inline-block text-indigo-400 hover:text-indigo-300 text-sm mt-3">[계속하기 →]</a>
+                    </div>
+
+                    <!-- Locked Week -->
+                    <div class="bg-gray-800 rounded-lg p-6 border border-gray-700 opacity-70">
+                        <div class="flex items-start justify-between">
+                            <div>
+                                <h4 class="font-bold text-gray-400">🔒 Week 4: 스택과 큐</h4>
+                                <p class="text-sm text-gray-500 mt-1">[잠금]</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Locked Week -->
+                    <div class="bg-gray-800 rounded-lg p-6 border border-gray-700 opacity-70">
+                        <div class="flex items-start justify-between">
+                            <div>
+                                <h4 class="font-bold text-gray-400">🔒 Week 5: 트리 구조</h4>
+                                <p class="text-sm text-gray-500 mt-1">[잠금]</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- More weeks (abbreviated) -->
+                    <div class="text-center text-gray-500 text-sm py-4">
+                        ... 6주차 이후 내용 ...
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

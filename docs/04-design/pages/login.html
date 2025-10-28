@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>로그인 - EduVerse</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 min-h-screen flex items-center justify-center p-4">
+    <div class="w-full max-w-md">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <div class="flex items-center justify-center space-x-2 mb-4">
+                <div class="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center text-white font-bold">E</div>
+                <span class="text-xl font-bold text-white">EduVerse</span>
+            </div>
+            <h1 class="text-3xl font-bold text-white">로그인</h1>
+        </div>
+
+        <!-- Form -->
+        <form class="bg-gray-800 rounded-xl p-8 space-y-6" id="loginForm">
+            <!-- Error Banner -->
+            <div id="errorBanner" class="hidden bg-red-900/50 border border-red-500 rounded-lg p-4 text-red-400 text-sm flex items-start space-x-2">
+                <span>❌</span>
+                <div id="errorMessage"></div>
+            </div>
+
+            <!-- Email Field -->
+            <div>
+                <label for="email" class="block text-sm font-medium text-gray-400 mb-2">
+                    이메일
+                </label>
+                <input
+                    type="email"
+                    id="email"
+                    placeholder="이메일 주소를 입력하세요"
+                    class="w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 outline-none transition"
+                    required>
+            </div>
+
+            <!-- Password Field -->
+            <div>
+                <label for="password" class="block text-sm font-medium text-gray-400 mb-2">
+                    비밀번호
+                </label>
+                <div class="relative">
+                    <input
+                        type="password"
+                        id="password"
+                        placeholder="비밀번호를 입력하세요"
+                        class="w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 outline-none transition pr-12"
+                        required>
+                    <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white" onclick="togglePasswordVisibility()">
+                        👁️
+                    </button>
+                </div>
+            </div>
+
+            <!-- Remember Me -->
+            <div class="flex items-center space-x-3">
+                <input
+                    type="checkbox"
+                    id="remember"
+                    class="w-4 h-4 rounded border-gray-600 text-indigo-600 focus:ring-indigo-500">
+                <label for="remember" class="text-sm text-gray-400">
+                    로그인 상태 유지 (30일)
+                </label>
+            </div>
+
+            <!-- Submit Button -->
+            <button
+                type="submit"
+                id="submitBtn"
+                class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-lg transition transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed">
+                로그인
+            </button>
+
+            <!-- Forgot Password Link -->
+            <div class="text-center">
+                <a href="#" class="text-indigo-500 hover:text-indigo-400 transition text-sm">
+                    비밀번호를 잊으셨나요?
+                </a>
+            </div>
+
+            <!-- Divider -->
+            <div class="flex items-center space-x-4 text-gray-600 text-sm">
+                <div class="flex-1 border-t border-gray-700"></div>
+                <span>또는</span>
+                <div class="flex-1 border-t border-gray-700"></div>
+            </div>
+
+            <!-- Sign Up Link -->
+            <div class="text-center text-sm text-gray-400">
+                계정이 없으신가요?
+                <a href="signup.html" class="text-indigo-500 hover:text-indigo-400 transition">회원가입</a>
+            </div>
+        </form>
+
+        <!-- Demo Credentials -->
+        <div class="mt-8 p-4 bg-gray-800/50 border border-gray-700 rounded-lg">
+            <p class="text-xs text-gray-500 mb-2">💡 테스트용 계정:</p>
+            <div class="text-xs text-gray-400 space-y-1">
+                <p><strong>학생:</strong> student@example.com / 12345678</p>
+                <p><strong>교수자:</strong> professor@example.com / 12345678</p>
+                <p><strong>관리자:</strong> admin@example.com / 12345678</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let failedAttempts = 0;
+        const MAX_ATTEMPTS = 5;
+        const LOCKOUT_TIME = 15 * 60 * 1000; // 15 minutes
+        let lockoutTime = null;
+
+        // Toggle Password Visibility
+        function togglePasswordVisibility() {
+            const field = document.getElementById('password');
+            field.type = field.type === 'password' ? 'text' : 'password';
+        }
+
+        // Check Lockout
+        function checkLockout() {
+            const lockout = localStorage.getItem('loginLockout');
+            if (lockout) {
+                const lockoutEndTime = parseInt(lockout);
+                const now = Date.now();
+                if (now < lockoutEndTime) {
+                    const remainingTime = Math.ceil((lockoutEndTime - now) / 1000);
+                    const minutes = Math.floor(remainingTime / 60);
+                    const seconds = remainingTime % 60;
+                    return { locked: true, remaining: `${minutes}분 ${seconds}초` };
+                } else {
+                    localStorage.removeItem('loginLockout');
+                    localStorage.removeItem('failedAttempts');
+                    failedAttempts = 0;
+                }
+            }
+            return { locked: false };
+        }
+
+        // Show Error
+        function showError(message) {
+            const errorBanner = document.getElementById('errorBanner');
+            const errorMessage = document.getElementById('errorMessage');
+            errorMessage.textContent = message;
+            errorBanner.classList.remove('hidden');
+        }
+
+        // Hide Error
+        function hideError() {
+            document.getElementById('errorBanner').classList.add('hidden');
+        }
+
+        // Form Submit
+        document.getElementById('loginForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            // Check Lockout
+            const lockoutStatus = checkLockout();
+            if (lockoutStatus.locked) {
+                showError(`로그인 시도 횟수를 초과했습니다. ${lockoutStatus.remaining} 후 다시 시도해주세요`);
+                document.getElementById('email').disabled = true;
+                document.getElementById('password').disabled = true;
+                document.getElementById('submitBtn').disabled = true;
+                return;
+            }
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            hideError();
+
+            // Validation
+            if (!email || !password) {
+                showError('모든 필드를 입력해주세요');
+                return;
+            }
+
+            // Simulate Login (in real app, call API)
+            if ((email === 'student@example.com' ||
+                 email === 'professor@example.com' ||
+                 email === 'admin@example.com') &&
+                password === '12345678') {
+
+                // Success
+                document.getElementById('submitBtn').innerHTML = '✅ 로그인 중...';
+                document.getElementById('submitBtn').disabled = true;
+
+                // Redirect based on role
+                setTimeout(() => {
+                    if (email === 'student@example.com') {
+                        window.location.href = 'student-dashboard.html';
+                    } else if (email === 'professor@example.com') {
+                        window.location.href = 'professor-dashboard.html';
+                    } else {
+                        window.location.href = 'admin-dashboard.html';
+                    }
+                }, 1000);
+
+                // Clear lockout
+                localStorage.removeItem('loginLockout');
+                localStorage.removeItem('failedAttempts');
+                failedAttempts = 0;
+
+            } else {
+                // Failure
+                failedAttempts++;
+                localStorage.setItem('failedAttempts', failedAttempts);
+
+                if (failedAttempts >= MAX_ATTEMPTS) {
+                    const lockoutEnd = Date.now() + LOCKOUT_TIME;
+                    localStorage.setItem('loginLockout', lockoutEnd);
+
+                    // Disable form
+                    document.getElementById('email').disabled = true;
+                    document.getElementById('password').disabled = true;
+                    document.getElementById('submitBtn').disabled = true;
+
+                    showError('로그인 시도 횟수를 초과했습니다. 15분 후 다시 시도해주세요');
+                } else {
+                    showError(`이메일 또는 비밀번호가 올바르지 않습니다 (${failedAttempts}/${MAX_ATTEMPTS})`);
+                }
+            }
+        });
+
+        // Check lockout on page load
+        const lockoutStatus = checkLockout();
+        if (lockoutStatus.locked) {
+            showError(`로그인 시도 횟수를 초과했습니다. ${lockoutStatus.remaining} 후 다시 시도해주세요`);
+            document.getElementById('email').disabled = true;
+            document.getElementById('password').disabled = true;
+            document.getElementById('submitBtn').disabled = true;
+        }
+    </script>
+</body>
+</html>

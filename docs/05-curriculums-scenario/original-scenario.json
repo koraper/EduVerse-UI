@@ -1,0 +1,841 @@
+{
+  "courseTitle": "LogiCore Tech 신입 개발자 과정",
+  "language": "Python",
+  "languageVersion": "3.10",
+  "installationGuide": {
+    "windows": "Windows 환경에서 Python 설치 가이드",
+    "macos": "macOS 환경에서 Python 설치 가이드",
+    "linux": "Linux 환경에서 Python 설치 가이드"
+  },
+  "weeks": [
+    {
+      "week": 1,
+      "title": "신입사원 온보딩 및 개발 환경 구축",
+      "cycles": [
+        {
+          "title": "오리엔테이션 및 파이썬 설치",
+          "syntax_key": "installation",
+          "filename": "check_python_version.py",
+          "starterCode": "# 이 파일은 파이썬 설치를 확인하기 위한 스크립트입니다.\n# 코드를 수정할 필요 없이, 아래 터미널에서 'python check_python_version.py' 명령어를 실행하여 설치를 확인하세요.\n\nimport sys\n\nprint(\"파이썬 설치 확인 완료!\")\nprint(\"설치된 파이썬 버전:\", sys.version)\n",
+          "testCode": "import sys\nassert sys.version_info.major >= 3, \"파이썬 3 이상 버전이 필요합니다.\"",
+          "task": {
+            "character": "alex",
+            "subtitle": "팀장 환영사",
+            "title": "LogiCore Tech에 오신 것을 환영합니다!",
+            "content": "OOO님, 우리 LogiCore Tech의 일원이 되신 것을 진심으로 환영합니다. 우리 회사는 데이터를 통해 세상을 더 이롭게 만드는 것을 목표로 하고 있죠. 이를 위해 우리는 <span class='font-bold text-yellow-300'>간결하고 강력한 언어인 '파이썬'</span>을 주로 사용합니다. OOO님의 첫 번째 업무는 앞으로 함께할 가장 중요한 도구, <span class='font-bold text-yellow-300'>파이썬을 OOO님의 PC에 설치</span>하는 것입니다."
+          },
+          "briefing": {
+            "character": "sena",
+            "subtitle": "직속 선임의 OJT",
+            "title": "첫 단추 채우기",
+            "content": "세나 선임이에요. 반갑습니다! 개발자는 코드를 짜기 전에 <span class='font-bold text-teal-300'>자신의 개발 환경을 제대로 구축</span>하는 게 정말 중요해요. 마치 요리사가 자기 칼을 먼저 챙기는 것과 같죠. 파이썬 설치는 간단하지만, 나중에 터미널에서 명령어를 바로 쓰려면 <span class='font-bold text-teal-300'>'Add Python to PATH' 옵션</span>을 꼭 체크하는 게 좋아요. 막히는 부분 있으면 언제든 물어보세요!"
+          },
+          "lecture": {
+            "character": "profKim",
+            "title": "교수님의 쪽지: 언어와 인터프리터",
+            "keyTakeaway": "파이썬 설치 = 컴퓨터에 파이썬 번역기 설치하기",
+            "sandboxCode": null,
+            "sections": [
+              {
+                "heading": "핵심 개념",
+                "text": "파이썬은 '프로그래밍 언어'입니다. 우리가 파이썬 문법으로 작성한 코드를 컴퓨터가 이해할 수 있는 기계어로 번역해주는 '번역기'가 필요한데, 이것을 '파이썬 인터프리터'라고 부릅니다. 지금 우리는 바로 그 번역기를 설치하는 것입니다.",
+                "code": null
+              },
+              {
+                "heading": "기본 문법",
+                "text": "설치가 완료되면 터미널(명령 프롬프트)에서 아래 명령어를 통해 설치된 버전을 확인할 수 있습니다.",
+                "code": "python --version\n# 또는\npython -V"
+              },
+              {
+                "heading": "활용 사례",
+                "text": "모든 파이썬 프로그램은 이 인터프리터를 통해 실행됩니다. 웹 서버, 데이터 분석, 인공지능 등 모든 파이썬 기반 애플리케이션의 가장 기초적인 실행 환경입니다.",
+                "code": null
+              },
+              {
+                "heading": "주의점 및 팁",
+                "text": "Windows 환경에서 설치할 경우, 'Add Python to PATH' 옵션을 체크하면 어떤 폴더에서든 `python` 명령어를 실행할 수 있어 매우 편리합니다. macOS나 Linux에는 기본적으로 파이썬이 설치되어 있는 경우가 많습니다.",
+                "code": null
+              }
+            ]
+          },
+          "feedback": {
+            "success": {
+              "character": "alex",
+              "subtitle": "업무 완료 피드백",
+              "title": "첫 번째 도구 획득!",
+              "content": "<span class='font-bold text-green-300'>설치 완료된 것을 확인했습니다.</span> 훌륭합니다. 이제 OOO님은 파이썬이라는 강력한 언어를 사용할 준비를 마쳤습니다. 다음 단계를 진행하죠."
+            },
+            "failure_logical": {
+              "character": "sena",
+              "subtitle": "문제 해결 지원",
+              "title": "음, 뭔가 이상한데요?",
+              "content": "테스트 코드를 실행하는 데 실패했어요. {{ERROR_MESSAGE}} 라는 메시지가 보이네요. 혹시 설치 가이드에 따라 올바른 버전의 파이썬을 설치했는지 다시 한번 확인해 주시겠어요?"
+            },
+            "failure_runtime": {
+              "character": "sena",
+              "subtitle": "문제 해결 지원",
+              "title": "명령어를 못 찾겠어요!",
+              "content": "어라, 터미널에서 `python` 명령어를 찾을 수 없다고 나오네요. 혹시 설치할 때 'Add Python to PATH' 옵션을 놓치신 건 아닐까요? 환경 변수 설정을 다시 한번 확인해보시는 게 좋겠어요!"
+            }
+          }
+        },
+        {
+          "title": "코드 에디터(VS Code) 설정",
+          "syntax_key": "ide_setup",
+          "filename": "welcome.py",
+          "starterCode": "# VS Code 설치 및 폴더 열기 확인용 파일입니다.\n# 다음 사이클에서 이 파일을 수정하여 첫 코드를 작성하게 됩니다.\n\nprint(\"VS Code 준비 완료!\")\n",
+          "testCode": "import os\nassert os.path.exists('welcome.py'), \"'welcome.py' 파일이 현재 폴더에 존재해야 합니다.\"",
+          "task": {
+            "character": "alex",
+            "subtitle": "팀장 과업 지시",
+            "title": "우리의 작업 공간, 코드 에디터",
+            "content": "두 번째 업무입니다. 전문 개발자는 메모장이 아닌 <span class='font-bold text-yellow-300'>'코드 에디터'</span>라는 전문 도구를 사용합니다. 우리는 'Visual Studio Code'를 표준으로 사용하고 있어요. <span class='font-bold text-yellow-300'>VS Code를 설치하고, 앞으로 작업할 이 프로젝트 폴더를 열어주세요.</span>"
+          },
+          "briefing": {
+            "character": "sena",
+            "subtitle": "직속 선임의 팁",
+            "title": "VS Code, 친해져 보세요!",
+            "content": "VS Code는 정말 좋은 에디터에요. 코드를 예쁘게 색칠해줘서(구문 강조) 오타도 잘 보이고, 터미널도 내장되어 있어서 편하죠. 나중에 'Python' 확장 프로그램을 설치하면 훨씬 더 강력해질 거예요. <span class='font-bold text-teal-300'>폴더를 열어서 작업하는 습관</span>을 들이면 파일 관리가 아주 편해진답니다."
+          },
+          "lecture": {
+            "character": "profKim",
+            "title": "교수님의 쪽지: IDE란?",
+            "keyTakeaway": "IDE는 개발자의 생산성을 높여주는 만능 도구 상자입니다.",
+            "sandboxCode": null,
+            "sections": [
+              {
+                "heading": "핵심 개념",
+                "text": "IDE(Integrated Development Environment, 통합 개발 환경)는 코드를 작성하는 에디터 기능뿐만 아니라, 코드를 실행하고 오류를 찾는 디버깅, 버전 관리 등 개발에 필요한 여러 기능을 하나로 합친 소프트웨어를 말합니다. PyCharm, VS Code 등이 좋은 예시입니다.",
+                "code": null
+              },
+              {
+                "heading": "기본 문법",
+                "text": "IDE 자체의 문법은 없지만, 대부분의 IDE는 '폴더 열기(Open Folder)' 기능을 통해 프로젝트 단위로 파일을 관리하고, '새 파일(New File)' 기능을 통해 소스 코드 파일을 생성합니다.",
+                "code": null
+              },
+              {
+                "heading": "활용 사례",
+                "text": "단순한 스크립트 작성부터 거대한 웹 서비스 개발까지, 거의 모든 소프트웨어 개발은 IDE 위에서 이루어집니다.",
+                "code": null
+              },
+              {
+                "heading": "주의점 및 팁",
+                "text": "메모장 같은 일반 텍스트 편집기는 문법 강조나 자동 들여쓰기 기능이 없어 파이썬 개발에 적합하지 않습니다. 반드시 프로그래밍 전용 에디터나 IDE를 사용하는 습관을 들이는 것이 중요합니다.",
+                "code": null
+              }
+            ]
+          },
+          "feedback": {
+            "success": {
+              "character": "alex",
+              "subtitle": "업무 완료 피드백",
+              "title": "업무 환경 준비 완료",
+              "content": "좋습니다. 프로젝트 폴더가 VS Code에 잘 열렸네요. 이제 OOO님의 <span class='font-bold text-green-300'>개인 작업 공간이 완벽하게 준비</span>되었습니다. 드디어 첫 코드를 작성할 시간이군요."
+            },
+            "failure_logical": {
+              "character": "sena",
+              "subtitle": "문제 해결 지원",
+              "title": "파일을 못 찾겠어요",
+              "content": "{{ERROR_MESSAGE}} 라는 메시지가 뜨네요. 혹시 현재 프로젝트 폴더가 아니라 다른 폴더를 여신 건 아닐까요? VS Code의 '파일' 메뉴에서 '폴더 열기'를 선택해서 올바른 작업 폴더를 열어주세요."
+            },
+            "failure_runtime": {
+              "character": "sena",
+              "subtitle": "문제 해결 지원",
+              "title": "폴더가 열리지 않았어요",
+              "content": "음, 아직 프로젝트 폴더가 열리지 않은 것 같아요. VS Code 화면 왼쪽의 탐색기 창에 'welcome.py' 파일이 보이는지 확인해주세요. 보이지 않는다면 폴더를 다시 열어주셔야 해요."
+            }
+          }
+        },
+        {
+          "title": "첫 파이썬 프로그램 작성 및 실행",
+          "syntax_key": "print_statement",
+          "filename": "welcome.py",
+          "starterCode": "# 이 파일에 'Hello, LogiCore Tech!'를 출력하는 코드를 작성하세요.\n",
+          "expectedPrintOutput": "Hello, LogiCore Tech!",
+          "testCode": null,
+          "task": {
+            "character": "alex",
+            "subtitle": "팀장 과업 지시",
+            "title": "전통적인 첫걸음, Hello World!",
+            "content": "모든 설정이 잘 되었는지 최종 확인할 시간입니다. 신입 개발자의 전통에 따라, 화면에 <span class='font-bold text-yellow-300'>'Hello, LogiCore Tech!'</span> 라는 문장을 출력하는 간단한 파이썬 스크립트를 작성하고 실행해주세요. OOO님의 첫 번째 공식적인 코드입니다."
+          },
+          "briefing": {
+            "character": "sena",
+            "subtitle": "직속 선임의 힌트",
+            "title": "첫 코드, 긴장되시죠?",
+            "content": "첫 스크립트네요! 간단해요. 지금 열려있는 `welcome.py` 파일에 작성하면 돼요. 화면에 글자를 출력할 때 어떤 함수를 썼는지 기억나시나요? <span class='font-bold text-teal-300'>`print()` 함수</span>를 사용했었죠. 괄호 안에 <span class='font-bold text-teal-300'>따옴표로 감싼 문자열</span>을 넣으면 된답니다. 한번 해보세요!"
+          },
+          "lecture": {
+            "character": "profKim",
+            "title": "강의 노트: print() 함수와 문자열",
+            "keyTakeaway": "`print()` 함수는 괄호 안의 내용을 화면에 보여주는 가장 기본적인 명령입니다.",
+            "sandboxCode": "print(\"파이썬, 반가워!\")",
+            "sections": [
+              {
+                "heading": "핵심 개념",
+                "text": "프로그램은 컴퓨터에 내리는 '명령문'들의 순차적인 나열입니다. `print()`는 파이썬이 기본으로 제공하는 '함수'이며, 괄호 안에 주어진 값을 화면(터미널)에 출력하라는 명령을 수행합니다.",
+                "code": null
+              },
+              {
+                "heading": "기본 문법",
+                "text": "따옴표 안에 출력하고 싶은 문장을 넣어 함수를 호출합니다.",
+                "code": "# 큰따옴표 사용\nprint(\"Hello, World!\")\n\n# 작은따옴표도 가능\nprint('Hello, Python!')"
+              },
+              {
+                "heading": "활용 사례",
+                "text": "프로그램의 실행 상태를 확인하거나, 사용자에게 메시지를 보여주거나, 계산 결과를 출력하는 등 가장 기본적이고 중요한 기능입니다.",
+                "code": null
+              },
+              {
+                "heading": "주의점 및 팁",
+                "text": "문자열은 반드시 작은따옴표('')나 큰따옴표(\"\")로 감싸야 합니다. 또한, 파이썬은 대소문자를 구분하므로 `Print()`가 아닌 `print()`로 정확하게 입력해야 합니다.",
+                "code": null
+              }
+            ]
+          },
+          "feedback": {
+            "success": {
+              "character": "alex",
+              "subtitle": "업무 완료 피드백",
+              "title": "첫 커밋(Commit) 성공!",
+              "content": "터미널에 메시지가 정확하게 출력되었군요. <span class='font-bold text-green-300'>모든 개발 환경이 완벽하게 동작한다는 의미</span>입니다. 축하합니다, OOO님의 첫 번째 코드가 성공적으로 실행되었습니다. LogiCore Tech에 오신 것을 다시 한번 환영합니다."
+            },
+            "failure_logical": {
+              "character": "sena",
+              "subtitle": "문제 해결 지원",
+              "title": "메시지가 조금 다른데요?",
+              "content": "앗, 출력된 메시지가 조금 다르네요. {{ERROR_MESSAGE}} 오탈자가 없는지, 대소문자는 정확한지, 쉼표나 마침표 같은 문장 부호까지 똑같은지 다시 한번 꼼꼼하게 확인해볼까요?"
+            },
+            "failure_runtime": {
+              "character": "sena",
+              "subtitle": "문제 해결 지원",
+              "title": "앗, 문법 오류!",
+              "content": "어이쿠, 코드를 실행하다가 오류가 발생했어요. 혹시 `print`를 `Print`로 잘못 쓰시진 않았나요? 아니면 문자열 양쪽에 따옴표를 빠뜨렸을 수도 있고요. 파이썬은 이런 사소한 실수에 민감하거든요. 오류 메시지를 천천히 읽어보시면 어디가 틀렸는지 힌트를 얻을 수 있을 거예요."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "week": 2,
+      "title": "데이터 기본기: 변수, 자료형, 연산자 다루기",
+      "cycles": [
+        {
+          "title": "변수와 기본 자료형",
+          "syntax_key": "variables_datatypes",
+          "filename": "server_status.py",
+          "starterCode": "# TODO: 아래 주석에 맞춰 서비스의 기본 정보를 변수에 저장해주세요.\n\n# 1. 서비스 이름(service_name)을 \"LogiCore\" 라는 문자열로 저장하세요.\n\n# 2. 현재 동시 접속자 수(concurrent_users)를 100 이라는 숫자로 저장하세요.\n\n# 3. 서비스 오픈 여부(is_active)를 True 라는 불리언 값으로 저장하세요.\n",
+          "testCode": "assert 'service_name' in locals() and service_name == 'LogiCore', \"service_name 변수에 'LogiCore' 문자열을 할당해야 합니다.\"\nassert 'concurrent_users' in locals() and concurrent_users == 100, \"concurrent_users 변수에 숫자 100을 할당해야 합니다.\"\nassert 'is_active' in locals() and is_active is True, \"is_active 변수에 불리언 값 True를 할당해야 합니다.\"",
+          "task": {
+            "character": "alex",
+            "subtitle": "팀장 과업 지시",
+            "title": "서비스 기본 정보 설정",
+            "content": "좋은 아침입니다, OOO님. 간단한 업무부터 시작하죠. 우리 서비스의 <span class='font-bold text-yellow-300'>운영 상태를 관리할 변수</span>가 필요합니다. 서비스 이름(`service_name`)과 현재 동시 접속자 수(`concurrent_users`), 그리고 서비스 오픈 여부(`is_active`)를 각각 <span class='font-bold text-yellow-300'>문자열, 숫자, 불리언(True/False) 값</span>으로 변수에 저장해주세요."
+          },
+          "briefing": {
+            "character": "sena",
+            "subtitle": "직속 선임의 OJT",
+            "title": "데이터를 담는 상자, 변수",
+            "content": "세나 선임이에요. 변수는 일종의 <span class='font-bold text-teal-300'>'이름표가 붙은 상자'</span>라고 생각하면 편해요. 상자에 물건을 넣듯, 변수에 데이터를 저장하는 거죠. 파이썬은 똑똑해서 상자에 <span class='font-bold text-teal-300'>숫자를 넣으면 숫자 상자</span>로, <span class='font-bold text-teal-300'>글자를 넣으면 글자 상자</span>로 알아서 인식한답니다. 이걸 '동적 타이핑'이라고 불러요."
+          },
+          "lecture": {
+            "character": "profKim",
+            "title": "강의 노트: 변수와 자료형",
+            "keyTakeaway": "변수는 값을 저장하는 공간이며, `=` 기호를 사용해 값을 할당(저장)합니다.",
+            "sandboxCode": "# my_age 변수에 자신의 나이를 숫자로 저장하고 출력해보세요.\nmy_age = 25\nprint(my_age)",
+            "sections": [
+              {
+                "heading": "핵심 개념",
+                "text": "변수(Variable)는 데이터를 저장하기 위해 이름표를 붙인 메모리 공간입니다. 파이썬에서는 변수를 만들기 전에 미리 타입을 선언할 필요가 없습니다. 값을 할당하면 그 값의 종류에 따라 자동으로 자료형(Data Type)이 결정됩니다.",
+                "code": null
+              },
+              {
+                "heading": "기본 문법",
+                "text": "변수이름 = 값 형태로 값을 할당합니다.",
+                "code": "# 숫자형 (Integer)\nuser_count = 100\n\n# 문자열 (String)\nserver_status = \"running\"\n\n# 불리언 (Boolean)\nis_admin = True"
+              },
+              {
+                "heading": "활용 사례",
+                "text": "사용자 이름, 나이, 점수 등 프로그램이 동작하는 동안 계속해서 사용되거나 변경될 수 있는 모든 데이터를 저장하는 데 사용됩니다.",
+                "code": null
+              },
+              {
+                "heading": "주의점 및 팁",
+                "text": "변수 이름은 숫자로 시작할 수 없으며, 공백을 포함할 수 없습니다. 또한, `my_name`과 `My_Name`은 서로 다른 변수로 인식될 만큼 대소문자를 엄격하게 구분합니다.",
+                "code": null
+              }
+            ]
+          },
+          "feedback": {
+            "success": {
+              "character": "alex",
+              "subtitle": "업무 완료 피드백",
+              "title": "기본 설정 완료",
+              "content": "<span class='font-bold text-green-300'>변수들이 정확하게 선언되었군요.</span> 좋습니다. 이제 이 변수들을 이용해 우리 서비스가 다양한 상황에 맞게 동작하도록 만들 수 있습니다. 다음 업무로 넘어가죠."
+            },
+            "failure_logical": {
+              "character": "sena",
+              "subtitle": "문제 해결 지원",
+              "title": "선언을 다시 확인해볼까요?",
+              "content": "음, 테스트를 통과하지 못했어요. {{ERROR_MESSAGE}} 메시지를 보니 변수 이름에 오타가 있거나, 저장된 값의 종류(자료형)가 다른 것 같아요. 문자열은 따옴표로 감쌌는지, 숫자는 그냥 썼는지 한번 확인해볼까요?"
+            },
+            "failure_runtime": {
+              "character": "sena",
+              "subtitle": "문제 해결 지원",
+              "title": "앗, 문법 오류!",
+              "content": "코드를 실행하다가 오류가 발생했어요. 변수 이름 규칙을 어긴 건 아닐까요? 변수 이름은 숫자로 시작할 수 없고, `my-name`처럼 특수문자를 쓸 수 없어요. 변수 이름을 다시 한번 확인해주세요!"
+            }
+          }
+        },
+        {
+          "title": "연산자를 활용한 계산",
+          "syntax_key": "operators",
+          "filename": "analysis.py",
+          "starterCode": "total_visits = 1250\npaid_users = 50\n\n# TODO: total_visits와 paid_users를 사용하여 conversion_rate를 계산하고, 그 결과를 출력하세요.\n# 전환율 공식: (유료 전환 사용자 / 총 방문자 수) * 100\n\nconversion_rate = 0 # 이 부분을 수정하여 계산식을 작성하세요.\nprint(conversion_rate)\n",
+          "testCode": "assert 'conversion_rate' in locals(), \"conversion_rate 변수가 선언되지 않았습니다.\"\nassert abs(conversion_rate - 4.0) < 0.001, f\"계산된 전환율이 4.0이 아닙니다. 실제 계산값: {conversion_rate}\"",
+          "task": {
+            "character": "alex",
+            "subtitle": "팀장 과업 지시",
+            "title": "사용자 데이터 분석",
+            "content": "기획팀에서 간단한 데이터 분석을 요청했습니다. 어제 하루 동안의 <span class='font-bold text-yellow-300'>총 방문자 수(total_visits)가 1,250명</span>이고, <span class='font-bold text-yellow-300'>유료 전환 사용자(paid_users)가 50명</span>일 때, '유료 전환율(conversion_rate)'이 몇 퍼센트인지 계산해서 출력해주세요."
+          },
+          "briefing": {
+            "character": "sena",
+            "subtitle": "직속 선임의 팁",
+            "title": "계산은 컴퓨터에게!",
+            "content": "간단한 계산이네요. (유료 전환 사용자 / 총 방문자 수) * 100 으로 구하면 되겠죠? 파이썬에서는 사칙연산을 위한 <span class='font-bold text-teal-300'>산술 연산자(`+`, `-`, `*`, `/`)</span>를 바로 사용할 수 있어요. 코드로 계산식을 그대로 옮겨보면 금방 해결될 거예요."
+          },
+          "lecture": {
+            "character": "profKim",
+            "title": "강의 노트: 연산자와 수식",
+            "keyTakeaway": "연산자는 값을 계산하고 비교하는 데 사용되며, 괄호로 계산 순서를 제어할 수 있습니다.",
+            "sandboxCode": "my_score = 85\npass_score = 60\n\n# my_score가 pass_score보다 높은지 확인해보세요.\nprint(my_score > pass_score)",
+            "sections": [
+              {
+                "heading": "핵심 개념",
+                "text": "연산자(Operator)는 덧셈, 뺄셈, 비교 등 특정 연산을 수행하는 기호입니다. 연산자와 값이 결합하여 만들어지는 하나의 식을 수식(Expression)이라고 합니다. 수식은 계산되어 하나의 결과값을 만들어냅니다.",
+                "code": null
+              },
+              {
+                "heading": "기본 문법",
+                "text": "다양한 연산자를 사용하여 수식을 만들 수 있습니다.",
+                "code": "# 산술 연산자\nresult = 10 + 5   # 15\nresult = 10 / 2   # 5.0\n\n# 비교 연산자 (결과는 True 또는 False)\nis_equal = (10 == 5) # False\nis_greater = (10 > 5)  # True"
+              },
+              {
+                "heading": "활용 사례",
+                "text": "점수 합계 계산, 상품 가격 비교, 사용자 입력값 검증 등 데이터에 기반한 모든 판단과 계산에 사용됩니다.",
+                "code": null
+              },
+              {
+                "heading": "주의점 및 팁",
+                "text": "곱셈/나눗셈(`*`, `/`)이 덧셈/뺄셈(`+`, `-`)보다 먼저 계산됩니다. 계산 순서가 헷갈릴 때는, 괄호 `()`를 사용하여 명확하게 순서를 지정해주는 것이 좋은 습관입니다. 예: `(a + b) / 2`",
+                "code": null
+              }
+            ]
+          },
+          "feedback": {
+            "success": {
+              "character": "alex",
+              "subtitle": "업무 완료 피드백",
+              "title": "분석 결과 확인",
+              "content": "<span class='font-bold text-green-300'>전환율 계산이 정확하네요.</span> 좋습니다. 이런 간단한 계산 자동화가 개발의 시작입니다. 이제 이 결과를 보고서 형태로 보기 좋게 만드는 작업을 해보죠."
+            },
+            "failure_logical": {
+              "character": "sena",
+              "subtitle": "문제 해결 지원",
+              "title": "계산 결과를 다시 확인해볼까요?",
+              "content": "어라, 계산 결과가 약간 다른 것 같아요. {{ERROR_MESSAGE}} 혹시 수식에 오타가 있거나, 변수 이름을 잘못 쓴 건 아닐까요? 아니면 나눗셈 순서가 바뀌었을 수도 있고요. 수식을 다시 한번 천천히 살펴봐 주세요."
+            },
+            "failure_runtime": {
+              "character": "sena",
+              "subtitle": "문제 해결 지원",
+              "title": "앗, 계산 중 오류!",
+              "content": "코드를 실행하다가 오류가 발생했어요. 혹시 숫자가 아닌 값으로 계산을 시도했거나, 존재하지 않는 변수를 사용한 건 아닐까요? 변수 이름에 오타는 없는지 꼼꼼히 확인해보세요."
+            }
+          }
+        },
+        {
+          "title": "문자열 다루기",
+          "syntax_key": "string_formatting",
+          "filename": "report.py",
+          "starterCode": "report_date = '2025-09-29'\nconversion_rate = 4.0\n\n# TODO: f-string을 사용하여 \"2025-09-29 기준, 유료 전환율은 4.0% 입니다.\" 형식의 문자열을 만들어 출력하세요.\n\nreport_message = \"\"\nprint(report_message)\n",
+          "testCode": "expected_output = f\"{report_date} 기준, 유료 전환율은 {conversion_rate}% 입니다.\"\nassert 'report_message' in locals(), \"'report_message' 변수를 선언해야 합니다.\"\nassert report_message == expected_output, f\"report_message 변수의 값이 기대와 다릅니다. 기대값: '{expected_output}', 실제값: '{report_message}'\"",
+          "task": {
+            "character": "alex",
+            "subtitle": "팀장 과업 지시",
+            "title": "동적 보고 메시지 생성",
+            "content": "방금 계산한 <span class='font-bold text-yellow-300'>유료 전환율 결과를 보고 메시지로 만드는 업무</span>입니다. `report_date` 변수(예: '2025-09-29')와 `conversion_rate` 변수의 값을 조합해서, <span class='font-bold text-yellow-300'>\"2025-09-29 기준, 유료 전환율은 4.0% 입니다.\"</span> 와 같은 최종 문자열을 만들어 출력해주세요."
+          },
+          "briefing": {
+            "character": "sena",
+            "subtitle": "직속 선임의 팁",
+            "title": "f-string을 써보세요!",
+            "content": "여러 변수를 합쳐서 하나의 문장을 만들 때, `+` 기호로 계속 이어 붙이는 건 좀 옛날 방식이에요. <span class='font-bold text-teal-300'>f-string</span>을 써보세요. 문자열 앞에 `f`를 붙이고, 문자열 안에 `{변수이름}`을 넣으면 알아서 값이 쏙 들어가요. 코드가 훨씬 깔끔해져서 저도 애용하는 기능이랍니다!"
+          },
+          "lecture": {
+            "character": "profKim",
+            "title": "강의 노트: 문자열 포맷팅",
+            "keyTakeaway": "f-string은 `f\"...{변수}...\"` 형태로, 변수 값을 문자열에 삽입하는 가장 현대적이고 편리한 방법입니다.",
+            "sandboxCode": "item = \"커피\"\nprice = 5000\n\n# f-string을 이용해 \"상품: 커피, 가격: 5000원\"을 출력해보세요.\nprint(f\"상품: {item}, 가격: {price}원\")",
+            "sections": [
+              {
+                "heading": "핵심 개념",
+                "text": "문자열 포맷팅(String Formatting)은 문자열의 특정 위치에 변수의 값을 삽입하여, 동적인 문자열을 생성하는 기법입니다. 이를 통해 형식화된 보고서, 알림 메시지 등을 쉽게 만들 수 있습니다.",
+                "code": null
+              },
+              {
+                "heading": "기본 문법",
+                "text": "문자열 시작 따옴표 앞에 `f`를 붙이고, 삽입할 변수나 값을 중괄호 `{}`로 감싸줍니다.",
+                "code": "# f-string (가장 추천하는 방식)\nname = \"Sena\"\nage = 30\nmessage = f\"안녕하세요, 제 이름은 {name}이고, 나이는 {age}살 입니다.\""
+              },
+              {
+                "heading": "활용 사례",
+                "text": "로그 메시지 기록, 사용자에게 보내는 이메일 내용 생성, 데이터베이스 쿼리 문자열 생성 등 변수와 문자열을 조합해야 하는 모든 상황에 사용됩니다.",
+                "code": null
+              },
+              {
+                "heading": "주의점 및 팁",
+                "text": "f-string을 사용할 때, 문자열 시작 따옴표 앞에 `f`를 빠뜨리지 않도록 주의하세요. 중괄호 `{}` 안에는 변수뿐만 아니라 ` {age + 1} `과 같은 간단한 계산식도 넣을 수 있습니다.",
+                "code": null
+              }
+            ]
+          },
+          "feedback": {
+            "success": {
+              "character": "alex",
+              "subtitle": "업무 완료 피드백",
+              "title": "보고서 형식 완성",
+              "content": "<span class='font-bold text-green-300'>메시지가 아주 깔끔하게 출력되는군요.</span> f-string을 잘 활용했네요. 데이터를 다루는 기본기를 모두 익혔으니, 다음 주차에는 더 복잡한 로직을 다뤄보겠습니다. 수고했어요."
+            },
+            "failure_logical": {
+              "character": "sena",
+              "subtitle": "문제 해결 지원",
+              "title": "메시지 형식이 조금 달라요",
+              "content": "음, 만들어진 메시지가 요청한 형식과 조금 다르네요. {{ERROR_MESSAGE}} 띄어쓰기나 `%` 같은 특수문자, 마침표까지 정확하게 일치해야 해요. 중괄호 안에 변수 이름은 제대로 들어갔는지도 한번 확인해볼까요?"
+            },
+            "failure_runtime": {
+              "character": "sena",
+              "subtitle": "문제 해결 지원",
+              "title": "앗, 문법 오류!",
+              "content": "코드를 실행하다가 오류가 발생했어요. f-string을 사용할 때 가장 흔한 실수는 문자열 앞에 `f`를 빠뜨리는 거예요. 혹시 잊으신 건 아닐까요? 아니면 중괄호 `{}`를 빠뜨렸거나, 변수 이름에 오타가 있을 수도 있어요!"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "week": 3,
+      "title": "흐름 제어: 조건과 반복으로 똑똑한 코드 만들기",
+      "cycles": [
+        {
+          "title": "조건에 따른 분기 (if-elif-else)",
+          "syntax_key": "if_statement",
+          "filename": "auth.py",
+          "starterCode": "def get_welcome_message(user_role):\n    # TODO: if-elif-else 문을 사용하여 user_role에 따라 다른 메시지를 반환(return)하세요.\n    # 'admin' -> \"관리자님 환영합니다.\"\n    # 'editor' -> \"에디터님 안녕하세요.\"\n    # 그 외 모든 경우 -> \"환영합니다.\"\n    \n    # 아래 코드를 수정하여 로직을 구현하세요.\n    if user_role == 'admin':\n        return \"\"\n    \n    return \"\"\n\n# 아래는 테스트용 코드입니다. 수정하지 마세요.\nprint(get_welcome_message('admin'))\nprint(get_welcome_message('editor'))\nprint(get_welcome_message('user'))\n",
+          "testCode": "assert get_welcome_message('admin') == \"관리자님 환영합니다.\", \"user_role이 'admin'일 때 반환값이 다릅니다.\"\nassert get_welcome_message('editor') == \"에디터님 안녕하세요.\", \"user_role이 'editor'일 때 반환값이 다릅니다.\"\nassert get_welcome_message('user') == \"환영합니다.\", \"user_role이 'user'일 때 반환값이 다릅니다.\"\nassert get_welcome_message('guest') == \"환영합니다.\", \"정의되지 않은 role('guest')일 때 '환영합니다.'를 반환해야 합니다.\"",
+          "task": {
+            "character": "alex",
+            "subtitle": "팀장 과업 지시",
+            "title": "사용자 역할별 접근 제어",
+            "content": "보안 강화의 첫 단계입니다. 현재 접속한 사용자의 역할(`user_role`)에 따라 다른 환영 메시지를 보여주는 기능을 구현해야 합니다. 역할이 <span class='font-bold text-yellow-300'>'admin'이면 '관리자님 환영합니다.'</span>를, <span class='font-bold text-yellow-300'>'editor'이면 '에디터님 안녕하세요.'</span>를, 그 외의 <span class='font-bold text-yellow-300'>'user'에게는 '환영합니다.'</span>를 출력해주세요."
+          },
+          "briefing": {
+            "character": "sena",
+            "subtitle": "직속 선임의 OJT",
+            "title": "갈림길을 만드는 `if`",
+            "content": "이건 마치 코드에 갈림길을 만들어주는 것과 같아요. '만약 ~라면 A로 가고, 아니고 만약 ~라면 B로 가고, 그것도 아니면 C로 가라'고 알려주는 거죠. 이때 <span class='font-bold text-teal-300'>`if`, `elif`, `else`</span> 구문을 사용하면 돼요. 변수의 값이 특정 문자열과 <span class='font-bold text-teal-300'>같은지 비교할 땐 `==` 기호</span>를 쓴다는 것만 기억하면 어렵지 않을 거예요."
+          },
+          "lecture": {
+            "character": "profKim",
+            "title": "강의 노트: if 조건문",
+            "keyTakeaway": "`if`문은 조건의 참/거짓에 따라 프로그램의 실행 경로를 결정합니다.",
+            "sandboxCode": "score = 85\n\nif score >= 90:\n    print(\"A 등급\")\nelif score >= 80:\n    print(\"B 등급\")\nelse:\n    print(\"C 등급\")",
+            "sections": [
+              {
+                "heading": "핵심 개념",
+                "text": "흐름 제어란 프로그램의 실행 순서를 제어하는 것을 말합니다. `if`문은 주어진 '조건(condition)'이 참(True)인지 거짓(False)인지에 따라 코드의 실행 흐름을 나누는 가장 기본적인 조건 분기문입니다.",
+                "code": null
+              },
+              {
+                "heading": "기본 문법",
+                "text": "조건문 뒤에는 콜론(:)을, 실행할 코드는 들여쓰기를 해야 합니다.",
+                "code": "if 조건1:\n    # 조건1이 참일 때 실행할 코드\nelif 조건2:\n    # 조건1은 거짓이고, 조건2가 참일 때 실행할 코드\nelse:\n    # 위의 모든 조건이 거짓일 때 실행할 코드"
+              },
+              {
+                "heading": "활용 사례",
+                "text": "사용자가 입력한 ID/PW가 올바른지 확인, 점수에 따른 합격/불합격/재시험 결정 등 프로그램이 특정 상황을 '판단'해야 하는 모든 곳에 사용됩니다.",
+                "code": null
+              },
+              {
+                "heading": "주의점 및 팁",
+                "text": "조건문 뒤에는 반드시 콜론(:)을 붙여야 하며, 각 조건에 따라 실행될 코드 블록은 반드시 '들여쓰기(indentation)'를 해야 합니다. `=`는 값을 할당하는 것이고, `==`가 값이 같은지 비교하는 것이니 헷갈리지 않도록 주의하세요.",
+                "code": null
+              }
+            ]
+          },
+          "feedback": {
+            "success": {
+              "character": "alex",
+              "subtitle": "업무 완료 피드백",
+              "title": "접근 제어 로직 구현 완료",
+              "content": "<span class='font-bold text-green-300'>훌륭합니다.</span> 사용자 역할에 따라 정확히 다른 메시지가 출력되는군요. 이 `if`문은 앞으로 만들 거의 모든 기능의 기초가 될 겁니다. 잘 익혀두었어요."
+            },
+            "failure_logical": {
+              "character": "sena",
+              "subtitle": "문제 해결 지원",
+              "title": "조건을 다시 확인해볼까요?",
+              "content": "테스트 결과가 조금 다르네요. {{ERROR_MESSAGE}} 혹시 `elif`나 `else` 조건이 빠졌거나, 문자열을 비교할 때 오타가 있는 건 아닐까요? 각 역할에 맞는 메시지가 정확히 반환되는지 확인해주세요."
+            },
+            "failure_runtime": {
+              "character": "sena",
+              "subtitle": "문제 해결 지원",
+              "title": "앗, 문법 오류!",
+              "content": "코드를 실행하다가 오류가 발생했어요. `if`나 `elif`, `else` 뒤에 콜론(`:`)을 빠뜨리진 않았나요? 아니면 들여쓰기가 잘못되었을 수도 있어요. 파이썬은 들여쓰기에 아주 민감하거든요. 다시 한번 확인해주세요!"
+            }
+          }
+        },
+        {
+          "title": "조건 기반 반복 (while)",
+          "syntax_key": "while_loop",
+          "filename": "monitor.py",
+          "starterCode": "# 가상 서버 상태입니다. 루프가 돌 때마다 하나씩 처리됩니다.\nserver_status_sequence = ['booting', 'booting', 'running']\n\ndef wait_for_server():\n    logs = []\n    # TODO: while 문을 사용하여 server_status가 'running'이 아닐 동안 반복하세요.\n    # 루프 안에서는 아래 두 작업을 순서대로 처리해야 합니다.\n    # 1. logs 리스트에 \"서버 상태 확인 중...\" 메시지를 추가합니다.\n    # 2. server_status_sequence 리스트에서 첫 번째 항목을 꺼내 server_status 변수에 저장합니다.\n    server_status = \"\"\n    \n    # 이 곳에 while 루프를 작성하세요.\n\n\n    logs.append(f\"서버 상태: {server_status}\")\n    return logs\n\n# 아래는 테스트용 코드입니다. 수정하지 마세요.\nfor log in wait_for_server():\n    print(log)",
+          "testCode": "server_status_sequence = ['booting', 'booting', 'running']\nexpected_logs = [\n    '서버 상태 확인 중...',\n    '서버 상태 확인 중...',\n    '서버 상태: running'\n]\nactual_logs = wait_for_server()\nassert actual_logs == expected_logs, f\"로그 메시지가 기대와 다릅니다.\\n기대값: {expected_logs}\\n실제값: {actual_logs}\"",
+          "task": {
+            "character": "alex",
+            "subtitle": "팀장 과업 지시",
+            "title": "서버 상태 모니터링",
+            "content": "새로운 분석 서버를 막 켰는데, 부팅되는 데 시간이 좀 걸립니다. <span class='font-bold text-yellow-300'>서버 상태(`server_status`)가 'running'이 될 때까지</span> 1초마다 \"서버 상태 확인 중...\" 메시지를 출력하며 기다리는 스크립트를 작성해주세요."
+          },
+          "briefing": {
+            "character": "sena",
+            "subtitle": "직속 선임의 팁",
+            "title": "`while`로 기다리기",
+            "content": "이럴 땐 특정 조건이 만족될 때까지 계속 같은 행동을 반복해야 하죠. <span class='font-bold text-teal-300'>`while` 반복문</span>이 딱이에요. '`server_status`가 `\"running\"`이 아닌 동안' 계속 반복하라고 시키면 되겠죠? 아, 그리고 <span class='font-bold text-teal-300'>무한 루프(infinite loop)에 빠지지 않도록 조심</span>해야 해요! 루프 안에서 언젠가는 상태가 바뀌도록 코드를 짜야 한답니다."
+          },
+          "lecture": {
+            "character": "profKim",
+            "title": "강의 노트: while 반복문",
+            "keyTakeaway": "`while`문은 특정 조건이 참인 동안 코드를 계속 반복합니다.",
+            "sandboxCode": "count = 5\nwhile count > 0:\n    print(f\"카운트 다운: {count}\")\n    count = count - 1 # 이 줄이 없으면 무한 루프에 빠져요!\nprint(\"발사!\")",
+            "sections": [
+              {
+                "heading": "핵심 개념",
+                "text": "`while`문은 주어진 '조건(condition)'이 참(True)인 '동안(while)' 코드 블록을 계속해서 반복 실행합니다. 조건이 거짓(False)이 되면 반복을 멈추고 다음 코드로 넘어갑니다.",
+                "code": null
+              },
+              {
+                "heading": "기본 문법",
+                "text": "조건문 뒤에 콜론(:)을, 반복할 코드는 들여쓰기를 해야 합니다.",
+                "code": "while 조건:\n    # 조건이 참인 동안 반복해서 실행할 코드"
+              },
+              {
+                "heading": "활용 사례",
+                "text": "사용자가 올바른 값을 입력할 때까지 계속 재입력 받기, 게임에서 플레이어의 체력이 0보다 클 동안 계속 게임 진행하기 등 특정 조건 하에 반복이 필요할 때 사용됩니다.",
+                "code": null
+              },
+              {
+                "heading": "주의점 및 팁",
+                "text": "가장 주의할 점은 '무한 루프'입니다. `while`문의 조건이 항상 참(True)으로 유지되면 프로그램이 멈추지 않고 영원히 반복합니다. 루프 내에서 조건을 변경하는 코드가 반드시 포함되어야 합니다.",
+                "code": null
+              }
+            ]
+          },
+          "feedback": {
+            "success": {
+              "character": "alex",
+              "subtitle": "업무 완료 피드백",
+              "title": "모니터링 스크립트 완성",
+              "content": "좋습니다. 서버 상태가 바뀔 때까지 루프가 잘 돌다가, 상태가 바뀌니 정확하게 멈추는군요. <span class='font-bold text-green-300'>`while`문을 잘 이해하고 있습니다.</span> 이런 방식은 시스템의 상태를 감시할 때 자주 사용됩니다."
+            },
+            "failure_logical": {
+              "character": "sena",
+              "subtitle": "문제 해결 지원",
+              "title": "루프 조건이나 순서를 확인해볼까요?",
+              "content": "결과가 조금 이상하게 나왔어요. {{ERROR_MESSAGE}} `while`문의 조건이 정확한지, 그리고 루프 안에서 상태를 확인하고 메시지를 추가하는 순서가 맞는지 다시 한번 확인해주세요."
+            },
+            "failure_runtime": {
+              "character": "sena",
+              "subtitle": "문제 해결 지원",
+              "title": "앗, 무한 루프!",
+              "content": "코드가 끝나지 않고 계속 실행되는 것 같아요! 이건 '무한 루프'에 빠진 거예요. 루프 안에서 `server_status` 변수의 값을 바꿔주는 코드를 빠뜨린 건 아닐까요? 루프의 조건이 언젠가는 거짓(False)이 되도록 만들어야 해요."
+            }
+          }
+        },
+        {
+          "title": "순회 반복 (for)",
+          "syntax_key": "for_loop",
+          "filename": "broadcast.py",
+          "starterCode": "server_list = ['server-alpha', 'server-beta', 'server-gamma']\n\ndef send_notifications():\n    sent_messages = []\n    # TODO: for 문을 사용하여 server_list의 모든 서버 이름을 하나씩 순회하세요.\n    # 루프 안에서 f-string을 이용해 아래 형식의 메시지를 만들어 sent_messages 리스트에 추가해야 합니다.\n    # 형식: \"[서버이름]에 점검 예고 메시지를 발송했습니다.\"\n    \n    # 이 곳에 for 루프를 작성하세요.\n\n\n    return sent_messages\n\n# 아래는 테스트용 코드입니다. 수정하지 마세요.\nfor msg in send_notifications():\n    print(msg)\n",
+          "testCode": "expected = [\n    \"server-alpha에 점검 예고 메시지를 발송했습니다.\",\n    \"server-beta에 점검 예고 메시지를 발송했습니다.\",\n    \"server-gamma에 점검 예고 메시지를 발송했습니다.\"\n]\nactual = send_notifications()\nassert actual == expected, f\"생성된 메시지 목록이 기대와 다릅니다.\\n기대값: {expected}\\n실제값: {actual}\"",
+          "task": {
+            "character": "alex",
+            "subtitle": "팀장 과업 지시",
+            "title": "전체 서버에 공지 발송",
+            "content": "긴급 공지입니다. 우리 회사에서 관리하는 <span class='font-bold text-yellow-300'>모든 서버 목록(`server_list`)</span>에 시스템 점검 예고 메시지를 보내야 합니다. 리스트에 있는 <span class='font-bold text-yellow-300'>서버 이름을 하나씩 꺼내서</span>, \"[서버이름]에 점검 예고 메시지를 발송했습니다.\" 라고 출력하는 스크립트를 작성해주세요."
+          },
+          "briefing": {
+            "character": "sena",
+            "subtitle": "직속 선임의 팁",
+            "title": "목록 순회는 `for`문 전문가",
+            "content": "방금 전 `while`문은 '조건'이 중요했지만, 이번엔 <span class='font-bold text-teal-300'>'목록에 있는 모든 항목에 대해 한 번씩'</span> 작업을 해야 하죠? 이럴 땐 `for` 반복문이 훨씬 간결하고 안전해요. '리스트에 있는 각 아이템에 대하여' 라는 의미로 `for item in my_list:` 처럼 사용하면 된답니다. 무한 루프 걱정도 없고요!"
+          },
+          "lecture": {
+            "character": "profKim",
+            "title": "강의 노트: for 반복문",
+            "keyTakeaway": "`for`문은 리스트와 같은 데이터 묶음의 모든 항목을 하나씩 순회하며 반복합니다.",
+            "sandboxCode": "fruits = [\"사과\", \"바나나\", \"딸기\"]\nfor fruit in fruits:\n    print(f\"{fruit} 맛있어요!\")",
+            "sections": [
+              {
+                "heading": "핵심 개념",
+                "text": "`for`문은 리스트, 튜플, 문자열과 같은 '순회 가능한(iterable)' 데이터 구조의 각 항목(item)을 처음부터 끝까지 차례대로 하나씩 꺼내어 코드 블록을 반복 실행합니다.",
+                "code": null
+              },
+              {
+                "heading": "기본 문법",
+                "text": "`range()` 함수와 함께 사용하면 특정 횟수만큼 반복하는 코드를 쉽게 작성할 수 있습니다.",
+                "code": "# 리스트의 각 항목에 대해 반복\nfor 변수 in 리스트:\n    # 반복 실행할 코드\n\n# range() 함수와 함께 사용하기\nfor i in range(5): # 0부터 4까지 5번 반복\n    print(i)"
+              },
+              {
+                "heading": "활용 사례",
+                "text": "사용자 목록 전체에 이메일 보내기, 파일의 모든 줄을 한 줄씩 읽어서 처리하기, 특정 횟수만큼 작업 반복하기 등 정해진 범위나 목록을 순회할 때 사용됩니다.",
+                "code": null
+              },
+              {
+                "heading": "주의점 및 팁",
+                "text": "`while`은 조건 기반, `for`는 순회 기반이라는 차이점을 이해하는 것이 중요합니다. `for`문과 함께 자주 사용되는 `range(n)` 함수는 0부터 n-1까지의 숫자를 만들어냅니다.",
+                "code": null
+              }
+            ]
+          },
+          "feedback": {
+            "success": {
+              "character": "alex",
+              "subtitle": "업무 완료 피드백",
+              "title": "자동화 스크립트 완성",
+              "content": "완벽합니다. 서버 목록에 있는 모든 서버에 대해 메시지가 정확히 출력되었네요. <span class='font-bold text-green-300'>이제 수십, 수백 개의 서버가 추가되어도 이 코드 하나면 충분</span>하겠군요. 반복적인 작업을 자동화하는 능력, 개발자의 핵심 역량입니다. 수고했어요."
+            },
+            "failure_logical": {
+              "character": "sena",
+              "subtitle": "문제 해결 지원",
+              "title": "메시지 내용이 다른데요?",
+              "content": "생성된 메시지 목록이 요청과 다르네요. {{ERROR_MESSAGE}} 혹시 `for`문 안에서 f-string을 사용해서 메시지를 만들 때 오타가 있거나 형식이 잘못된 건 아닐까요? 띄어쓰기나 문장부호까지 똑같은지 확인해주세요."
+            },
+            "failure_runtime": {
+              "character": "sena",
+              "subtitle": "문제 해결 지원",
+              "title": "앗, 문법 오류!",
+              "content": "코드를 실행하다가 오류가 발생했어요. `for ... in ...:` 구문은 정확하게 작성하셨나요? `in`을 빠뜨리거나, 맨 끝에 콜론(`:`)을 잊어버리는 실수를 자주 하곤 해요. 들여쓰기도 다시 한번 확인해보세요!"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "week": 4,
+      "title": "코드 재사용의 시작: 함수 정의와 활용",
+      "cycles": [
+        {
+          "title": "함수의 정의와 호출 (def)",
+          "syntax_key": "function_def",
+          "filename": "utils.py",
+          "starterCode": "# TODO: 'show_welcome_message'라는 이름의 함수를 정의하세요.\n# 이 함수는 \"Welcome to LogiCore Tech!\" 라는 문장을 출력해야 합니다.\n\n# 아래에 함수를 정의하세요.\n\n\n\n# 아래는 정의된 함수를 호출하는 코드입니다. 수정하지 마세요.\nshow_welcome_message()\n",
+          "testCode": "import io\nfrom contextlib import redirect_stdout\n\nassert 'show_welcome_message' in locals() and callable(show_welcome_message), \"'show_welcome_message' 라는 이름의 함수가 정의되지 않았습니다.\"\n\nf = io.StringIO()\nwith redirect_stdout(f):\n    show_welcome_message()\noutput = f.getvalue().strip()\nexpected = \"Welcome to LogiCore Tech!\"\nassert output == expected, f\"함수 출력값이 다릅니다. 기대값: '{expected}', 실제값: '{output}'\"",
+          "task": {
+            "character": "alex",
+            "subtitle": "팀장 과업 지시",
+            "title": "반복 작업 개선하기",
+            "content": "최근 여러 스크립트를 작성하면서, 시작할 때마다 회사의 공식 환영 메시지를 계속 복사-붙여넣기 하고 있더군요. 이건 좋은 방법이 아닙니다. 이 <span class='font-bold text-yellow-300'>반복되는 환영 메시지 출력 코드를 재사용 가능한 하나의 덩어리</span>로 만들어 주세요. 파이썬에서는 이걸 <span class='font-bold text-yellow-300'>'함수(function)'</span>라고 부릅니다."
+          },
+          "briefing": {
+            "character": "sena",
+            "subtitle": "직속 선임의 OJT",
+            "title": "나만의 명령어 만들기",
+            "content": "아, 리팩토링(refactoring) 작업이네요! 코드를 복사-붙여넣기 하면 나중에 메시지가 바뀔 때마다 모든 파일을 찾아다니며 수정해야 해서 끔찍한 상황이 생겨요. 이럴 때 <span class='font-bold text-teal-300'>`def` 키워드로 함수를 만들면</span>, 코드를 한 곳에서만 관리할 수 있죠. <span class='font-bold text-teal-300'>함수는 '나만의 새로운 명령어'를 만드는 것</span>과 같아요. 한번 만들어두면, 이름만 불러서 계속 쓸 수 있답니다."
+          },
+          "lecture": {
+            "character": "profKim",
+            "title": "강의 노트: 함수 (Function)",
+            "keyTakeaway": "함수는 `def`로 정의하고, 이름()으로 호출하는 재사용 가능한 코드 블록입니다.",
+            "sandboxCode": "def show_my_name():\n    name = \"김신입\"\n    print(f\"제 이름은 {name}입니다.\")\n\n# 아래에 함수를 호출해서 이름을 출력해보세요.\nshow_my_name()",
+            "sections": [
+              {
+                "heading": "핵심 개념",
+                "text": "함수(Function)는 특정 작업을 수행하는 코드 덩어리에 이름을 붙인 것입니다. 프로그램을 논리적인 단위로 나눌 수 있게 해주며, 코드의 재사용성을 극대화합니다. 잘 정의된 함수는 '무엇을 하는지'는 알려주지만 '어떻게 하는지'는 숨겨주는 '추상화'의 첫걸음입니다.",
+                "code": null
+              },
+              {
+                "heading": "기본 문법",
+                "text": "함수를 정의하는 것을 '선언'이라 하고, 사용하는 것을 '호출'이라고 합니다.",
+                "code": "# 함수 정의하기(선언)\ndef 함수이름():\n    # 이 블록 안에 재사용할 코드를 작성\n    print(\"Hello Function!\")\n\n# 함수 호출하기(사용)\n함수이름()"
+              },
+              {
+                "heading": "활용 사례",
+                "text": "프로그램의 시작 부분에 환영 메시지 출력하기, 복잡한 계산 수행하기, 파일 내용 읽어오기 등 반복적으로 사용될 가능성이 있는 모든 코드 묶음에 활용됩니다.",
+                "code": null
+              },
+              {
+                "heading": "주의점 및 팁",
+                "text": "함수 이름은 소문자와 밑줄(_)을 사용하여 만드는 것이 일반적입니다. 함수를 정의(`def`)만 하고 호출하지 않으면 코드는 실행되지 않습니다. 반드시 이름으로 호출해야 합니다.",
+                "code": null
+              }
+            ]
+          },
+          "feedback": {
+            "success": {
+              "character": "alex",
+              "subtitle": "업무 완료 피드백",
+              "title": "유지보수성 향상",
+              "content": "<span class='font-bold text-green-300'>좋습니다. 이제 환영 메시지가 바뀌더라도 우리는 이 함수 하나만 수정</span>하면 되겠군요. 이렇게 코드를 재사용 가능하게 만드는 것이 <span class='font-bold text-green-300'>유지보수가 쉬운 코드를 만드는 첫걸음</span>입니다."
+            },
+            "failure_logical": {
+              "character": "sena",
+              "subtitle": "문제 해결 지원",
+              "title": "출력 메시지를 확인해볼까요?",
+              "content": "함수는 잘 만들어졌는데, 출력된 메시지가 요청한 내용과 조금 다르네요. {{ERROR_MESSAGE}} 함수 안에 있는 `print`문의 문자열에 오타가 없는지 다시 한번 확인해주세요."
+            },
+            "failure_runtime": {
+              "character": "sena",
+              "subtitle": "문제 해결 지원",
+              "title": "앗, 함수를 찾을 수 없어요!",
+              "content": "함수를 호출하는 부분에서 오류가 발생했어요. 혹시 함수를 정의할 때 `def 함수이름():` 형식을 정확하게 지키셨나요? 함수 이름에 오타가 있거나, 정의하는 부분의 들여쓰기가 잘못되었을 수도 있으니 확인해보세요."
+            }
+          }
+        },
+        {
+          "title": "값의 전달과 반환 (매개변수와 return)",
+          "syntax_key": "function_params_return",
+          "filename": "hr_system.py",
+          "starterCode": "def get_personalized_greeting(username):\n    # TODO: username을 사용하여 \"Welcome, [username]!\" 형식의 문자열을 반환(return)하세요.\n    # 예를 들어, username이 \"Alex\"라면 \"Welcome, Alex!\"를 반환해야 합니다.\n    return \"\"\n\ndef calculate_bonus(score):\n    # TODO: score의 10%를 보너스로 계산하여 그 결과를 반환(return)하세요. (score * 0.1)\n    return 0\n\n# 아래는 테스트용 코드입니다. 수정하지 마세요.\nprint(get_personalized_greeting(\"Alex\"))\nprint(calculate_bonus(1000))\n",
+          "testCode": "assert get_personalized_greeting('Alex') == \"Welcome, Alex!\", \"get_personalized_greeting('Alex')의 반환값이 'Welcome, Alex!'여야 합니다.\"\nassert get_personalized_greeting('Sena') == \"Welcome, Sena!\", \"get_personalized_greeting('Sena')의 반환값이 'Welcome, Sena!'여야 합니다.\"\nassert calculate_bonus(1000) == 100, \"calculate_bonus(1000)의 반환값이 100이어야 합니다.\"\nassert calculate_bonus(500) == 50, \"calculate_bonus(500)의 반환값이 50이어야 합니다.\"",
+          "task": {
+            "character": "alex",
+            "subtitle": "팀장 과업 지시",
+            "title": "함수 동적으로 만들기",
+            "content": "이전 함수를 개선해봅시다. 모든 사용자에게 똑같은 메시지를 보여주는 대신, <span class='font-bold text-yellow-300'>사용자 이름(username)을 함수에 전달</span>하여 개인화된 메시지를 출력하도록 수정해주세요. 추가로, 사용자의 <span class='font-bold text-yellow-300'>성과 점수(score)를 입력받아 보너스 금액을 계산하고, 그 결과를 반환</span>하는 `calculate_bonus` 함수도 만들어주세요."
+          },
+          "briefing": {
+            "character": "sena",
+            "subtitle": "직속 선임의 팁",
+            "title": "함수의 입구와 출구",
+            "content": "함수를 더 유용하게 만들려면 입출구가 필요해요. 함수에 데이터를 넣는 입구가 <span class='font-bold text-teal-300'>'매개변수(parameter)'</span>이고, 함수에서 계산 결과를 밖으로 내보내는 출구가 <span class='font-bold text-teal-300'>`return`</span>이에요. `print()`는 그냥 화면에 보여주고 끝나지만, `return`은 값을 돌려줘서 다른 변수에 저장하거나 또 다른 계산에 쓸 수 있게 해준다는 차이가 있죠."
+          },
+          "lecture": {
+            "character": "profKim",
+            "title": "강의 노트: 매개변수와 Return",
+            "keyTakeaway": "매개변수로 데이터를 받고, `return`으로 결과를 돌려주어 함수를 유연하게 활용할 수 있습니다.",
+            "sandboxCode": "def get_greeting(name):\n    return f\"{name}님, 안녕하세요!\"\n\nmessage = get_greeting(\"김선임\")\nprint(message)",
+            "sections": [
+              {
+                "heading": "핵심 개념",
+                "text": "매개변수(Parameter)는 함수가 작업을 수행하는 데 필요한 외부 데이터를 받아들이는 '입력' 통로입니다. `return`문은 함수의 작업 결과를 호출한 곳으로 되돌려주는 '출력' 통로입니다.",
+                "code": null
+              },
+              {
+                "heading": "기본 문법",
+                "text": "함수 정의 시 소괄호 안에 매개변수 이름을, 함수 코드 블록 안에 `return`을 사용합니다.",
+                "code": "# 매개변수가 있는 함수 정의\ndef add(a, b):\n    result = a + b\n    return result\n\n# 함수 호출 및 결과 저장\nsum_value = add(10, 5)\nprint(sum_value) # 15 출력"
+              },
+              {
+                "heading": "활용 사례",
+                "text": "사용자 이름을 받아 환영 메시지를 꾸미거나, 두 숫자를 받아 계산 결과를 얻는 등 함수의 동작을 외부 값에 따라 유연하게 바꾸고 싶을 때 사용됩니다.",
+                "code": null
+              },
+              {
+                "heading": "주의점 및 팁",
+                "text": "함수를 호출할 때 넘겨주는 값(인자)의 순서는 매개변수의 순서와 일치해야 합니다. `return`문이 실행되면 함수는 즉시 종료됩니다. `return` 아래에 있는 코드는 실행되지 않습니다.",
+                "code": null
+              }
+            ]
+          },
+          "feedback": {
+            "success": {
+              "character": "alex",
+              "subtitle": "업무 완료 피드백",
+              "title": "훌륭한 함수 설계",
+              "content": "완벽합니다. 이제 함수를 통해 <span class='font-bold text-green-300'>개인화된 메시지</span>를 만들 수 있고, 보너스 계산 결과를 <span class='font-bold text-green-300'>다른 변수에 저장하여 재사용</span>할 수도 있겠군요. 함수 설계의 핵심을 잘 이해했습니다."
+            },
+            "failure_logical": {
+              "character": "sena",
+              "subtitle": "문제 해결 지원",
+              "title": "반환값을 확인해볼까요?",
+              "content": "함수에서 돌려준 값이 예상과 조금 다르네요. {{ERROR_MESSAGE}} 인사말을 만드는 함수에서는 f-string이 정확한지, 보너스 계산 함수에서는 계산식이 올바른지 다시 한번 확인해주세요."
+            },
+            "failure_runtime": {
+              "character": "sena",
+              "subtitle": "문제 해결 지원",
+              "title": "앗, 매개변수 오류!",
+              "content": "함수를 호출하거나 정의하는 부분에서 오류가 발생했어요. 함수를 정의할 때 `def 함수이름(매개변수):` 형식으로 괄호 안에 매개변수 이름을 잘 넣어주셨나요? 혹은 함수 안에서 `return` 키워드를 빠뜨린 건 아닐까요?"
+            }
+          }
+        },
+        {
+          "title": "변수의 유효 범위 (Scope)",
+          "syntax_key": "variable_scope",
+          "filename": "task_manager.py",
+          "starterCode": "total_task_count = 0 # 전역 변수\n\ndef complete_task():\n    # TODO: 전역 변수 total_task_count의 값을 1 증가시키세요.\n    # 함수 안에서 전역 변수의 값을 바꾸려면 무엇을 해야 할까요?\n    \n    pass # 이 부분을 수정하여 코드를 작성하세요.\n\n# 아래는 테스트용 코드입니다. 수정하지 마세요.\nprint(f\"호출 전: {total_task_count}\")\ncomplete_task()\nprint(f\"1회 호출 후: {total_task_count}\")\ncomplete_task()\nprint(f\"2회 호출 후: {total_task_count}\")\n",
+          "testCode": "total_task_count = 0\ncomplete_task()\nassert total_task_count == 1, \"complete_task()를 한 번 호출하면 total_task_count가 1이어야 합니다.\"\ncomplete_task()\ncomplete_task()\nassert total_task_count == 3, \"complete_task()를 총 세 번 호출하면 total_task_count가 3이어야 합니다.\"",
+          "task": {
+            "character": "alex",
+            "subtitle": "팀장 과업 지시",
+            "title": "전역 상태 관리",
+            "content": "우리 애플리케이션 전체에서 공유되는 <span class='font-bold text-yellow-300'>'총 작업 횟수(total_task_count)' 변수</span>가 있습니다. 사용자가 특정 작업을 완료할 때마다 호출되는 함수 `complete_task()`를 만들고, 이 함수 안에서 <span class='font-bold text-yellow-300'>바깥에 있는 `total_task_count`의 값을 1 증가</span>시키도록 구현해주세요."
+          },
+          "briefing": {
+            "character": "sena",
+            "subtitle": "직속 선임의 팁",
+            "title": "함수 안과 밖은 다른 세상",
+            "content": "이거 신입 때 많이 하는 실수인데, 함수 안에서 바깥에 있는 변수를 그냥 바꾸려고 하면 에러가 날 거예요. 파이썬은 기본적으로 함수 안을 독립된 공간으로 보거든요. 함수 안에서 바깥 세상에 있는 변수를 직접 수정하고 싶다면, <span class='font-bold text-teal-300'>'이 변수는 바깥에 있는 전역 변수입니다!'</span>라고 알려주는 <span class='font-bold text-teal-300'>`global`</span> 키워드를 써야 해요."
+          },
+          "lecture": {
+            "character": "profKim",
+            "title": "강의 노트: 변수의 범위 (Scope)",
+            "keyTakeaway": "함수 안에서 바깥의 전역 변수 값을 바꾸려면 `global` 키워드가 필요합니다.",
+            "sandboxCode": "message = \"바깥 메시지\"\n\ndef change_message():\n    # 이 함수 안에서 message 변수의 값을\n    # \"안쪽 메시지\"로 바꿔보세요.\n    global message\n    message = \"안쪽 메시지\"\n\nchange_message()\nprint(message)",
+            "sections": [
+              {
+                "heading": "핵심 개념",
+                "text": "변수가 유효한 범위를 스코프(Scope)라고 합니다. 함수 안에서 만들어진 변수는 '지역 변수(Local Variable)'라 하며, 함수 안에서만 사용할 수 있고 함수가 끝나면 사라집니다. 함수 바깥 최상단에서 만들어진 변수는 '전역 변수(Global Variable)'라 하며, 프로그램 어디서든 접근할 수 있습니다.",
+                "code": null
+              },
+              {
+                "heading": "기본 문법",
+                "text": "함수 안에서 전역 변수의 값을 '변경'하려면 `global` 키워드를 사용해야 합니다.",
+                "code": "count = 0 # 전역 변수\n\ndef increment():\n    global count # 전역 변수 count를 수정하겠다고 선언\n    count = count + 1"
+              },
+              {
+                "heading": "활용 사례",
+                "text": "프로그램의 전체 설정값이나 상태를 저장하는 전역 변수를 여러 함수에서 읽거나, 지금처럼 값을 변경해야 할 때 사용됩니다.",
+                "code": null
+              },
+              {
+                "heading": "주의점 및 팁",
+                "text": "전역 변수를 너무 많이 사용하면 코드의 흐름을 파악하기 어려워집니다. 함수 안에서 전역 변수를 '읽는 것'은 `global` 선언 없이도 가능하지만, '값을 변경(할당)'하려면 반드시 `global` 선언이 필요합니다.",
+                "code": null
+              }
+            ]
+          },
+          "feedback": {
+            "success": {
+              "character": "alex",
+              "subtitle": "업무 완료 피드백",
+              "title": "변수 범위 마스터",
+              "content": "<span class='font-bold text-green-300'>전역 카운터가 정상적으로 증가하는 것을 확인했습니다.</span> 변수의 유효 범위를 이해하는 것은 여러 함수가 상호작용하는 복잡한 프로그램을 만들 때 매우 중요합니다. 핵심 개념을 잘 습득했네요. 수고했습니다."
+            },
+            "failure_logical": {
+              "character": "sena",
+              "subtitle": "문제 해결 지원",
+              "title": "전역 변수가 그대로인데요?",
+              "content": "함수를 호출했는데도 전역 변수의 값이 바뀌지 않았어요. {{ERROR_MESSAGE}} 혹시 함수 안에서 `global` 키워드를 사용해서 이 변수가 전역 변수임을 알려주는 코드를 빠뜨린 건 아닐까요?"
+            },
+            "failure_runtime": {
+              "character": "sena",
+              "subtitle": "문제 해결 지원",
+              "title": "앗, UnboundLocalError!",
+              "content": "오류 메시지에 `UnboundLocalError`라고 나오네요. 이 오류는 함수 안에서 `global` 선언 없이 전역 변수를 수정하려고 할 때 자주 발생해요. 파이썬이 이 변수를 지역 변수로 착각해서 생기는 문제랍니다. `global` 키워드를 추가해보세요!"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

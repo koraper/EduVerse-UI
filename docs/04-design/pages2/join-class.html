@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>수업 참여 - EduVerse</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50">
+    <div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-md w-full space-y-8">
+            <!-- Header -->
+            <div class="text-center">
+                <h1 class="text-3xl font-bold text-indigo-600 mb-2">수업 참여</h1>
+                <p class="text-gray-600">교수님이 제공한 입장 코드나 QR 코드를 사용하세요</p>
+            </div>
+
+            <!-- Tabs -->
+            <div class="bg-white rounded-lg shadow">
+                <div class="border-b border-gray-200">
+                    <nav class="flex -mb-px">
+                        <button class="w-1/2 py-4 px-1 text-center border-b-2 border-indigo-600 font-medium text-sm text-indigo-600">
+                            입장 코드
+                        </button>
+                        <button class="w-1/2 py-4 px-1 text-center border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300">
+                            QR 코드
+                        </button>
+                    </nav>
+                </div>
+
+                <!-- Code Input -->
+                <div class="p-6">
+                    <form class="space-y-6">
+                        <div>
+                            <label for="code" class="block text-sm font-medium text-gray-700 mb-2">
+                                입장 코드 (영문 대문자 + 숫자 6자리)
+                            </label>
+                            <input type="text" id="code" name="code" maxlength="6" required
+                                   class="block w-full px-4 py-3 text-center text-2xl font-bold uppercase border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                                   placeholder="ABC123">
+                            <p class="mt-2 text-sm text-gray-500">예: ABC123, XYZ789</p>
+                        </div>
+
+                        <button type="submit"
+                                class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700">
+                            수업 참여하기
+                        </button>
+                    </form>
+                </div>
+
+                <!-- QR Scanner (Hidden by default) -->
+                <div class="p-6 hidden">
+                    <div class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
+                        <div class="text-6xl mb-4">📷</div>
+                        <p class="text-gray-600 mb-4">카메라를 켜고 QR 코드를 스캔하세요</p>
+                        <button class="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700">
+                            카메라 켜기
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Back -->
+            <div class="text-center">
+                <a href="student-dashboard.html" class="text-sm text-gray-600 hover:text-gray-900">
+                    대시보드로 돌아가기
+                </a>
+            </div>
+
+            <!-- Info -->
+            <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                <h3 class="text-sm font-medium text-blue-900 mb-2">💡 입장 코드를 모르시나요?</h3>
+                <p class="text-xs text-blue-700">교수님께 입장 코드 또는 QR 코드를 요청하세요</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-white text-gray-900 antialiased;
+  }
+}
+
+@layer components {
+  /* 커스텀 컴포넌트 스타일 */
+}
+
+@layer utilities {
+  /* 커스텀 유틸리티 클래스 */
+}

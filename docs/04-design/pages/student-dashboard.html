@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>학생 대시보드 - EduVerse</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-gray-100">
+    <div class="flex h-screen">
+        <!-- Sidebar -->
+        <aside class="w-60 bg-gray-800 border-r border-gray-700 flex flex-col">
+            <div class="p-4 border-b border-gray-700">
+                <div class="flex items-center space-x-2">
+                    <div class="w-6 h-6 bg-indigo-600 rounded-lg flex items-center justify-center text-white text-sm font-bold">E</div>
+                    <span class="font-bold text-white">EduVerse</span>
+                </div>
+            </div>
+
+            <nav class="flex-1 p-4 space-y-2">
+                <a href="#" class="flex items-center space-x-3 px-4 py-2 bg-indigo-600 rounded-lg text-white transition">
+                    <span>📚</span>
+                    <span>대시보드</span>
+                </a>
+                <a href="student-progress.html" class="flex items-center space-x-3 px-4 py-2 text-gray-400 hover:bg-gray-700 rounded-lg transition">
+                    <span>📈</span>
+                    <span>진도</span>
+                </a>
+                <a href="student-qna.html" class="flex items-center space-x-3 px-4 py-2 text-gray-400 hover:bg-gray-700 rounded-lg transition">
+                    <span>💭</span>
+                    <span>질문</span>
+                    <span class="ml-auto bg-red-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">2</span>
+                </a>
+                <a href="#" class="flex items-center space-x-3 px-4 py-2 text-gray-400 hover:bg-gray-700 rounded-lg transition">
+                    <span>⚙️</span>
+                    <span>설정</span>
+                </a>
+            </nav>
+
+            <div class="p-4 border-t border-gray-700">
+                <a href="landing.html" class="flex items-center space-x-3 px-4 py-2 text-gray-500 hover:text-gray-300 transition">
+                    <span>🚪</span>
+                    <span>로그아웃</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 overflow-auto">
+            <!-- Top Bar -->
+            <div class="bg-gray-800 border-b border-gray-700 px-6 py-4 flex items-center justify-between">
+                <h1 class="text-2xl font-bold text-white">대시보드</h1>
+                <div class="flex items-center space-x-4">
+                    <button class="text-gray-400 hover:text-white relative">
+                        🔔
+                        <span class="absolute top-0 right-0 bg-red-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">2</span>
+                    </button>
+                    <div class="flex items-center space-x-2 cursor-pointer group">
+                        <div class="w-8 h-8 bg-indigo-600 rounded-full flex items-center justify-center text-white">👤</div>
+                        <span class="text-sm text-gray-300 group-hover:text-white">김철수 ▼</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content -->
+            <div class="p-6 space-y-6">
+                <!-- Greeting -->
+                <div>
+                    <h2 class="text-3xl font-bold text-white mb-2">안녕하세요, 김철수님! 👋</h2>
+                </div>
+
+                <!-- Learning Progress Card -->
+                <div class="bg-gray-800 rounded-lg border border-gray-700 p-6">
+                    <h3 class="text-lg font-bold text-white mb-4">📊 나의 학습 진도</h3>
+
+                    <div class="space-y-4">
+                        <div>
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-gray-300">전체 진도</span>
+                                <span class="font-bold text-indigo-400">65%</span>
+                            </div>
+                            <div class="w-full h-3 bg-gray-700 rounded-full overflow-hidden">
+                                <div class="h-full bg-indigo-600" style="width: 65%;"></div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-3 gap-4 mt-6 pt-4 border-t border-gray-700">
+                            <div class="text-center">
+                                <p class="text-2xl font-bold text-green-400">10/16</p>
+                                <p class="text-xs text-gray-400 mt-1">📚 완료된 주차</p>
+                            </div>
+                            <div class="text-center">
+                                <p class="text-2xl font-bold text-blue-400">28/45</p>
+                                <p class="text-xs text-gray-400 mt-1">✅ 테스트 통과</p>
+                            </div>
+                            <div class="text-center">
+                                <p class="text-2xl font-bold text-purple-400">24시간 30분</p>
+                                <p class="text-xs text-gray-400 mt-1">⏱️ 학습 시간</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <a href="student-progress.html" class="inline-block mt-4 text-indigo-400 hover:text-indigo-300 transition">
+                        자세히 보기 →
+                    </a>
+                </div>
+
+                <!-- My Classes -->
+                <div>
+                    <h3 class="text-lg font-bold text-white mb-4">내 수업 목록</h3>
+
+                    <div class="space-y-4">
+                        <!-- Active Class -->
+                        <div class="bg-gray-800 rounded-lg border border-gray-700 p-6 hover:border-indigo-500 transition">
+                            <div class="flex items-start justify-between mb-4">
+                                <div>
+                                    <h4 class="text-lg font-bold text-white">자료구조 및 알고리즘</h4>
+                                    <p class="text-sm text-gray-400">김교수님 | 2025-1학기</p>
+                                </div>
+                                <span class="bg-indigo-600/20 text-indigo-400 text-xs font-bold px-3 py-1 rounded-full">진행 중</span>
+                            </div>
+
+                            <div class="space-y-3 mb-4">
+                                <p class="text-sm text-gray-300">
+                                    <span class="font-bold">현재 주차:</span> Week 3 - 알고리즘 기초
+                                </p>
+                                <p class="text-sm text-gray-300">
+                                    <span class="font-bold">다음 과제:</span>
+                                    <span class="text-yellow-400">정렬 알고리즘 (테스트 2/3 통과)</span>
+                                </p>
+                                <div>
+                                    <div class="flex justify-between text-xs mb-1">
+                                        <span class="text-gray-400">진도: 65%</span>
+                                        <span class="text-indigo-400 font-bold">▲</span>
+                                    </div>
+                                    <div class="w-full h-2 bg-gray-700 rounded-full overflow-hidden">
+                                        <div class="h-full bg-green-600" style="width: 65%;"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <a href="student-learning.html" class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-lg transition text-sm">
+                                계속 학습하기 →
+                            </a>
+                        </div>
+
+                        <!-- Completed Class -->
+                        <div class="bg-gray-800 rounded-lg border border-gray-700 p-6 hover:border-green-500 transition">
+                            <div class="flex items-start justify-between mb-4">
+                                <div>
+                                    <h4 class="text-lg font-bold text-white">Python 프로그래밍 기초</h4>
+                                    <p class="text-sm text-gray-400">이교수님 | 2024-2학기</p>
+                                </div>
+                                <span class="bg-green-600/20 text-green-400 text-xs font-bold px-3 py-1 rounded-full flex items-center space-x-1">
+                                    <span>✅</span>
+                                    <span>완료</span>
+                                </span>
+                            </div>
+
+                            <p class="text-sm text-gray-300 mb-4">
+                                ✅ 전체 과정 완료
+                            </p>
+
+                            <div class="flex space-x-3">
+                                <button class="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg transition text-sm">
+                                    복습하기
+                                </button>
+                                <button class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg transition text-sm">
+                                    수료증 보기
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Join New Class -->
+                        <div class="bg-gray-800 rounded-lg border border-gray-700 border-dashed p-6 hover:bg-gray-700/50 transition cursor-pointer">
+                            <div class="text-center">
+                                <p class="text-2xl mb-2">➕</p>
+                                <p class="font-bold text-white">새 수업 참여하기</p>
+                                <p class="text-sm text-gray-400 mt-2">초대 코드를 입력하여 수업에 참여하세요</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Demo: Simulating active notifications
+        console.log('학생 대시보드 로드됨');
+    </script>
+</body>
+</html>

@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduVerse - 오프라인 수업을 위한 프로그래밍 교육 플랫폼</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&display=swap" rel="stylesheet">
+    <style>
+        .font-planner {
+            font-family: 'Nanum Pen Script', cursive;
+        }
+        .hero-gradient {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(168, 85, 247, 0.1) 100%);
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-100">
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full bg-gray-900/80 backdrop-blur-md z-50 border-b border-gray-800">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+                <div class="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center text-white font-bold">E</div>
+                <span class="text-xl font-bold text-white">EduVerse</span>
+            </div>
+
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="#features" class="text-gray-300 hover:text-white transition">기능</a>
+                <a href="#for-students" class="text-gray-300 hover:text-white transition">학생용</a>
+                <a href="#for-professors" class="text-gray-300 hover:text-white transition">교수자용</a>
+                <a href="#testimonials" class="text-gray-300 hover:text-white transition">후기</a>
+            </div>
+
+            <div class="flex items-center space-x-4">
+                <a href="login.html" class="text-gray-300 hover:text-white transition">로그인</a>
+                <a href="signup.html" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-6 rounded-lg transition">회원가입</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="pt-32 pb-20 px-6 hero-gradient">
+        <div class="max-w-4xl mx-auto text-center space-y-8">
+            <h1 class="text-5xl md:text-7xl font-bold text-white drop-shadow-lg animate-fade-in">
+                오프라인 수업을 위한
+                <br>
+                프로그래밍 교육 플랫폼
+            </h1>
+
+            <p class="text-xl md:text-2xl text-gray-300 font-light">
+                실시간 모니터링 • 코드 피드백 • 학습 분석
+            </p>
+
+            <div class="grid md:grid-cols-2 gap-4 pt-8">
+                <a href="signup.html" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 px-8 rounded-lg transition transform hover:scale-105 flex items-center justify-center space-x-2 shadow-lg">
+                    <span>🎓</span>
+                    <span>교수자로 시작하기</span>
+                </a>
+                <a href="signup.html" class="bg-green-600 hover:bg-green-700 text-white font-bold py-4 px-8 rounded-lg transition transform hover:scale-105 flex items-center justify-center space-x-2 shadow-lg">
+                    <span>📚</span>
+                    <span>학생으로 시작하기</span>
+                </a>
+            </div>
+
+            <div class="mt-12 p-8 bg-gray-800 rounded-lg border border-gray-700">
+                <p class="text-gray-400 mb-4">📸 데모 스크린샷</p>
+                <div class="aspect-video bg-gray-900 rounded border border-gray-700 flex items-center justify-center">
+                    <div class="text-center text-gray-500">
+                        <p class="text-3xl mb-2">🖥️</p>
+                        <p>실제 대시보드 미리보기</p>
+                    </div>
+                </div>
+            </div>
+
+            <button class="text-indigo-400 hover:text-indigo-300 transition text-lg animate-bounce">
+                ▼ 더 알아보기
+            </button>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-20 px-6 bg-gray-900">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-4xl font-bold text-center text-white mb-4">
+                왜 EduVerse는 오프라인 수업에 최적일까요?
+            </h2>
+            <p class="text-center text-gray-400 mb-12">
+                학생의 진도를 한눈에 파악하고, 즉각적인 개입으로 학습 효과를 극대화하세요.
+            </p>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="bg-gray-800 p-6 rounded-lg border border-gray-700 hover:border-indigo-500 transition group cursor-pointer">
+                    <div class="text-5xl mb-4 group-hover:scale-110 transition">👁️</div>
+                    <h3 class="text-xl font-bold text-white mb-2">실시간 모니터링</h3>
+                    <p class="text-gray-400 text-sm">
+                        강의 중 모든 학생의 화면을 한눈에 파악하고, 진도 상태를 실시간으로 확인하세요.
+                    </p>
+                </div>
+
+                <div class="bg-gray-800 p-6 rounded-lg border border-gray-700 hover:border-indigo-500 transition group cursor-pointer">
+                    <div class="text-5xl mb-4 group-hover:scale-110 transition">🎯</div>
+                    <h3 class="text-xl font-bold text-white mb-2">즉각적 개입</h3>
+                    <p class="text-gray-400 text-sm">
+                        막힌 학생을 즉시 발견하고 도움을 제공하여 학습 효율을 높이세요.
+                    </p>
+                </div>
+
+                <div class="bg-gray-800 p-6 rounded-lg border border-gray-700 hover:border-indigo-500 transition group cursor-pointer">
+                    <div class="text-5xl mb-4 group-hover:scale-110 transition">💻</div>
+                    <h3 class="text-xl font-bold text-white mb-2">제로 셋업</h3>
+                    <p class="text-gray-400 text-sm">
+                        브라우저만 있으면 즉시 시작 가능합니다. 복잡한 설치 절차는 필요없습니다.
+                    </p>
+                </div>
+
+                <div class="bg-gray-800 p-6 rounded-lg border border-gray-700 hover:border-indigo-500 transition group cursor-pointer">
+                    <div class="text-5xl mb-4 group-hover:scale-110 transition">📊</div>
+                    <h3 class="text-xl font-bold text-white mb-2">수업 후 분석</h3>
+                    <p class="text-gray-400 text-sm">
+                        학습 데이터를 분석하여 다음 수업을 개선할 수 있는 인사이트를 얻으세요.
+                    </p>
+                </div>
+            </div>
+
+            <div class="text-center mt-12">
+                <button class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-lg transition">
+                    무료 데모 수업 신청하기
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Student Features -->
+    <section id="for-students" class="py-20 px-6 bg-gray-800">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-3xl font-bold text-white mb-12 text-center">학생들을 위한 기능</h2>
+
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div class="bg-gray-700 p-8 rounded-lg aspect-video flex items-center justify-center">
+                    <div class="text-center">
+                        <p class="text-4xl mb-2">📝</p>
+                        <p class="text-gray-300">시나리오 학습 인터페이스</p>
+                    </div>
+                </div>
+
+                <div class="space-y-6">
+                    <div>
+                        <h3 class="text-xl font-bold text-white mb-2">🎬 인턴십 시뮬레이션</h3>
+                        <p class="text-gray-300">
+                            LogiCore Tech에서 실제 업무처럼 프로젝트를 수행하며 학습합니다.
+                        </p>
+                    </div>
+
+                    <div>
+                        <h3 class="text-xl font-bold text-white mb-2">💬 Monaco Editor</h3>
+                        <p class="text-gray-300">
+                            VS Code 수준의 코드 에디터로 편하게 프로그래밍 하세요.
+                        </p>
+                    </div>
+
+                    <div>
+                        <h3 class="text-xl font-bold text-white mb-2">🌍 다중 언어 지원</h3>
+                        <p class="text-gray-300">
+                            Python, JavaScript, C, Java 등 다양한 언어를 지원합니다.
+                        </p>
+                    </div>
+
+                    <div>
+                        <h3 class="text-xl font-bold text-white mb-2">🤖 자동 테스트</h3>
+                        <p class="text-gray-300">
+                            코드를 제출하면 자동으로 테스트 케이스를 실행하고 결과를 보여줍니다.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Professor Features -->
+    <section id="for-professors" class="py-20 px-6 bg-gray-900">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-3xl font-bold text-white mb-12 text-center">교수자를 위한 기능</h2>
+
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div class="space-y-6 order-2 md:order-1">
+                    <div>
+                        <h3 class="text-xl font-bold text-white mb-2">👁️ Code Peek</h3>
+                        <p class="text-gray-300">
+                            학생의 코드를 실시간으로 확인하고 문제점을 파악하세요.
+                        </p>
+                    </div>
+
+                    <div>
+                        <h3 class="text-xl font-bold text-white mb-2">📊 실시간 대시보드</h3>
+                        <p class="text-gray-300">
+                            모든 학생의 진도와 상태를 한눈에 파악할 수 있습니다.
+                        </p>
+                    </div>
+
+                    <div>
+                        <h3 class="text-xl font-bold text-white mb-2">📈 학습 분석</h3>
+                        <p class="text-gray-300">
+                            수업 후 데이터 기반 분석으로 다음 수업을 개선하세요.
+                        </p>
+                    </div>
+
+                    <div>
+                        <h3 class="text-xl font-bold text-white mb-2">💭 Q&A 관리</h3>
+                        <p class="text-gray-300">
+                            학생의 질문을 우선순위별로 관리하고 답변하세요.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="bg-gray-700 p-8 rounded-lg aspect-video flex items-center justify-center order-1 md:order-2">
+                    <div class="text-center">
+                        <p class="text-4xl mb-2">📊</p>
+                        <p class="text-gray-300">실시간 모니터링 대시보드</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section id="testimonials" class="py-20 px-6 bg-gray-800">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-3xl font-bold text-center text-white mb-12">실제 사용자들의 후기</h2>
+
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="bg-gray-700 p-6 rounded-lg border border-gray-600">
+                    <p class="text-gray-300 mb-4">
+                        "20명 학생의 진도를 실시간으로 확인할 수 있어서 정말 편리해요.
+                        전에는 수업 중에 일일이 돌아다니며 확인해야 했는데..."
+                    </p>
+                    <p class="font-bold text-white">김교수님</p>
+                    <p class="text-gray-400 text-sm">컴퓨터공학과 - 프로그래밍</p>
+                </div>
+
+                <div class="bg-gray-700 p-6 rounded-lg border border-gray-600">
+                    <p class="text-gray-300 mb-4">
+                        "Code Peek으로 자리 가기 전에 학생의 문제를 파악할 수 있어서
+                        더 효율적으로 도움을 줄 수 있습니다."
+                    </p>
+                    <p class="font-bold text-white">박교수님</p>
+                    <p class="text-gray-400 text-sm">컴퓨터공학과 - 자료구조</p>
+                </div>
+
+                <div class="bg-gray-700 p-6 rounded-lg border border-gray-600">
+                    <p class="text-gray-300 mb-4">
+                        "학습 분석으로 다음 수업을 개선했어요.
+                        학생들이 어디서 막히는지 명확히 보이니까 강의 방식을 조정하기 쉬워요."
+                    </p>
+                    <p class="font-bold text-white">최교수님</p>
+                    <p class="text-gray-400 text-sm">소프트웨어학과</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-20 px-6 bg-gray-900">
+        <div class="max-w-4xl mx-auto text-center">
+            <h2 class="text-4xl font-bold text-white mb-8">지금 바로 시작해보세요</h2>
+
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="bg-gray-800 p-8 rounded-lg border border-gray-700">
+                    <h3 class="text-2xl font-bold text-white mb-4">🎓 교수자</h3>
+                    <p class="text-gray-300 mb-6">
+                        지금 바로 수업을 만들고 학생을 초대하세요.
+                    </p>
+                    <a href="signup.html" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-lg transition inline-block">
+                        시작하기 →
+                    </a>
+                </div>
+
+                <div class="bg-gray-800 p-8 rounded-lg border border-gray-700">
+                    <h3 class="text-2xl font-bold text-white mb-4">📚 학생</h3>
+                    <p class="text-gray-300 mb-6">
+                        초대코드를 받으셨나요? 지금 바로 참여하세요.
+                    </p>
+                    <a href="signup.html" class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg transition inline-block">
+                        참여하기 →
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 border-t border-gray-700 py-12 px-6">
+        <div class="max-w-7xl mx-auto grid md:grid-cols-4 gap-8">
+            <div>
+                <h4 class="font-bold text-white mb-4">EduVerse</h4>
+                <p class="text-gray-400 text-sm">
+                    오프라인 수업을 위한 프로그래밍 교육 플랫폼
+                </p>
+            </div>
+
+            <div>
+                <h4 class="font-bold text-white mb-4">기능</h4>
+                <ul class="text-gray-400 text-sm space-y-2">
+                    <li><a href="#" class="hover:text-white transition">학생용 기능</a></li>
+                    <li><a href="#" class="hover:text-white transition">교수자용 기능</a></li>
+                    <li><a href="#" class="hover:text-white transition">관리자 기능</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="font-bold text-white mb-4">회사</h4>
+                <ul class="text-gray-400 text-sm space-y-2">
+                    <li><a href="#" class="hover:text-white transition">회사 소개</a></li>
+                    <li><a href="#" class="hover:text-white transition">이용약관</a></li>
+                    <li><a href="#" class="hover:text-white transition">개인정보처리방침</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="font-bold text-white mb-4">지원</h4>
+                <ul class="text-gray-400 text-sm space-y-2">
+                    <li><a href="#" class="hover:text-white transition">문의하기</a></li>
+                    <li><a href="#" class="hover:text-white transition">FAQ</a></li>
+                    <li><a href="#" class="hover:text-white transition">블로그</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-500 text-sm">
+            <p>© 2025 EduVerse. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

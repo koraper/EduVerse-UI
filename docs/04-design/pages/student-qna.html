@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>질문/답변 - EduVerse</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-gray-100">
+    <div class="flex h-screen">
+        <aside class="w-60 bg-gray-800 border-r border-gray-700 flex flex-col">
+            <div class="p-4 border-b border-gray-700">
+                <div class="flex items-center space-x-2">
+                    <div class="w-6 h-6 bg-indigo-600 rounded-lg flex items-center justify-center text-white text-sm font-bold">E</div>
+                    <span class="font-bold text-white">EduVerse</span>
+                </div>
+            </div>
+
+            <nav class="flex-1 p-4 space-y-2">
+                <a href="student-dashboard.html" class="flex items-center space-x-3 px-4 py-2 text-gray-400 hover:bg-gray-700 rounded-lg transition">
+                    <span>📚</span>
+                    <span>대시보드</span>
+                </a>
+                <a href="student-progress.html" class="flex items-center space-x-3 px-4 py-2 text-gray-400 hover:bg-gray-700 rounded-lg transition">
+                    <span>📈</span>
+                    <span>진도</span>
+                </a>
+                <a href="#" class="flex items-center space-x-3 px-4 py-2 bg-indigo-600 rounded-lg text-white transition">
+                    <span>💭</span>
+                    <span>질문</span>
+                    <span class="ml-auto bg-red-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">2</span>
+                </a>
+            </nav>
+
+            <div class="p-4 border-t border-gray-700">
+                <a href="landing.html" class="flex items-center space-x-3 px-4 py-2 text-gray-500 hover:text-gray-300 transition">
+                    <span>🚪</span>
+                    <span>로그아웃</span>
+                </a>
+            </div>
+        </aside>
+
+        <main class="flex-1 overflow-auto">
+            <div class="bg-gray-800 border-b border-gray-700 px-6 py-4 flex justify-between items-center">
+                <h1 class="text-2xl font-bold text-white">나의 질문 & 답변</h1>
+                <button class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-lg transition flex items-center space-x-2">
+                    <span>➕</span>
+                    <span>질문하기</span>
+                </button>
+            </div>
+
+            <div class="p-6 space-y-4">
+                <!-- Answered Question -->
+                <div class="bg-gray-800 rounded-lg border border-gray-700 p-6">
+                    <div class="flex items-start justify-between mb-3">
+                        <div>
+                            <p class="font-bold text-white">✅ Week 1 - greet() 함수</p>
+                            <p class="text-sm text-gray-400">1시간 전</p>
+                        </div>
+                        <span class="text-green-400">답변 완료</span>
+                    </div>
+
+                    <div class="mb-4 pb-4 border-b border-gray-700">
+                        <p class="text-gray-300 text-sm mb-2">
+                            <span class="font-bold">Q:</span> greet() 함수에서 name 변수를 사용하는데 "NameError: name 'name' is not defined" 오류가 나와요. 어떻게 해결하나요?
+                        </p>
+                    </div>
+
+                    <div class="bg-gray-900 rounded p-4 mb-4">
+                        <p class="text-sm text-gray-300 mb-2">
+                            <span class="font-bold text-white">📝 김교수님</span> (5분 전):
+                        </p>
+                        <p class="text-gray-300 text-sm leading-relaxed">
+                            함수의 매개변수 `name`은 함수 내부에서만 사용 가능합니다. 들여쓰기를 확인해보세요!
+                        </p>
+                        <div class="mt-3 bg-gray-800 p-3 rounded text-xs font-mono text-gray-300">
+                            <p>def greet(name):</p>
+                            <p class="text-green-400">    return "Hello, " + name  # 올바른 들여쓰기</p>
+                        </div>
+                        <p class="text-gray-400 text-sm mt-3">이렇게 수정해보세요.</p>
+                    </div>
+
+                    <div class="flex items-center space-x-4 text-sm">
+                        <button class="text-gray-400 hover:text-white transition">👍 도움이 됨</button>
+                        <button class="text-gray-400 hover:text-white transition">👎 도움이 안 됨</button>
+                    </div>
+                </div>
+
+                <!-- Waiting for Answer -->
+                <div class="bg-gray-800 rounded-lg border border-yellow-600/50 p-6">
+                    <div class="flex items-start justify-between mb-3">
+                        <div>
+                            <p class="font-bold text-white">🟡 Week 2 - 리스트 관련</p>
+                            <p class="text-sm text-gray-400">10분 전</p>
+                        </div>
+                        <span class="text-yellow-400">답변 대기 중</span>
+                    </div>
+
+                    <p class="text-gray-300 text-sm">
+                        <span class="font-bold">Q:</span> 리스트와 튜플의 차이가 정확히 뭔가요?
+                    </p>
+
+                    <div class="mt-4 flex items-center space-x-2 text-sm text-gray-400">
+                        <span>⏳ 평균 답변 시간: 약 12분</span>
+                    </div>
+                </div>
+
+                <!-- Waiting for Answer (Urgent) -->
+                <div class="bg-gray-800 rounded-lg border border-red-600/50 p-6">
+                    <div class="flex items-start justify-between mb-3">
+                        <div>
+                            <p class="font-bold text-white">🔴 Week 3 - 정렬 알고리즘</p>
+                            <p class="text-sm text-gray-400">3분 전</p>
+                        </div>
+                        <span class="text-red-400">긴급 - 답변 대기 중</span>
+                    </div>
+
+                    <p class="text-gray-300 text-sm">
+                        <span class="font-bold">Q:</span> 버블 정렬 구현 시 인덱스 범위가 자꾸 초과되는데요. 어디가 잘못됐을까요?
+                    </p>
+
+                    <div class="mt-4 flex items-center space-x-2 text-sm">
+                        <span class="text-red-400">🔴 긴급 질문으로 표시됨</span>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        console.log('Q&A 페이지 로드됨');
+    </script>
+</body>
+</html>

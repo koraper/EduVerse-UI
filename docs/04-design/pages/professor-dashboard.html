@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>교수자 대시보드 - EduVerse</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-gray-100">
+    <div class="flex flex-col min-h-screen">
+        <!-- Top Bar -->
+        <div class="bg-gray-800 border-b border-gray-700 px-6 py-4 flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+                <div class="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center text-white font-bold">E</div>
+                <span class="font-bold text-white">EduVerse</span>
+            </div>
+            <div class="flex items-center space-x-4">
+                <button class="text-gray-400 hover:text-white relative">🔔</button>
+                <div class="flex items-center space-x-2 cursor-pointer group">
+                    <div class="w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center text-white">👨‍🏫</div>
+                    <span class="text-sm text-gray-300 group-hover:text-white">김교수 ▼</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <main class="flex-1 overflow-auto p-6">
+            <div class="max-w-7xl mx-auto space-y-6">
+                <!-- Greeting -->
+                <div>
+                    <h1 class="text-3xl font-bold text-white">안녕하세요, 김교수님! 👋</h1>
+                </div>
+
+                <!-- Create Class Button -->
+                <div class="bg-gradient-to-r from-indigo-600/20 to-purple-600/20 border border-indigo-600/50 rounded-lg p-6">
+                    <button class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-lg transition flex items-center space-x-2">
+                        <span>➕</span>
+                        <span>새 수업 만들기</span>
+                    </button>
+                </div>
+
+                <!-- My Classes -->
+                <div>
+                    <h2 class="text-2xl font-bold text-white mb-4">내 수업 목록</h2>
+
+                    <div class="space-y-4">
+                        <!-- Active Class -->
+                        <div class="bg-gray-800 rounded-lg border border-gray-700 p-6 hover:border-indigo-500 transition">
+                            <div class="flex items-start justify-between mb-4">
+                                <div>
+                                    <h3 class="text-lg font-bold text-white">자료구조 및 알고리즘</h3>
+                                    <p class="text-sm text-gray-400">2025-1학기 | 16주 | 공학관 301호</p>
+                                </div>
+                                <span class="bg-blue-600/20 text-blue-400 text-xs font-bold px-3 py-1 rounded-full">진행 중</span>
+                            </div>
+
+                            <div class="bg-gray-900 rounded p-3 mb-4 text-sm">
+                                <p class="text-gray-400 mb-1">초대 코드:</p>
+                                <div class="flex items-center space-x-2">
+                                    <span class="text-white font-mono text-lg font-bold">ABC123</span>
+                                    <button class="text-indigo-400 hover:text-indigo-300 text-xs">📋 복사</button>
+                                    <button class="text-gray-400 hover:text-gray-300 text-xs">🔄 재발급</button>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-4 mb-4 text-sm">
+                                <p class="text-gray-300">
+                                    <span class="font-bold">참여 학생:</span> <span class="text-indigo-400">23명</span>
+                                </p>
+                                <p class="text-gray-300">
+                                    <span class="font-bold">평균 진도:</span> <span class="text-indigo-400">65%</span>
+                                </p>
+                            </div>
+
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
+                                <a href="professor-monitoring.html" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded text-sm transition text-center">
+                                    📊 실시간 모니터링
+                                </a>
+                                <a href="professor-qna.html" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded text-sm transition text-center">
+                                    💬 Q&A
+                                </a>
+                                <a href="professor-analytics.html" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded text-sm transition text-center">
+                                    📈 학습 분석
+                                </a>
+                                <button class="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded text-sm transition">
+                                    ⚙️ 설정
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Completed Class -->
+                        <div class="bg-gray-800 rounded-lg border border-gray-700 p-6">
+                            <div class="flex items-start justify-between mb-4">
+                                <div>
+                                    <h3 class="text-lg font-bold text-white">Python 프로그래밍 기초</h3>
+                                    <p class="text-sm text-gray-400">2024-2학기 | 12주</p>
+                                </div>
+                                <span class="bg-green-600/20 text-green-400 text-xs font-bold px-3 py-1 rounded-full">완료</span>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-4 mb-4 text-sm">
+                                <p class="text-gray-300">
+                                    <span class="font-bold">참여 학생:</span> <span class="text-green-400">30명</span>
+                                </p>
+                                <p class="text-gray-300">
+                                    <span class="font-bold">완료율:</span> <span class="text-green-400">100%</span>
+                                </p>
+                            </div>
+
+                            <div class="grid grid-cols-2 md:grid-cols-3 gap-2">
+                                <a href="professor-analytics.html" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded text-sm transition text-center">
+                                    📈 학습 분석
+                                </a>
+                                <button class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-sm transition">
+                                    📄 수료증 발급
+                                </button>
+                                <button class="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded text-sm transition">
+                                    📦 아카이브
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

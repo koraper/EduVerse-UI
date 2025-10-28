@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>교수자 대시보드 - EduVerse</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50">
+    <nav class="bg-white shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <h1 class="text-2xl font-bold text-green-600">EduVerse</h1>
+                    <span class="ml-4 text-gray-600">교수자</span>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="professor-qna.html" class="text-gray-700 hover:text-green-600">Q&A</a>
+                    <button class="text-gray-700 hover:text-green-600">로그아웃</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="mb-8">
+            <h2 class="text-3xl font-bold text-gray-900">안녕하세요, 김교수님! 👋</h2>
+            <p class="mt-2 text-gray-600">오늘도 학생들과 함께 성장하는 하루 되세요!</p>
+        </div>
+
+        <!-- Stats -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <div class="bg-white p-6 rounded-lg shadow">
+                <div class="text-3xl mb-2">📚</div>
+                <h3 class="text-lg font-semibold mb-2">운영 중인 수업</h3>
+                <p class="text-3xl font-bold text-green-600">3개</p>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow">
+                <div class="text-3xl mb-2">👥</div>
+                <h3 class="text-lg font-semibold mb-2">전체 학생 수</h3>
+                <p class="text-3xl font-bold text-blue-600">127명</p>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow">
+                <div class="text-3xl mb-2">❓</div>
+                <h3 class="text-lg font-semibold mb-2">미답변 질문</h3>
+                <p class="text-3xl font-bold text-yellow-600">5개</p>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow">
+                <div class="text-3xl mb-2">📊</div>
+                <h3 class="text-lg font-semibold mb-2">평균 진도율</h3>
+                <p class="text-3xl font-bold text-indigo-600">68%</p>
+            </div>
+        </div>
+
+        <!-- Create New Class -->
+        <div class="bg-green-50 border-2 border-dashed border-green-300 rounded-lg p-8 mb-8 text-center">
+            <h3 class="text-xl font-bold text-green-900 mb-2">새로운 수업을 만드시겠어요?</h3>
+            <p class="text-green-700 mb-4">커리큘럼을 선택하고 수업을 생성하세요</p>
+            <a href="create-class.html" class="inline-block bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700">
+                수업 만들기
+            </a>
+        </div>
+
+        <!-- Class List -->
+        <div class="bg-white rounded-lg shadow">
+            <div class="px-6 py-4 border-b border-gray-200">
+                <h3 class="text-xl font-bold">운영 중인 수업</h3>
+            </div>
+            <div class="divide-y divide-gray-200">
+                <div class="p-6 hover:bg-gray-50">
+                    <div class="flex items-center justify-between">
+                        <div class="flex-1">
+                            <div class="flex items-center">
+                                <span class="px-3 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">1주차 진행 중</span>
+                                <h4 class="ml-3 text-lg font-semibold text-gray-900">C 프로그래밍 기초 2025 1학기</h4>
+                            </div>
+                            <p class="mt-2 text-sm text-gray-600">학생 45명 | 평균 진도 78%</p>
+                            <div class="mt-3 flex items-center space-x-4">
+                                <span class="text-sm text-gray-600">입장 코드: <span class="font-mono font-bold">ABC123</span></span>
+                            </div>
+                        </div>
+                        <div class="ml-6 space-x-2">
+                            <a href="professor-monitoring.html" class="inline-block bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
+                                실시간 모니터링
+                            </a>
+                            <a href="class-detail.html" class="inline-block bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700">
+                                수업 관리
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
