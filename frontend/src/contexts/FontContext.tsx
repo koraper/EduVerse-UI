@@ -62,10 +62,6 @@ export const FontProvider = ({ children }: FontProviderProps) => {
     applyFont(font)
   }
 
-  if (isLoading) {
-    return <>{children}</>
-  }
-
   return (
     <FontContext.Provider value={{ currentFont, setFont }}>
       {children}
