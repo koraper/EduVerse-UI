@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
-import DashboardLayout from '@/components/layout/DashboardLayout'
+import StudentLayout from '@/components/layout/StudentLayout'
 import Card from '@/components/common/Card'
 import Badge from '@/components/common/Badge'
 
@@ -29,7 +29,7 @@ const ProgressPage = () => {
 
   if (isLoading) {
     return (
-      <DashboardLayout>
+      <StudentLayout>
         <div className="flex items-center justify-center min-h-[400px]">
           <div className="text-center">
             <div className="inline-flex items-center justify-center w-12 h-12 bg-primary-100 rounded-lg mb-4">
@@ -40,7 +40,7 @@ const ProgressPage = () => {
             <p className="text-gray-600">로딩 중...</p>
           </div>
         </div>
-      </DashboardLayout>
+      </StudentLayout>
     )
   }
 
@@ -97,7 +97,7 @@ const ProgressPage = () => {
   }
 
   return (
-    <DashboardLayout>
+    <StudentLayout>
       <div className="space-y-6">
         {/* 헤더 */}
         <div>
@@ -265,7 +265,7 @@ const ProgressPage = () => {
           </div>
         </Card>
       </div>
-    </DashboardLayout>
+    </StudentLayout>
   )
 }
 

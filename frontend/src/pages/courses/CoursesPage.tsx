@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import { useApiError } from '@/hooks/useApiError'
 import { useToast } from '@/components/common'
-import DashboardLayout from '@/components/layout/DashboardLayout'
+import StudentLayout from '@/components/layout/StudentLayout'
 import Card from '@/components/common/Card'
 import Button from '@/components/common/Button'
 import Badge from '@/components/common/Badge'
@@ -128,16 +128,16 @@ const CoursesPage = () => {
 
   if (isLoading) {
     return (
-      <DashboardLayout>
+      <StudentLayout>
         <Loading />
-      </DashboardLayout>
+      </StudentLayout>
     )
   }
 
   // 에러 상태 UI
   if (hasError) {
     return (
-      <DashboardLayout>
+      <StudentLayout>
         <div className="space-y-6">
           <div>
             <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
@@ -170,12 +170,12 @@ const CoursesPage = () => {
             </div>
           </Card>
         </div>
-      </DashboardLayout>
+      </StudentLayout>
     )
   }
 
   return (
-    <DashboardLayout>
+    <StudentLayout>
       <div className="space-y-6">
         {/* 헤더 */}
         <div className="flex items-center justify-between">
@@ -368,7 +368,7 @@ const CoursesPage = () => {
           </div>
         </div>
       </Modal>
-    </DashboardLayout>
+    </StudentLayout>
   )
 }
 

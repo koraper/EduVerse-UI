@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import { useApiError } from '@/hooks/useApiError'
-import DashboardLayout from '@/components/layout/DashboardLayout'
+import StudentLayout from '@/components/layout/StudentLayout'
 import Card from '@/components/common/Card'
 import Button from '@/components/common/Button'
 import Badge from '@/components/common/Badge'
@@ -105,16 +105,16 @@ const CourseDetailPage = () => {
 
   if (isLoading) {
     return (
-      <DashboardLayout>
+      <StudentLayout>
         <Loading />
-      </DashboardLayout>
+      </StudentLayout>
     )
   }
 
   // 에러 상태 UI
   if (hasError) {
     return (
-      <DashboardLayout>
+      <StudentLayout>
         <Card>
           <div className="p-12 text-center">
             <div className="flex items-center justify-center mb-4">
@@ -130,13 +130,13 @@ const CourseDetailPage = () => {
             </div>
           </div>
         </Card>
-      </DashboardLayout>
+      </StudentLayout>
     )
   }
 
   if (!course) {
     return (
-      <DashboardLayout>
+      <StudentLayout>
         <Card>
           <div className="p-12 text-center">
             <h3 className="text-lg font-medium text-gray-900 mb-2">과목을 찾을 수 없습니다</h3>
@@ -144,12 +144,12 @@ const CourseDetailPage = () => {
             <Button onClick={() => navigate('/courses')}>목록으로 돌아가기</Button>
           </div>
         </Card>
-      </DashboardLayout>
+      </StudentLayout>
     )
   }
 
   return (
-    <DashboardLayout>
+    <StudentLayout>
       <div className="space-y-6">
         {/* 뒤로가기 버튼 */}
         <button
@@ -300,7 +300,7 @@ const CourseDetailPage = () => {
           </div>
         </div>
       </div>
-    </DashboardLayout>
+    </StudentLayout>
   )
 }
 
