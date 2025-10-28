@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
-import DashboardLayout from '@/components/layout/DashboardLayout'
+import StudentLayout from '@/components/layout/StudentLayout'
 import Card from '@/components/common/Card'
 import Badge from '@/components/common/Badge'
 import Button from '@/components/common/Button'
@@ -62,7 +62,7 @@ const StudentDashboardPage = () => {
   }
 
   return (
-    <DashboardLayout>
+    <StudentLayout>
       <div className="space-y-6">
         {/* 환영 메시지 (신규 가입자) */}
         {showWelcome && (
@@ -101,7 +101,6 @@ const StudentDashboardPage = () => {
               오늘도 즐거운 학습 되세요
             </p>
           </div>
-          <Badge variant="blue">학생</Badge>
         </div>
 
         {/* 초대코드 입력 (수업이 없는 경우) */}
@@ -302,7 +301,7 @@ const StudentDashboardPage = () => {
           animation: fade-in 0.5s ease-out;
         }
       `}</style>
-    </DashboardLayout>
+    </StudentLayout>
   )
 }
 
