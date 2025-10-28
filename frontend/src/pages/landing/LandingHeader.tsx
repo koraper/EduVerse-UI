@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { Button } from '@/components/common'
 
 const LandingHeader = () => {
   const navigate = useNavigate()
+  const location = useLocation()
   const [isScrolled, setIsScrolled] = useState(false)
   const isDevelopment = import.meta.env.DEV
 
@@ -30,6 +31,20 @@ const LandingHeader = () => {
         testAccount: testAccounts[role]
       }
     })
+  }
+
+  // 문의하기 버튼 클릭 핸들러
+  const handleContactClick = () => {
+    // 현재 랜딩 페이지인 경우 스크롤
+    if (location.pathname === '/') {
+      const contactSection = document.querySelector('#contact')
+      if (contactSection) {
+        contactSection.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      }
+    } else {
+      // 다른 페이지인 경우 랜딩 페이지로 이동 후 스크롤
+      navigate('/', { state: { scrollTo: 'contact' } })
+    }
   }
 
   return (
@@ -96,12 +111,7 @@ const LandingHeader = () => {
             <Button
               variant="primary"
               size="sm"
-              onClick={() => {
-                const contactSection = document.querySelector('#contact')
-                if (contactSection) {
-                  contactSection.scrollIntoView({ behavior: 'smooth' })
-                }
-              }}
+              onClick={handleContactClick}
               className="bg-primary-600 hover:bg-primary-700"
             >
               문의하기
