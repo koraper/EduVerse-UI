@@ -163,6 +163,30 @@ const LoginPage = () => {
               }
             />
 
+            {/* 계정 찾기 & 비밀번호 찾기 */}
+            <div className="flex justify-end gap-4 text-sm">
+              <button
+                type="button"
+                onClick={() => {
+                  // TODO: 계정(이메일) 찾기 페이지로 이동
+                  alert('계정 찾기 기능은 추후 구현 예정입니다')
+                }}
+                className="text-primary-600 hover:text-primary-700 font-medium"
+              >
+                계정(이메일) 찾기
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  // TODO: 비밀번호 찾기 페이지로 이동
+                  alert('비밀번호 찾기 기능은 추후 구현 예정입니다')
+                }}
+                className="text-primary-600 hover:text-primary-700 font-medium"
+              >
+                비밀번호 찾기
+              </button>
+            </div>
+
             {/* 로그인 버튼 */}
             <Button
               type="submit"
@@ -177,13 +201,26 @@ const LoginPage = () => {
             {/* 회원가입 링크 */}
             <div className="text-center text-sm">
               <span className="text-gray-600">계정이 없으신가요? </span>
-              <Link to="/register" className="text-primary-600 hover:text-primary-700 font-medium">
+              <Link to="/student/signup" className="text-primary-600 hover:text-primary-700 font-medium">
                 회원가입
               </Link>
             </div>
 
           </form>
         </Card>
+
+        {/* 문의하기 버튼 */}
+        <div className="text-center mt-4">
+          <Link
+            to="/#contact"
+            className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 text-sm transition-colors"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+            </svg>
+            문의하기
+          </Link>
+        </div>
         </div>
       </div>
     </>

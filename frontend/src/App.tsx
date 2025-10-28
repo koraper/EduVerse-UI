@@ -5,6 +5,7 @@ import { ToastProvider, ToastContainer, ErrorBoundary } from '@/components/commo
 import LandingPage from '@/pages/landing/LandingPage'
 import LoginPage from '@/pages/auth/LoginPage'
 import RegisterPage from '@/pages/auth/RegisterPage'
+import StudentSignupPage from '@/pages/auth/StudentSignupPage'
 import StudentDashboardPage from '@/pages/student/StudentDashboardPage'
 import ProfessorDashboardPage from '@/pages/professor/ProfessorDashboardPage'
 import AdminDashboardPage from '@/pages/admin/AdminDashboardPage'
@@ -46,6 +47,7 @@ function App() {
           {/* 인증 페이지 */}
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
+          <Route path="/student/signup" element={<StudentSignupPage />} />
 
           {/* 역할별 대시보드 */}
           <Route path="/student/dashboard" element={<StudentDashboardPage />} />
