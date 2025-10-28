@@ -15,22 +15,15 @@ interface ThemeProviderProps {
 }
 
 export const ThemeProvider = ({ children }: ThemeProviderProps) => {
-  const [currentTheme, setCurrentTheme] = useState<ThemeType>('system')
-  const [actualTheme, setActualTheme] = useState<'light' | 'dark'>('light')
-  const [isLoading, setIsLoading] = useState(true)
-
-  // 초기화: localStorage에서 저장된 테마 로드
-  useEffect(() => {
+  const [currentTheme, setCurrentTheme] = useState<ThemeType>(() => {
+    // 초기화: localStorage에서 저장된 테마 로드
     const savedTheme = localStorage.getItem('selectedTheme') as ThemeType | null
     if (savedTheme && ['system', 'light', 'dark'].includes(savedTheme)) {
-      setCurrentTheme(savedTheme)
-      applyTheme(savedTheme)
-    } else {
-      // 기본값: system
-      applyTheme('system')
+      return savedTheme
     }
-    setIsLoading(false)
-  }, [])
+    return 'system'
+  })
+  const [actualTheme, setActualTheme] = useState<'light' | 'dark'>('light')
 
   // 시스템 다크 모드 감지
   useEffect(() => {
