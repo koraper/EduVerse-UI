@@ -550,6 +550,11 @@ const SettingsPage = () => {
                             disabled={!isEditing}
                             error={profileErrors.name}
                             maxLength={50}
+                            leftIcon={
+                              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                              </svg>
+                            }
                           />
                           {isEditing && (
                             <p className="mt-1 text-xs text-gray-500 text-right">
@@ -570,6 +575,11 @@ const SettingsPage = () => {
                             disabled={true}
                             error={profileErrors.email}
                             helperText="이메일은 수정할 수 없습니다"
+                            leftIcon={
+                              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
+                              </svg>
+                            }
                           />
                         </div>
 
@@ -586,6 +596,11 @@ const SettingsPage = () => {
                               disabled={!isEditing}
                               error={profileErrors.studentId}
                               maxLength={20}
+                              leftIcon={
+                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14" />
+                                </svg>
+                              }
                             />
                             {isEditing && (
                               <p className="mt-1 text-xs text-gray-500 text-right">
@@ -607,6 +622,11 @@ const SettingsPage = () => {
                             disabled={!isEditing}
                             error={profileErrors.department}
                             maxLength={100}
+                            leftIcon={
+                              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5.581m0 0H9m11.581 0a2 2 0 100-4H9m0 0a2 2 0 110-4m11.581 8a2 2 0 100-4m-11.581 4a2 2 0 110-4m0 8v-2.5" />
+                              </svg>
+                            }
                           />
                           {isEditing && (
                             <p className="mt-1 text-xs text-gray-500 text-right">
@@ -628,6 +648,11 @@ const SettingsPage = () => {
                             disabled={!isEditing}
                             error={profileErrors.phone}
                             maxLength={13}
+                            leftIcon={
+                              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 00.948.684l2.498 8.756a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l8.756 2.498a1 1 0 00.684-.948V5a2 2 0 00-2-2h-2.28a1 1 0 00-.948.684m0 0L9.879 9.878m0 0a3 3 0 10-4.243-4.243m4.243 4.243L9.879 9.879" />
+                              </svg>
+                            }
                           />
                           {isEditing && (
                             <p className="mt-1 text-xs text-gray-500 text-right">
