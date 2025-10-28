@@ -180,7 +180,7 @@ const StudentSignupPage = () => {
       <LandingHeader />
 
       <div className="min-h-screen bg-gradient-to-br from-primary-50 to-secondary-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 pt-24">
-        <div className="max-w-md w-full">
+        <div className="max-w-md w-full min-w-[500px]">
           {/* 로고 및 헤더 */}
           <div className="text-center mb-8">
             <div className="flex justify-center mb-4">
