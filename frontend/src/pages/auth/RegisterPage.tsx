@@ -359,9 +359,6 @@ const RegisterPage = () => {
                     <span className={`mr-2 ${passwordValidation.complexity.complexityCount >= 2 ? 'text-success-600' : 'text-gray-600'}`}>✓</span>
                     영문 대소문자+숫자+특수문자 중 2가지 이상 조합 ({passwordValidation.complexity.complexityCount}/4)
                   </li>
-                  <li className="flex items-center text-gray-600">
-                    <span className="mr-2">✓</span> 연속된 문자 3개 이상 불가
-                  </li>
                 </ul>
               </div>
             </div>

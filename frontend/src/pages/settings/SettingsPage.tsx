@@ -817,9 +817,6 @@ const SettingsPage = () => {
                             <li className={`flex items-center ${passwordValidation.complexity.complexityCount >= 2 ? 'text-success-600' : 'text-gray-600'}`}>
                               <span className="mr-2">✓</span> 영문 대소문자, 숫자, 특수문자 중 최소 2가지 조합 ({passwordValidation.complexity.complexityCount}/4)
                             </li>
-                            <li className={`flex items-center ${!hasConsecutiveChars(passwordForm.newPassword) ? 'text-success-600' : 'text-gray-600'}`}>
-                              <span className="mr-2">✓</span> 같은 문자 3개 이상 연속 불가
-                            </li>
                           </ul>
                         </div>
                       </div>
