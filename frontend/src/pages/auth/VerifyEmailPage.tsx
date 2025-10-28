@@ -390,23 +390,6 @@ const VerifyEmailPage = () => {
               )}
             </div>
 
-            {/* 개발 환경 전용 */}
-            {isDevelopment && (
-              <div className="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-                <p className="text-sm text-yellow-700 mb-2">⚙️ 개발 모드</p>
-                <p className="text-xs text-yellow-600 mb-3">고정 인증번호: 123456</p>
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  className="w-full"
-                  onClick={handleAutoFill}
-                >
-                  자동 입력
-                </Button>
-              </div>
-            )}
-
             {/* 홈으로 돌아가기 */}
             <div className="mt-6 text-center">
               <Link to="/" className="text-gray-600 hover:text-gray-900 text-sm">

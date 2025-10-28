@@ -7,7 +7,7 @@ const ToastContainer = () => {
   return (
     <div
       className={`
-        fixed top-4 right-4 z-50
+        fixed top-20 left-1/2 -translate-x-1/2 z-50
         flex flex-col gap-2
         pointer-events-auto
       `}
