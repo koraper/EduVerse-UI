@@ -5,7 +5,6 @@ export const PASSWORD_POLICY = {
   minLength: 8,           // 최소 8자
   maxLength: 20,          // 최대 20자
   minComplexity: 2,       // 최소 2가지 조합 필요
-  maxConsecutive: 2,      // 연속된 문자 최대 2개 (3개 이상 불가)
 } as const
 
 /**
@@ -86,11 +85,6 @@ export const validatePassword = (password: string): PasswordValidationResult => 
     errors.push(
       `영문 대소문자, 숫자, 특수문자 중 최소 ${PASSWORD_POLICY.minComplexity}가지 이상 조합이 필요합니다`
     )
-  }
-
-  // 연속된 문자 검증
-  if (password && hasConsecutiveChars(password)) {
-    errors.push('같은 문자가 연속 3개 이상 포함될 수 없습니다')
   }
 
   // 경고사항
@@ -178,7 +172,6 @@ export const getPasswordPolicyDescription = (): string => {
     비밀번호는 다음 정책을 따라야 합니다:
     • 최소 ${PASSWORD_POLICY.minLength}자 이상, 최대 ${PASSWORD_POLICY.maxLength}자 이하
     • 영문 대소문자, 숫자, 특수문자 중 최소 ${PASSWORD_POLICY.minComplexity}가지 이상 조합
-    • 같은 문자가 연속 ${PASSWORD_POLICY.maxConsecutive + 1}개 이상 포함될 수 없음
   `.trim()
 }
 

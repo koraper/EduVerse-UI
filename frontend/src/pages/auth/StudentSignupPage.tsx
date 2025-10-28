@@ -250,7 +250,7 @@ const StudentSignupPage = () => {
                 onChange={handleStudentIdChange}
                 error={errors.studentId}
                 maxLength={REGISTER_INPUT_LIMITS.studentId}
-                placeholder="2024123456"
+                placeholder="24123456 or st24123456"
                 leftIcon={
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14" />
@@ -271,7 +271,7 @@ const StudentSignupPage = () => {
                   }}
                   maxLength={INPUT_LIMITS.password}
                   error={errors.password}
-                  placeholder="8-20자, 영문 대소문자+숫자+특수문자 중 2가지 이상 조합"
+                  placeholder="********"
                   leftIcon={
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
@@ -288,7 +288,6 @@ const StudentSignupPage = () => {
                   </div>
                 )}
                 <div className="mt-3 p-3 bg-blue-50 rounded border border-blue-200 text-xs">
-                  <p className="text-blue-700 font-medium mb-2">비밀번호 정책 요구사항:</p>
                   <ul className="text-blue-600 space-y-1">
                     <li className="flex items-center">
                       <span className={`mr-2 ${formData.password.length >= 8 && formData.password.length <= 20 ? 'text-success-600' : 'text-gray-600'}`}>✓</span>
@@ -297,9 +296,6 @@ const StudentSignupPage = () => {
                     <li className="flex items-center">
                       <span className={`mr-2 ${passwordValidation.complexity.complexityCount >= 2 ? 'text-success-600' : 'text-gray-600'}`}>✓</span>
                       영문 대소문자+숫자+특수문자 중 2가지 이상 조합 ({passwordValidation.complexity.complexityCount}/4)
-                    </li>
-                    <li className="flex items-center text-gray-600">
-                      <span className="mr-2">✓</span> 연속된 문자 3개 이상 불가
                     </li>
                   </ul>
                 </div>
@@ -314,7 +310,7 @@ const StudentSignupPage = () => {
                 onChange={handleChange}
                 maxLength={INPUT_LIMITS.password}
                 error={errors.confirmPassword}
-                placeholder="비밀번호를 다시 입력하세요"
+                placeholder="********"
                 leftIcon={
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
