@@ -176,12 +176,12 @@ const StudentDashboardPage = () => {
         </div>
 
         {/* 섹션 1: 초대코드로 수업 참여하기 */}
-        <Card className="bg-gradient-to-br from-primary-50 to-blue-50 border border-primary-200">
+        <Card className="bg-gradient-to-br from-green-50 to-emerald-50 border border-green-200">
           <div className="p-6">
             <div className="flex items-start gap-6">
               {/* 좌측 아이콘 */}
               <div className="flex-shrink-0">
-                <div className="w-16 h-16 bg-gradient-to-br from-primary-500 to-blue-500 rounded-xl flex items-center justify-center shadow-lg">
+                <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-500 rounded-xl flex items-center justify-center shadow-lg">
                   <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 7h4a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V9a2 2 0 012-2h4m0 0V5a2 2 0 012-2h2a2 2 0 012 2v2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v2" />
                   </svg>
@@ -194,7 +194,7 @@ const StudentDashboardPage = () => {
                   <div className="flex-1">
                     <div className="flex items-center gap-2">
                       <h2 className="text-lg font-bold text-gray-900">초대코드로 수업 참여하기</h2>
-                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary-100 text-primary-700">
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-700">
                         새로운 수업
                       </span>
                     </div>
@@ -206,31 +206,22 @@ const StudentDashboardPage = () => {
                 </div>
 
                 {/* 버튼 */}
-                <div className="mt-4 flex gap-3">
+                <div className="mt-4">
                   <button
                     onClick={() => setInviteModalOpen(true)}
-                    className="inline-flex items-center gap-2 px-6 py-2.5 bg-primary-600 text-white rounded-lg hover:bg-primary-700 active:bg-primary-800 transition-colors text-sm font-medium shadow-md hover:shadow-lg"
+                    className="inline-flex items-center gap-2 px-6 py-2.5 bg-green-600 text-white rounded-lg hover:bg-green-700 active:bg-green-800 transition-colors text-sm font-medium shadow-md hover:shadow-lg"
                   >
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                     </svg>
                     초대코드 입력
                   </button>
-                  <button
-                    onClick={() => {/* 도움말 또는 FAQ로 이동 */}}
-                    className="inline-flex items-center gap-2 px-4 py-2.5 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 active:bg-gray-100 transition-colors text-sm font-medium"
-                  >
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    도움말
-                  </button>
                 </div>
               </div>
 
               {/* 우측 데코레이션 */}
               <div className="hidden sm:block flex-shrink-0">
-                <svg className="w-20 h-20 text-primary-100 opacity-60" fill="currentColor" viewBox="0 0 20 20">
+                <svg className="w-20 h-20 text-green-200 opacity-60" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M4.293 7.707a1 1 0 011.414-1.414L8 9.586l6.293-6.293a1 1 0 111.414 1.414l-7 7a1 1 0 01-1.414 0l-4-4z" clipRule="evenodd" />
                 </svg>
               </div>
