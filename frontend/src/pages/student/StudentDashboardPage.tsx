@@ -14,6 +14,7 @@ interface Course {
   code: string
   students: number
   progress: number
+  status: 'pending' | 'ongoing' | 'completed'
 }
 
 const StudentDashboardPage = () => {
@@ -28,6 +29,11 @@ const StudentDashboardPage = () => {
   const [inviteError, setInviteError] = useState('')
   const [showWelcome, setShowWelcome] = useState(false)
 
+  // 상태 관리
+  const [selectedStatuses, setSelectedStatuses] = useState<Set<'pending' | 'ongoing' | 'completed'>>(
+    new Set(['pending', 'ongoing', 'completed'])
+  )
+
   // Mock 과목 데이터
   const courses: Course[] = useMemo(
     () => [
@@ -38,6 +44,7 @@ const StudentDashboardPage = () => {
         code: 'CS101',
         students: 45,
         progress: 65,
+        status: 'ongoing',
       },
       {
         id: 2,
@@ -46,6 +53,7 @@ const StudentDashboardPage = () => {
         code: 'CS202',
         students: 38,
         progress: 78,
+        status: 'ongoing',
       },
       {
         id: 3,
@@ -54,6 +62,7 @@ const StudentDashboardPage = () => {
         code: 'CS303',
         students: 52,
         progress: 45,
+        status: 'pending',
       },
       {
         id: 4,
@@ -62,10 +71,28 @@ const StudentDashboardPage = () => {
         code: 'CS404',
         students: 35,
         progress: 82,
+        status: 'completed',
       },
     ],
     []
   )
+
+  // 필터링된 과목 데이터
+  const filteredCourses = useMemo(
+    () => courses.filter((course) => selectedStatuses.has(course.status)),
+    [courses, selectedStatuses]
+  )
+
+  // 상태 토글 핸들러
+  const toggleStatus = (status: 'pending' | 'ongoing' | 'completed') => {
+    const newStatuses = new Set(selectedStatuses)
+    if (newStatuses.has(status)) {
+      newStatuses.delete(status)
+    } else {
+      newStatuses.add(status)
+    }
+    setSelectedStatuses(newStatuses)
+  }
 
   // FAQ 데이터
   const faqs = [
@@ -237,16 +264,17 @@ const StudentDashboardPage = () => {
 
         {/* 섹션 2: 내 수강 과목 */}
         <div>
-          <div className="flex items-center justify-between mb-4">
-            <div>
-              <h2 className="text-lg font-semibold text-gray-900">내 수강 과목</h2>
-              <p className="mt-1 text-sm text-gray-600">
-                현재 수강 중인 과목은 총 {courses.length}개입니다
-              </p>
-            </div>
+          <div className="mb-6">
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <h2 className="text-lg font-semibold text-gray-900">내 수강 과목</h2>
+                <p className="mt-1 text-sm text-gray-600">
+                  현재 수강 중인 과목은 총 {filteredCourses.length}개입니다
+                </p>
+              </div>
 
-            {/* 뷰 전환 버튼 */}
-            <div className="flex items-center gap-2">
+              {/* 뷰 전환 버튼 */}
+              <div className="flex items-center gap-2">
               <button
                 onClick={() => setViewMode('card')}
                 className={`p-2 rounded-lg transition-colors ${
@@ -274,12 +302,47 @@ const StudentDashboardPage = () => {
                 </svg>
               </button>
             </div>
+            </div>
+          </div>
+
+          {/* 필터 토글 */}
+          <div className="mb-6 flex flex-wrap gap-3">
+            <button
+              onClick={() => toggleStatus('pending')}
+              className={`px-4 py-2 rounded-lg font-medium text-sm transition-colors ${
+                selectedStatuses.has('pending')
+                  ? 'bg-blue-100 text-blue-700 border border-blue-300'
+                  : 'bg-gray-100 text-gray-600 border border-gray-300 hover:bg-gray-200'
+              }`}
+            >
+              📅 예정
+            </button>
+            <button
+              onClick={() => toggleStatus('ongoing')}
+              className={`px-4 py-2 rounded-lg font-medium text-sm transition-colors ${
+                selectedStatuses.has('ongoing')
+                  ? 'bg-yellow-100 text-yellow-700 border border-yellow-300'
+                  : 'bg-gray-100 text-gray-600 border border-gray-300 hover:bg-gray-200'
+              }`}
+            >
+              ▶️ 진행 중
+            </button>
+            <button
+              onClick={() => toggleStatus('completed')}
+              className={`px-4 py-2 rounded-lg font-medium text-sm transition-colors ${
+                selectedStatuses.has('completed')
+                  ? 'bg-green-100 text-green-700 border border-green-300'
+                  : 'bg-gray-100 text-gray-600 border border-gray-300 hover:bg-gray-200'
+              }`}
+            >
+              ✅ 완료
+            </button>
           </div>
 
           {/* 카드 뷰 */}
           {viewMode === 'card' && (
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {courses.map((course) => (
+              {filteredCourses.map((course) => (
                 <Card key={course.id}>
                   <div className="p-6 flex flex-col h-full">
                     <div className="mb-4">
@@ -328,7 +391,7 @@ const StudentDashboardPage = () => {
           {/* 목록 뷰 */}
           {viewMode === 'list' && (
             <div className="space-y-3">
-              {courses.map((course) => (
+              {filteredCourses.map((course) => (
                 <Card key={course.id}>
                   <div className="p-4">
                     <div className="flex items-center justify-between">
