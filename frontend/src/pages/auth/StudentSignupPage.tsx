@@ -42,10 +42,11 @@ const StudentSignupPage = () => {
 
   // 필수 필드 입력 확인 (회원가입 버튼 활성화 조건)
   const isFormValid = () => {
-    // 이메일, 이름, 비밀번호, 비밀번호 확인이 모두 입력되어야 함
+    // 이메일, 이름, 학번, 비밀번호, 비밀번호 확인이 모두 입력되어야 함
     const hasRequiredFields =
       formData.email.trim() &&
       formData.name.trim() &&
+      formData.studentId.trim() &&
       formData.password.trim() &&
       formData.confirmPassword.trim()
 
@@ -108,12 +109,10 @@ const StudentSignupPage = () => {
       newErrors.confirmPassword = '비밀번호가 일치하지 않습니다'
     }
 
-    // 학번 검증 (선택사항)
-    if (formData.studentId) {
-      const studentIdError = validateStudentId(formData.studentId, false)
-      if (studentIdError) {
-        newErrors.studentId = studentIdError
-      }
+    // 학번 검증 (필수)
+    const studentIdError = validateStudentId(formData.studentId, true)
+    if (studentIdError) {
+      newErrors.studentId = studentIdError
     }
 
     // 약관 동의 검증
@@ -169,13 +168,9 @@ const StudentSignupPage = () => {
     const { value } = e.target
     setFormData((prev) => ({ ...prev, studentId: value }))
 
-    // 실시간 유효성 검증
-    if (value.trim()) {
-      const error = validateStudentId(value, false)
-      setErrors((prev) => ({ ...prev, studentId: error || '' }))
-    } else {
-      setErrors((prev) => ({ ...prev, studentId: '' }))
-    }
+    // 실시간 유효성 검증 (필수 필드이므로 항상 검증)
+    const error = validateStudentId(value, true)
+    setErrors((prev) => ({ ...prev, studentId: error || '' }))
     setApiError('')
   }
 
@@ -246,10 +241,10 @@ const StudentSignupPage = () => {
                 }
               />
 
-              {/* 학번 입력 (선택사항) */}
+              {/* 학번 입력 (필수) */}
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                 <Input
-                  label="학번 (선택사항)"
+                  label={<span>학번 <span className="text-error-500">*</span></span>}
                   type="text"
                   name="studentId"
                   value={formData.studentId}
