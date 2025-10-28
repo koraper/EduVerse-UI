@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useAuth } from '@/contexts/AuthContext'
 import { useToast } from '@/components/common/ToastContext'
 import { useFont } from '@/contexts/FontContext'
+import { useTheme } from '@/contexts/ThemeContext'
 import type { FontType } from '@/contexts/FontContext'
 import DashboardLayout from '@/components/layout/DashboardLayout'
 import Card from '@/components/common/Card'
@@ -24,6 +25,7 @@ const SettingsPage = () => {
   const { user, token, updateUser } = useAuth()
   const { addToast } = useToast()
   const { currentFont, setFont } = useFont()
+  const { currentTheme, setTheme } = useTheme()
   const [activeTab, setActiveTab] = useState<'profile' | 'password' | 'notifications' | 'appearance'>('profile')
   const [isLoading, setIsLoading] = useState(false)
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
@@ -991,7 +993,68 @@ const SettingsPage = () => {
                 {/* 글꼴 설정 탭 */}
                 {activeTab === 'appearance' && (
                   <div>
-                    <h2 className="text-lg font-semibold text-gray-900 mb-6">글꼴 설정</h2>
+                    <h2 className="text-lg font-semibold text-gray-900 mb-6">기타 설정</h2>
+
+                    {/* 테마 설정 섹션 */}
+                    <div className="mb-8">
+                      <h3 className="text-md font-semibold text-gray-900 mb-4">테마</h3>
+                      <div className="space-y-3">
+                        {[
+                          { value: 'system' as const, name: '시스템', description: '운영 체제 설정에 따라 자동으로 변경됩니다' },
+                          { value: 'light' as const, name: '라이트', description: '밝은 테마를 항상 사용합니다' },
+                          { value: 'dark' as const, name: '다크', description: '어두운 테마를 항상 사용합니다' },
+                        ].map((option) => (
+                          <div
+                            key={option.value}
+                            onClick={() => setTheme(option.value)}
+                            className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
+                              currentTheme === option.value
+                                ? 'border-primary-500 bg-primary-50'
+                                : 'border-gray-200 hover:border-gray-300 bg-white'
+                            }`}
+                          >
+                            <div className="flex items-start space-x-3">
+                              <div
+                                className={`w-5 h-5 rounded-full border-2 mt-1 flex items-center justify-center transition-all ${
+                                  currentTheme === option.value
+                                    ? 'border-primary-500 bg-primary-500'
+                                    : 'border-gray-300'
+                                }`}
+                              >
+                                {currentTheme === option.value && (
+                                  <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                                  </svg>
+                                )}
+                              </div>
+                              <div className="flex-1">
+                                <p
+                                  className={`text-sm font-medium ${
+                                    currentTheme === option.value
+                                      ? 'text-primary-700'
+                                      : 'text-gray-900'
+                                  }`}
+                                >
+                                  {option.name}
+                                </p>
+                                <p className="text-xs text-gray-500 mt-1">{option.description}</p>
+                              </div>
+                              {option.value === 'system' && (
+                                <div className="text-xs text-gray-400 px-2 py-1 bg-gray-100 rounded">
+                                  {window.matchMedia('(prefers-color-scheme: dark)').matches ? '다크 감지됨' : '라이트 감지됨'}
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* 구분선 */}
+                    <div className="border-t border-gray-200 my-8" />
+
+                    {/* 글꼴 설정 섹션 */}
+                    <h3 className="text-md font-semibold text-gray-900 mb-4">글꼴</h3>
                     <div className="space-y-4">
                       {fontOptions.map((option) => (
                         <div
@@ -1038,10 +1101,17 @@ const SettingsPage = () => {
                       ))}
                     </div>
 
-                    <div className="mt-6 p-4 bg-primary-50 rounded-lg border border-primary-200">
-                      <p className="text-sm text-primary-700">
-                        <span className="font-medium">💡 팁:</span> 선택한 글꼴은 자동으로 저장되며, 브라우저를 다시 열어도 유지됩니다.
-                      </p>
+                    <div className="mt-6 space-y-3">
+                      <div className="p-4 bg-primary-50 rounded-lg border border-primary-200">
+                        <p className="text-sm text-primary-700">
+                          <span className="font-medium">💡 팁:</span> 선택한 테마와 글꼴은 자동으로 저장되며, 브라우저를 다시 열어도 유지됩니다.
+                        </p>
+                      </div>
+                      <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
+                        <p className="text-sm text-blue-700">
+                          <span className="font-medium">ℹ️ 정보:</span> 시스템 테마를 선택하면 운영 체제의 다크 모드 설정을 따릅니다.
+                        </p>
+                      </div>
                     </div>
                   </div>
                 )}

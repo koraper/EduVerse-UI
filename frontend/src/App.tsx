@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { AuthProvider } from '@/contexts/AuthContext'
 import { FontProvider } from '@/contexts/FontContext'
+import { ThemeProvider } from '@/contexts/ThemeContext'
 import { ToastProvider, ToastContainer, ErrorBoundary } from '@/components/common'
 import LandingPage from '@/pages/landing/LandingPage'
 import LoginPage from '@/pages/auth/LoginPage'
@@ -37,10 +38,11 @@ function App() {
           }
         }}
       >
-        <FontProvider>
-          <AuthProvider>
-            <ToastProvider>
-              <ToastContainer />
+        <ThemeProvider>
+          <FontProvider>
+            <AuthProvider>
+              <ToastProvider>
+                <ToastContainer />
               <Routes>
           {/* 랜딩 페이지 */}
           <Route path="/" element={<LandingPage />} />
@@ -84,9 +86,10 @@ function App() {
           {/* 404 페이지 */}
           <Route path="*" element={<div className="min-h-screen flex items-center justify-center"><h1 className="text-2xl">페이지를 찾을 수 없습니다</h1></div>} />
               </Routes>
-            </ToastProvider>
-          </AuthProvider>
-        </FontProvider>
+              </ToastProvider>
+            </AuthProvider>
+          </FontProvider>
+        </ThemeProvider>
       </ErrorBoundary>
     </BrowserRouter>
   )
