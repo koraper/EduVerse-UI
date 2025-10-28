@@ -211,15 +211,18 @@ const LoginPage = () => {
 
         {/* 문의하기 버튼 */}
         <div className="text-center mt-4">
-          <Link
-            to="/#contact"
+          <button
+            type="button"
+            onClick={() => {
+              navigate('/', { state: { scrollTo: 'contact' } })
+            }}
             className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 text-sm transition-colors"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
             </svg>
             문의하기
-          </Link>
+          </button>
         </div>
         </div>
       </div>
