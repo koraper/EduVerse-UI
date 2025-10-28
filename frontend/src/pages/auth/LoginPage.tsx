@@ -10,7 +10,7 @@ import LandingHeader from '@/pages/landing/LandingHeader'
 const LoginPage = () => {
   const navigate = useNavigate()
   const location = useLocation()
-  const { login } = useAuth()
+  const { login, updateUser } = useAuth()
 
   const [formData, setFormData] = useState({
     email: '',
@@ -22,6 +22,9 @@ const LoginPage = () => {
   })
   const [isLoading, setIsLoading] = useState(false)
   const [apiError, setApiError] = useState('')
+
+  // 개발 환경 여부
+  const isDevelopment = import.meta.env.DEV
 
   // 테스트 계정 정보 자동 입력
   useEffect(() => {
@@ -72,6 +75,33 @@ const LoginPage = () => {
     setIsLoading(true)
 
     try {
+      // 개발 환경: 학생 로그인 bypass
+      if (isDevelopment) {
+        // 약간의 로딩 시간 시뮬레이션
+        await new Promise(resolve => setTimeout(resolve, 500))
+
+        // 더미 학생 사용자 설정
+        const dummyUser = {
+          id: 1,
+          email: formData.email || 'student@test.com',
+          name: '테스트 학생',
+          role: 'student' as const,
+          emailVerified: true,
+          studentId: '20240001'
+        }
+
+        // AuthContext에 사용자 정보 설정
+        updateUser(dummyUser)
+
+        // localStorage에도 저장
+        localStorage.setItem('auth_token', 'dev-token-123')
+        localStorage.setItem('auth_user', JSON.stringify(dummyUser))
+
+        // 학생 대시보드로 바로 이동
+        navigate('/student/dashboard')
+        return
+      }
+
       const user = await login(formData.email, formData.password)
 
       // 역할별 대시보드로 리다이렉트

@@ -37,7 +37,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   }, [isMobile, isSidebarOpen])
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50">
+    <div className="min-h-screen lg:min-w-[1280px] flex flex-col bg-gray-50">
       <Header />
 
       <div className="flex flex-1 relative">

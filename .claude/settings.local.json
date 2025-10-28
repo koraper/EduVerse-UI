@@ -38,7 +38,9 @@
       "Bash(git restore README.md)",
       "Bash(sed -i \"s/import { Button, Input, Select, Card } from ''@\\/components\\/common''/import { Button, Input, Card } from ''@\\/components\\/common''/\" src/pages/auth/RegisterPage.tsx)",
       "Bash(sed -i \"s/import type { SelectOption } from ''@\\/components\\/common''//\" src/pages/auth/RegisterPage.tsx)",
-      "Bash(git log -3 --format='%h %s')"
+      "Bash(git log -3 --format='%h %s')",
+      "Bash(findstr:*)",
+      "Bash(taskkill:*)"
     ],
     "deny": [],
     "ask": []

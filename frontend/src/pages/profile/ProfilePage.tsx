@@ -148,7 +148,7 @@ const ProfilePage = () => {
       setErrors({ ...errors, name: '이름은 최소 2자 이상이어야 합니다' })
     } else if (value.trim().length > 50) {
       setErrors({ ...errors, name: '이름은 최대 50자까지 입력 가능합니다' })
-    } else if (value.trim().length > 0 && !/^[가-힣a-zA-Z\s]+$/.test(value.trim())) {
+    } else if (value.trim().length > 0 && !/^ㄴ+$/.test(value.trim())) {
       setErrors({ ...errors, name: '이름은 한글 또는 영문만 입력 가능합니다' })
     } else {
       setErrors({ ...errors, name: '' })
