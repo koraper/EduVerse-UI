@@ -11,7 +11,7 @@ import Button from '@/components/common/Button'
 import Badge from '@/components/common/Badge'
 import PasswordStrengthIndicator from '@/components/common/PasswordStrengthIndicator'
 import { INPUT_LIMITS } from '@/utils/inputValidation'
-import { validatePassword } from '@/utils/passwordValidation'
+import { validatePassword, hasConsecutiveChars } from '@/utils/passwordValidation'
 import {
   validateName,
   validateEmail,
@@ -792,7 +792,7 @@ const SettingsPage = () => {
                           }}
                           maxLength={INPUT_LIMITS.password}
                           error={passwordErrors.newPassword}
-                          placeholder="8자 이상, 2가지 이상의 문자 조합"
+                          placeholder="새 비밀번호를 입력하세요"
                           leftIcon={
                             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
@@ -811,14 +811,14 @@ const SettingsPage = () => {
                         <div className="mt-3 p-3 bg-blue-50 rounded border border-blue-200">
                           <p className="text-xs text-blue-700 font-medium mb-2">정책 요구사항:</p>
                           <ul className="text-xs text-blue-600 space-y-1">
-                            <li className={`flex items-center ${passwordValidation.complexity.hasLowercase && passwordValidation.complexity.hasUppercase && passwordValidation.complexity.hasNumber && passwordValidation.complexity.hasSpecialChar ? 'text-success-600' : 'text-gray-600'}`}>
-                              <span className="mr-2">✓</span> 8-20자 범위
+                            <li className={`flex items-center ${passwordForm.newPassword.length >= 8 && passwordForm.newPassword.length <= 20 ? 'text-success-600' : 'text-gray-600'}`}>
+                              <span className="mr-2">✓</span> 최소 8자, 최대 20자
                             </li>
                             <li className={`flex items-center ${passwordValidation.complexity.complexityCount >= 2 ? 'text-success-600' : 'text-gray-600'}`}>
-                              <span className="mr-2">✓</span> 영문 대소문자+숫자+특수문자 중 2가지 이상 조합 ({passwordValidation.complexity.complexityCount}/4)
+                              <span className="mr-2">✓</span> 영문 대소문자, 숫자, 특수문자 중 최소 2가지 조합 ({passwordValidation.complexity.complexityCount}/4)
                             </li>
-                            <li className="flex items-center text-gray-600">
-                              <span className="mr-2">✓</span> 연속된 문자 3개 이상 불가
+                            <li className={`flex items-center ${!hasConsecutiveChars(passwordForm.newPassword) ? 'text-success-600' : 'text-gray-600'}`}>
+                              <span className="mr-2">✓</span> 같은 문자 3개 이상 연속 불가
                             </li>
                           </ul>
                         </div>
@@ -1050,6 +1050,14 @@ const SettingsPage = () => {
                       </div>
                     </div>
 
+                    <div className="mt-6 space-y-3">
+                      <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
+                        <p className="text-sm text-blue-700">
+                          <span className="font-medium">ℹ️ 정보:</span> 시스템 테마를 선택하면 운영 체제의 다크 모드 설정을 따릅니다.
+                        </p>
+                      </div>
+                    </div>
+
                     {/* 구분선 */}
                     <div className="border-t border-gray-200 my-8" />
 
@@ -1105,11 +1113,6 @@ const SettingsPage = () => {
                       <div className="p-4 bg-primary-50 rounded-lg border border-primary-200">
                         <p className="text-sm text-primary-700">
                           <span className="font-medium">💡 팁:</span> 선택한 테마와 글꼴은 자동으로 저장되며, 브라우저를 다시 열어도 유지됩니다.
-                        </p>
-                      </div>
-                      <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
-                        <p className="text-sm text-blue-700">
-                          <span className="font-medium">ℹ️ 정보:</span> 시스템 테마를 선택하면 운영 체제의 다크 모드 설정을 따릅니다.
                         </p>
                       </div>
                     </div>
