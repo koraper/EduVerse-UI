@@ -126,8 +126,14 @@ const StudentDashboardPage = () => {
       return
     }
 
-    if (inviteCode.length !== 8) {
-      setInviteError('초대코드는 8자리입니다.')
+    if (inviteCode.length !== 6) {
+      setInviteError('초대코드는 6자리입니다.')
+      return
+    }
+
+    // 영어와 숫자만 포함하는지 확인 (대소문자 구분 없음)
+    if (!/^[A-Z0-9]{6}$/.test(inviteCode)) {
+      setInviteError('초대코드는 영어와 숫자의 조합이어야 합니다.')
       return
     }
 
@@ -199,8 +205,8 @@ const StudentDashboardPage = () => {
                       </span>
                     </div>
                     <p className="mt-2 text-sm text-gray-600">
-                      교수님으로부터 받은 8자리 초대코드를 입력하여 새로운 수업에 참여하세요.
-                      <span className="font-medium text-primary-600"> 코드는 이메일이나 학사공지사항</span>을 통해 제공됩니다.
+                      교수님으로부터 받은 6자리 초대코드(영어+숫자)를 입력하여 새로운 수업에 참여하세요.
+                      <span className="font-medium text-green-600"> 코드는 이메일이나 학사공지사항</span>을 통해 제공됩니다.
                     </p>
                   </div>
                 </div>
@@ -392,19 +398,19 @@ const StudentDashboardPage = () => {
       {/* 초대코드 입력 모달 */}
       <Modal isOpen={inviteModalOpen} onClose={() => setInviteModalOpen(false)} title="초대코드로 수업 참여">
         <p className="text-sm text-gray-600 mb-6">
-          교수님으로부터 받은 8자리 초대코드를 입력하세요.
+          교수님으로부터 받은 6자리 초대코드(영어+숫자)를 입력하세요.
         </p>
 
         <div className="space-y-4">
           <Input
             type="text"
-            placeholder="예: ABC12345"
+            placeholder="예: ABC123"
             value={inviteCode}
             onChange={(e) => {
               setInviteCode(e.target.value.toUpperCase())
               setInviteError('')
             }}
-            maxLength={8}
+            maxLength={6}
             className="text-center uppercase"
           />
           {inviteError && <p className="text-sm text-red-600">{inviteError}</p>}
