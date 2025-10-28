@@ -251,23 +251,6 @@ const StudentSignupPage = () => {
                 error={errors.studentId}
                 maxLength={REGISTER_INPUT_LIMITS.studentId}
                 placeholder="2024123456"
-                helperText={
-                  !errors.studentId ? (
-                    <div className="text-xs text-gray-600 space-y-1 mt-2">
-                      <p>📝 입력 가능한 형식:</p>
-                      <ul className="list-disc list-inside ml-2">
-                        <li>숫자만: 2024123456, 20241234</li>
-                        <li>문자+숫자: STU20241234, CS2024123</li>
-                        <li>하이픈/언더스코어: 2024-1-12345, STU_2024_123</li>
-                      </ul>
-                      <p className="mt-2">❌ 불가능한 형식:</p>
-                      <ul className="list-disc list-inside ml-2">
-                        <li>한글 포함, 공백, 특수문자(@, !, # 등)</li>
-                        <li>문자만: ABC, STU (숫자 필수)</li>
-                      </ul>
-                    </div>
-                  ) : undefined
-                }
                 leftIcon={
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14" />
