@@ -19,7 +19,7 @@ export default defineConfig({
     },
   },
   server: {
-    port: 3000,
+    port: 3005,
     // MSW 사용 시 프록시 비활성화
     // proxy: {
     //   '/api': {
