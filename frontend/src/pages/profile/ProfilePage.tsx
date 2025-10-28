@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useAuth } from '@/contexts/AuthContext'
+import { useToast } from '@/components/common/ToastContext'
 import DashboardLayout from '@/components/layout/DashboardLayout'
 import Card from '@/components/common/Card'
 import Input from '@/components/common/Input'
@@ -16,9 +17,9 @@ import {
 
 const ProfilePage = () => {
   const { user, token, updateUser } = useAuth()
+  const { addToast } = useToast()
   const [isEditing, setIsEditing] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-  const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
 
   const [formData, setFormData] = useState({
     name: user?.name || '',
@@ -95,32 +96,52 @@ const ProfilePage = () => {
     if (!validateForm()) return
 
     setIsLoading(true)
-    setMessage(null)
 
     try {
-      const response = await fetch('/api/profile', {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-        body: JSON.stringify(formData),
-      })
+      const isDev = import.meta.env.DEV
+      if (isDev) {
+        // 개발 모드: 모든 과정이 성공한 것으로 처리
+        await new Promise((resolve) => setTimeout(resolve, 800))
 
-      const data = await response.json()
-
-      if (data.status === 'success') {
-        // AuthContext 업데이트 (localStorage의 auth_user 갱신)
-        if (data.data?.user) {
-          updateUser(data.data.user)
+        // AuthContext 업데이트
+        if (user) {
+          updateUser({
+            ...user,
+            ...formData,
+          })
         }
-        setMessage({ type: 'success', text: '프로필이 성공적으로 업데이트되었습니다' })
+
+        // Toast 성공 알림
+        addToast('프로필이 성공적으로 저장되었습니다', { variant: 'success' })
+
+        // 편집 모드에서 뷰 모드로 전환
         setIsEditing(false)
       } else {
-        setMessage({ type: 'error', text: data.message || '프로필 업데이트에 실패했습니다' })
+        // 프로덕션 모드: 실제 API 요청
+        const response = await fetch('/api/profile', {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          },
+          body: JSON.stringify(formData),
+        })
+
+        const data = await response.json()
+
+        if (data.status === 'success') {
+          // AuthContext 업데이트 (localStorage의 auth_user 갱신)
+          if (data.data?.user) {
+            updateUser(data.data.user)
+          }
+          addToast('프로필이 성공적으로 저장되었습니다', { variant: 'success' })
+          setIsEditing(false)
+        } else {
+          addToast(data.message || '프로필 업데이트에 실패했습니다', { variant: 'error' })
+        }
       }
     } catch (error: any) {
-      setMessage({ type: 'error', text: '서버 오류가 발생했습니다' })
+      addToast('서버 오류가 발생했습니다', { variant: 'error' })
     } finally {
       setIsLoading(false)
     }
@@ -137,7 +158,6 @@ const ProfilePage = () => {
       studentId: user?.studentId || '',
     })
     setErrors({ name: '', email: '', phone: '', department: '', bio: '' })
-    setMessage(null)
   }
 
   // 실시간 유효성 검사
@@ -193,30 +213,6 @@ const ProfilePage = () => {
           <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">프로필</h1>
           <p className="mt-1 text-sm text-gray-600">개인 정보를 관리하세요</p>
         </div>
-
-        {/* 메시지 */}
-        {message && (
-          <div
-            className={`p-4 rounded-lg ${
-              message.type === 'success'
-                ? 'bg-success-50 text-success-800 border border-success-200'
-                : 'bg-error-50 text-error-800 border border-error-200'
-            }`}
-          >
-            <div className="flex items-center space-x-2">
-              {message.type === 'success' ? (
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              ) : (
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              )}
-              <span className="text-sm font-medium">{message.text}</span>
-            </div>
-          </div>
-        )}
 
         {/* 프로필 카드 */}
         <Card>

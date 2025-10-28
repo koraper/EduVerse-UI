@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
-import { toast } from 'react-toastify'
 import { useAuth } from '@/contexts/AuthContext'
-
+import { useToast } from '@/components/common/ToastContext'
 import { useFont } from '@/contexts/FontContext'
 import type { FontType } from '@/contexts/FontContext'
 import DashboardLayout from '@/components/layout/DashboardLayout'
@@ -23,6 +22,7 @@ import {
 
 const SettingsPage = () => {
   const { user, token, updateUser } = useAuth()
+  const { addToast } = useToast()
   const { currentFont, setFont } = useFont()
   const [activeTab, setActiveTab] = useState<'profile' | 'password' | 'notifications' | 'appearance'>('profile')
   const [isLoading, setIsLoading] = useState(false)
@@ -135,29 +135,51 @@ const SettingsPage = () => {
     setMessage(null)
 
     try {
-      const response = await fetch('/api/profile', {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-        body: JSON.stringify(profileForm),
-      })
+      const isDev = import.meta.env.DEV
 
-      const data = await response.json()
+      if (isDev) {
+        // 개발 모드: 모든 과정이 성공한 것으로 처리
+        await new Promise((resolve) => setTimeout(resolve, 800))
 
-      if (data.status === 'success') {
-        if (data.data?.user) {
-          updateUser(data.data.user)
+        // AuthContext 업데이트
+        if (user) {
+          updateUser({
+            ...user,
+            ...profileForm,
+          })
         }
-        toast.success('프로필이 성공적으로 업데이트되었습니다')
+
+        // Toast 성공 알림
+        addToast('프로필이 성공적으로 저장되었습니다', { variant: 'success' })
+
+        // 편집 모드에서 뷰 모드로 전환
         setIsEditing(false)
-        setMessage(null)
       } else {
-        toast.error(data.message || '프로필 업데이트에 실패했습니다')
+        // 프로덕션 모드: 실제 API 요청
+        const response = await fetch('/api/profile', {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          },
+          body: JSON.stringify(profileForm),
+        })
+
+        const data = await response.json()
+
+        if (data.status === 'success') {
+          if (data.data?.user) {
+            updateUser(data.data.user)
+          }
+          addToast('프로필이 성공적으로 저장되었습니다', { variant: 'success' })
+          setIsEditing(false)
+          setMessage(null)
+        } else {
+          addToast(data.message || '프로필 업데이트에 실패했습니다', { variant: 'error' })
+        }
       }
     } catch (error: any) {
-      toast.error('서버 오류가 발생했습니다')
+      addToast('서버 오류가 발생했습니다', { variant: 'error' })
     } finally {
       setIsLoading(false)
     }
@@ -283,28 +305,39 @@ const SettingsPage = () => {
     setMessage(null)
 
     try {
-      const response = await fetch('/api/profile/password', {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          currentPassword: passwordForm.currentPassword,
-          newPassword: passwordForm.newPassword,
-        }),
-      })
+      const isDev = import.meta.env.DEV
 
-      const data = await response.json()
+      if (isDev) {
+        // 개발 모드: 모든 과정이 성공한 것으로 처리
+        await new Promise((resolve) => setTimeout(resolve, 800))
 
-      if (data.status === 'success') {
-        setMessage({ type: 'success', text: '비밀번호가 성공적으로 변경되었습니다' })
+        addToast('비밀번호가 성공적으로 변경되었습니다', { variant: 'success' })
         setPasswordForm({ currentPassword: '', newPassword: '', confirmPassword: '' })
       } else {
-        setMessage({ type: 'error', text: data.message || '비밀번호 변경에 실패했습니다' })
+        // 프로덕션 모드: 실제 API 요청
+        const response = await fetch('/api/profile/password', {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            currentPassword: passwordForm.currentPassword,
+            newPassword: passwordForm.newPassword,
+          }),
+        })
+
+        const data = await response.json()
+
+        if (data.status === 'success') {
+          addToast('비밀번호가 성공적으로 변경되었습니다', { variant: 'success' })
+          setPasswordForm({ currentPassword: '', newPassword: '', confirmPassword: '' })
+        } else {
+          addToast(data.message || '비밀번호 변경에 실패했습니다', { variant: 'error' })
+        }
       }
     } catch (error: any) {
-      setMessage({ type: 'error', text: '서버 오류가 발생했습니다' })
+      addToast('서버 오류가 발생했습니다', { variant: 'error' })
     } finally {
       setIsLoading(false)
     }
@@ -316,24 +349,34 @@ const SettingsPage = () => {
     setMessage(null)
 
     try {
-      const response = await fetch('/api/profile/notifications', {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-        body: JSON.stringify(notificationSettings),
-      })
+      const isDev = import.meta.env.DEV
 
-      const data = await response.json()
+      if (isDev) {
+        // 개발 모드: 모든 과정이 성공한 것으로 처리
+        await new Promise((resolve) => setTimeout(resolve, 800))
 
-      if (data.status === 'success') {
-        setMessage({ type: 'success', text: '알림 설정이 저장되었습니다' })
+        addToast('알림 설정이 저장되었습니다', { variant: 'success' })
       } else {
-        setMessage({ type: 'error', text: data.message || '설정 저장에 실패했습니다' })
+        // 프로덕션 모드: 실제 API 요청
+        const response = await fetch('/api/profile/notifications', {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          },
+          body: JSON.stringify(notificationSettings),
+        })
+
+        const data = await response.json()
+
+        if (data.status === 'success') {
+          addToast('알림 설정이 저장되었습니다', { variant: 'success' })
+        } else {
+          addToast(data.message || '설정 저장에 실패했습니다', { variant: 'error' })
+        }
       }
     } catch (error: any) {
-      setMessage({ type: 'error', text: '서버 오류가 발생했습니다' })
+      addToast('서버 오류가 발생했습니다', { variant: 'error' })
     } finally {
       setIsLoading(false)
     }
