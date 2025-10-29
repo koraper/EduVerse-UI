@@ -447,7 +447,7 @@ const StudentDashboardPage = () => {
                         <span className="text-xs font-medium text-gray-600">과제 성공률</span>
                         <span className="text-xs font-semibold text-emerald-600">{course.assignmentSuccessRate}%</span>
                       </div>
-                      <div className="text-xs text-gray-500 mb-2">{Math.round((course.assignmentSuccessRate / 100) * 18)}/18개</div>
+                      <div className="text-xs text-gray-500 mb-2">총 18개 과제 중 {Math.round((course.assignmentSuccessRate / 100) * 18)}개 성공</div>
                       <div className="w-full bg-gray-200 rounded-full h-2">
                         <div
                           className="bg-emerald-600 h-2 rounded-full transition-all duration-300"
