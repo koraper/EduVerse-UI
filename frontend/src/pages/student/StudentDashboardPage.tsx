@@ -382,7 +382,7 @@ const StudentDashboardPage = () => {
                         </div>
 
                         <button className="w-full mt-auto pt-4 border-t border-gray-200 text-primary-600 hover:text-primary-700 font-medium text-sm transition-colors">
-                          수업 바로가기 →
+                          학습하기 →
                         </button>
                       </div>
                     </Card>
