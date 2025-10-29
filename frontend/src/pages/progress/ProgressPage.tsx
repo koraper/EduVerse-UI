@@ -4,7 +4,7 @@ import { useAuth } from '@/contexts/AuthContext'
 import { useTheme } from '@/contexts/ThemeContext'
 import StudentLayout from '@/components/layout/StudentLayout'
 import { Card } from '@/components/common'
-import { TrendingUp, ArrowLeft, Star, Award, Target, CheckCircle2 } from 'lucide-react'
+import { TrendingUp, ArrowLeft, Star, Award, Target, CheckCircle2, ChevronDown, ChevronUp } from 'lucide-react'
 
 interface LessonProgress {
   id: number
@@ -24,6 +24,20 @@ const ProgressPage = () => {
   const { currentTheme } = useTheme()
   const [loading, setLoading] = useState(true)
   const [lessons, setLessons] = useState<LessonProgress[]>([])
+  const [expandedLessons, setExpandedLessons] = useState<Set<number>>(new Set())
+
+  // 차시 펼치기/접기 토글
+  const toggleLesson = (lessonId: number) => {
+    setExpandedLessons(prev => {
+      const newSet = new Set(prev)
+      if (newSet.has(lessonId)) {
+        newSet.delete(lessonId)
+      } else {
+        newSet.add(lessonId)
+      }
+      return newSet
+    })
+  }
 
   // Auth check
   useEffect(() => {
@@ -169,7 +183,7 @@ const ProgressPage = () => {
 
   return (
     <StudentLayout>
-      <div className="max-w-6xl mx-auto space-y-6">
+      <div className="max-w-6xl min-w-[1280px] mx-auto space-y-6">
         {/* Header */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
@@ -246,17 +260,17 @@ const ProgressPage = () => {
                     currentTheme === 'dark' ? 'text-blue-400' : 'text-blue-600'
                   }`} />
                 </div>
+                <div className={`text-2xl font-bold ${
+                  currentTheme === 'dark' ? 'text-white' : 'text-gray-900'
+                }`}>
+                  {totalConceptUnderstanding}
+                </div>
               </div>
               <p className={`text-sm font-medium mb-0.5 ${
                 currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'
               }`}>
                 개념 이해도
               </p>
-              <div className={`text-2xl font-bold mb-0.5 ${
-                currentTheme === 'dark' ? 'text-white' : 'text-gray-900'
-              }`}>
-                {totalConceptUnderstanding}
-              </div>
               <StarRating score={totalConceptUnderstanding} />
             </div>
           </Card>
@@ -325,11 +339,31 @@ const ProgressPage = () => {
 
                   {/* 두 번째 줄: 차시 제목 + 성적 + 제출 상태 */}
                   <div className="flex items-center justify-between gap-2">
-                    <p className={`text-sm font-medium truncate ${
-                      currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'
-                    }`}>
-                      {lesson.lessonTitle}
-                    </p>
+                    <div className="flex items-center gap-2">
+                      <p className={`text-sm font-medium truncate ${
+                        currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'
+                      }`}>
+                        {lesson.lessonTitle}
+                      </p>
+
+                      {/* 토글 버튼 */}
+                      {lesson.attendance === 'completed' && (
+                        <button
+                          onClick={() => toggleLesson(lesson.id)}
+                          className={`p-1 rounded transition-colors flex-shrink-0 ${
+                            currentTheme === 'dark'
+                              ? 'bg-gray-600 hover:bg-gray-500 text-gray-300 hover:text-white'
+                              : 'bg-gray-200 hover:bg-gray-300 text-gray-600 hover:text-gray-900'
+                          }`}
+                        >
+                          {expandedLessons.has(lesson.id) ? (
+                            <ChevronUp className="w-4 h-4" />
+                          ) : (
+                            <ChevronDown className="w-4 h-4" />
+                          )}
+                        </button>
+                      )}
+                    </div>
 
                     <div className="flex items-center gap-3">
                       {lesson.attendance === 'completed' && (
@@ -398,6 +432,139 @@ const ProgressPage = () => {
                       </div>
                     </div>
                   </div>
+
+                  {/* 펼쳐진 상태: 수업 평가 자세히 보기 */}
+                  {expandedLessons.has(lesson.id) && lesson.attendance === 'completed' && (
+                    <div className={`mt-4 pt-4 border-t ${
+                      currentTheme === 'dark' ? 'border-gray-600' : 'border-gray-200'
+                    }`}>
+                      <h4 className={`text-sm font-semibold mb-3 ${
+                        currentTheme === 'dark' ? 'text-gray-200' : 'text-gray-800'
+                      }`}>
+                        수업 평가 자세히 보기
+                      </h4>
+
+                      {/* 평가 질문 목록 (데모) */}
+                      <div className="space-y-4">
+                        {/* 질문 1 */}
+                        <div>
+                          <p className={`text-xs font-medium mb-2 ${
+                            currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'
+                          }`}>
+                            1. 초차 계산하기 (연산자)
+                          </p>
+                          <p className={`text-sm mb-2 ${
+                            currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'
+                          }`}>
+                            이번 주제의 <span className="text-yellow-500">개념</span>을 얼마나 이해했나요?
+                          </p>
+                          <div className="flex items-center gap-2">
+                            {[1, 2, 3, 4, 5].map((score) => (
+                              <button
+                                key={score}
+                                disabled
+                                className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
+                                  score === 4
+                                    ? currentTheme === 'dark'
+                                      ? 'bg-blue-600 text-white'
+                                      : 'bg-blue-500 text-white'
+                                    : currentTheme === 'dark'
+                                    ? 'bg-gray-600 text-gray-400'
+                                    : 'bg-gray-200 text-gray-600'
+                                }`}
+                              >
+                                {score}
+                              </button>
+                            ))}
+                            <span className={`ml-2 text-xs ${
+                              currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'
+                            }`}>
+                              중복
+                            </span>
+                          </div>
+                        </div>
+
+                        {/* 질문 2 */}
+                        <div>
+                          <p className={`text-sm mb-2 ${
+                            currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'
+                          }`}>
+                            스스로 코드를 <span className="text-yellow-500">활용</span>할 수 있나요?
+                          </p>
+                          <div className="flex items-center gap-2">
+                            {[1, 2, 3, 4, 5].map((score) => (
+                              <button
+                                key={score}
+                                disabled
+                                className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
+                                  score === 5
+                                    ? currentTheme === 'dark'
+                                      ? 'bg-blue-600 text-white'
+                                      : 'bg-blue-500 text-white'
+                                    : currentTheme === 'dark'
+                                    ? 'bg-gray-600 text-gray-400'
+                                    : 'bg-gray-200 text-gray-600'
+                                }`}
+                              >
+                                {score}
+                              </button>
+                            ))}
+                            <span className={`ml-2 text-xs ${
+                              currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'
+                            }`}>
+                              중복
+                            </span>
+                          </div>
+                        </div>
+
+                        {/* 추가 피드백 */}
+                        <div>
+                          <p className={`text-xs font-medium mb-2 flex items-center gap-1 ${
+                            currentTheme === 'dark' ? 'text-yellow-400' : 'text-yellow-600'
+                          }`}>
+                            💡 가장 의미있던 내용은?
+                          </p>
+                          <div className={`p-3 rounded text-sm ${
+                            currentTheme === 'dark'
+                              ? 'bg-gray-800 text-gray-300'
+                              : 'bg-gray-100 text-gray-700'
+                          }`}>
+                            변수와 자료형의 개념을 잘 이해할 수 있었습니다.
+                          </div>
+                        </div>
+
+                        <div>
+                          <p className={`text-xs font-medium mb-2 flex items-center gap-1 ${
+                            currentTheme === 'dark' ? 'text-red-400' : 'text-red-600'
+                          }`}>
+                            ⚠️ 제일 어려웠던 내용은?
+                          </p>
+                          <div className={`p-3 rounded text-sm ${
+                            currentTheme === 'dark'
+                              ? 'bg-gray-800 text-gray-300'
+                              : 'bg-gray-100 text-gray-700'
+                          }`}>
+                            형 변환 부분이 조금 어려웠습니다.
+                          </div>
+                        </div>
+
+                        <div>
+                          <p className={`text-xs font-medium mb-2 flex items-center gap-1 ${
+                            currentTheme === 'dark' ? 'text-blue-400' : 'text-blue-600'
+                          }`}>
+                            🔍 궁금한 점이 있다면?
+                          </p>
+                          <div className={`p-3 rounded text-sm ${
+                            currentTheme === 'dark'
+                              ? 'bg-gray-800 text-gray-300'
+                              : 'bg-gray-100 text-gray-700'
+                          }`}>
+                            실무에서는 어떤 자료형을 주로 사용하나요?
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

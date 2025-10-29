@@ -102,7 +102,7 @@ const LearningPage = () => {
   }, [])
 
   return (
-    <div className={`min-h-screen flex flex-col transition-colors duration-300 ${
+    <div className={`min-h-screen min-w-[1280px] flex flex-col transition-colors duration-300 ${
       currentTheme === 'dark' ? 'bg-gray-900' : 'bg-gray-50'
     }`}>
       {/* Header */}

@@ -272,7 +272,7 @@ const QnaPage = () => {
 
   return (
     <StudentLayout>
-      <div className="max-w-6xl mx-auto space-y-6">
+      <div className="max-w-6xl min-w-[1280px] mx-auto space-y-6">
         {/* Header */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">

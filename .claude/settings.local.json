@@ -11,7 +11,10 @@
       "Bash(git push:*)",
       "Bash(git commit -m \"$(cat <<''EOF''\nfeat: 헤더 컴포넌트에 설정/홈 토글 및 lucide-react 아이콘 적용\n\n- LearningHeader: 설정 페이지에서 홈 버튼, 홈에서 설정 버튼으로 토글\n- Header: 드롭다운 메뉴에 설정/홈 토글 추가, 다크모드 지원 개선\n- 모든 SVG 아이콘을 lucide-react로 통일 (Sun, Moon, Bell, HelpCircle, ChevronDown, Home, Settings, LogOut)\n- LandingHeader: 테마 토글 아이콘을 lucide-react로 변경\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
       "Bash(git commit:*)",
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "Bash(taskkill:*)",
+      "Bash(pkill:*)",
+      "Bash(npm install:*)"
     ],
     "deny": [],
     "ask": []
