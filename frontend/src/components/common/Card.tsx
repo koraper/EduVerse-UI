@@ -11,11 +11,11 @@ const Card = ({
   onClick,
 }: CardProps) => {
   // 기본 스타일
-  const baseStyles = 'bg-white rounded-lg border border-gray-200 shadow-sm transition-all duration-200'
+  const baseStyles = 'bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-lg hover:border-gray-300 transition-all duration-200'
 
   // Hoverable 스타일
   const hoverStyles = hoverable
-    ? 'hover:shadow-md hover:border-gray-300 cursor-pointer'
+    ? 'cursor-pointer'
     : ''
 
   // Padding 스타일

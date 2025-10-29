@@ -347,7 +347,7 @@ const StudentDashboardPage = () => {
           {filteredCourses.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {filteredCourses.map((course) => (
-                <Card key={course.id}>
+                <Card key={course.id} hoverable>
                   <div className="p-6 flex flex-col h-full">
                     {/* 1. 수업명 */}
                     <div className="mb-2">
