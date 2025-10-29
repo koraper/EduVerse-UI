@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduVerse - 학습하기 페이지 프로토타입</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        * {
+            scrollbar-width: thin;
+            scrollbar-color: rgb(107 114 128) transparent;
+        }
+
+        *::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        *::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        *::-webkit-scrollbar-thumb {
+            background: rgb(107 114 128);
+            border-radius: 4px;
+        }
+
+        *::-webkit-scrollbar-thumb:hover {
+            background: rgb(75 85 99);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+        }
+
+        .dark-mode {
+            background-color: #111827;
+            color: #f3f4f6;
+        }
+
+        .light-mode {
+            background-color: #f9fafb;
+            color: #111827;
+        }
+
+        .sidebar-item {
+            transition: all 0.3s ease;
+            padding: 12px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 4px 0;
+        }
+
+        .sidebar-item:hover {
+            background-color: rgba(59, 130, 246, 0.1);
+        }
+
+        .sidebar-item.active {
+            background-color: rgb(59, 130, 246);
+            color: white;
+            font-weight: 600;
+        }
+
+        .code-editor {
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .tab-button {
+            padding: 12px 20px;
+            border-bottom: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .tab-button.active {
+            border-bottom-color: rgb(59, 130, 246);
+            color: rgb(59, 130, 246);
+        }
+
+        .lesson-card {
+            transition: all 0.3s ease;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 8px;
+        }
+
+        .lesson-card:hover {
+            transform: translateX(4px);
+        }
+
+        .progress-bar {
+            height: 24px;
+            background-color: rgba(107, 114, 128, 0.2);
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, rgb(59, 130, 246), rgb(99, 102, 241));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 8px;
+            color: white;
+            font-size: 12px;
+            font-weight: 600;
+            transition: width 0.5s ease;
+        }
+
+        .test-case {
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            border-left: 4px solid;
+        }
+
+        .test-case.pass {
+            background-color: rgba(16, 185, 129, 0.1);
+            border-left-color: rgb(16, 185, 129);
+        }
+
+        .test-case.fail {
+            background-color: rgba(239, 68, 68, 0.1);
+            border-left-color: rgb(239, 68, 68);
+        }
+
+        .difficulty-btn {
+            padding: 10px 20px;
+            border: 2px solid;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .difficulty-btn.selected {
+            transform: scale(1.05);
+            background-color: rgb(59, 130, 246);
+            color: white;
+            border-color: rgb(59, 130, 246);
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                position: fixed;
+                left: -280px;
+                top: 0;
+                height: 100vh;
+                z-index: 40;
+                transition: left 0.3s ease;
+            }
+
+            .sidebar.open {
+                left: 0;
+            }
+
+            .sidebar-overlay {
+                display: none;
+            }
+
+            .sidebar-overlay.show {
+                display: block;
+            }
+        }
+    </style>
+</head>
+<body class="light-mode">
+    <!-- 헤더 -->
+    <header class="border-b border-gray-200 dark-mode:border-gray-700 bg-white dark-mode:bg-gray-900 sticky top-0 z-30">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <button class="p-2 hover:bg-gray-200 dark-mode:hover:bg-gray-800 rounded-lg transition">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                    </svg>
+                </button>
+                <div>
+                    <h1 class="font-bold text-gray-900 dark-mode:text-white">자료구조론</h1>
+                    <p class="text-sm text-gray-600 dark-mode:text-gray-400">Week 8: 이진 탐색 트리</p>
+                </div>
+            </div>
+
+            <div class="hidden md:flex items-center gap-4">
+                <div class="flex items-center gap-2 bg-gray-100 dark-mode:bg-gray-800 rounded-lg px-4 py-2">
+                    <div class="w-32 h-2 bg-gray-300 dark-mode:bg-gray-700 rounded-full overflow-hidden">
+                        <div class="w-2/3 h-full bg-blue-500 rounded-full"></div>
+                    </div>
+                    <span class="text-sm font-semibold text-gray-700 dark-mode:text-gray-300">67%</span>
+                </div>
+
+                <button class="p-2 hover:bg-gray-200 dark-mode:hover:bg-gray-800 rounded-lg transition">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="1"></circle>
+                        <circle cx="19" cy="12" r="1"></circle>
+                        <circle cx="5" cy="12" r="1"></circle>
+                    </svg>
+                </button>
+
+                <button class="p-2 hover:bg-gray-200 dark-mode:hover:bg-gray-800 rounded-lg transition" onclick="toggleTheme()">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 015.646 5.646 9.003 9.003 0 0015.354 20.354z" />
+                    </svg>
+                </button>
+
+                <div class="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold cursor-pointer">
+                    J
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="flex gap-0 max-w-7xl mx-auto">
+        <!-- 사이드바 -->
+        <aside class="w-80 border-r border-gray-200 dark-mode:border-gray-700 p-6 max-h-[calc(100vh-80px)] overflow-y-auto hidden md:block">
+            <div class="mb-6">
+                <h3 class="font-bold text-lg text-gray-900 dark-mode:text-white mb-4 flex items-center gap-2">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z"></path>
+                    </svg>
+                    커리큘럼 로드맵
+                </h3>
+
+                <div class="space-y-1">
+                    <div class="lesson-card bg-green-50 dark-mode:bg-green-900/20 text-gray-900 dark-mode:text-gray-300">
+                        <div class="flex items-center gap-2 text-sm">
+                            <span class="text-lg">✅</span>
+                            <span>Week 1: 변수와 타입</span>
+                        </div>
+                    </div>
+                    <div class="lesson-card bg-green-50 dark-mode:bg-green-900/20 text-gray-900 dark-mode:text-gray-300">
+                        <div class="flex items-center gap-2 text-sm">
+                            <span class="text-lg">✅</span>
+                            <span>Week 2: 조건문</span>
+                        </div>
+                    </div>
+                    <div class="lesson-card bg-green-50 dark-mode:bg-green-900/20 text-gray-900 dark-mode:text-gray-300">
+                        <div class="flex items-center gap-2 text-sm">
+                            <span class="text-lg">✅</span>
+                            <span>Week 3: 반복문</span>
+                        </div>
+                    </div>
+                    <div class="lesson-card bg-blue-50 dark-mode:bg-blue-900/20 text-gray-900 dark-mode:text-gray-300 border-l-4 border-blue-500">
+                        <div class="flex items-center gap-2 text-sm font-semibold">
+                            <span class="text-lg">🔵</span>
+                            <span>Week 8: 이진탐색트리 (현재)</span>
+                        </div>
+                    </div>
+                    <div class="lesson-card bg-gray-100 dark-mode:bg-gray-800 text-gray-600 dark-mode:text-gray-400">
+                        <div class="flex items-center gap-2 text-sm">
+                            <span class="text-lg">⭕</span>
+                            <span>Week 9: 그래프 기초</span>
+                        </div>
+                    </div>
+                    <div class="lesson-card bg-gray-100 dark-mode:bg-gray-800 text-gray-600 dark-mode:text-gray-400">
+                        <div class="flex items-center gap-2 text-sm">
+                            <span class="text-lg">⭕</span>
+                            <span>Week 10: BFS/DFS</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-200 dark-mode:border-gray-700 pt-6">
+                <h4 class="font-semibold text-gray-900 dark-mode:text-white mb-4 flex items-center gap-2">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M5.5 7A1.5 1.5 0 0 1 7 5.5h10A1.5 1.5 0 0 1 18.5 7v10a1.5 1.5 0 0 1-1.5 1.5H7a1.5 1.5 0 0 1-1.5-1.5V7zM2 2h20v2H2V2zm0 20h20v-2H2v2z"></path>
+                    </svg>
+                    📊 학습 통계
+                </h4>
+                <div class="space-y-3 text-sm text-gray-600 dark-mode:text-gray-400">
+                    <div>
+                        <p class="font-semibold text-gray-900 dark-mode:text-gray-300">완료: <span class="text-blue-600 dark-mode:text-blue-400">7/12</span> (58%)</p>
+                        <div class="w-full h-2 bg-gray-200 dark-mode:bg-gray-700 rounded-full mt-1 overflow-hidden">
+                            <div class="h-full w-7/12 bg-blue-500"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <p class="font-semibold text-gray-900 dark-mode:text-gray-300">소요시간: <span class="text-blue-600 dark-mode:text-blue-400">12시간 45분</span></p>
+                    </div>
+                    <div>
+                        <p class="font-semibold text-gray-900 dark-mode:text-gray-300">마지막 학습: <span class="text-blue-600 dark-mode:text-blue-400">오늘</span></p>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- 메인 컨텐츠 -->
+        <main class="flex-1 p-6 overflow-y-auto max-h-[calc(100vh-80px)]">
+            <!-- 학습 콘텐츠 -->
+            <section class="mb-8 bg-white dark-mode:bg-gray-800 rounded-xl p-6 border border-gray-200 dark-mode:border-gray-700">
+                <h2 class="text-3xl font-bold text-gray-900 dark-mode:text-white mb-2">
+                    이진 탐색 트리 (Binary Search Tree)
+                </h2>
+                <p class="text-gray-600 dark-mode:text-gray-400 mb-6">자료구조 Week 8 | 학습 목표 달성까지 40% 진행</p>
+
+                <div class="mb-6">
+                    <h3 class="font-semibold text-lg text-gray-900 dark-mode:text-white mb-3">📌 학습 목표</h3>
+                    <ul class="space-y-2 text-gray-700 dark-mode:text-gray-300">
+                        <li class="flex gap-2">
+                            <span class="text-blue-500">•</span>
+                            <span>이진 탐색 트리의 개념과 특징 이해하기</span>
+                        </li>
+                        <li class="flex gap-2">
+                            <span class="text-blue-500">•</span>
+                            <span>삽입(Insert), 삭제(Delete), 검색(Search) 구현</span>
+                        </li>
+                        <li class="flex gap-2">
+                            <span class="text-blue-500">•</span>
+                            <span>시간 복잡도 분석 (O(log n) ~ O(n))</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="mb-6 p-4 bg-blue-50 dark-mode:bg-blue-900/20 rounded-lg border border-blue-200 dark-mode:border-blue-700">
+                    <h4 class="font-semibold text-gray-900 dark-mode:text-white mb-2">💡 개념 설명</h4>
+                    <p class="text-gray-700 dark-mode:text-gray-300 text-sm leading-relaxed">
+                        이진 탐색 트리는 다음의 성질을 만족하는 이진 트리입니다: <br>
+                        1. 각 노드는 최대 2개의 자식을 가짐 <br>
+                        2. 왼쪽 서브트리의 모든 값 &lt; 부모 노드 값 <br>
+                        3. 오른쪽 서브트리의 모든 값 &gt; 부모 노드 값
+                    </p>
+                </div>
+
+                <div class="mb-6">
+                    <h4 class="font-semibold text-gray-900 dark-mode:text-white mb-3">🎯 난이도 선택</h4>
+                    <div class="flex gap-3 flex-wrap">
+                        <button class="difficulty-btn border-gray-300 dark-mode:border-gray-600 text-gray-700 dark-mode:text-gray-300 selected" onclick="selectDifficulty('basic')">
+                            기초 (B)
+                        </button>
+                        <button class="difficulty-btn border-gray-300 dark-mode:border-gray-600 text-gray-700 dark-mode:text-gray-300" onclick="selectDifficulty('intermediate')">
+                            중급 (M)
+                        </button>
+                        <button class="difficulty-btn border-gray-300 dark-mode:border-gray-600 text-gray-700 dark-mode:text-gray-300" onclick="selectDifficulty('advanced')">
+                            심화 (A)
+                        </button>
+                    </div>
+                    <p class="text-xs text-gray-500 dark-mode:text-gray-400 mt-2">
+                        ℹ️ 선택한 난이도에 따라 과제의 시작 코드와 테스트 케이스 내용이 달라질 수 있습니다.
+                    </p>
+                </div>
+            </section>
+
+            <!-- 코드 에디터 -->
+            <section class="mb-8 bg-white dark-mode:bg-gray-800 rounded-xl border border-gray-200 dark-mode:border-gray-700 overflow-hidden">
+                <div class="bg-gray-100 dark-mode:bg-gray-700 px-6 py-3 flex items-center justify-between border-b border-gray-200 dark-mode:border-gray-600">
+                    <h3 class="font-semibold text-gray-900 dark-mode:text-white flex items-center gap-2">
+                        💻 코드 작성 영역
+                    </h3>
+                    <div class="flex items-center gap-2">
+                        <select class="bg-white dark-mode:bg-gray-800 text-gray-900 dark-mode:text-white px-3 py-1 rounded border border-gray-300 dark-mode:border-gray-600 text-sm">
+                            <option>Python</option>
+                            <option>JavaScript</option>
+                            <option>Java</option>
+                            <option>C++</option>
+                        </select>
+                        <button class="p-1 hover:bg-gray-200 dark-mode:hover:bg-gray-600 rounded text-sm text-gray-600 dark-mode:text-gray-400">
+                            포맷 맞추기
+                        </button>
+                        <button class="p-1 hover:bg-gray-200 dark-mode:hover:bg-gray-600 rounded text-sm text-gray-600 dark-mode:text-gray-400">
+                            초기화
+                        </button>
+                    </div>
+                </div>
+
+                <div class="code-editor p-6 bg-gray-900 text-gray-300 overflow-x-auto" style="font-size: 13px; line-height: 1.6;">
+                    <div class="text-gray-500 select-none" style="counter-reset: line;">
+                        <div class="hover:bg-gray-800/50"><span class="inline-block w-12 text-right pr-4 text-gray-600">1</span><span>class Node:</span></div>
+                        <div class="hover:bg-gray-800/50"><span class="inline-block w-12 text-right pr-4 text-gray-600">2</span><span class="text-gray-400">    def</span> <span class="text-yellow-300">__init__</span>(self, value):</div>
+                        <div class="hover:bg-gray-800/50"><span class="inline-block w-12 text-right pr-4 text-gray-600">3</span><span class="text-gray-400">        </span>self.value = value</div>
+                        <div class="hover:bg-gray-800/50"><span class="inline-block w-12 text-right pr-4 text-gray-600">4</span><span class="text-gray-400">        </span>self.left = <span class="text-red-400">None</span></div>
+                        <div class="hover:bg-gray-800/50"><span class="inline-block w-12 text-right pr-4 text-gray-600">5</span><span class="text-gray-400">        </span>self.right = <span class="text-red-400">None</span></div>
+                        <div class="hover:bg-gray-800/50"><span class="inline-block w-12 text-right pr-4 text-gray-600">6</span><br></div>
+                        <div class="hover:bg-gray-800/50"><span class="inline-block w-12 text-right pr-4 text-gray-600">7</span><span class="text-gray-400">class</span> <span class="text-green-400">BinarySearchTree</span>:</div>
+                        <div class="hover:bg-gray-800/50"><span class="inline-block w-12 text-right pr-4 text-gray-600">8</span><span class="text-gray-400">    def</span> <span class="text-yellow-300">__init__</span>(self):</div>
+                        <div class="hover:bg-gray-800/50"><span class="inline-block w-12 text-right pr-4 text-gray-600">9</span><span class="text-gray-400">        </span>self.root = <span class="text-red-400">None</span></div>
+                        <div class="hover:bg-gray-800/50"><span class="inline-block w-12 text-right pr-4 text-gray-600">10</span><br></div>
+                        <div class="hover:bg-gray-800/50"><span class="inline-block w-12 text-right pr-4 text-gray-600">11</span><span class="text-gray-400">    def</span> <span class="text-yellow-300">insert</span>(self, value):</div>
+                        <div class="hover:bg-gray-800/50" style="background-color: rgba(239, 68, 68, 0.1);"><span class="inline-block w-12 text-right pr-4 text-gray-600">12</span><span class="text-gray-400">        </span><span class="text-gray-500"># TODO: insert 메서드 구현</span></div>
+                        <div class="hover:bg-gray-800/50"><span class="inline-block w-12 text-right pr-4 text-gray-600">13</span><span class="text-gray-400">        </span>pass</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 실행 및 테스트 -->
+            <section class="mb-8 bg-white dark-mode:bg-gray-800 rounded-xl border border-gray-200 dark-mode:border-gray-700 overflow-hidden">
+                <div class="flex border-b border-gray-200 dark-mode:border-gray-700">
+                    <button class="tab-button active" onclick="switchTab('console')">
+                        📋 콘솔 출력
+                    </button>
+                    <button class="tab-button" onclick="switchTab('tests')">
+                        🧪 테스트 결과
+                    </button>
+                </div>
+
+                <!-- 콘솔 탭 -->
+                <div id="console-tab" class="p-6">
+                    <div class="bg-gray-900 text-gray-300 p-4 rounded-lg font-mono text-sm">
+                        <div class="text-green-400">>>> 50</div>
+                        <div class="text-green-400">>>> [30, 50, 70]</div>
+                        <div class="text-green-400">>>> True</div>
+                        <div class="text-green-400">>>> 1.234ms</div>
+                        <div class="mt-4 text-gray-500">
+                            <span class="text-blue-400">실행 완료</span> | 소요 시간: 1.234ms
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 테스트 탭 -->
+                <div id="tests-tab" class="p-6 hidden">
+                    <div class="space-y-3">
+                        <div class="test-case pass">
+                            <div class="flex items-center justify-between">
+                                <span class="font-semibold text-gray-900 dark-mode:text-white">✅ Test 1: Insert 기본</span>
+                                <span class="text-sm text-gray-600 dark-mode:text-gray-400">0.12ms</span>
+                            </div>
+                            <p class="text-sm text-gray-600 dark-mode:text-gray-400 mt-1">노드를 올바르게 삽입합니다.</p>
+                        </div>
+                        <div class="test-case pass">
+                            <div class="flex items-center justify-between">
+                                <span class="font-semibold text-gray-900 dark-mode:text-white">✅ Test 2: Search 기본</span>
+                                <span class="text-sm text-gray-600 dark-mode:text-gray-400">0.08ms</span>
+                            </div>
+                            <p class="text-sm text-gray-600 dark-mode:text-gray-400 mt-1">값을 올바르게 검색합니다.</p>
+                        </div>
+                        <div class="test-case fail">
+                            <div class="flex items-center justify-between">
+                                <span class="font-semibold text-gray-900 dark-mode:text-white">❌ Test 3: Delete 복합</span>
+                                <span class="text-sm text-gray-600 dark-mode:text-gray-400">0.05ms</span>
+                            </div>
+                            <div class="mt-2 text-sm">
+                                <p class="text-gray-600 dark-mode:text-gray-400">예상: [20, 30, 40, 50, 60, 70, 80]</p>
+                                <p class="text-red-600 dark-mode:text-red-400">실제: [20, 30, 40, 50, 60, 70]</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 p-4 bg-blue-50 dark-mode:bg-blue-900/20 rounded-lg">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="font-semibold text-gray-900 dark-mode:text-white">테스트 통과: 2/3 (67%)</p>
+                                <p class="text-sm text-gray-600 dark-mode:text-gray-400">1개의 테스트가 실패했습니다.</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-2xl font-bold text-blue-600 dark-mode:text-blue-400">67%</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 컨트롤 버튼 -->
+            <div class="flex gap-3 mb-8">
+                <button class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition flex items-center justify-center gap-2">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M8 5v14l11-7z"></path>
+                    </svg>
+                    코드 실행
+                </button>
+                <button class="flex-1 bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-lg transition flex items-center justify-center gap-2">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"></path>
+                    </svg>
+                    테스트 실행
+                </button>
+            </div>
+
+            <!-- 피드백 섹션 -->
+            <section class="mb-8 bg-white dark-mode:bg-gray-800 rounded-xl p-6 border border-gray-200 dark-mode:border-gray-700">
+                <h3 class="font-semibold text-lg text-gray-900 dark-mode:text-white mb-4">📝 학습 피드백</h3>
+
+                <div class="mb-6">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-sm font-semibold text-gray-700 dark-mode:text-gray-300">진행 상태</span>
+                        <span class="text-sm font-semibold text-blue-600 dark-mode:text-blue-400">40%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 40%">40%</div>
+                    </div>
+                </div>
+
+                <div class="mb-4 text-sm text-gray-600 dark-mode:text-gray-400">
+                    💾 자동 저장됨 (1분 전)
+                </div>
+
+                <div class="mb-4 p-3 bg-yellow-50 dark-mode:bg-yellow-900/20 rounded-lg border border-yellow-200 dark-mode:border-yellow-700">
+                    <button class="w-full text-left font-semibold text-gray-900 dark-mode:text-white hover:text-yellow-700 dark-mode:hover:text-yellow-300 transition text-sm">
+                        💡 힌트 보기 (진행도 40% 이상시 활성화)
+                    </button>
+                    <p class="text-sm text-gray-600 dark-mode:text-gray-400 mt-2 hidden">
+                        "insert 메서드는 재귀를 사용하여 구현할 수 있습니다."
+                    </p>
+                </div>
+
+                <button class="w-full p-3 border border-blue-600 dark-mode:border-blue-500 text-blue-600 dark-mode:text-blue-400 font-semibold rounded-lg hover:bg-blue-50 dark-mode:hover:bg-blue-900/20 transition">
+                    💬 교수님께 질문하기
+                </button>
+            </section>
+
+            <!-- 하단 네비게이션 -->
+            <div class="flex gap-4 mb-8">
+                <button class="flex-1 border border-gray-300 dark-mode:border-gray-600 text-gray-700 dark-mode:text-gray-300 font-semibold py-3 px-6 rounded-lg hover:bg-gray-100 dark-mode:hover:bg-gray-700 transition flex items-center justify-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                    </svg>
+                    이전 차시 (Week 7)
+                </button>
+                <button class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                    완료 및 다음 (Week 9)
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                </button>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        function toggleTheme() {
+            const body = document.body;
+            if (body.classList.contains('light-mode')) {
+                body.classList.remove('light-mode');
+                body.classList.add('dark-mode');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                body.classList.remove('dark-mode');
+                body.classList.add('light-mode');
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        function switchTab(tabName) {
+            // 모든 탭 내용 숨기기
+            document.querySelectorAll('[id$="-tab"]').forEach(tab => {
+                tab.classList.add('hidden');
+            });
+
+            // 선택한 탭만 표시
+            document.getElementById(tabName + '-tab').classList.remove('hidden');
+
+            // 버튼 활성화 상태 업데이트
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+
+        function selectDifficulty(level) {
+            // 모든 버튼의 selected 클래스 제거
+            document.querySelectorAll('.difficulty-btn').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+
+            // 선택한 버튼에 selected 클래스 추가
+            event.target.classList.add('selected');
+        }
+
+        // 페이지 로드 시 테마 복원
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            const body = document.body;
+
+            if (savedTheme === 'dark') {
+                body.classList.remove('light-mode');
+                body.classList.add('dark-mode');
+            }
+        });
+    </script>
+</body>
+</html>

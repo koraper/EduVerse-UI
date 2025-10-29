@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduVerse - 내 수업 페이지 프로토타입</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        * {
+            scrollbar-width: thin;
+            scrollbar-color: rgb(107 114 128) transparent;
+        }
+
+        *::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        *::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        *::-webkit-scrollbar-thumb {
+            background: rgb(107 114 128);
+            border-radius: 4px;
+        }
+
+        *::-webkit-scrollbar-thumb:hover {
+            background: rgb(75 85 99);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+        }
+
+        .dark-mode {
+            background-color: #111827;
+            color: #f3f4f6;
+        }
+
+        .light-mode {
+            background-color: #f9fafb;
+            color: #111827;
+        }
+
+        .course-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .course-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        .progress-bar {
+            height: 8px;
+            background-color: rgba(107, 114, 128, 0.2);
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, rgb(59, 130, 246), rgb(99, 102, 241));
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        .sidebar {
+            transition: transform 0.3s ease;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                position: fixed;
+                left: -280px;
+                top: 0;
+                height: 100vh;
+                z-index: 40;
+            }
+
+            .sidebar.open {
+                left: 0;
+            }
+
+            .overlay {
+                display: none;
+            }
+
+            .overlay.show {
+                display: block;
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0, 0, 0, 0.5);
+                z-index: 30;
+            }
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .badge-primary {
+            background-color: rgb(219, 234, 254);
+            color: rgb(30, 58, 138);
+        }
+
+        .badge-primary.dark {
+            background-color: rgb(30, 58, 138);
+            color: rgb(191, 219, 254);
+        }
+
+        .filter-btn {
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+
+        .filter-btn.active {
+            background-color: rgb(59, 130, 246);
+            color: white;
+            border-color: rgb(59, 130, 246);
+        }
+
+        .filter-btn.inactive {
+            background-color: transparent;
+            color: rgb(107, 114, 128);
+            border-color: rgb(229, 231, 235);
+        }
+
+        .filter-btn.dark.inactive {
+            border-color: rgb(75, 85, 99);
+        }
+    </style>
+</head>
+<body class="light-mode">
+    <!-- 헤더 -->
+    <header class="border-b border-gray-200 dark-mode:border-gray-700 bg-white dark-mode:bg-gray-900 sticky top-0 z-30">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <button class="md:hidden p-2 hover:bg-gray-200 dark-mode:hover:bg-gray-800 rounded-lg transition" onclick="toggleSidebar()">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+                <h1 class="text-2xl font-bold text-gray-900 dark-mode:text-white">내 수업</h1>
+            </div>
+
+            <div class="flex items-center gap-4 flex-1 justify-center hidden md:flex">
+                <div class="relative w-64">
+                    <input type="text" placeholder="수업명, 교수명 검색..."
+                           class="w-full px-4 py-2 rounded-lg bg-gray-100 dark-mode:bg-gray-800 text-gray-900 dark-mode:text-white border border-gray-300 dark-mode:border-gray-600 placeholder-gray-500 dark-mode:placeholder-gray-400">
+                    <svg class="absolute right-3 top-2.5 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-4">
+                <button class="p-2 hover:bg-gray-200 dark-mode:hover:bg-gray-800 rounded-lg transition" onclick="toggleTheme()">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 015.646 5.646 9.003 9.003 0 0015.354 20.354z" />
+                    </svg>
+                </button>
+
+                <div class="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold cursor-pointer">
+                    J
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 오버레이 -->
+    <div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+
+    <div class="flex gap-0">
+        <!-- 사이드바 -->
+        <aside class="sidebar w-80 border-r border-gray-200 dark-mode:border-gray-700 p-6 max-h-[calc(100vh-80px)] overflow-y-auto hidden md:block bg-white dark-mode:bg-gray-900" id="sidebar">
+            <!-- Today's Mission -->
+            <div class="mb-8">
+                <h3 class="font-bold text-lg text-gray-900 dark-mode:text-white mb-4 flex items-center gap-2">
+                    <svg class="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="9"></circle>
+                        <circle cx="12" cy="12" r="4" fill="currentColor"></circle>
+                    </svg>
+                    Today's Mission
+                </h3>
+
+                <div class="bg-amber-50 dark-mode:bg-amber-900/20 rounded-lg p-4 border border-amber-200 dark-mode:border-amber-700">
+                    <p class="text-yellow-600 dark-mode:text-yellow-400 font-semibold text-sm mb-2">
+                        1주차 학습을 진행할 차례입니다.
+                    </p>
+                    <p class="text-gray-700 dark-mode:text-gray-300 text-sm mb-4">
+                        오늘의 주제: 첫 코드 작성과 데이터 저장
+                    </p>
+
+                    <button class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition pulse flex items-center justify-center gap-2">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M8 5v14l11-7z"></path>
+                        </svg>
+                        업무 복귀하기
+                    </button>
+                </div>
+            </div>
+
+            <!-- My Activity -->
+            <div class="border-t border-gray-200 dark-mode:border-gray-700 pt-6">
+                <h4 class="font-bold text-lg text-gray-900 dark-mode:text-white mb-4 flex items-center gap-2">
+                    <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"></path>
+                    </svg>
+                    My Activity
+                </h4>
+
+                <div class="text-gray-600 dark-mode:text-gray-400 text-sm text-center py-4">
+                    <p>아직 완료한 활동이 없어요.</p>
+                </div>
+            </div>
+        </aside>
+
+        <!-- 메인 콘텐츠 -->
+        <main class="flex-1 p-4 md:p-8 overflow-y-auto max-h-[calc(100vh-80px)]">
+            <!-- 필터 및 정렬 -->
+            <div class="mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div class="flex flex-wrap gap-2">
+                    <button class="filter-btn active" onclick="setFilter('all')">전체</button>
+                    <button class="filter-btn inactive dark-mode:filter-btn.dark.inactive" onclick="setFilter('ongoing')">진행 중</button>
+                    <button class="filter-btn inactive dark-mode:filter-btn.dark.inactive" onclick="setFilter('pending')">예정</button>
+                    <button class="filter-btn inactive dark-mode:filter-btn.dark.inactive" onclick="setFilter('completed')">완료</button>
+                </div>
+
+                <div class="flex gap-2">
+                    <select class="px-3 py-2 rounded-lg bg-white dark-mode:bg-gray-800 text-gray-900 dark-mode:text-white border border-gray-300 dark-mode:border-gray-600 text-sm">
+                        <option>최신순</option>
+                        <option>진행도 높음</option>
+                        <option>진행도 낮음</option>
+                        <option>이름순</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- 수업 카드 그리드 -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- 카드 1 -->
+                <div class="course-card bg-white dark-mode:bg-gray-800 border border-gray-200 dark-mode:border-gray-700 p-6">
+                    <h3 class="text-lg font-bold text-gray-900 dark-mode:text-white mb-2">자료구조론</h3>
+
+                    <div class="mb-4 space-y-1">
+                        <p class="text-sm text-gray-600 dark-mode:text-gray-400">
+                            <span class="font-semibold">홍길동</span> 교수
+                        </p>
+                        <p class="text-sm text-gray-600 dark-mode:text-gray-400">
+                            <span class="badge badge-primary dark-mode:badge-primary.dark">컴공과</span>
+                        </p>
+                        <p class="text-sm text-gray-600 dark-mode:text-gray-400">2025년 1학기 A반</p>
+                    </div>
+
+                    <div class="mb-4">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-semibold text-gray-700 dark-mode:text-gray-300">진행도</span>
+                            <span class="text-sm font-bold text-blue-600 dark-mode:text-blue-400">67%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 67%"></div>
+                        </div>
+                    </div>
+
+                    <button class="w-full bg-blue-600 hover:bg-blue-700 dark-mode:bg-blue-500 dark-mode:hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg transition flex items-center justify-center gap-2">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M8 5v14l11-7z"></path>
+                        </svg>
+                        학습하기
+                    </button>
+                </div>
+
+                <!-- 카드 2 -->
+                <div class="course-card bg-white dark-mode:bg-gray-800 border border-gray-200 dark-mode:border-gray-700 p-6">
+                    <h3 class="text-lg font-bold text-gray-900 dark-mode:text-white mb-2">알고리즘</h3>
+
+                    <div class="mb-4 space-y-1">
+                        <p class="text-sm text-gray-600 dark-mode:text-gray-400">
+                            <span class="font-semibold">김영희</span> 교수
+                        </p>
+                        <p class="text-sm text-gray-600 dark-mode:text-gray-400">
+                            <span class="badge badge-primary dark-mode:badge-primary.dark">컴공과</span>
+                        </p>
+                        <p class="text-sm text-gray-600 dark-mode:text-gray-400">2025년 1학기 B반</p>
+                    </div>
+
+                    <div class="mb-4">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-semibold text-gray-700 dark-mode:text-gray-300">진행도</span>
+                            <span class="text-sm font-bold text-blue-600 dark-mode:text-blue-400">78%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 78%"></div>
+                        </div>
+                    </div>
+
+                    <button class="w-full bg-blue-600 hover:bg-blue-700 dark-mode:bg-blue-500 dark-mode:hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg transition flex items-center justify-center gap-2">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M8 5v14l11-7z"></path>
+                        </svg>
+                        학습하기
+                    </button>
+                </div>
+
+                <!-- 카드 3 -->
+                <div class="course-card bg-white dark-mode:bg-gray-800 border border-gray-200 dark-mode:border-gray-700 p-6">
+                    <h3 class="text-lg font-bold text-gray-900 dark-mode:text-white mb-2">데이터베이스</h3>
+
+                    <div class="mb-4 space-y-1">
+                        <p class="text-sm text-gray-600 dark-mode:text-gray-400">
+                            <span class="font-semibold">이준호</span> 교수
+                        </p>
+                        <p class="text-sm text-gray-600 dark-mode:text-gray-400">
+                            <span class="badge badge-primary dark-mode:badge-primary.dark">정통과</span>
+                        </p>
+                        <p class="text-sm text-gray-600 dark-mode:text-gray-400">2025년 1학기 A반</p>
+                    </div>
+
+                    <div class="mb-4">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-semibold text-gray-700 dark-mode:text-gray-300">진행도</span>
+                            <span class="text-sm font-bold text-blue-600 dark-mode:text-blue-400">45%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 45%"></div>
+                        </div>
+                    </div>
+
+                    <button class="w-full bg-blue-600 hover:bg-blue-700 dark-mode:bg-blue-500 dark-mode:hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg transition flex items-center justify-center gap-2">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M8 5v14l11-7z"></path>
+                        </svg>
+                        학습하기
+                    </button>
+                </div>
+
+                <!-- 카드 4 -->
+                <div class="course-card bg-white dark-mode:bg-gray-800 border border-gray-200 dark-mode:border-gray-700 p-6">
+                    <h3 class="text-lg font-bold text-gray-900 dark-mode:text-white mb-2">웹프로그래밍</h3>
+
+                    <div class="mb-4 space-y-1">
+                        <p class="text-sm text-gray-600 dark-mode:text-gray-400">
+                            <span class="font-semibold">박준호</span> 교수
+                        </p>
+                        <p class="text-sm text-gray-600 dark-mode:text-gray-400">
+                            <span class="badge badge-primary dark-mode:badge-primary.dark">컴공과</span>
+                        </p>
+                        <p class="text-sm text-gray-600 dark-mode:text-gray-400">2025년 1학기 C반</p>
+                    </div>
+
+                    <div class="mb-4">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-semibold text-gray-700 dark-mode:text-gray-300">진행도</span>
+                            <span class="text-sm font-bold text-blue-600 dark-mode:text-blue-400">55%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 55%"></div>
+                        </div>
+                    </div>
+
+                    <button class="w-full bg-blue-600 hover:bg-blue-700 dark-mode:bg-blue-500 dark-mode:hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg transition flex items-center justify-center gap-2">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M8 5v14l11-7z"></path>
+                        </svg>
+                        학습하기
+                    </button>
+                </div>
+
+                <!-- 카드 5 -->
+                <div class="course-card bg-white dark-mode:bg-gray-800 border border-gray-200 dark-mode:border-gray-700 p-6">
+                    <h3 class="text-lg font-bold text-gray-900 dark-mode:text-white mb-2">모바일앱</h3>
+
+                    <div class="mb-4 space-y-1">
+                        <p class="text-sm text-gray-600 dark-mode:text-gray-400">
+                            <span class="font-semibold">최지현</span> 교수
+                        </p>
+                        <p class="text-sm text-gray-600 dark-mode:text-gray-400">
+                            <span class="badge badge-primary dark-mode:badge-primary.dark">정통과</span>
+                        </p>
+                        <p class="text-sm text-gray-600 dark-mode:text-gray-400">2025년 1학기 B반</p>
+                    </div>
+
+                    <div class="mb-4">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-semibold text-gray-700 dark-mode:text-gray-300">진행도</span>
+                            <span class="text-sm font-bold text-blue-600 dark-mode:text-blue-400">82%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 82%"></div>
+                        </div>
+                    </div>
+
+                    <button class="w-full bg-blue-600 hover:bg-blue-700 dark-mode:bg-blue-500 dark-mode:hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg transition flex items-center justify-center gap-2">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M8 5v14l11-7z"></path>
+                        </svg>
+                        학습하기
+                    </button>
+                </div>
+
+                <!-- 카드 6 -->
+                <div class="course-card bg-white dark-mode:bg-gray-800 border border-gray-200 dark-mode:border-gray-700 p-6">
+                    <h3 class="text-lg font-bold text-gray-900 dark-mode:text-white mb-2">클라우드기초</h3>
+
+                    <div class="mb-4 space-y-1">
+                        <p class="text-sm text-gray-600 dark-mode:text-gray-400">
+                            <span class="font-semibold">한승호</span> 교수
+                        </p>
+                        <p class="text-sm text-gray-600 dark-mode:text-gray-400">
+                            <span class="badge badge-primary dark-mode:badge-primary.dark">컴공과</span>
+                        </p>
+                        <p class="text-sm text-gray-600 dark-mode:text-gray-400">2025년 1학기 A반</p>
+                    </div>
+
+                    <div class="mb-4">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-semibold text-gray-700 dark-mode:text-gray-300">진행도</span>
+                            <span class="text-sm font-bold text-blue-600 dark-mode:text-blue-400">30%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 30%"></div>
+                        </div>
+                    </div>
+
+                    <button class="w-full bg-blue-600 hover:bg-blue-700 dark-mode:bg-blue-500 dark-mode:hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg transition flex items-center justify-center gap-2">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M8 5v14l11-7z"></path>
+                        </svg>
+                        학습하기
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        function toggleTheme() {
+            const body = document.body;
+            if (body.classList.contains('light-mode')) {
+                body.classList.remove('light-mode');
+                body.classList.add('dark-mode');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                body.classList.remove('dark-mode');
+                body.classList.add('light-mode');
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('overlay');
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('show');
+        }
+
+        function closeSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('overlay');
+            sidebar.classList.remove('open');
+            overlay.classList.remove('show');
+        }
+
+        function setFilter(filter) {
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+                btn.classList.add('inactive');
+            });
+            event.target.classList.remove('inactive');
+            event.target.classList.add('active');
+            // 필터링 로직 추가 가능
+        }
+
+        // 테마 복원
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            const body = document.body;
+
+            if (savedTheme === 'dark') {
+                body.classList.remove('light-mode');
+                body.classList.add('dark-mode');
+            }
+        });
+    </script>
+</body>
+</html>
