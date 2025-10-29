@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { createPortal } from 'react-dom'
+import { useTheme } from '@/contexts/ThemeContext'
 import type { ModalProps } from './types'
 
 const Modal = ({
@@ -13,6 +14,7 @@ const Modal = ({
   closeOnEsc = true,
   showCloseButton = true,
 }: ModalProps) => {
+  const { currentTheme } = useTheme()
   // ESC 키로 닫기
   useEffect(() => {
     if (!closeOnEsc || !isOpen) return
@@ -64,19 +66,27 @@ const Modal = ({
       onClick={handleBackdropClick}
     >
       <div
-        className={`bg-white rounded-lg shadow-xl w-full ${sizeStyles[size]} max-h-[90vh] flex flex-col`}
+        className={`rounded-lg shadow-xl w-full ${sizeStyles[size]} max-h-[90vh] flex flex-col ${
+          currentTheme === 'dark'
+            ? 'bg-gray-800'
+            : 'bg-white'
+        }`}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
         {(title || showCloseButton) && (
-          <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200">
+          <div className={`flex items-center justify-between px-6 py-4 border-b ${
+            currentTheme === 'dark'
+              ? 'border-gray-700'
+              : 'border-gray-200'
+          }`}>
             {title && (
-              <h2 className="text-xl font-semibold text-gray-900">{title}</h2>
+              <h2 className={`text-xl font-semibold ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{title}</h2>
             )}
             {showCloseButton && (
               <button
                 onClick={onClose}
-                className="text-gray-400 hover:text-gray-600 transition-colors"
+                className={`transition-colors ${currentTheme === 'dark' ? 'text-gray-500 hover:text-gray-400' : 'text-gray-400 hover:text-gray-600'}`}
                 aria-label="닫기"
               >
                 <svg
@@ -98,13 +108,17 @@ const Modal = ({
         )}
 
         {/* Body */}
-        <div className="px-6 py-4 overflow-y-auto flex-1">
+        <div className={`px-6 py-4 overflow-y-auto flex-1 ${currentTheme === 'dark' ? 'text-gray-200' : 'text-gray-900'}`}>
           {children}
         </div>
 
         {/* Footer */}
         {footer && (
-          <div className="px-6 py-4 border-t border-gray-200 bg-gray-50 rounded-b-lg">
+          <div className={`px-6 py-4 border-t rounded-b-lg ${
+            currentTheme === 'dark'
+              ? 'border-gray-700 bg-gray-700'
+              : 'border-gray-200 bg-gray-50'
+          }`}>
             {footer}
           </div>
         )}
