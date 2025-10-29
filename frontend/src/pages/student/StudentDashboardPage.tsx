@@ -417,7 +417,7 @@ const StudentDashboardPage = () => {
                         <span className="text-xs font-medium text-gray-600">수업 진행률</span>
                         <span className="text-xs font-semibold text-primary-600">{Math.round((course.completedLessons / course.totalLessons) * 100)}%</span>
                       </div>
-                      <div className="text-xs text-gray-500 mb-2">{course.completedLessons}/{course.totalLessons}차시</div>
+                      <div className="text-xs text-gray-500 mb-2">{course.totalLessons}차시 중 {course.completedLessons}차시까지 진행</div>
                       <div className="w-full bg-gray-200 rounded-full h-2">
                         <div
                           className="bg-primary-600 h-2 rounded-full transition-all duration-300"
@@ -432,7 +432,7 @@ const StudentDashboardPage = () => {
                         <span className="text-xs font-medium text-gray-600">수업 참여율</span>
                         <span className="text-xs font-semibold text-blue-600">{course.participationRate}%</span>
                       </div>
-                      <div className="text-xs text-gray-500 mb-2">{Math.round((course.participationRate / 100) * course.totalLessons)}/{course.totalLessons}차시</div>
+                      <div className="text-xs text-gray-500 mb-2">수업 완료된 {course.completedLessons}차시 중 {Math.round((course.participationRate / 100) * course.completedLessons)}차시 참여</div>
                       <div className="w-full bg-gray-200 rounded-full h-2">
                         <div
                           className="bg-blue-600 h-2 rounded-full transition-all duration-300"
