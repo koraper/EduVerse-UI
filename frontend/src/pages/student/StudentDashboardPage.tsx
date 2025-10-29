@@ -218,7 +218,11 @@ const StudentDashboardPage = () => {
       <div className="space-y-6">
         {/* 환영 메시지 */}
         {showWelcome && (
-          <div className="bg-gradient-to-r from-primary-500 to-purple-600 rounded-lg shadow-lg p-6 text-white">
+          <div className={`rounded-lg shadow-lg p-6 text-white transition-colors ${
+            currentTheme === 'dark'
+              ? 'bg-gradient-to-r from-indigo-700 to-purple-800'
+              : 'bg-gradient-to-r from-primary-500 to-purple-600'
+          }`}>
             <div className="flex items-start gap-4">
               <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0">
                 <svg className="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 20 20">
@@ -245,14 +249,18 @@ const StudentDashboardPage = () => {
 
         {/* 헤더 */}
         <div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">대시보드</h1>
-          <p className="mt-1 text-sm text-gray-600">
+          <h1 className={`text-2xl sm:text-3xl font-bold ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>대시보드</h1>
+          <p className={`mt-1 text-sm ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
             수강 중인 과목을 한눈에 확인하고 관리하세요
           </p>
         </div>
 
         {/* 섹션 1: 초대코드로 수업 참여하기 */}
-        <Card className="bg-gradient-to-br from-green-50 to-emerald-50 border border-green-200">
+        <Card className={`bg-gradient-to-br border ${
+          currentTheme === 'dark'
+            ? 'from-gray-800 to-gray-700 border-gray-600'
+            : 'from-green-50 to-emerald-50 border-green-200'
+        }`}>
           <div className="p-6">
             <div className="flex items-start gap-6">
               {/* 좌측 아이콘 */}
@@ -269,14 +277,18 @@ const StudentDashboardPage = () => {
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
                     <div className="flex items-center gap-2">
-                      <h2 className="text-lg font-bold text-gray-900">초대코드로 수업 참여하기</h2>
-                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-700">
+                      <h2 className={`text-lg font-bold ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>초대코드로 수업 참여하기</h2>
+                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                        currentTheme === 'dark'
+                          ? 'bg-emerald-900 text-emerald-200'
+                          : 'bg-green-100 text-green-700'
+                      }`}>
                         새로운 수업
                       </span>
                     </div>
-                    <p className="mt-2 text-sm text-gray-600">
+                    <p className={`mt-2 text-sm ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
                       교수님으로부터 받은 6자리 초대코드(영어+숫자)를 입력하여 새로운 수업에 참여하세요.
-                      <span className="font-medium text-green-600"> 코드는 이메일이나 학사공지사항</span>을 통해 제공됩니다.
+                      <span className={`font-medium ${currentTheme === 'dark' ? 'text-emerald-400' : 'text-green-600'}`}> 코드는 이메일이나 학사공지사항</span>을 통해 제공됩니다.
                     </p>
                   </div>
                 </div>
@@ -285,7 +297,11 @@ const StudentDashboardPage = () => {
                 <div className="mt-4">
                   <button
                     onClick={() => setInviteModalOpen(true)}
-                    className="inline-flex items-center gap-2 px-6 py-2.5 bg-green-600 text-white rounded-lg hover:bg-green-700 active:bg-green-800 transition-colors text-sm font-medium shadow-md hover:shadow-lg"
+                    className={`inline-flex items-center gap-2 px-6 py-2.5 rounded-lg transition-colors text-sm font-medium shadow-md hover:shadow-lg ${
+                      currentTheme === 'dark'
+                        ? 'bg-emerald-600 text-white hover:bg-emerald-700 active:bg-emerald-800'
+                        : 'bg-green-600 text-white hover:bg-green-700 active:bg-green-800'
+                    }`}
                   >
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -297,7 +313,7 @@ const StudentDashboardPage = () => {
 
               {/* 우측 데코레이션 */}
               <div className="hidden sm:block flex-shrink-0">
-                <svg className="w-20 h-20 text-green-200 opacity-60" fill="currentColor" viewBox="0 0 20 20">
+                <svg className={`w-20 h-20 opacity-60 ${currentTheme === 'dark' ? 'text-emerald-600' : 'text-green-200'}`} fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M4.293 7.707a1 1 0 011.414-1.414L8 9.586l6.293-6.293a1 1 0 111.414 1.414l-7 7a1 1 0 01-1.414 0l-4-4z" clipRule="evenodd" />
                 </svg>
               </div>
@@ -468,7 +484,9 @@ const StudentDashboardPage = () => {
                     </div>
 
                     {/* 8. 학습하기 버튼 */}
-                    <button className="w-full mt-auto px-4 py-2.5 bg-primary-600 text-white rounded-lg hover:bg-primary-700 active:bg-primary-800 font-medium text-sm transition-colors">
+                    <button
+                      onClick={() => navigate(`/student/course/${course.id}/planner`)}
+                      className="w-full mt-auto px-4 py-2.5 bg-primary-600 text-white rounded-lg hover:bg-primary-700 active:bg-primary-800 font-medium text-sm transition-colors">
                       학습하기
                     </button>
                   </div>
@@ -479,19 +497,27 @@ const StudentDashboardPage = () => {
             <Card>
               <div className="p-12 text-center">
                 <div className="mb-6 flex justify-center">
-                  <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center">
-                    <svg className="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div className={`w-24 h-24 rounded-full flex items-center justify-center ${
+                    currentTheme === 'dark'
+                      ? 'bg-gray-700'
+                      : 'bg-gray-100'
+                  }`}>
+                    <svg className={`w-12 h-12 ${currentTheme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                     </svg>
                   </div>
                 </div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">해당하는 수업이 없습니다</h3>
-                <p className="text-sm text-gray-600 mb-6">
+                <h3 className={`text-lg font-semibold mb-2 ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>해당하는 수업이 없습니다</h3>
+                <p className={`text-sm mb-6 ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
                   선택한 필터에 해당하는 수업이 없습니다. 다른 필터를 선택해보세요.
                 </p>
                 <button
                   onClick={() => setSelectedStatuses(new Set(['ongoing']))}
-                  className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
+                  className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg transition-colors text-sm font-medium text-white ${
+                    currentTheme === 'dark'
+                      ? 'bg-blue-700 hover:bg-blue-600'
+                      : 'bg-blue-600 hover:bg-blue-700'
+                  }`}
                 >
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
