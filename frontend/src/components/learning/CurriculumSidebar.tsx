@@ -50,7 +50,7 @@ const CurriculumSidebar = ({
   const [isActivitiesExpanded, setIsActivitiesExpanded] = useState(true)
   const [isGrowthExpanded, setIsGrowthExpanded] = useState(true)
   const [isInfoExpanded, setIsInfoExpanded] = useState(true)
-  const [showChart, setShowChart] = useState(false) // 차트/별점 토글 상태
+  const [showChart, setShowChart] = useState(true) // 차트/별점 토글 상태 - 기본값: 차트 보기
 
   // 점수를 별점으로 변환하는 컴포넌트
   const StarRating = ({ score }: { score: number }) => {
