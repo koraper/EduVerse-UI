@@ -382,9 +382,14 @@ const StudentDashboardPage = () => {
 
                     {/* 현재 진행 중인 주차 정보 */}
                     {course.currentWeek && course.currentLessonTitle && (
-                      <div className="mb-4 p-3 bg-red-50 rounded-lg border border-red-200">
-                        <p className="text-xs text-red-600 font-medium mb-1">수업 중</p>
-                        <p className="text-sm font-semibold text-red-900">{course.currentWeek}차시 : {course.currentLessonTitle}</p>
+                      <div className="mb-4 p-3 bg-red-50 rounded-lg border border-red-200 flex items-center justify-between gap-3">
+                        <div className="flex-1">
+                          <p className="text-xs text-red-600 font-medium mb-1">수업 중</p>
+                          <p className="text-sm font-semibold text-red-900">{course.currentWeek}차시 : {course.currentLessonTitle}</p>
+                        </div>
+                        <button className="px-3 py-1.5 bg-red-600 text-white rounded-lg hover:bg-red-700 active:bg-red-800 font-medium text-xs whitespace-nowrap transition-colors flex-shrink-0">
+                          바로 수업 참여
+                        </button>
                       </div>
                     )}
 
