@@ -129,6 +129,7 @@ const LearningPage = () => {
                 lessonWeek={currentLesson?.week || 0}
                 difficulty={difficulty}
                 onDifficultyChange={setDifficulty}
+                lessonStatus={currentLesson?.status}
               />
             )}
             {uiStyle === 'card' && (

@@ -177,9 +177,7 @@ const CurriculumSidebar = ({
                 currentTheme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'
               }`}>
                 <div
-                  className={`h-2 rounded-full transition-all duration-300 ${
-                    currentTheme === 'dark' ? 'bg-primary-500' : 'bg-primary-600'
-                  }`}
+                  className="h-2 rounded-full transition-all duration-300 bg-gradient-to-r from-primary-400 to-primary-600"
                   style={{ width: `${progressPercentage}%` }}
                 />
               </div>
@@ -204,9 +202,7 @@ const CurriculumSidebar = ({
                   currentTheme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'
                 }`}>
                   <div
-                    className={`h-2 rounded-full transition-all duration-300 ${
-                      currentTheme === 'dark' ? 'bg-green-500' : 'bg-green-600'
-                    }`}
+                    className="h-2 rounded-full transition-all duration-300 bg-gradient-to-r from-green-400 to-green-600"
                     style={{ width: `${courseInfo.participationRate}%` }}
                   />
                 </div>
@@ -223,7 +219,7 @@ const CurriculumSidebar = ({
                     과제 성공률
                   </span>
                   <span className={`text-sm font-semibold ${
-                    currentTheme === 'dark' ? 'text-blue-400' : 'text-blue-600'
+                    currentTheme === 'dark' ? 'text-purple-400' : 'text-purple-600'
                   }`}>
                     {courseInfo.assignmentSuccessRate}%
                   </span>
@@ -232,9 +228,7 @@ const CurriculumSidebar = ({
                   currentTheme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'
                 }`}>
                   <div
-                    className={`h-2 rounded-full transition-all duration-300 ${
-                      currentTheme === 'dark' ? 'bg-blue-500' : 'bg-blue-600'
-                    }`}
+                    className="h-2 rounded-full transition-all duration-300 bg-gradient-to-r from-purple-400 to-purple-600"
                     style={{ width: `${courseInfo.assignmentSuccessRate}%` }}
                   />
                 </div>

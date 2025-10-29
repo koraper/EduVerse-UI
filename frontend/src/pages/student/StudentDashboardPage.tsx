@@ -468,7 +468,7 @@ const StudentDashboardPage = () => {
                       <div className={`text-xs mb-2 ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>{course.totalLessons}차시 중 {course.completedLessons}차시까지 진행</div>
                       <div className={`w-full rounded-full h-2 ${currentTheme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'}`}>
                         <div
-                          className="bg-primary-600 h-2 rounded-full transition-all duration-300"
+                          className="bg-gradient-to-r from-primary-400 to-primary-600 h-2 rounded-full transition-all duration-300"
                           style={{ width: `${(course.completedLessons / course.totalLessons) * 100}%` }}
                         />
                       </div>
@@ -483,7 +483,7 @@ const StudentDashboardPage = () => {
                       <div className={`text-xs mb-2 ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>수업 완료된 {course.completedLessons}차시 중 {Math.round((course.participationRate / 100) * course.completedLessons)}차시 참여</div>
                       <div className={`w-full rounded-full h-2 ${currentTheme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'}`}>
                         <div
-                          className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+                          className="bg-gradient-to-r from-green-400 to-green-600 h-2 rounded-full transition-all duration-300"
                           style={{ width: `${course.participationRate}%` }}
                         />
                       </div>
@@ -501,7 +501,7 @@ const StudentDashboardPage = () => {
                       <div className={`text-xs mb-2 ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>총 18개 과제 중 {Math.round((course.assignmentSuccessRate / 100) * 18)}개 성공</div>
                       <div className={`w-full rounded-full h-2 ${currentTheme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'}`}>
                         <div
-                          className="bg-emerald-600 h-2 rounded-full transition-all duration-300"
+                          className="bg-gradient-to-r from-purple-400 to-purple-600 h-2 rounded-full transition-all duration-300"
                           style={{ width: `${course.assignmentSuccessRate}%` }}
                         />
                       </div>
