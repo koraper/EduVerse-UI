@@ -59,15 +59,23 @@ const QnaPage = () => {
       try {
         setLoading(true)
         console.log('[QnA Page] Fetching questions for user:', user?.id, user?.name)
+
+        const token = localStorage.getItem('token')
+        console.log('[QnA Page] Token exists:', !!token)
+
         const response = await fetch('/api/student/qna', {
           headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`
+            'Authorization': `Bearer ${token}`
           }
         })
 
         console.log('[QnA Page] Response status:', response.status, response.ok)
 
-        if (!response.ok) throw await response.json()
+        if (!response.ok) {
+          const error = await response.json()
+          console.error('[QnA Page] API Error:', error)
+          throw error
+        }
 
         const data = await response.json()
         console.log('[QnA Page] Received data:', data)
@@ -75,7 +83,6 @@ const QnaPage = () => {
         setQuestions(data.data || [])
       } catch (error) {
         console.error('[QnA Page] Error fetching questions:', error)
-        handleError(error)
       } finally {
         setLoading(false)
       }
@@ -84,7 +91,7 @@ const QnaPage = () => {
     if (user?.role === 'student') {
       fetchQuestions()
     }
-  }, [user, handleError])
+  }, [user])
 
   // Filter questions - useMemo로 변경하여 불필요한 리렌더링 방지
   const filteredQuestions = useMemo(() => {

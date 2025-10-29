@@ -82,7 +82,11 @@ export const db = {
     findAll: () => users,
     findById: (id: number) => users.find((u) => u.id === id),
     findByEmail: (email: string) => users.find((u) => u.email === email),
-    findByToken: (token: string) => users.find((u) => u.email === token.split('@')[0] + '@eduverse.com'),
+    findByToken: (token: string) => {
+      // 토큰 형식: 'mock-jwt-token-{userId}'
+      const userId = parseInt(token.replace('mock-jwt-token-', ''))
+      return users.find((u) => u.id === userId)
+    },
     create: (user: Omit<User, 'id'>) => {
       const newUser = { ...user, id: users.length + 1 }
       users.push(newUser)
