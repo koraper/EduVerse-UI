@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import { useTheme } from '@/contexts/ThemeContext'
 import Header from './Header'
 
 interface StudentLayoutProps {
@@ -6,8 +7,14 @@ interface StudentLayoutProps {
 }
 
 const StudentLayout = ({ children }: StudentLayoutProps) => {
+  const { currentTheme } = useTheme()
+
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50">
+    <div className={`min-h-screen flex flex-col transition-colors duration-300 ${
+      currentTheme === 'dark'
+        ? 'bg-gray-900'
+        : 'bg-gray-50'
+    }`}>
       <Header />
 
       <main className="flex-1 flex flex-col overflow-x-hidden">

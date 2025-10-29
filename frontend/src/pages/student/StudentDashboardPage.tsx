@@ -410,21 +410,33 @@ const StudentDashboardPage = () => {
                     {course.currentWeek && course.currentLessonTitle && (
                       <div className={`mb-4 p-3 rounded-lg border flex items-center justify-between gap-3 ${
                         course.isCompletedLesson
-                          ? 'bg-gray-50 border-gray-200'
-                          : 'bg-red-50 border-red-200'
+                          ? currentTheme === 'dark'
+                            ? 'bg-gray-700 border-gray-600'
+                            : 'bg-gray-50 border-gray-200'
+                          : currentTheme === 'dark'
+                            ? 'bg-red-900/20 border-red-700'
+                            : 'bg-red-50 border-red-200'
                       }`}>
                         <div className="flex-1">
                           <p className={`text-xs font-medium mb-1 ${
                             course.isCompletedLesson
-                              ? 'text-gray-600'
-                              : 'text-red-600'
+                              ? currentTheme === 'dark'
+                                ? 'text-gray-400'
+                                : 'text-gray-600'
+                              : currentTheme === 'dark'
+                                ? 'text-red-400'
+                                : 'text-red-600'
                           }`}>
                             {course.isCompletedLesson ? '최근 수업' : '수업 중'}
                           </p>
                           <p className={`text-sm font-semibold ${
                             course.isCompletedLesson
-                              ? 'text-gray-900'
-                              : 'text-red-900'
+                              ? currentTheme === 'dark'
+                                ? 'text-gray-200'
+                                : 'text-gray-900'
+                              : currentTheme === 'dark'
+                                ? 'text-red-300'
+                                : 'text-red-900'
                           }`}>{course.currentWeek}차시 : {course.currentLessonTitle}</p>
                         </div>
                         {!course.isCompletedLesson && (
@@ -441,8 +453,8 @@ const StudentDashboardPage = () => {
                         <span className="text-xs font-medium text-gray-600">수업 진행률</span>
                         <span className="text-xs font-semibold text-primary-600">{Math.round((course.completedLessons / course.totalLessons) * 100)}%</span>
                       </div>
-                      <div className="text-xs text-gray-500 mb-2">{course.totalLessons}차시 중 {course.completedLessons}차시까지 진행</div>
-                      <div className="w-full bg-gray-200 rounded-full h-2">
+                      <div className={`text-xs mb-2 ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>{course.totalLessons}차시 중 {course.completedLessons}차시까지 진행</div>
+                      <div className={`w-full rounded-full h-2 ${currentTheme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'}`}>
                         <div
                           className="bg-primary-600 h-2 rounded-full transition-all duration-300"
                           style={{ width: `${(course.completedLessons / course.totalLessons) * 100}%` }}
@@ -456,8 +468,8 @@ const StudentDashboardPage = () => {
                         <span className="text-xs font-medium text-gray-600">수업 참여율</span>
                         <span className="text-xs font-semibold text-blue-600">{course.participationRate}%</span>
                       </div>
-                      <div className="text-xs text-gray-500 mb-2">수업 완료된 {course.completedLessons}차시 중 {Math.round((course.participationRate / 100) * course.completedLessons)}차시 참여</div>
-                      <div className="w-full bg-gray-200 rounded-full h-2">
+                      <div className={`text-xs mb-2 ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>수업 완료된 {course.completedLessons}차시 중 {Math.round((course.participationRate / 100) * course.completedLessons)}차시 참여</div>
+                      <div className={`w-full rounded-full h-2 ${currentTheme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'}`}>
                         <div
                           className="bg-blue-600 h-2 rounded-full transition-all duration-300"
                           style={{ width: `${course.participationRate}%` }}
@@ -474,8 +486,8 @@ const StudentDashboardPage = () => {
                         </div>
                         <span className="text-xs font-semibold text-emerald-600">{course.assignmentSuccessRate}%</span>
                       </div>
-                      <div className="text-xs text-gray-500 mb-2">총 18개 과제 중 {Math.round((course.assignmentSuccessRate / 100) * 18)}개 성공</div>
-                      <div className="w-full bg-gray-200 rounded-full h-2">
+                      <div className={`text-xs mb-2 ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>총 18개 과제 중 {Math.round((course.assignmentSuccessRate / 100) * 18)}개 성공</div>
+                      <div className={`w-full rounded-full h-2 ${currentTheme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'}`}>
                         <div
                           className="bg-emerald-600 h-2 rounded-full transition-all duration-300"
                           style={{ width: `${course.assignmentSuccessRate}%` }}
@@ -531,18 +543,18 @@ const StudentDashboardPage = () => {
 
         {/* 섹션 3: 자주하는 질문 */}
         <div>
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">자주하는 질문</h2>
+          <h2 className={`text-lg font-semibold mb-4 ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>자주하는 질문</h2>
           <div className="space-y-3">
             {faqs.map((faq) => (
               <Card key={faq.id}>
                 <details className="group">
-                  <summary className="flex items-center justify-between cursor-pointer p-4 hover:bg-gray-50 transition-colors">
-                    <span className="font-medium text-gray-900">{faq.question}</span>
+                  <summary className={`flex items-center justify-between cursor-pointer p-4 transition-colors ${currentTheme === 'dark' ? 'hover:bg-gray-700' : 'hover:bg-gray-50'}`}>
+                    <span className={`font-medium ${currentTheme === 'dark' ? 'text-gray-200' : 'text-gray-900'}`}>{faq.question}</span>
                     <svg className="w-5 h-5 text-gray-500 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
                     </svg>
                   </summary>
-                  <div className="px-4 pb-4 text-sm text-gray-600 border-t border-gray-200">
+                  <div className={`px-4 pb-4 text-sm border-t ${currentTheme === 'dark' ? 'text-gray-300 border-gray-700' : 'text-gray-600 border-gray-200'}`}>
                     {faq.answer}
                   </div>
                 </details>
