@@ -24,6 +24,7 @@ interface Course {
   assignmentSuccessRate: number
   currentWeek?: number
   currentLessonTitle?: string
+  isCompletedLesson?: boolean
 }
 
 const StudentDashboardPage = () => {
@@ -79,6 +80,7 @@ const StudentDashboardPage = () => {
         assignmentSuccessRate: 91,
         currentWeek: 9,
         currentLessonTitle: '동적 프로그래밍 기초',
+        isCompletedLesson: true,
       },
       {
         id: 3,
@@ -382,14 +384,30 @@ const StudentDashboardPage = () => {
 
                     {/* 현재 진행 중인 주차 정보 */}
                     {course.currentWeek && course.currentLessonTitle && (
-                      <div className="mb-4 p-3 bg-red-50 rounded-lg border border-red-200 flex items-center justify-between gap-3">
+                      <div className={`mb-4 p-3 rounded-lg border flex items-center justify-between gap-3 ${
+                        course.isCompletedLesson
+                          ? 'bg-gray-50 border-gray-200'
+                          : 'bg-red-50 border-red-200'
+                      }`}>
                         <div className="flex-1">
-                          <p className="text-xs text-red-600 font-medium mb-1">수업 중</p>
-                          <p className="text-sm font-semibold text-red-900">{course.currentWeek}차시 : {course.currentLessonTitle}</p>
+                          <p className={`text-xs font-medium mb-1 ${
+                            course.isCompletedLesson
+                              ? 'text-gray-600'
+                              : 'text-red-600'
+                          }`}>
+                            {course.isCompletedLesson ? '최근 수업' : '수업 중'}
+                          </p>
+                          <p className={`text-sm font-semibold ${
+                            course.isCompletedLesson
+                              ? 'text-gray-900'
+                              : 'text-red-900'
+                          }`}>{course.currentWeek}차시 : {course.currentLessonTitle}</p>
                         </div>
-                        <button className="px-3 py-1.5 bg-red-600 text-white rounded-lg hover:bg-red-700 active:bg-red-800 font-medium text-xs whitespace-nowrap transition-colors flex-shrink-0">
-                          바로 수업 참여
-                        </button>
+                        {!course.isCompletedLesson && (
+                          <button className="px-3 py-1.5 bg-red-600 text-white rounded-lg hover:bg-red-700 active:bg-red-800 font-medium text-xs whitespace-nowrap transition-colors flex-shrink-0">
+                            바로 수업 참여
+                          </button>
+                        )}
                       </div>
                     )}
 
