@@ -382,9 +382,9 @@ const StudentDashboardPage = () => {
 
                     {/* 현재 진행 중인 주차 정보 */}
                     {course.currentWeek && course.currentLessonTitle && (
-                      <div className="mb-4 p-3 bg-blue-50 rounded-lg border border-blue-200">
-                        <p className="text-xs text-blue-600 font-medium mb-1">수업 중</p>
-                        <p className="text-sm font-semibold text-blue-900">{course.currentWeek}차시 : {course.currentLessonTitle}</p>
+                      <div className="mb-4 p-3 bg-red-50 rounded-lg border border-red-200">
+                        <p className="text-xs text-red-600 font-medium mb-1">수업 중</p>
+                        <p className="text-sm font-semibold text-red-900">{course.currentWeek}차시 : {course.currentLessonTitle}</p>
                       </div>
                     )}
 
