@@ -53,43 +53,125 @@ const QnaPage = () => {
     }
   }, [user, authLoading, navigate])
 
-  // Fetch questions
+  // Load demo questions
   useEffect(() => {
-    const fetchQuestions = async () => {
-      try {
-        setLoading(true)
-        console.log('[QnA Page] Fetching questions for user:', user?.id, user?.name)
-
-        const token = localStorage.getItem('token')
-        console.log('[QnA Page] Token exists:', !!token)
-
-        const response = await fetch('/api/student/qna', {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
-        })
-
-        console.log('[QnA Page] Response status:', response.status, response.ok)
-
-        if (!response.ok) {
-          const error = await response.json()
-          console.error('[QnA Page] API Error:', error)
-          throw error
-        }
-
-        const data = await response.json()
-        console.log('[QnA Page] Received data:', data)
-        console.log('[QnA Page] Questions count:', data.data?.length || 0)
-        setQuestions(data.data || [])
-      } catch (error) {
-        console.error('[QnA Page] Error fetching questions:', error)
-      } finally {
-        setLoading(false)
-      }
-    }
-
     if (user?.role === 'student') {
-      fetchQuestions()
+      setLoading(true)
+
+      // 데모 데이터
+      const demoQuestions: Question[] = [
+        {
+          id: 1,
+          lessonId: 1,
+          lessonTitle: '변수와 자료형',
+          lessonWeek: 1,
+          studentId: user.id,
+          studentName: user.name,
+          question: '변수를 선언할 때 let과 const의 차이점이 무엇인가요? 어떤 상황에서 각각을 사용해야 하나요?',
+          answer: 'let은 재할당이 가능한 변수를 선언할 때 사용하고, const는 재할당이 불가능한 상수를 선언할 때 사용합니다. 일반적으로 값이 변경되지 않는 경우 const를 사용하는 것이 좋으며, 값이 변경될 필요가 있을 때만 let을 사용하는 것을 권장합니다.',
+          status: 'answered',
+          createdAt: '2025-01-15 10:30',
+          answeredAt: '2025-01-15 14:20',
+          answeredBy: '김교수'
+        },
+        {
+          id: 2,
+          lessonId: 2,
+          lessonTitle: '조건문과 반복문',
+          lessonWeek: 2,
+          studentId: user.id,
+          studentName: user.name,
+          question: 'for...of와 for...in 반복문의 차이점을 설명해주세요. 각각 언제 사용하는 것이 적절한가요?',
+          answer: 'for...of는 배열이나 이터러블 객체의 값을 순회할 때 사용하고, for...in은 객체의 속성(키)을 순회할 때 사용합니다. 배열을 다룰 때는 for...of를 사용하고, 객체의 속성을 확인할 때는 for...in을 사용하는 것이 좋습니다.',
+          status: 'answered',
+          createdAt: '2025-01-16 11:45',
+          answeredAt: '2025-01-16 15:30',
+          answeredBy: '김교수'
+        },
+        {
+          id: 3,
+          lessonId: 3,
+          lessonTitle: '함수의 이해',
+          lessonWeek: 3,
+          studentId: user.id,
+          studentName: user.name,
+          question: '화살표 함수와 일반 함수의 차이점이 무엇인가요? 특히 this 바인딩 관련해서 설명해주세요.',
+          status: 'pending',
+          createdAt: '2025-01-18 09:20'
+        },
+        {
+          id: 4,
+          lessonId: 4,
+          lessonTitle: '리스트와 튜플',
+          lessonWeek: 4,
+          studentId: user.id,
+          studentName: user.name,
+          question: 'map(), filter(), reduce() 메서드의 차이점과 각각의 사용 사례를 알려주세요.',
+          answer: 'map()은 배열의 각 요소를 변환하여 새로운 배열을 만들 때, filter()는 조건에 맞는 요소만 추출할 때, reduce()는 배열의 모든 요소를 하나의 값으로 축약할 때 사용합니다. 예를 들어, 가격 배열에서 할인 가격 계산은 map, 특정 가격 이상 필터링은 filter, 총합 계산은 reduce를 사용합니다.',
+          status: 'answered',
+          createdAt: '2025-01-19 14:15',
+          answeredAt: '2025-01-19 16:45',
+          answeredBy: '이교수'
+        },
+        {
+          id: 5,
+          lessonId: 4,
+          lessonTitle: '리스트와 튜플',
+          lessonWeek: 4,
+          studentId: user.id,
+          studentName: user.name,
+          question: '스프레드 연산자(...)의 사용법과 실제 활용 예시를 알려주세요.',
+          status: 'pending',
+          createdAt: '2025-01-20 10:00'
+        },
+        {
+          id: 6,
+          lessonId: 5,
+          lessonTitle: '딕셔너리와 집합',
+          lessonWeek: 5,
+          studentId: user.id,
+          studentName: user.name,
+          question: 'Map과 일반 객체의 차이점이 무엇인가요? 언제 Map을 사용하는 것이 더 좋을까요?',
+          answer: 'Map은 키로 어떤 타입이든 사용 가능하고, 순서가 보장되며, size 속성으로 크기를 쉽게 확인할 수 있습니다. 일반 객체는 문자열/심볼만 키로 사용 가능합니다. 키가 다양한 타입이거나 자주 추가/삭제되는 경우, 또는 순서가 중요한 경우 Map을 사용하는 것이 좋습니다.',
+          status: 'answered',
+          createdAt: '2025-01-21 13:30',
+          answeredAt: '2025-01-21 17:00',
+          answeredBy: '이교수'
+        },
+        {
+          id: 7,
+          lessonId: 5,
+          lessonTitle: '딕셔너리와 집합',
+          lessonWeek: 5,
+          studentId: user.id,
+          studentName: user.name,
+          question: 'Set을 사용하면 어떤 장점이 있나요? 배열 대신 Set을 사용하는 것이 좋은 경우는 언제인가요?',
+          status: 'pending',
+          createdAt: '2025-01-22 11:20'
+        },
+        {
+          id: 8,
+          lessonId: 3,
+          lessonTitle: '함수의 이해',
+          lessonWeek: 3,
+          studentId: user.id,
+          studentName: user.name,
+          question: '콜백 함수가 무엇인지, 그리고 비동기 처리에서 어떻게 사용되는지 설명해주세요.',
+          answer: '콜백 함수는 다른 함수의 인자로 전달되어 나중에 호출되는 함수입니다. 비동기 작업(API 호출, 파일 읽기 등)이 완료된 후 실행될 코드를 콜백으로 전달합니다. 하지만 콜백이 중첩되면 "콜백 지옥"이 발생할 수 있어, 최근에는 Promise나 async/await를 더 많이 사용합니다.',
+          status: 'answered',
+          createdAt: '2025-01-17 15:40',
+          answeredAt: '2025-01-17 18:10',
+          answeredBy: '김교수'
+        }
+      ]
+
+      // 날짜 기준 내림차순 정렬 (최신순)
+      const sortedQuestions = demoQuestions.sort((a, b) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      )
+
+      setQuestions(sortedQuestions)
+      setLoading(false)
     }
   }, [user])
 
