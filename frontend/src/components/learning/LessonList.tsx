@@ -209,14 +209,20 @@ const LessonList = ({ lessons, currentLessonId, onLessonSelect }: LessonListProp
           {/* 정렬 버튼 */}
           <button
             onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
-            className={`p-1.5 rounded-lg transition-colors ${
+            className={`relative group p-1.5 rounded-lg transition-colors ${
               currentTheme === 'dark'
                 ? 'bg-gray-900 hover:bg-gray-700 text-gray-400 hover:text-white'
                 : 'bg-gray-100 hover:bg-gray-200 text-gray-600 hover:text-gray-900'
             }`}
-            title={sortOrder === 'asc' ? '오름차순' : '내림차순'}
           >
             <ArrowUpDown className="w-4 h-4" />
+            <div className={`absolute top-full left-1/2 -translate-x-1/2 mt-2 px-2 py-1 text-xs rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 ${
+              currentTheme === 'dark'
+                ? 'bg-gray-900 text-white border border-gray-700'
+                : 'bg-gray-800 text-white'
+            }`}>
+              {sortOrder === 'asc' ? '오름차순' : '내림차순'}
+            </div>
           </button>
         </div>
       </div>

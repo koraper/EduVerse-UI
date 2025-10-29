@@ -68,8 +68,8 @@ const Header = () => {
     }
   }
 
-  // 현재 페이지가 설정 페이지인지 확인
-  const isSettingsPage = location.pathname === '/settings'
+  // 현재 페이지가 설정 페이지, 질의응답 페이지, 성장 일기 페이지인지 확인 (홈 버튼을 표시해야 하는 페이지들)
+  const isSettingsPage = location.pathname === '/settings' || location.pathname === '/student/qna' || location.pathname === '/progress'
 
   return (
     <header className={`sticky top-0 z-40 transition-colors duration-300 ${
@@ -192,6 +192,7 @@ const Header = () => {
 
                 {/* 메뉴 항목 */}
                 <div className="py-2">
+                  {/* 홈/설정 토글 버튼 */}
                   <button
                     onClick={() => {
                       setIsProfileMenuOpen(false)
@@ -216,8 +217,10 @@ const Header = () => {
                     )}
                   </button>
 
-                  {/* 학생 전용 - 질의응답 메뉴 */}
-                  {user?.role === 'student' && (
+                  {/* 학생 전용 - 질의응답 메뉴 (질의응답/성장일기 페이지에서는 숨김) */}
+                  {user?.role === 'student' &&
+                   location.pathname !== '/student/qna' &&
+                   location.pathname !== '/progress' && (
                     <button
                       onClick={() => {
                         setIsProfileMenuOpen(false)

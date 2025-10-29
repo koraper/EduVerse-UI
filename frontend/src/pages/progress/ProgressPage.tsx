@@ -1,269 +1,408 @@
-import { useEffect, useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
+import { useTheme } from '@/contexts/ThemeContext'
 import StudentLayout from '@/components/layout/StudentLayout'
-import Card from '@/components/common/Card'
-import Badge from '@/components/common/Badge'
+import { Card } from '@/components/common'
+import { TrendingUp, ArrowLeft, Star, Award, Target, CheckCircle2 } from 'lucide-react'
+
+interface LessonProgress {
+  id: number
+  lessonTitle: string
+  lessonWeek: number
+  completedAt?: string
+  averageScore: number
+  conceptUnderstanding: number
+  codeApplication: number
+  status: 'completed' | 'in_progress' | 'upcoming'
+  attendance?: 'completed' | 'incomplete' | 'absent'
+}
 
 const ProgressPage = () => {
   const navigate = useNavigate()
-  const { user } = useAuth()
-  const [isLoading, setIsLoading] = useState(true)
+  const { user, loading: authLoading } = useAuth()
+  const { currentTheme } = useTheme()
+  const [loading, setLoading] = useState(true)
+  const [lessons, setLessons] = useState<LessonProgress[]>([])
 
+  // Auth check
   useEffect(() => {
-    // 학생만 접근 가능
-    if (user && user.role !== 'student') {
-      navigate('/dashboard')
-      return
-    }
-
-    // 비인증 사용자 리다이렉트
+    if (authLoading) return
     if (!user) {
       navigate('/login')
       return
     }
+    if (user.role !== 'student') {
+      navigate(`/${user.role}/dashboard`)
+    }
+  }, [user, authLoading, navigate])
 
-    // Mock 데이터 로드 (향후 API 호출로 변경)
-    setIsLoading(false)
-  }, [user, navigate])
+  // Load demo data
+  useEffect(() => {
+    if (user?.role === 'student') {
+      setLoading(true)
 
-  if (isLoading) {
+      // 데모 데이터
+      const demoLessons: LessonProgress[] = [
+        {
+          id: 1,
+          lessonTitle: '변수와 자료형',
+          lessonWeek: 1,
+          completedAt: '2025-10-20',
+          averageScore: 92,
+          conceptUnderstanding: 95,
+          codeApplication: 88,
+          status: 'completed',
+          attendance: 'completed'
+        },
+        {
+          id: 2,
+          lessonTitle: '조건문과 반복문',
+          lessonWeek: 2,
+          completedAt: '2025-10-22',
+          averageScore: 0,
+          conceptUnderstanding: 0,
+          codeApplication: 0,
+          status: 'completed',
+          attendance: 'absent'
+        },
+        {
+          id: 3,
+          lessonTitle: '함수의 이해',
+          lessonWeek: 3,
+          completedAt: '2025-10-25',
+          averageScore: 0,
+          conceptUnderstanding: 0,
+          codeApplication: 0,
+          status: 'completed',
+          attendance: 'incomplete'
+        },
+        {
+          id: 4,
+          lessonTitle: '리스트와 튜플',
+          lessonWeek: 4,
+          completedAt: '2025-10-27',
+          averageScore: 78,
+          conceptUnderstanding: 75,
+          codeApplication: 80,
+          status: 'completed',
+          attendance: 'completed'
+        },
+        {
+          id: 5,
+          lessonTitle: '딕셔너리와 집합',
+          lessonWeek: 5,
+          completedAt: '2025-10-29',
+          averageScore: 90,
+          conceptUnderstanding: 88,
+          codeApplication: 92,
+          status: 'completed',
+          attendance: 'completed'
+        }
+      ]
+
+      setLessons(demoLessons)
+      setLoading(false)
+    }
+  }, [user])
+
+  // 전체 통계 계산 (출석 완료한 차시만 포함)
+  const completedLessons = lessons.filter(l => l.status === 'completed' && l.attendance === 'completed')
+  const totalAverage = completedLessons.length > 0
+    ? Math.round(completedLessons.reduce((sum, l) => sum + l.averageScore, 0) / completedLessons.length)
+    : 0
+  const totalConceptUnderstanding = completedLessons.length > 0
+    ? Math.round(completedLessons.reduce((sum, l) => sum + l.conceptUnderstanding, 0) / completedLessons.length)
+    : 0
+  const totalCodeApplication = completedLessons.length > 0
+    ? Math.round(completedLessons.reduce((sum, l) => sum + l.codeApplication, 0) / completedLessons.length)
+    : 0
+
+  // 점수를 별점으로 변환 (100점 만점 -> 5점 만점)
+  const StarRating = ({ score }: { score: number }) => {
+    const rating = score / 20
+    const fullStars = Math.floor(rating)
+    const partialFill = rating - fullStars
+
+    return (
+      <div className="flex items-center gap-0.5">
+        {[...Array(5)].map((_, index) => {
+          if (index < fullStars) {
+            return <Star key={index} className="w-4 h-4 text-yellow-400 fill-yellow-400" />
+          }
+          if (index === fullStars && partialFill > 0) {
+            return (
+              <div key={index} className="relative">
+                <Star className="w-4 h-4 text-gray-400 fill-gray-400" />
+                <div
+                  className="absolute top-0 left-0 overflow-hidden"
+                  style={{ width: `${partialFill * 100}%` }}
+                >
+                  <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" />
+                </div>
+              </div>
+            )
+          }
+          return <Star key={index} className="w-4 h-4 text-gray-400 fill-gray-400" />
+        })}
+        <span className={`ml-2 text-sm font-medium ${
+          currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'
+        }`}>
+          {rating.toFixed(1)}
+        </span>
+      </div>
+    )
+  }
+
+
+  if (loading) {
     return (
       <StudentLayout>
-        <div className="flex items-center justify-center min-h-[400px]">
-          <div className="text-center">
-            <div className="inline-flex items-center justify-center w-12 h-12 bg-primary-100 rounded-lg mb-4">
-              <svg className="w-6 h-6 text-primary-600 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-              </svg>
-            </div>
-            <p className="text-gray-600">로딩 중...</p>
+        <div className="flex items-center justify-center min-h-[60vh]">
+          <div className={`text-lg ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
+            로딩 중...
           </div>
         </div>
       </StudentLayout>
     )
   }
 
-  // Mock 학습 진도 데이터
-  const courses = [
-    {
-      id: 1,
-      name: '자료구조론',
-      professor: '김교수',
-      progress: 75,
-      completedLectures: 15,
-      totalLectures: 20,
-      lastActivity: '2025-10-17 14:30',
-    },
-    {
-      id: 2,
-      name: '알고리즘',
-      professor: '이교수',
-      progress: 60,
-      completedLectures: 12,
-      totalLectures: 20,
-      lastActivity: '2025-10-16 10:15',
-    },
-    {
-      id: 3,
-      name: '데이터베이스',
-      professor: '박교수',
-      progress: 85,
-      completedLectures: 17,
-      totalLectures: 20,
-      lastActivity: '2025-10-17 16:45',
-    },
-    {
-      id: 4,
-      name: '운영체제',
-      professor: '최교수',
-      progress: 45,
-      completedLectures: 9,
-      totalLectures: 20,
-      lastActivity: '2025-10-15 09:00',
-    },
-  ]
-
-  // 전체 통계
-  const totalCourses = courses.length
-  const totalProgress = Math.round(courses.reduce((sum, c) => sum + c.progress, 0) / totalCourses)
-  const completedLectures = courses.reduce((sum, c) => sum + c.completedLectures, 0)
-  const totalLectures = courses.reduce((sum, c) => sum + c.totalLectures, 0)
-
-  const getProgressColor = (progress: number) => {
-    if (progress >= 80) return 'success'
-    if (progress >= 60) return 'warning'
-    return 'gray'
-  }
-
   return (
     <StudentLayout>
-      <div className="space-y-6">
-        {/* 헤더 */}
-        <div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">학습 진도</h1>
-          <p className="mt-1 text-sm text-gray-600">각 과목별 학습 현황을 확인하고 학습 계획을 세우세요</p>
+      <div className="max-w-6xl mx-auto space-y-6">
+        {/* Header */}
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <button
+              onClick={() => navigate(-1)}
+              className={`relative group p-2 rounded-lg transition-colors ${
+                currentTheme === 'dark'
+                  ? 'hover:bg-gray-800 text-gray-400 hover:text-white'
+                  : 'hover:bg-gray-100 text-gray-600 hover:text-gray-900'
+              }`}
+            >
+              <ArrowLeft className="w-6 h-6" />
+              <div className={`absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 text-xs rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 ${
+                currentTheme === 'dark'
+                  ? 'bg-gray-900 text-white border border-gray-700'
+                  : 'bg-gray-800 text-white'
+              }`}>
+                뒤로가기
+              </div>
+            </button>
+            <div>
+              <h1 className={`text-3xl font-bold ${
+                currentTheme === 'dark' ? 'text-white' : 'text-gray-900'
+              }`}>
+                나의 성장 일기
+              </h1>
+              <p className={`mt-2 ${
+                currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'
+              }`}>
+                차시별 학습 성과를 확인하고 성장 과정을 분석하세요
+              </p>
+            </div>
+          </div>
         </div>
 
-        {/* 전체 통계 카드 */}
-        <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
+        {/* 전체 통계 */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <Card>
-            <div className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-gray-600">수강 중인 과목</p>
-                  <p className="mt-2 text-3xl font-bold text-gray-900">{totalCourses}</p>
+            <div className="px-4 py-3">
+              <div className="flex items-center justify-between mb-1">
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                  currentTheme === 'dark'
+                    ? 'bg-purple-900/30'
+                    : 'bg-purple-100'
+                }`}>
+                  <TrendingUp className={`w-4 h-4 ${
+                    currentTheme === 'dark' ? 'text-purple-400' : 'text-purple-600'
+                  }`} />
                 </div>
-                <div className="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center">
-                  <svg className="w-6 h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                  </svg>
+                <div className={`text-2xl font-bold ${
+                  currentTheme === 'dark' ? 'text-white' : 'text-gray-900'
+                }`}>
+                  {totalAverage}
                 </div>
               </div>
+              <p className={`text-sm font-medium mb-0.5 ${
+                currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'
+              }`}>
+                누적 평균
+              </p>
+              <StarRating score={totalAverage} />
             </div>
           </Card>
 
           <Card>
-            <div className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-gray-600">평균 진행률</p>
-                  <p className="mt-2 text-3xl font-bold text-gray-900">{totalProgress}%</p>
-                </div>
-                <div className="w-12 h-12 bg-success-100 rounded-lg flex items-center justify-center">
-                  <svg className="w-6 h-6 text-success-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                  </svg>
+            <div className="px-4 py-3">
+              <div className="flex items-center justify-between mb-1">
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                  currentTheme === 'dark'
+                    ? 'bg-blue-900/30'
+                    : 'bg-blue-100'
+                }`}>
+                  <Award className={`w-4 h-4 ${
+                    currentTheme === 'dark' ? 'text-blue-400' : 'text-blue-600'
+                  }`} />
                 </div>
               </div>
+              <p className={`text-sm font-medium mb-0.5 ${
+                currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'
+              }`}>
+                개념 이해도
+              </p>
+              <div className={`text-2xl font-bold mb-0.5 ${
+                currentTheme === 'dark' ? 'text-white' : 'text-gray-900'
+              }`}>
+                {totalConceptUnderstanding}
+              </div>
+              <StarRating score={totalConceptUnderstanding} />
             </div>
           </Card>
 
           <Card>
-            <div className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-gray-600">수강한 강의</p>
-                  <p className="mt-2 text-3xl font-bold text-gray-900">{completedLectures}</p>
+            <div className="px-4 py-3">
+              <div className="flex items-center justify-between mb-1">
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                  currentTheme === 'dark'
+                    ? 'bg-green-900/30'
+                    : 'bg-green-100'
+                }`}>
+                  <Target className={`w-4 h-4 ${
+                    currentTheme === 'dark' ? 'text-green-400' : 'text-green-600'
+                  }`} />
                 </div>
-                <div className="w-12 h-12 bg-warning-100 rounded-lg flex items-center justify-center">
-                  <svg className="w-6 h-6 text-warning-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                </div>
-              </div>
-              <div className="mt-2">
-                <p className="text-xs text-gray-500">전체 {totalLectures}강 중</p>
-              </div>
-            </div>
-          </Card>
-
-          <Card>
-            <div className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-gray-600">학습 효율성</p>
-                  <p className="mt-2 text-3xl font-bold text-gray-900">89%</p>
-                </div>
-                <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
-                  <svg className="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                  </svg>
+                <div className={`text-2xl font-bold ${
+                  currentTheme === 'dark' ? 'text-white' : 'text-gray-900'
+                }`}>
+                  {totalCodeApplication}
                 </div>
               </div>
+              <p className={`text-sm font-medium mb-0.5 ${
+                currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'
+              }`}>
+                코드 활용도
+              </p>
+              <StarRating score={totalCodeApplication} />
             </div>
           </Card>
         </div>
 
-        {/* 과목별 진도 상세 */}
-        <Card>
-          <div className="p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">과목별 학습 진도</h2>
-            <div className="space-y-4">
-              {courses.map((course) => (
-                <div key={course.id} className="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
-                  <div className="flex items-start justify-between mb-3">
-                    <div className="flex-1">
-                      <div className="flex items-center space-x-2">
-                        <p className="text-sm font-medium text-gray-900">{course.name}</p>
-                        <Badge variant={getProgressColor(course.progress)}>
-                          {course.progress}%
-                        </Badge>
+        {/* 차시별 상세 리스트 (완료된 차시 모두 표시) */}
+        <div className="space-y-2">
+          {lessons.filter(lesson => lesson.status === 'completed').map((lesson) => (
+            <div
+              key={lesson.id}
+              className={`rounded-lg p-3 transition-all duration-200 ${
+                currentTheme === 'dark'
+                  ? 'bg-gray-700 border-2 border-transparent shadow-sm'
+                  : 'bg-white border-2 border-gray-200 shadow-sm'
+              }`}
+            >
+              <div className="flex items-start gap-3">
+                {/* 상태 아이콘 */}
+                <div className="flex-shrink-0 mt-0.5">
+                  <CheckCircle2 className="w-5 h-5 text-green-500" />
+                </div>
+
+                {/* 차시 정보 */}
+                <div className="flex-1 min-w-0">
+                  {/* 첫 번째 줄: N차시 + 완료일 */}
+                  <div className="flex items-center justify-between gap-2 mb-1">
+                    <span className={`text-xs font-medium ${
+                      currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+                    }`}>
+                      {lesson.lessonWeek}차시
+                    </span>
+
+                    <span className={`text-xs ${
+                      currentTheme === 'dark' ? 'text-gray-500' : 'text-gray-500'
+                    }`}>
+                      {lesson.completedAt}
+                    </span>
+                  </div>
+
+                  {/* 두 번째 줄: 차시 제목 + 성적 + 제출 상태 */}
+                  <div className="flex items-center justify-between gap-2">
+                    <p className={`text-sm font-medium truncate ${
+                      currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'
+                    }`}>
+                      {lesson.lessonTitle}
+                    </p>
+
+                    <div className="flex items-center gap-3">
+                      {lesson.attendance === 'completed' && (
+                        <div className="flex items-center gap-3 text-xs">
+                          <div className="flex items-center gap-1">
+                            <span className={`${
+                              currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'
+                            }`}>
+                              개념 이해도
+                            </span>
+                            <Star className="w-3 h-3 text-yellow-400 fill-yellow-400" />
+                            <span className={`font-medium ${
+                              currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'
+                            }`}>
+                              {(lesson.conceptUnderstanding / 20).toFixed(1)}
+                            </span>
+                          </div>
+                          <span className={`${
+                            currentTheme === 'dark' ? 'text-gray-600' : 'text-gray-400'
+                          }`}>
+                            |
+                          </span>
+                          <div className="flex items-center gap-1">
+                            <span className={`${
+                              currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'
+                            }`}>
+                              코드 활용도
+                            </span>
+                            <Star className="w-3 h-3 text-yellow-400 fill-yellow-400" />
+                            <span className={`font-medium ${
+                              currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'
+                            }`}>
+                              {(lesson.codeApplication / 20).toFixed(1)}
+                            </span>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* 제출 상태 뱃지 */}
+                      <div className="flex-shrink-0">
+                        {lesson.attendance === 'completed' ? (
+                          <span className={`px-2 py-0.5 text-xs font-medium rounded ${
+                            currentTheme === 'dark'
+                              ? 'bg-green-900/30 text-green-400'
+                              : 'bg-green-100 text-green-700'
+                          }`}>
+                            완료
+                          </span>
+                        ) : lesson.attendance === 'absent' ? (
+                          <span className={`px-2 py-0.5 text-xs font-medium rounded ${
+                            currentTheme === 'dark'
+                              ? 'bg-gray-700 text-gray-400'
+                              : 'bg-gray-200 text-gray-600'
+                          }`}>
+                            불참
+                          </span>
+                        ) : lesson.attendance === 'incomplete' ? (
+                          <span className={`px-2 py-0.5 text-xs font-medium rounded ${
+                            currentTheme === 'dark'
+                              ? 'bg-yellow-900/30 text-yellow-400'
+                              : 'bg-yellow-100 text-yellow-700'
+                          }`}>
+                            미완료
+                          </span>
+                        ) : null}
                       </div>
-                      <p className="text-xs text-gray-500 mt-1">{course.professor} 교수</p>
-                    </div>
-                    <div className="text-right">
-                      <p className="text-sm font-semibold text-gray-900">{course.completedLectures}/{course.totalLectures}</p>
-                      <p className="text-xs text-gray-500">강의 수강</p>
                     </div>
                   </div>
-
-                  {/* 진행바 */}
-                  <div className="mb-3">
-                    <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
-                      <div
-                        className="h-full bg-primary-600 rounded-full transition-all duration-300"
-                        style={{ width: `${course.progress}%` }}
-                      />
-                    </div>
-                  </div>
-
-                  {/* 최근 활동 */}
-                  <div className="flex items-center justify-between">
-                    <div className="text-xs text-gray-500">
-                      마지막 활동: {course.lastActivity}
-                    </div>
-                    <button className="text-sm text-primary-600 hover:text-primary-700 font-medium">
-                      상세 보기
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </Card>
-
-        {/* 학습 권장사항 */}
-        <Card>
-          <div className="p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">학습 권장사항</h2>
-            <div className="space-y-3">
-              <div className="flex items-start space-x-3">
-                <div className="flex-shrink-0 w-6 h-6 bg-warning-100 rounded-full flex items-center justify-center mt-0.5">
-                  <svg className="w-4 h-4 text-warning-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4v.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                </div>
-                <div className="flex-1">
-                  <p className="text-sm font-medium text-gray-900">운영체제 과목 진도 가속화 권장</p>
-                  <p className="text-xs text-gray-500 mt-1">현재 45% 진행률로 다른 과목에 비해 뒤쳐지고 있습니다. 이번 주에 최소 3강 이상 수강을 권장합니다.</p>
-                </div>
-              </div>
-              <div className="flex items-start space-x-3">
-                <div className="flex-shrink-0 w-6 h-6 bg-success-100 rounded-full flex items-center justify-center mt-0.5">
-                  <svg className="w-4 h-4 text-success-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                </div>
-                <div className="flex-1">
-                  <p className="text-sm font-medium text-gray-900">데이터베이스 과목 순조로운 진행</p>
-                  <p className="text-xs text-gray-500 mt-1">85%의 진행률로 잘 따라가고 있습니다. 현재 속도를 유지하면 다음 주 말 완료 가능합니다.</p>
-                </div>
-              </div>
-              <div className="flex items-start space-x-3">
-                <div className="flex-shrink-0 w-6 h-6 bg-primary-100 rounded-full flex items-center justify-center mt-0.5">
-                  <svg className="w-4 h-4 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                  </svg>
-                </div>
-                <div className="flex-1">
-                  <p className="text-sm font-medium text-gray-900">균형잡힌 학습 계획 유지</p>
-                  <p className="text-xs text-gray-500 mt-1">전체 평균 진행률 66%로 좋은 진행 속도를 유지하고 있습니다. 계속 화이팅!</p>
                 </div>
               </div>
             </div>
-          </div>
-        </Card>
+          ))}
+        </div>
       </div>
     </StudentLayout>
   )
