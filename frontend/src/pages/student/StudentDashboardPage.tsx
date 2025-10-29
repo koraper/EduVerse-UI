@@ -29,8 +29,6 @@ const StudentDashboardPage = () => {
   const location = useLocation()
   const { user, isLoading: authLoading } = useAuth()
 
-  // 상태 관리
-  const [viewMode, setViewMode] = useState<'card' | 'list'>('card')
   const [inviteModalOpen, setInviteModalOpen] = useState(false)
   const [inviteCode, setInviteCode] = useState('')
   const [inviteError, setInviteError] = useState('')
@@ -308,35 +306,6 @@ const StudentDashboardPage = () => {
                 </p>
               </div>
 
-              {/* 뷰 전환 버튼 */}
-              <div className="flex items-center gap-2">
-              <button
-                onClick={() => setViewMode('card')}
-                className={`p-2 rounded-lg transition-colors ${
-                  viewMode === 'card'
-                    ? 'bg-primary-100 text-primary-600'
-                    : 'text-gray-400 hover:bg-gray-100'
-                }`}
-                title="카드 보기"
-              >
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M3 4a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H4a1 1 0 01-1-1V4zm8 0a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1V4zm8 0a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1V4z" />
-                </svg>
-              </button>
-              <button
-                onClick={() => setViewMode('list')}
-                className={`p-2 rounded-lg transition-colors ${
-                  viewMode === 'list'
-                    ? 'bg-primary-100 text-primary-600'
-                    : 'text-gray-400 hover:bg-gray-100'
-                }`}
-                title="목록 보기"
-              >
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zm0 6a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1v-2zm0 6a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1v-2z" />
-                </svg>
-              </button>
-            </div>
             </div>
           </div>
 
@@ -375,188 +344,109 @@ const StudentDashboardPage = () => {
           </div>
 
           {/* 카드 뷰 */}
-          {viewMode === 'card' && (
-            <>
-              {filteredCourses.length > 0 ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {filteredCourses.map((course) => (
-                    <Card key={course.id}>
-                      <div className="p-6 flex flex-col h-full">
-                        {/* 1. 수업명 */}
-                        <div className="mb-2">
-                          <h3 className="text-base font-semibold text-gray-900">{course.name}</h3>
-                        </div>
+          {filteredCourses.length > 0 ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {filteredCourses.map((course) => (
+                <Card key={course.id}>
+                  <div className="p-6 flex flex-col h-full">
+                    {/* 1. 수업명 */}
+                    <div className="mb-2">
+                      <h3 className="text-base font-semibold text-gray-900">{course.name}</h3>
+                    </div>
 
-                        {/* 2. 담당교수명 */}
-                        <div className="mb-3">
-                          <p className="text-sm text-gray-600">{course.professor}</p>
-                        </div>
+                    {/* 2. 담당교수명 */}
+                    <div className="mb-3">
+                      <p className="text-sm text-gray-600">{course.professor}</p>
+                    </div>
 
-                        {/* 3. 학과명 */}
-                        <div className="mb-2">
-                          <Badge variant="secondary">{course.department}</Badge>
-                        </div>
+                    {/* 3. 학과명 */}
+                    <div className="mb-2">
+                      <Badge variant="secondary">{course.department}</Badge>
+                    </div>
 
-                        {/* 4. 학기/반정보 (2025년 1학기 A반) */}
-                        <div className="mb-4 pb-4 border-b border-gray-200">
-                          <p className="text-xs text-gray-500">{course.semester} {course.section}</p>
-                        </div>
+                    {/* 4. 학기/반정보 (2025년 1학기 A반) */}
+                    <div className="mb-4 pb-4 border-b border-gray-200">
+                      <p className="text-xs text-gray-500">{course.semester} {course.section}</p>
+                    </div>
 
-                        {/* 5. 수업 진행율: progress bar chart (8/12차시), chart 위에 % 표시 */}
-                        <div className="mb-4">
-                          <div className="flex items-center justify-between mb-1">
-                            <span className="text-xs font-medium text-gray-600">수업 진행율</span>
-                            <span className="text-xs font-semibold text-primary-600">{Math.round((course.completedLessons / course.totalLessons) * 100)}%</span>
-                          </div>
-                          <div className="text-xs text-gray-500 mb-2">{course.completedLessons}/{course.totalLessons}차시</div>
-                          <div className="w-full bg-gray-200 rounded-full h-2">
-                            <div
-                              className="bg-primary-600 h-2 rounded-full transition-all duration-300"
-                              style={{ width: `${(course.completedLessons / course.totalLessons) * 100}%` }}
-                            />
-                          </div>
-                        </div>
-
-                        {/* 6. 수업 참여율: progress bar chart (6/12차시), chart 위에 % 표시 */}
-                        <div className="mb-4">
-                          <div className="flex items-center justify-between mb-1">
-                            <span className="text-xs font-medium text-gray-600">수업 참여율</span>
-                            <span className="text-xs font-semibold text-blue-600">{course.participationRate}%</span>
-                          </div>
-                          <div className="text-xs text-gray-500 mb-2">{Math.round((course.participationRate / 100) * course.totalLessons)}/{course.totalLessons}차시</div>
-                          <div className="w-full bg-gray-200 rounded-full h-2">
-                            <div
-                              className="bg-blue-600 h-2 rounded-full transition-all duration-300"
-                              style={{ width: `${course.participationRate}%` }}
-                            />
-                          </div>
-                        </div>
-
-                        {/* 7. 과제 성공율: progress bar chart (15/18개), chart 위에 % 표시 */}
-                        <div className="mb-6">
-                          <div className="flex items-center justify-between mb-1">
-                            <span className="text-xs font-medium text-gray-600">과제 성공율</span>
-                            <span className="text-xs font-semibold text-emerald-600">{course.assignmentSuccessRate}%</span>
-                          </div>
-                          <div className="text-xs text-gray-500 mb-2">{Math.round((course.assignmentSuccessRate / 100) * 18)}/18개</div>
-                          <div className="w-full bg-gray-200 rounded-full h-2">
-                            <div
-                              className="bg-emerald-600 h-2 rounded-full transition-all duration-300"
-                              style={{ width: `${course.assignmentSuccessRate}%` }}
-                            />
-                          </div>
-                        </div>
-
-                        {/* 8. 학습하기 버튼 */}
-                        <button className="w-full mt-auto px-4 py-2.5 bg-primary-600 text-white rounded-lg hover:bg-primary-700 active:bg-primary-800 font-medium text-sm transition-colors">
-                          학습하기
-                        </button>
+                    {/* 5. 수업 진행율: progress bar chart (8/12차시), chart 위에 % 표시 */}
+                    <div className="mb-4">
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="text-xs font-medium text-gray-600">수업 진행율</span>
+                        <span className="text-xs font-semibold text-primary-600">{Math.round((course.completedLessons / course.totalLessons) * 100)}%</span>
                       </div>
-                    </Card>
-                  ))}
-                </div>
-              ) : (
-                <Card>
-                  <div className="p-12 text-center">
-                    <div className="mb-6 flex justify-center">
-                      <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center">
-                        <svg className="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                        </svg>
+                      <div className="text-xs text-gray-500 mb-2">{course.completedLessons}/{course.totalLessons}차시</div>
+                      <div className="w-full bg-gray-200 rounded-full h-2">
+                        <div
+                          className="bg-primary-600 h-2 rounded-full transition-all duration-300"
+                          style={{ width: `${(course.completedLessons / course.totalLessons) * 100}%` }}
+                        />
                       </div>
                     </div>
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">해당하는 수업이 없습니다</h3>
-                    <p className="text-sm text-gray-600 mb-6">
-                      선택한 필터에 해당하는 수업이 없습니다. 다른 필터를 선택해보세요.
-                    </p>
-                    <button
-                      onClick={() => setSelectedStatuses(new Set(['ongoing']))}
-                      className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
-                    >
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                      </svg>
-                      필터 초기화
+
+                    {/* 6. 수업 참여율: progress bar chart (6/12차시), chart 위에 % 표시 */}
+                    <div className="mb-4">
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="text-xs font-medium text-gray-600">수업 참여율</span>
+                        <span className="text-xs font-semibold text-blue-600">{course.participationRate}%</span>
+                      </div>
+                      <div className="text-xs text-gray-500 mb-2">{Math.round((course.participationRate / 100) * course.totalLessons)}/{course.totalLessons}차시</div>
+                      <div className="w-full bg-gray-200 rounded-full h-2">
+                        <div
+                          className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+                          style={{ width: `${course.participationRate}%` }}
+                        />
+                      </div>
+                    </div>
+
+                    {/* 7. 과제 성공율: progress bar chart (15/18개), chart 위에 % 표시 */}
+                    <div className="mb-6">
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="text-xs font-medium text-gray-600">과제 성공율</span>
+                        <span className="text-xs font-semibold text-emerald-600">{course.assignmentSuccessRate}%</span>
+                      </div>
+                      <div className="text-xs text-gray-500 mb-2">{Math.round((course.assignmentSuccessRate / 100) * 18)}/18개</div>
+                      <div className="w-full bg-gray-200 rounded-full h-2">
+                        <div
+                          className="bg-emerald-600 h-2 rounded-full transition-all duration-300"
+                          style={{ width: `${course.assignmentSuccessRate}%` }}
+                        />
+                      </div>
+                    </div>
+
+                    {/* 8. 학습하기 버튼 */}
+                    <button className="w-full mt-auto px-4 py-2.5 bg-primary-600 text-white rounded-lg hover:bg-primary-700 active:bg-primary-800 font-medium text-sm transition-colors">
+                      학습하기
                     </button>
                   </div>
                 </Card>
-              )}
-            </>
-          )}
-
-          {/* 목록 뷰 */}
-          {viewMode === 'list' && (
-            <>
-              {filteredCourses.length > 0 ? (
-                <div className="space-y-3">
-                  {filteredCourses.map((course) => (
-                    <Card key={course.id}>
-                      <div className="p-4">
-                        <div className="flex items-center justify-between">
-                          <div className="flex-1">
-                            <div className="flex items-center gap-3">
-                              <div className="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                                <svg className="w-6 h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                                </svg>
-                              </div>
-                              <div className="flex-1">
-                                <div className="flex items-center gap-2">
-                                  <h3 className="font-semibold text-gray-900">{course.name}</h3>
-                                  <Badge variant="secondary">{course.code}</Badge>
-                                </div>
-                                <p className="text-xs text-gray-500 mt-1">{course.professor}</p>
-                              </div>
-                            </div>
-                          </div>
-
-                          <div className="flex items-center gap-6 ml-4">
-                            <div className="text-right">
-                              <p className="text-xs text-gray-500">학습 진도</p>
-                              <p className="font-semibold text-gray-900">{course.progress}%</p>
-                            </div>
-                            <div className="text-right">
-                              <p className="text-xs text-gray-500">수강생</p>
-                              <p className="font-semibold text-gray-900">{course.students}명</p>
-                            </div>
-                            <button className="p-2 text-gray-400 hover:text-gray-600">
-                              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                              </svg>
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    </Card>
-                  ))}
-                </div>
-              ) : (
-                <Card>
-                  <div className="p-12 text-center">
-                    <div className="mb-6 flex justify-center">
-                      <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center">
-                        <svg className="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                        </svg>
-                      </div>
-                    </div>
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">해당하는 수업이 없습니다</h3>
-                    <p className="text-sm text-gray-600 mb-6">
-                      선택한 필터에 해당하는 수업이 없습니다. 다른 필터를 선택해보세요.
-                    </p>
-                    <button
-                      onClick={() => setSelectedStatuses(new Set(['ongoing']))}
-                      className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
-                    >
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                      </svg>
-                      필터 초기화
-                    </button>
+              ))}
+            </div>
+          ) : (
+            <Card>
+              <div className="p-12 text-center">
+                <div className="mb-6 flex justify-center">
+                  <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center">
+                    <svg className="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                    </svg>
                   </div>
-                </Card>
-              )}
-            </>
+                </div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">해당하는 수업이 없습니다</h3>
+                <p className="text-sm text-gray-600 mb-6">
+                  선택한 필터에 해당하는 수업이 없습니다. 다른 필터를 선택해보세요.
+                </p>
+                <button
+                  onClick={() => setSelectedStatuses(new Set(['ongoing']))}
+                  className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                  </svg>
+                  필터 초기화
+                </button>
+              </div>
+            </Card>
           )}
         </div>
 
