@@ -349,9 +349,18 @@ const StudentDashboardPage = () => {
               {filteredCourses.map((course) => (
                 <Card key={course.id} hoverable>
                   <div className="p-6 flex flex-col h-full">
-                    {/* 1. 수업명 */}
-                    <div className="mb-2">
-                      <h3 className="text-base font-semibold text-gray-900">{course.name}</h3>
+                    {/* 수업명과 상태 배지 */}
+                    <div className="mb-2 flex items-start justify-between gap-2">
+                      <h3 className="text-base font-semibold text-gray-900 flex-1">{course.name}</h3>
+                      <Badge variant={
+                        course.status === 'pending' ? 'secondary' :
+                        course.status === 'ongoing' ? 'primary' :
+                        'success'
+                      }>
+                        {course.status === 'pending' ? '예정' :
+                         course.status === 'ongoing' ? '진행 중' :
+                         '완료'}
+                      </Badge>
                     </div>
 
                     {/* 2. 담당교수명 */}
