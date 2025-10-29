@@ -397,13 +397,13 @@ const StudentDashboardPage = () => {
 
                     {/* 2. 담당교수명 & 3. 학과명배지 */}
                     <div className="mb-3 flex items-center justify-between gap-2">
-                      <p className="text-sm text-gray-600">{course.professor}</p>
+                      <p className={`text-sm ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>{course.professor}</p>
                       <Badge variant="secondary" className="flex-shrink-0">{course.department}</Badge>
                     </div>
 
                     {/* 4. 학기 - 반 정보 */}
-                    <div className="mb-4 pb-4 border-b border-gray-200">
-                      <p className="text-xs text-gray-500">{course.semester} - {course.section}</p>
+                    <div className={`mb-4 pb-4 border-b ${currentTheme === 'dark' ? 'border-gray-700' : 'border-gray-200'}`}>
+                      <p className={`text-xs ${currentTheme === 'dark' ? 'text-gray-500' : 'text-gray-500'}`}>{course.semester} - {course.section}</p>
                     </div>
 
                     {/* 현재 진행 중인 주차 정보 */}
@@ -450,7 +450,7 @@ const StudentDashboardPage = () => {
                     {/* 5. 수업 진행률: progress bar chart (8/12차시), chart 위에 % 표시 */}
                     <div className="mb-4">
                       <div className="flex items-center justify-between mb-1">
-                        <span className="text-xs font-medium text-gray-600">수업 진행률</span>
+                        <span className={`text-xs font-medium ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>수업 진행률</span>
                         <span className="text-xs font-semibold text-primary-600">{Math.round((course.completedLessons / course.totalLessons) * 100)}%</span>
                       </div>
                       <div className={`text-xs mb-2 ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>{course.totalLessons}차시 중 {course.completedLessons}차시까지 진행</div>
@@ -465,7 +465,7 @@ const StudentDashboardPage = () => {
                     {/* 6. 수업 참여율: progress bar chart (6/12차시), chart 위에 % 표시 */}
                     <div className="mb-4">
                       <div className="flex items-center justify-between mb-1">
-                        <span className="text-xs font-medium text-gray-600">수업 참여율</span>
+                        <span className={`text-xs font-medium ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>수업 참여율</span>
                         <span className="text-xs font-semibold text-blue-600">{course.participationRate}%</span>
                       </div>
                       <div className={`text-xs mb-2 ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>수업 완료된 {course.completedLessons}차시 중 {Math.round((course.participationRate / 100) * course.completedLessons)}차시 참여</div>
@@ -481,8 +481,8 @@ const StudentDashboardPage = () => {
                     <div className="mb-6">
                       <div className="flex items-center justify-between mb-1">
                         <div className="flex items-center gap-1">
-                          <span className="text-xs font-medium text-gray-600">과제 성공률</span>
-                          <span className="text-xs text-gray-500">(참여한 수업 한정)</span>
+                          <span className={`text-xs font-medium ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>과제 성공률</span>
+                          <span className={`text-xs ${currentTheme === 'dark' ? 'text-gray-500' : 'text-gray-500'}`}>(참여한 수업 한정)</span>
                         </div>
                         <span className="text-xs font-semibold text-emerald-600">{course.assignmentSuccessRate}%</span>
                       </div>
