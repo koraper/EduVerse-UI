@@ -111,8 +111,6 @@ const StudentDashboardPage = () => {
         totalLessons: 16,
         participationRate: 94,
         assignmentSuccessRate: 94,
-        currentWeek: 16,
-        currentLessonTitle: '프로젝트 최종 발표',
       },
     ],
     []
