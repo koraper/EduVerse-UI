@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useTheme } from '@/contexts/ThemeContext'
+import { Sun, Moon } from 'lucide-react'
 import { Button } from '@/components/common'
 
 const LandingHeader = () => {
@@ -118,13 +119,9 @@ const LandingHeader = () => {
                 title="다크/라이트 모드 전환"
               >
                 {currentTheme === 'dark' ? (
-                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
-                  </svg>
+                  <Sun className="w-5 h-5" />
                 ) : (
-                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 2a1 1 0 011 1v2a1 1 0 11-2 0V3a1 1 0 011-1zm4.293 1.707a1 1 0 011.414 0l1.414 1.414a1 1 0 11-1.414 1.414l-1.414-1.414a1 1 0 010-1.414zm2 4.586a1 1 0 111.414-1.414l1.414 1.414a1 1 0 11-1.414 1.414l-1.414-1.414zM16 11a1 1 0 11-2 0 1 1 0 012 0zm-7 4a1 1 0 011 1v2a1 1 0 11-2 0v-2a1 1 0 011-1zm-4.293-1.707a1 1 0 011.414-1.414l1.414 1.414a1 1 0 11-1.414 1.414l-1.414-1.414zm2-4.586a1 1 0 111.414 1.414L5.414 9.414a1 1 0 11-1.414-1.414l1.414-1.414zM4 11a1 1 0 11-2 0 1 1 0 012 0zm7-7a1 1 0 011 1v2a1 1 0 11-2 0V3a1 1 0 011-1z" clipRule="evenodd" />
-                  </svg>
+                  <Moon className="w-5 h-5" />
                 )}
               </button>
             )}
