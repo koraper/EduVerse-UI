@@ -311,31 +311,31 @@ const StudentDashboardPage = () => {
               onClick={() => toggleStatus('pending')}
               className={`px-4 py-2 rounded-lg font-medium text-sm transition-colors ${
                 selectedStatuses.has('pending')
-                  ? 'bg-blue-100 text-blue-700 border border-blue-300'
-                  : 'bg-gray-100 text-gray-600 border border-gray-300 hover:bg-gray-200'
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
               }`}
             >
-              📅 예정
+              예정
             </button>
             <button
               onClick={() => toggleStatus('ongoing')}
               className={`px-4 py-2 rounded-lg font-medium text-sm transition-colors ${
                 selectedStatuses.has('ongoing')
-                  ? 'bg-yellow-100 text-yellow-700 border border-yellow-300'
-                  : 'bg-gray-100 text-gray-600 border border-gray-300 hover:bg-gray-200'
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
               }`}
             >
-              ▶️ 진행 중
+              진행 중
             </button>
             <button
               onClick={() => toggleStatus('completed')}
               className={`px-4 py-2 rounded-lg font-medium text-sm transition-colors ${
                 selectedStatuses.has('completed')
-                  ? 'bg-green-100 text-green-700 border border-green-300'
-                  : 'bg-gray-100 text-gray-600 border border-gray-300 hover:bg-gray-200'
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
               }`}
             >
-              ✅ 완료
+              완료
             </button>
           </div>
 
