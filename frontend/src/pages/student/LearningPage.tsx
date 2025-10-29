@@ -61,6 +61,16 @@ const LearningPage = () => {
     ]
   })
 
+  // Mock 수업 정보 (추후 API로 대체)
+  const courseInfo = {
+    professor: '김철수 교수',
+    department: '컴퓨터공학과',
+    language: 'Python',
+    semester: '2025-1학기',
+    participationRate: 95,
+    assignmentSuccessRate: 88
+  }
+
   const currentLesson = courseData.lessons.find(l => l.id === currentLessonId)
   const progress = Math.round((courseData.completedLessons / courseData.totalLessons) * 100)
 
@@ -97,6 +107,7 @@ const LearningPage = () => {
             onLessonSelect={handleLessonChange}
             totalLessons={courseData.totalLessons}
             completedLessons={courseData.completedLessons}
+            courseInfo={courseInfo}
           />
         )}
 
