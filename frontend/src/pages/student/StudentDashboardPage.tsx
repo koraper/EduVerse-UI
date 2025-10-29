@@ -349,33 +349,29 @@ const StudentDashboardPage = () => {
               {filteredCourses.map((course) => (
                 <Card key={course.id} hoverable>
                   <div className="p-6 flex flex-col h-full">
-                    {/* 수업명과 상태 배지 */}
-                    <div className="mb-2 flex items-start justify-between gap-2">
+                    {/* 1. 수업명과 상태 배지 */}
+                    <div className="mb-3 flex items-start justify-between gap-3">
                       <h3 className="text-base font-semibold text-gray-900 flex-1">{course.name}</h3>
                       <Badge variant={
                         course.status === 'pending' ? 'secondary' :
                         course.status === 'ongoing' ? 'primary' :
                         'success'
-                      }>
+                      } className="flex-shrink-0">
                         {course.status === 'pending' ? '예정' :
                          course.status === 'ongoing' ? '진행 중' :
                          '완료'}
                       </Badge>
                     </div>
 
-                    {/* 2. 담당교수명 */}
-                    <div className="mb-3">
+                    {/* 2. 담당교수명 & 3. 학과명배지 */}
+                    <div className="mb-3 flex items-center justify-between gap-2">
                       <p className="text-sm text-gray-600">{course.professor}</p>
+                      <Badge variant="secondary" className="flex-shrink-0">{course.department}</Badge>
                     </div>
 
-                    {/* 3. 학과명 */}
-                    <div className="mb-2">
-                      <Badge variant="secondary">{course.department}</Badge>
-                    </div>
-
-                    {/* 4. 학기/반정보 (2025년 1학기 A반) */}
+                    {/* 4. 학기 - 반 정보 */}
                     <div className="mb-4 pb-4 border-b border-gray-200">
-                      <p className="text-xs text-gray-500">{course.semester} {course.section}</p>
+                      <p className="text-xs text-gray-500">{course.semester} - {course.section}</p>
                     </div>
 
                     {/* 5. 수업 진행율: progress bar chart (8/12차시), chart 위에 % 표시 */}
