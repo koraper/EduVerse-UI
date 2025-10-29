@@ -125,6 +125,9 @@ const LearningPage = () => {
             totalLessons={courseData.totalLessons}
             completedLessons={courseData.completedLessons}
             courseInfo={courseInfo}
+            averageScore={85}
+            conceptUnderstanding={90}
+            codeApplication={75}
           />
         )}
 
