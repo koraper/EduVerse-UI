@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { useTheme } from '@/contexts/ThemeContext'
 import LearningHeader from '@/components/learning/LearningHeader'
 import CurriculumSidebar from '@/components/learning/CurriculumSidebar'
+import LessonList from '@/components/learning/LessonList'
 import LearningContent_Slider from '@/components/learning/LearningContent_Slider'
 import LearningContent_Card from '@/components/learning/LearningContent_Card'
 import LearningContent_Toggle from '@/components/learning/LearningContent_Toggle'
@@ -33,7 +34,12 @@ const LearningPage = () => {
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(true)
   const [currentLessonId, setCurrentLessonId] = useState<number>(1)
-  const [difficulty, setDifficulty] = useState<'basic' | 'intermediate' | 'advanced'>('basic')
+
+  // localStorage에서 난이도 설정 불러오기
+  const [difficulty, setDifficulty] = useState<'basic' | 'intermediate' | 'advanced'>(() => {
+    const saved = localStorage.getItem('learning_difficulty')
+    return (saved as 'basic' | 'intermediate' | 'advanced') || 'basic'
+  })
 
   // 난이도 UI 방식 선택: 'slider' | 'card' | 'toggle'
   // 아래 값을 변경하여 3가지 방식을 테스트할 수 있습니다
@@ -50,7 +56,7 @@ const LearningPage = () => {
     completedLessons: 3,
     lessons: [
       { id: 1, title: '변수와 자료형', week: 1, status: 'completed', completedAt: '2025-10-20', classDate: '10/20', attendance: 'completed', qnaStatus: 'none' },
-      { id: 2, title: '조건문과 반복문', week: 2, status: 'completed', completedAt: '2025-10-22', classDate: '10/22', attendance: 'completed', qnaStatus: 'question' },
+      { id: 2, title: '조건문과 반복문', week: 2, status: 'completed', completedAt: '2025-10-22', classDate: '10/22', attendance: 'absent', qnaStatus: 'question' },
       { id: 3, title: '함수의 이해', week: 3, status: 'completed', completedAt: '2025-10-25', classDate: '10/25', attendance: 'incomplete', qnaStatus: 'answered' },
       { id: 4, title: '리스트와 튜플', week: 4, status: 'in_progress', classDate: '10/27', attendance: 'incomplete', qnaStatus: 'question' },
       { id: 5, title: '딕셔너리와 집합', week: 5, status: 'upcoming', classDate: '10/29', qnaStatus: 'none' },
@@ -79,6 +85,11 @@ const LearningPage = () => {
 
   const handleLessonChange = (lessonId: number) => {
     setCurrentLessonId(lessonId)
+  }
+
+  const handleDifficultyChange = (newDifficulty: 'basic' | 'intermediate' | 'advanced') => {
+    setDifficulty(newDifficulty)
+    localStorage.setItem('learning_difficulty', newDifficulty)
   }
 
   const handleGoBack = () => {
@@ -111,8 +122,6 @@ const LearningPage = () => {
         {isSidebarOpen && (
           <CurriculumSidebar
             lessons={courseData.lessons}
-            currentLessonId={currentLessonId}
-            onLessonSelect={handleLessonChange}
             totalLessons={courseData.totalLessons}
             completedLessons={courseData.completedLessons}
             courseInfo={courseInfo}
@@ -134,7 +143,7 @@ const LearningPage = () => {
                 lessonTitle={currentLesson?.title || ''}
                 lessonWeek={currentLesson?.week || 0}
                 difficulty={difficulty}
-                onDifficultyChange={setDifficulty}
+                onDifficultyChange={handleDifficultyChange}
                 lessonStatus={currentLesson?.status}
               />
             )}
@@ -143,7 +152,7 @@ const LearningPage = () => {
                 lessonTitle={currentLesson?.title || ''}
                 lessonWeek={currentLesson?.week || 0}
                 difficulty={difficulty}
-                onDifficultyChange={setDifficulty}
+                onDifficultyChange={handleDifficultyChange}
               />
             )}
             {uiStyle === 'toggle' && (
@@ -151,11 +160,18 @@ const LearningPage = () => {
                 lessonTitle={currentLesson?.title || ''}
                 lessonWeek={currentLesson?.week || 0}
                 difficulty={difficulty}
-                onDifficultyChange={setDifficulty}
+                onDifficultyChange={handleDifficultyChange}
               />
             )}
           </div>
         </main>
+
+        {/* Right Sidebar - 차시 목록 */}
+        <LessonList
+          lessons={courseData.lessons}
+          currentLessonId={currentLessonId}
+          onLessonSelect={handleLessonChange}
+        />
       </div>
     </div>
   )

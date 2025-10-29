@@ -180,7 +180,11 @@ const LearningContent_Slider = ({
         <div className="flex justify-center pt-6">
           <button
             className={`px-8 py-3 rounded-lg font-semibold text-lg transition-all duration-200 ${
-              currentTheme === 'dark'
+              lessonStatus === 'in_progress'
+                ? currentTheme === 'dark'
+                  ? 'bg-red-600 hover:bg-red-700 text-white shadow-lg hover:shadow-xl animate-pulse'
+                  : 'bg-red-500 hover:bg-red-600 text-white shadow-lg hover:shadow-xl animate-pulse'
+                : currentTheme === 'dark'
                 ? 'bg-primary-600 hover:bg-primary-700 text-white shadow-lg hover:shadow-xl'
                 : 'bg-primary-500 hover:bg-primary-600 text-white shadow-lg hover:shadow-xl'
             }`}

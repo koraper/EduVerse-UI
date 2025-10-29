@@ -40,6 +40,8 @@ const QnaPage = () => {
   // URL 파라미터에서 현재 필터 값 가져오기 (상태 없이 직접 계산)
   const filterParam = searchParams.get('filter')
   const statusFilter = (filterParam === 'pending' || filterParam === 'answered') ? filterParam : 'all'
+  const lessonIdParam = searchParams.get('lesson')
+  const lessonIdFilter = lessonIdParam ? parseInt(lessonIdParam, 10) : null
 
   // Auth check
   useEffect(() => {
@@ -184,6 +186,11 @@ const QnaPage = () => {
       filtered = filtered.filter(q => q.status === statusFilter)
     }
 
+    // Lesson filter
+    if (lessonIdFilter !== null) {
+      filtered = filtered.filter(q => q.lessonId === lessonIdFilter)
+    }
+
     // Search filter
     if (searchTerm.trim()) {
       const term = searchTerm.toLowerCase()
@@ -195,7 +202,7 @@ const QnaPage = () => {
     }
 
     return filtered
-  }, [questions, statusFilter, searchTerm])
+  }, [questions, statusFilter, lessonIdFilter, searchTerm])
 
   // 필터 변경 핸들러 - URL만 업데이트 (상태는 useEffect에서 자동 동기화)
   const handleFilterChange = (filter: 'all' | 'pending' | 'answered') => {

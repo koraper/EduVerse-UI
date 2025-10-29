@@ -1,9 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useTheme } from '@/contexts/ThemeContext'
-import { CheckCircle2, Circle, PlayCircle, Clock, Users, Award, GraduationCap, Calendar, Code, ChevronDown, ChevronUp, ArrowUpDown, MessageCircle, MessageSquare, Activity, BarChart3 } from 'lucide-react'
-
-type LessonFilter = 'all' | 'in_progress' | 'absent' | 'completed'
+import { Users, GraduationCap, Calendar, Code, ChevronDown, ChevronUp, MessageCircle, MessageSquare, Activity, BarChart3, TrendingUp, Star, StarHalf } from 'lucide-react'
 
 interface Lesson {
   id: number
@@ -27,137 +25,72 @@ interface CourseInfo {
 
 interface CurriculumSidebarProps {
   lessons: Lesson[]
-  currentLessonId: number
-  onLessonSelect: (lessonId: number) => void
   totalLessons: number
   completedLessons: number
   courseInfo?: CourseInfo
+  averageScore?: number // 나의 성장 기록에 표시할 평균 점수 (예: 85)
+  conceptUnderstanding?: number // 나의 성장 기록에 표시할 개념 이해도 (예: 90)
+  codeApplication?: number // 나의 성장 기록에 표시할 코드 활용도 (예: 75)
+  totalLearningHours?: number // 나의 성장 기록에 표시할 총 학습 시간 (예: 24)
 }
 
 const CurriculumSidebar = ({
   lessons,
-  currentLessonId,
-  onLessonSelect,
   totalLessons,
   completedLessons,
-  courseInfo
+  courseInfo,
+  averageScore,
+  conceptUnderstanding, // 새롭게 추가된 prop
+  codeApplication,      // 새롭게 추가된 prop
+  totalLearningHours // 기존 prop
 }: CurriculumSidebarProps) => {
   const navigate = useNavigate()
   const { currentTheme } = useTheme()
   const [isActivitiesExpanded, setIsActivitiesExpanded] = useState(true)
+  const [isGrowthExpanded, setIsGrowthExpanded] = useState(true)
   const [isInfoExpanded, setIsInfoExpanded] = useState(true)
-  const [activeFilter, setActiveFilter] = useState<LessonFilter>('all')
-  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc')
 
-  const getStatusIcon = (status: string) => {
-    switch (status) {
-      case 'completed':
-        return <CheckCircle2 className="w-5 h-5 text-green-500" />
-      case 'in_progress':
-        return <PlayCircle className="w-5 h-5 text-blue-500" />
-      default:
-        return <Circle className="w-5 h-5 text-gray-400" />
-    }
+  // 점수를 별점으로 변환하는 컴포넌트
+  const StarRating = ({ score }: { score: number }) => {
+    const totalStars = 5
+    const rating = score / 20 // 100점 만점을 5점 만점으로 변환
+    const fullStars = Math.floor(rating)
+    const hasHalfStar = rating - fullStars >= 0.5
+
+    return (
+      <div className="relative group flex items-center">
+        {/* 별점 아이콘 */}
+        <div className="flex">
+          {[...Array(totalStars)].map((_, index) => {
+            if (index < fullStars) {
+              return <Star key={index} className="w-4 h-4 text-yellow-400 fill-yellow-400" />
+            }
+            if (index === fullStars && hasHalfStar) {
+              return (
+                <div key={index} className="relative">
+                  <Star className="w-4 h-4 text-gray-500 fill-gray-500" />
+                  <div className="absolute top-0 left-0 overflow-hidden w-1/2">
+                    <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" />
+                  </div>
+                </div>
+              )
+            }
+            return <Star key={index} className="w-4 h-4 text-gray-500 fill-gray-500" />
+          })}
+        </div>
+        {/* 툴팁 */}
+        <div className={`absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 text-xs rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 ${
+          currentTheme === 'dark'
+            ? 'bg-gray-900 text-white border border-gray-700'
+            : 'bg-gray-800 text-white'
+        }`}>
+          {score}%
+        </div>
+      </div>
+    )
   }
-
-  const getAttendanceBadge = (attendance?: 'completed' | 'incomplete' | 'absent') => {
-    if (!attendance) return null
-
-    switch (attendance) {
-      case 'completed':
-        return (
-          <span className={`px-2 py-0.5 text-xs font-medium rounded ${
-            currentTheme === 'dark'
-              ? 'bg-green-900/30 text-green-400'
-              : 'bg-green-100 text-green-700'
-          }`}>
-            완료
-          </span>
-        )
-      case 'incomplete':
-        return (
-          <span className={`px-2 py-0.5 text-xs font-medium rounded ${
-            currentTheme === 'dark'
-              ? 'bg-yellow-900/30 text-yellow-400'
-              : 'bg-yellow-100 text-yellow-700'
-          }`}>
-            미완료
-          </span>
-        )
-      case 'absent':
-        return (
-          <span className={`px-2 py-0.5 text-xs font-medium rounded ${
-            currentTheme === 'dark'
-              ? 'bg-gray-700 text-gray-400'
-              : 'bg-gray-200 text-gray-600'
-          }`}>
-            불참
-          </span>
-        )
-      default:
-        return null
-    }
-  }
-
-  const getQnaIcon = (qnaStatus?: 'none' | 'question' | 'answered') => {
-    if (!qnaStatus || qnaStatus === 'none') return null
-
-    switch (qnaStatus) {
-      case 'question':
-        return (
-          <div className="relative group">
-            <MessageCircle className={`w-4 h-4 ${
-              currentTheme === 'dark' ? 'text-orange-400' : 'text-orange-600'
-            }`} />
-            <div className={`absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 text-xs rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none ${
-              currentTheme === 'dark'
-                ? 'bg-gray-900 text-white border border-gray-700'
-                : 'bg-gray-800 text-white'
-            }`}>
-              질의 있음
-            </div>
-          </div>
-        )
-      case 'answered':
-        return (
-          <div className="relative group">
-            <div className="relative w-4 h-4">
-              <MessageCircle className={`absolute inset-0 w-4 h-4 ${
-                currentTheme === 'dark' ? 'text-orange-400' : 'text-orange-600'
-              }`} />
-              <MessageSquare className={`absolute inset-0 w-4 h-4 ${
-                currentTheme === 'dark' ? 'text-blue-400' : 'text-blue-600'
-              }`} style={{ transform: 'translate(2px, 2px)' }} />
-            </div>
-            <div className={`absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 text-xs rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none ${
-              currentTheme === 'dark'
-                ? 'bg-gray-900 text-white border border-gray-700'
-                : 'bg-gray-800 text-white'
-            }`}>
-              응답 완료
-            </div>
-          </div>
-        )
-      default:
-        return null
-    }
-  }
-
+  const completedMissionsCount = lessons.filter(l => l.status === 'completed').length;
   const progressPercentage = Math.round((completedLessons / totalLessons) * 100)
-
-  // 필터링 및 정렬된 차시 목록
-  const filteredLessons = lessons
-    .filter((lesson) => {
-      if (activeFilter === 'all') return true
-      if (activeFilter === 'completed') return lesson.status === 'completed'
-      if (activeFilter === 'in_progress') return lesson.status === 'in_progress'
-      if (activeFilter === 'absent') return lesson.attendance === 'absent' // 불참: 수업 진행되었으나 학생이 참여하지 않은 차시
-      return true
-    })
-    .sort((a, b) => {
-      return sortOrder === 'asc' ? a.week - b.week : b.week - a.week
-    })
-
 
   // 언어별 배지 색상
   const getLanguageBadgeColor = (language: string) => {
@@ -174,30 +107,6 @@ const CurriculumSidebar = ({
         return isDark ? 'bg-gray-700 text-gray-300' : 'bg-gray-700 text-white'
     }
   }
-
-  // 필터 버튼의 클래스를 결정하는 헬퍼 함수
-  const getFilterButtonClasses = (filterType: LessonFilter, filterColor: string) => {
-    const isActive = activeFilter === filterType;
-    const isDark = currentTheme === 'dark';
-
-    const baseClasses = 'px-3 py-1.5 text-xs font-medium rounded-md transition-all';
-
-    if (isActive) {
-      // 활성 상태일 때의 스타일
-      const activeColorClasses = {
-        primary: isDark ? 'bg-primary-600' : 'bg-primary-500',
-        blue: isDark ? 'bg-blue-600' : 'bg-blue-500',
-        gray: isDark ? 'bg-gray-600' : 'bg-gray-500',
-        green: isDark ? 'bg-green-600' : 'bg-green-500',
-      }[filterColor] || (isDark ? 'bg-primary-600' : 'bg-primary-500');
-      
-      return `${baseClasses} ${activeColorClasses} text-white shadow-md`;
-    } else {
-      // 비활성 상태일 때의 스타일
-      const inactiveClasses = isDark ? 'text-gray-400 hover:text-gray-300' : 'text-gray-600 hover:text-gray-700';
-      return `${baseClasses} ${inactiveClasses}`;
-    }
-  };
 
   return (
     <aside className={`w-80 border-r flex flex-col transition-colors duration-300 ${
@@ -348,6 +257,97 @@ const CurriculumSidebar = ({
                   </span>
                 </button>
               </div>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* 나의 성장 기록 */}
+      <div className={`p-6 border-b ${
+        currentTheme === 'dark' ? 'border-gray-700' : 'border-gray-200'
+      }`}>
+        <div className="flex items-center justify-between mb-4">
+          <h2 className={`text-lg font-bold flex items-center gap-2 ${
+            currentTheme === 'dark' ? 'text-white' : 'text-gray-900'
+          }`}>
+            <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
+              currentTheme === 'dark'
+                ? 'bg-gradient-to-br from-purple-500 to-purple-600'
+                : 'bg-gradient-to-br from-purple-400 to-purple-500'
+            }`}>
+              <TrendingUp className="w-4 h-4 text-white" />
+            </div>
+            나의 성장 기록
+          </h2>
+          <button
+            onClick={() => setIsGrowthExpanded(!isGrowthExpanded)}
+            className={`p-1 rounded-lg transition-colors ${
+              currentTheme === 'dark'
+                ? 'hover:bg-gray-700 text-gray-400 hover:text-white'
+                : 'hover:bg-gray-100 text-gray-600 hover:text-gray-900'
+            }`}
+            aria-label={isGrowthExpanded ? '접기' : '펼치기'}
+          >
+            {isGrowthExpanded ? (
+              <ChevronUp className="w-5 h-5" />
+            ) : (
+              <ChevronDown className="w-5 h-5" />
+            )}
+          </button>
+        </div>
+
+        {isGrowthExpanded && (
+          <div className="space-y-4 pt-2">
+            {/* 완료한 미션 */}
+            <div className="flex items-center justify-between">
+              <span className={`text-sm ${
+                currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'
+              }`}>
+                완료한 미션
+              </span>
+              <span className={`text-sm font-semibold ${
+                currentTheme === 'dark' ? 'text-green-400' : 'text-green-600'
+              }`}>
+                {completedMissionsCount}개
+              </span>
+            </div>
+
+            {/* 평균 점수 */}
+            <div className="flex items-center justify-between">
+              <span className={`text-sm ${
+                currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'
+              }`}>
+                평균 점수
+              </span>
+              <span className={`text-sm font-semibold ${
+                currentTheme === 'dark' ? 'text-blue-400' : 'text-blue-600'
+              }`}>
+                {averageScore !== undefined ? `${averageScore}점` : 'N/A'}
+              </span>
+            </div>
+
+            {/* 개념 이해도 */}
+            <div className="flex items-center justify-between">
+              <span className={`text-sm ${
+                currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'
+              }`}>
+                개념 이해도
+              </span>
+              <span className={`text-sm font-semibold ${
+                currentTheme === 'dark' ? 'text-orange-400' : 'text-orange-600'
+              }`}>{conceptUnderstanding !== undefined ? <StarRating score={70} /> : 'N/A'}</span>
+            </div>
+
+            {/* 코드 활용도 */}
+            <div className="flex items-center justify-between">
+              <span className={`text-sm ${
+                currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'
+              }`}>
+                코드 활용도
+              </span>
+              <span className={`text-sm font-semibold ${
+                currentTheme === 'dark' ? 'text-teal-400' : 'text-teal-600'
+              }`}>{codeApplication !== undefined ? <StarRating score={codeApplication} /> : 'N/A'}</span>
             </div>
           </div>
         )}
@@ -539,138 +539,6 @@ const CurriculumSidebar = ({
             )}
           </>
         )}
-      </div>
-
-      {/* 차시 목록 */}
-      <div className="flex-1 overflow-y-auto p-4">
-        {/* 필터 토글 버튼 및 정렬 */}
-        <div className="flex items-center justify-between mb-3">
-          <div className={`inline-flex p-1 rounded-lg ${
-            currentTheme === 'dark' ? 'bg-gray-800' : 'bg-gray-100'
-          }`}>
-          <button
-            onClick={() => setActiveFilter('all')}
-            className={getFilterButtonClasses('all', 'primary')}
-          >
-            전체
-          </button>
-          <button
-            onClick={() => setActiveFilter('in_progress')}
-            className={getFilterButtonClasses('in_progress', 'blue')}
-          >
-            수업 중
-          </button>
-          <button
-            onClick={() => setActiveFilter('absent')}
-            className={getFilterButtonClasses('absent', 'gray')}
-          >
-            불참
-          </button>
-          <button
-            onClick={() => setActiveFilter('completed')}
-            className={getFilterButtonClasses('completed', 'green')}
-          >
-            참여
-          </button>
-          </div>
-
-          {/* 정렬 버튼 */}
-          <button
-            onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
-            className={`p-2 rounded-lg transition-colors ${
-              currentTheme === 'dark'
-                ? 'bg-gray-800 hover:bg-gray-700 text-gray-400 hover:text-white'
-                : 'bg-gray-100 hover:bg-gray-200 text-gray-600 hover:text-gray-900'
-            }`}
-            title={sortOrder === 'asc' ? '오름차순' : '내림차순'}
-          >
-            <ArrowUpDown className="w-4 h-4" />
-          </button>
-        </div>
-
-        <div className="space-y-2">
-          {filteredLessons.map((lesson) => {
-            const isActive = lesson.id === currentLessonId
-
-            return (
-              <button
-                key={lesson.id}
-                onClick={() => onLessonSelect(lesson.id)}
-                className={`w-full text-left p-3 rounded-lg transition-all duration-200 ${
-                  lesson.status === 'in_progress'
-                    ? currentTheme === 'dark'
-                      ? 'bg-red-900/20 border-2 border-red-600 hover:bg-red-900/30 animate-pulse'
-                      : 'bg-red-50 border-2 border-red-400 hover:bg-red-100 shadow-lg shadow-red-200/50'
-                    : isActive
-                    ? currentTheme === 'dark'
-                      ? 'bg-primary-900 border-2 border-primary-600'
-                      : 'bg-primary-50 border-2 border-primary-600 shadow-md'
-                    : currentTheme === 'dark'
-                    ? 'bg-gray-700 hover:bg-gray-650 border-2 border-transparent'
-                    : 'bg-white hover:bg-gray-50 border-2 border-gray-200 hover:border-gray-300 shadow-sm hover:shadow-md'
-                }`}
-              >
-                <div className="flex items-start gap-3">
-                  {/* 상태 아이콘 */}
-                  <div className="flex-shrink-0 mt-0.5">
-                    {getStatusIcon(lesson.status)}
-                  </div>
-
-                  {/* 차시 정보 */}
-                  <div className="flex-1 min-w-0">
-                    {/* 첫 번째 줄: N차시 + 수업일 */}
-                    <div className="flex items-center justify-between gap-2 mb-1">
-                      <div className="flex items-center gap-2">
-                        <span className={`text-xs font-medium ${
-                          currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-500'
-                        }`}>
-                          {lesson.week}차시
-                        </span>
-                        {lesson.status === 'in_progress' && (
-                          <span className={`px-2 py-0.5 text-xs font-medium rounded-full ${
-                            currentTheme === 'dark'
-                              ? 'bg-red-900/30 text-red-400'
-                              : 'bg-red-100 text-red-700'
-                          }`}>
-                            수업 중
-                          </span>
-                        )}
-                      </div>
-                      <div className="flex items-center gap-2">
-                        {getQnaIcon(lesson.qnaStatus)}
-                        {lesson.classDate && lesson.status !== 'upcoming' && (
-                          <span className={`text-xs ${
-                            currentTheme === 'dark' ? 'text-gray-500' : 'text-gray-500'
-                          }`}>
-                            {lesson.classDate}
-                          </span>
-                        )}
-                      </div>
-                    </div>
-
-                    {/* 두 번째 줄: 차시 제목 + 참석/과제 완료 여부 */}
-                    <div className="flex items-center justify-between gap-2">
-                      <p className={`text-sm font-medium truncate flex-1 ${
-                        isActive
-                          ? currentTheme === 'dark'
-                            ? 'text-white'
-                            : 'text-gray-900'
-                          : currentTheme === 'dark'
-                          ? 'text-gray-300'
-                          : 'text-gray-700'
-                      }`}>
-                        {lesson.title}
-                      </p>
-                      <div className="flex-shrink-0">
-                        {getAttendanceBadge(lesson.attendance)}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </button>
-            )
-          })}
-        </div>
       </div>
     </aside>
   )
