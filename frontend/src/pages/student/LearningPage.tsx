@@ -1,12 +1,11 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useTheme } from '@/contexts/ThemeContext'
 import LearningHeader from '@/components/learning/LearningHeader'
 import CurriculumSidebar from '@/components/learning/CurriculumSidebar'
-import LearningContent from '@/components/learning/LearningContent'
-import CodeEditor from '@/components/learning/CodeEditor'
-import ExecutionPanel from '@/components/learning/ExecutionPanel'
-import NavigationFooter from '@/components/learning/NavigationFooter'
+import LearningContent_Slider from '@/components/learning/LearningContent_Slider'
+import LearningContent_Card from '@/components/learning/LearningContent_Card'
+import LearningContent_Toggle from '@/components/learning/LearningContent_Toggle'
 
 interface Lesson {
   id: number
@@ -32,11 +31,13 @@ const LearningPage = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true)
   const [currentLessonId, setCurrentLessonId] = useState<number>(1)
   const [difficulty, setDifficulty] = useState<'basic' | 'intermediate' | 'advanced'>('basic')
-  const [code, setCode] = useState('')
-  const [language, setLanguage] = useState<'python' | 'javascript' | 'java' | 'cpp'>('python')
-  const [consoleOutput, setConsoleOutput] = useState('')
-  const [testResults, setTestResults] = useState<any[]>([])
-  const [isExecuting, setIsExecuting] = useState(false)
+
+  // 난이도 UI 방식 선택: 'slider' | 'card' | 'toggle'
+  // 아래 값을 변경하여 3가지 방식을 테스트할 수 있습니다
+  // 'slider' - 슬라이더 방식
+  // 'card' - 카드 선택 방식
+  // 'toggle' - 토글 스위치 방식
+  const [uiStyle] = useState<'slider' | 'card' | 'toggle'>('slider')
 
   // Mock 데이터 (추후 API로 대체)
   const [courseData] = useState<CourseData>({
@@ -63,47 +64,8 @@ const LearningPage = () => {
   const currentLesson = courseData.lessons.find(l => l.id === currentLessonId)
   const progress = Math.round((courseData.completedLessons / courseData.totalLessons) * 100)
 
-  // 자동 저장 (디바운싱)
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      // TODO: API 호출로 코드 저장
-      console.log('Auto-saving code...')
-    }, 2000)
-
-    return () => clearTimeout(timer)
-  }, [code])
-
   const handleLessonChange = (lessonId: number) => {
     setCurrentLessonId(lessonId)
-    // TODO: 해당 차시의 코드 불러오기
-    setCode('')
-    setConsoleOutput('')
-    setTestResults([])
-  }
-
-  const handleRunCode = async () => {
-    setIsExecuting(true)
-    setConsoleOutput('코드를 실행 중입니다...')
-
-    // TODO: Piston API 연동
-    setTimeout(() => {
-      setConsoleOutput('Hello, World!\n실행 완료 (0.23초)')
-      setIsExecuting(false)
-    }, 1000)
-  }
-
-  const handleRunTests = async () => {
-    setIsExecuting(true)
-
-    // TODO: 테스트 실행 API 연동
-    setTimeout(() => {
-      setTestResults([
-        { id: 1, name: '기본 입력 테스트', status: 'pass', expected: '5', actual: '5' },
-        { id: 2, name: '경계값 테스트', status: 'pass', expected: '0', actual: '0' },
-        { id: 3, name: '음수 입력 테스트', status: 'fail', expected: '-5', actual: '0' },
-      ])
-      setIsExecuting(false)
-    }, 1500)
   }
 
   const handleGoBack = () => {
@@ -139,56 +101,39 @@ const LearningPage = () => {
         )}
 
         {/* Main Content Area */}
-        <main className={`flex-1 overflow-y-auto transition-all duration-300 relative ${
-          currentTheme === 'dark' ? 'bg-gray-900' : 'bg-gray-50'
-        }`}>
-          {/* 수첩 배경 효과 */}
-          <div className={`absolute inset-0 pointer-events-none ${
-            currentTheme === 'dark' ? 'opacity-5' : 'opacity-10'
-          }`}
-            style={{
-              backgroundImage: `
-                linear-gradient(transparent 0px, transparent 39px, ${currentTheme === 'dark' ? '#60A5FA' : '#93C5FD'} 39px, ${currentTheme === 'dark' ? '#60A5FA' : '#93C5FD'} 40px),
-                linear-gradient(90deg, ${currentTheme === 'dark' ? '#EF4444' : '#F87171'} 0px, transparent 1px)
-              `,
-              backgroundSize: '100% 40px, 80px 100%',
-              backgroundPosition: '0 0, 40px 0'
-            }}
-          />
+        <main className="flex-1 overflow-y-auto transition-all duration-300 relative">
+          {/* 그라디언트 배경 */}
+          <div className={`absolute inset-0 ${
+            currentTheme === 'dark'
+              ? 'bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900'
+              : 'bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50'
+          }`} />
           <div className="container mx-auto p-6 space-y-6 relative z-10">
-            {/* Learning Content Section */}
-            <LearningContent
-              lessonTitle={currentLesson?.title || ''}
-              lessonWeek={currentLesson?.week || 0}
-              difficulty={difficulty}
-              onDifficultyChange={setDifficulty}
-            />
-
-            {/* Code Editor */}
-            <CodeEditor
-              code={code}
-              language={language}
-              onCodeChange={setCode}
-              onLanguageChange={setLanguage}
-            />
-
-            {/* Execution Panel */}
-            <ExecutionPanel
-              consoleOutput={consoleOutput}
-              testResults={testResults}
-              isExecuting={isExecuting}
-              onRunCode={handleRunCode}
-              onRunTests={handleRunTests}
-            />
-
-            {/* Navigation Footer */}
-            <NavigationFooter
-              currentLessonId={currentLessonId}
-              totalLessons={courseData.totalLessons}
-              isCompleted={testResults.every(t => t.status === 'pass')}
-              onPrevious={() => currentLessonId > 1 && handleLessonChange(currentLessonId - 1)}
-              onNext={() => currentLessonId < courseData.totalLessons && handleLessonChange(currentLessonId + 1)}
-            />
+            {/* Learning Content Section - 3가지 UI 방식 */}
+            {uiStyle === 'slider' && (
+              <LearningContent_Slider
+                lessonTitle={currentLesson?.title || ''}
+                lessonWeek={currentLesson?.week || 0}
+                difficulty={difficulty}
+                onDifficultyChange={setDifficulty}
+              />
+            )}
+            {uiStyle === 'card' && (
+              <LearningContent_Card
+                lessonTitle={currentLesson?.title || ''}
+                lessonWeek={currentLesson?.week || 0}
+                difficulty={difficulty}
+                onDifficultyChange={setDifficulty}
+              />
+            )}
+            {uiStyle === 'toggle' && (
+              <LearningContent_Toggle
+                lessonTitle={currentLesson?.title || ''}
+                lessonWeek={currentLesson?.week || 0}
+                difficulty={difficulty}
+                onDifficultyChange={setDifficulty}
+              />
+            )}
           </div>
         </main>
       </div>

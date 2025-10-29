@@ -124,7 +124,6 @@ const LearningHeader = ({
               <p className={`text-sm mt-0.5 ${
                 currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'
               }`}>
-                {lessonWeek}주차: {lessonTitle}
               </p>
             </div>
           </div>
@@ -135,7 +134,7 @@ const LearningHeader = ({
             <div className={`hidden md:flex flex-col items-end ${
               currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'
             }`}>
-              <div className="text-2xl font-bold font-mono tabular-nums">
+              <div className="text-sm font-bold font-mono tabular-nums">
                 {formatTime(currentTime)}
               </div>
               <div className={`text-xs mt-0.5 ${
