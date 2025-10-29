@@ -411,10 +411,10 @@ const StudentDashboardPage = () => {
                       </div>
                     )}
 
-                    {/* 5. 수업 진행율: progress bar chart (8/12차시), chart 위에 % 표시 */}
+                    {/* 5. 수업 진행률: progress bar chart (8/12차시), chart 위에 % 표시 */}
                     <div className="mb-4">
                       <div className="flex items-center justify-between mb-1">
-                        <span className="text-xs font-medium text-gray-600">수업 진행율</span>
+                        <span className="text-xs font-medium text-gray-600">수업 진행률</span>
                         <span className="text-xs font-semibold text-primary-600">{Math.round((course.completedLessons / course.totalLessons) * 100)}%</span>
                       </div>
                       <div className="text-xs text-gray-500 mb-2">{course.completedLessons}/{course.totalLessons}차시</div>
@@ -441,10 +441,10 @@ const StudentDashboardPage = () => {
                       </div>
                     </div>
 
-                    {/* 7. 과제 성공율: progress bar chart (15/18개), chart 위에 % 표시 */}
+                    {/* 7. 과제 성공률: progress bar chart (15/18개), chart 위에 % 표시 */}
                     <div className="mb-6">
                       <div className="flex items-center justify-between mb-1">
-                        <span className="text-xs font-medium text-gray-600">과제 성공율</span>
+                        <span className="text-xs font-medium text-gray-600">과제 성공률</span>
                         <span className="text-xs font-semibold text-emerald-600">{course.assignmentSuccessRate}%</span>
                       </div>
                       <div className="text-xs text-gray-500 mb-2">{Math.round((course.assignmentSuccessRate / 100) * 18)}/18개</div>
