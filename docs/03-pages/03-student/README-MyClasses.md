@@ -1,8 +1,10 @@
-# 내 수업 페이지 (My Classes) 문서
+# 학습 페이지 (LearningPage) 플래너 문서
 
 ## 📚 개요
 
-LogiCore Tech의 "My First Planner" 대시보드를 참고하여 설계한 EduVerse의 **내 수업 페이지** 설계 문서입니다.
+LogiCore Tech의 "My First Planner" 대시보드를 참고하여 설계한 EduVerse의 **학습 페이지 플래너** 설계 문서입니다.
+
+이 페이지는 특정 수업에 대한 플래너로 동작하며, 학생이 해당 수업에 대한 모든 정보를 확인하고 학습할 수 있습니다.
 
 ---
 

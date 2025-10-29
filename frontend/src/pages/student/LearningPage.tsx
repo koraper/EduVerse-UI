@@ -139,10 +139,23 @@ const LearningPage = () => {
         )}
 
         {/* Main Content Area */}
-        <main className={`flex-1 overflow-y-auto transition-all duration-300 ${
+        <main className={`flex-1 overflow-y-auto transition-all duration-300 relative ${
           currentTheme === 'dark' ? 'bg-gray-900' : 'bg-gray-50'
         }`}>
-          <div className="container mx-auto p-6 space-y-6">
+          {/* 수첩 배경 효과 */}
+          <div className={`absolute inset-0 pointer-events-none ${
+            currentTheme === 'dark' ? 'opacity-5' : 'opacity-10'
+          }`}
+            style={{
+              backgroundImage: `
+                linear-gradient(transparent 0px, transparent 39px, ${currentTheme === 'dark' ? '#60A5FA' : '#93C5FD'} 39px, ${currentTheme === 'dark' ? '#60A5FA' : '#93C5FD'} 40px),
+                linear-gradient(90deg, ${currentTheme === 'dark' ? '#EF4444' : '#F87171'} 0px, transparent 1px)
+              `,
+              backgroundSize: '100% 40px, 80px 100%',
+              backgroundPosition: '0 0, 40px 0'
+            }}
+          />
+          <div className="container mx-auto p-6 space-y-6 relative z-10">
             {/* Learning Content Section */}
             <LearningContent
               lessonTitle={currentLesson?.title || ''}
