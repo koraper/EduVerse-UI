@@ -31,7 +31,7 @@ const StudentDashboardPage = () => {
 
   // 상태 관리
   const [selectedStatuses, setSelectedStatuses] = useState<Set<'pending' | 'ongoing' | 'completed'>>(
-    new Set(['pending', 'ongoing', 'completed'])
+    new Set(['ongoing'])
   )
 
   // Mock 과목 데이터
@@ -403,13 +403,13 @@ const StudentDashboardPage = () => {
                       선택한 필터에 해당하는 수업이 없습니다. 다른 필터를 선택해보세요.
                     </p>
                     <button
-                      onClick={() => setSelectedStatuses(new Set(['pending', 'ongoing', 'completed']))}
+                      onClick={() => setSelectedStatuses(new Set(['ongoing']))}
                       className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
                     >
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                       </svg>
-                      모든 필터 초기화
+                      필터 초기화
                     </button>
                   </div>
                 </Card>
@@ -478,13 +478,13 @@ const StudentDashboardPage = () => {
                       선택한 필터에 해당하는 수업이 없습니다. 다른 필터를 선택해보세요.
                     </p>
                     <button
-                      onClick={() => setSelectedStatuses(new Set(['pending', 'ongoing', 'completed']))}
+                      onClick={() => setSelectedStatuses(new Set(['ongoing']))}
                       className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
                     >
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                       </svg>
-                      모든 필터 초기화
+                      필터 초기화
                     </button>
                   </div>
                 </Card>
