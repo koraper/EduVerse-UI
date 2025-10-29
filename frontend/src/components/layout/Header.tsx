@@ -1,12 +1,14 @@
 import { useState, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
+import { useTheme } from '@/contexts/ThemeContext'
 import Button from '@/components/common/Button'
 import ComingSoonModal from '@/components/common/ComingSoonModal'
 
 const Header = () => {
   const navigate = useNavigate()
   const { user, logout } = useAuth()
+  const { currentTheme, setTheme } = useTheme()
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false)
   const [isHelpModalOpen, setIsHelpModalOpen] = useState(false)
   const [isNotificationModalOpen, setIsNotificationModalOpen] = useState(false)
@@ -65,7 +67,11 @@ const Header = () => {
   }
 
   return (
-    <header className="bg-white border-b border-gray-200 sticky top-0 z-40">
+    <header className={`sticky top-0 z-40 transition-colors duration-300 ${
+      currentTheme === 'dark'
+        ? 'bg-gray-900 border-b border-gray-700'
+        : 'bg-white border-b border-gray-200'
+    }`}>
       <div className="flex items-center justify-between h-16 px-4 sm:px-6 lg:px-8">
         {/* 로고 */}
         <div className="flex items-center">
@@ -76,16 +82,41 @@ const Header = () => {
             <div className="w-8 h-8 bg-gradient-to-br from-primary-600 to-primary-800 rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-lg">E</span>
             </div>
-            <span className="text-xl font-bold text-gray-900 hidden sm:block">EduVerse</span>
+            <span className={`text-xl font-bold hidden sm:block ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>EduVerse</span>
           </button>
         </div>
 
         {/* 우측 메뉴 */}
         <div className="flex items-center space-x-4">
+          {/* 테마 토글 버튼 */}
+          <button
+            onClick={() => setTheme(currentTheme === 'dark' ? 'light' : 'dark')}
+            className={`p-2 rounded-lg transition-colors ${
+              currentTheme === 'dark'
+                ? 'text-yellow-400 hover:bg-gray-800 hover:text-yellow-300'
+                : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
+            }`}
+            title="다크/라이트 모드 전환"
+          >
+            {currentTheme === 'dark' ? (
+              <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
+              </svg>
+            ) : (
+              <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M10 2a1 1 0 011 1v2a1 1 0 11-2 0V3a1 1 0 011-1zm4.293 1.707a1 1 0 011.414 0l1.414 1.414a1 1 0 11-1.414 1.414l-1.414-1.414a1 1 0 010-1.414zm2 4.586a1 1 0 111.414-1.414l1.414 1.414a1 1 0 11-1.414 1.414l-1.414-1.414zM16 11a1 1 0 11-2 0 1 1 0 012 0zm-7 4a1 1 0 011 1v2a1 1 0 11-2 0v-2a1 1 0 011-1zm-4.293-1.707a1 1 0 011.414-1.414l1.414 1.414a1 1 0 11-1.414 1.414l-1.414-1.414zm2-4.586a1 1 0 111.414 1.414L5.414 9.414a1 1 0 11-1.414-1.414l1.414-1.414zM4 11a1 1 0 11-2 0 1 1 0 012 0zm7-7a1 1 0 011 1v2a1 1 0 11-2 0V3a1 1 0 011-1z" clipRule="evenodd" />
+              </svg>
+            )}
+          </button>
+
           {/* 알림 버튼 */}
           <button
             onClick={() => setIsNotificationModalOpen(true)}
-            className="relative p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
+            className={`relative p-2 rounded-lg transition-colors ${
+              currentTheme === 'dark'
+                ? 'text-gray-400 hover:text-gray-300 hover:bg-gray-800'
+                : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+            }`}
             title="알림"
           >
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -97,7 +128,11 @@ const Header = () => {
           {/* 도움말 버튼 */}
           <button
             onClick={() => setIsHelpModalOpen(true)}
-            className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
+            className={`p-2 rounded-lg transition-colors ${
+              currentTheme === 'dark'
+                ? 'text-gray-400 hover:text-gray-300 hover:bg-gray-800'
+                : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+            }`}
             title="도움말"
           >
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -109,7 +144,11 @@ const Header = () => {
           <div className="relative" ref={profileMenuRef}>
             <button
               onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
-              className="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-100 transition-colors"
+              className={`flex items-center space-x-3 p-2 rounded-lg transition-colors ${
+                currentTheme === 'dark'
+                  ? 'hover:bg-gray-800'
+                  : 'hover:bg-gray-100'
+              }`}
             >
               <div className="w-8 h-8 bg-gradient-to-br from-primary-400 to-primary-600 rounded-full flex items-center justify-center">
                 <span className="text-white font-semibold text-sm">
@@ -117,10 +156,10 @@ const Header = () => {
                 </span>
               </div>
               <div className="hidden md:block text-left">
-                <div className="text-sm font-medium text-gray-900">{user?.name}</div>
-                <div className="text-xs text-gray-500">{user?.email}</div>
+                <div className={`text-sm font-medium ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{user?.name}</div>
+                <div className={`text-xs ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>{user?.email}</div>
               </div>
-              <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className={`w-5 h-5 ${currentTheme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
               </svg>
             </button>

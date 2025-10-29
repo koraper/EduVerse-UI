@@ -1,6 +1,7 @@
 import { useEffect, useState, useMemo } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
+import { useTheme } from '@/contexts/ThemeContext'
 import StudentLayout from '@/components/layout/StudentLayout'
 import Card from '@/components/common/Card'
 import Badge from '@/components/common/Badge'
@@ -31,6 +32,7 @@ const StudentDashboardPage = () => {
   const navigate = useNavigate()
   const location = useLocation()
   const { user, isLoading: authLoading } = useAuth()
+  const { currentTheme } = useTheme()
 
   const [inviteModalOpen, setInviteModalOpen] = useState(false)
   const [inviteCode, setInviteCode] = useState('')
@@ -308,8 +310,8 @@ const StudentDashboardPage = () => {
           <div className="mb-6">
             <div className="flex items-center justify-between mb-4">
               <div>
-                <h2 className="text-lg font-semibold text-gray-900">내 수강 과목</h2>
-                <p className="mt-1 text-sm text-gray-600">
+                <h2 className={`text-lg font-semibold ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>내 수강 과목</h2>
+                <p className={`mt-1 text-sm ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
                   현재 수강 중인 과목은 총 {filteredCourses.length}개입니다
                 </p>
               </div>
@@ -324,6 +326,8 @@ const StudentDashboardPage = () => {
               className={`px-4 py-2 rounded-full font-medium text-sm transition-colors ${
                 selectedStatuses.has('pending')
                   ? 'bg-blue-600 text-white'
+                  : currentTheme === 'dark'
+                  ? 'bg-gray-700 text-gray-300 hover:bg-gray-600'
                   : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
               }`}
             >
@@ -334,6 +338,8 @@ const StudentDashboardPage = () => {
               className={`px-4 py-2 rounded-full font-medium text-sm transition-colors ${
                 selectedStatuses.has('ongoing')
                   ? 'bg-blue-600 text-white'
+                  : currentTheme === 'dark'
+                  ? 'bg-gray-700 text-gray-300 hover:bg-gray-600'
                   : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
               }`}
             >
@@ -344,6 +350,8 @@ const StudentDashboardPage = () => {
               className={`px-4 py-2 rounded-full font-medium text-sm transition-colors ${
                 selectedStatuses.has('completed')
                   ? 'bg-blue-600 text-white'
+                  : currentTheme === 'dark'
+                  ? 'bg-gray-700 text-gray-300 hover:bg-gray-600'
                   : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
               }`}
             >
@@ -359,7 +367,7 @@ const StudentDashboardPage = () => {
                   <div className="p-6 flex flex-col h-full">
                     {/* 1. 수업명과 상태 배지 */}
                     <div className="mb-3 flex items-start justify-between gap-3">
-                      <h3 className="text-lg font-semibold text-gray-900 flex-1">{course.name}</h3>
+                      <h3 className={`text-lg font-semibold flex-1 ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{course.name}</h3>
                       <Badge variant={
                         course.status === 'pending' ? 'secondary' :
                         course.status === 'ongoing' ? 'primary' :
