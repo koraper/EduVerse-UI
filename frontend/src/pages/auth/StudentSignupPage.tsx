@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
+import { useTheme } from '@/contexts/ThemeContext'
 import { Button, Input, Card } from '@/components/common'
 import PasswordStrengthIndicator from '@/components/common/PasswordStrengthIndicator'
 import { useToast } from '@/components/common/ToastContext'
@@ -19,6 +20,7 @@ const StudentSignupPage = () => {
   const navigate = useNavigate()
   const inputRefs = useRef<(HTMLInputElement | null)[]>([])
   const { addToast } = useToast()
+  const { currentTheme } = useTheme()
 
   const [formData, setFormData] = useState({
     email: '',
@@ -484,7 +486,11 @@ const StudentSignupPage = () => {
     <>
       <LandingHeader />
 
-      <div className="min-h-screen bg-gradient-to-br from-primary-50 to-secondary-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 pt-24">
+      <div className={`min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 pt-24 transition-colors duration-300 ${
+        currentTheme === 'dark'
+          ? 'bg-gradient-to-br from-gray-900 to-gray-800'
+          : 'bg-gradient-to-br from-primary-50 to-secondary-50'
+      }`}>
         <div className="max-w-md w-full min-w-[500px]">
           {/* 로고 및 헤더 */}
           <div className="text-center mb-8">
@@ -493,8 +499,8 @@ const StudentSignupPage = () => {
                 E
               </div>
             </div>
-            <h2 className="text-3xl font-bold text-gray-900">학생 회원가입</h2>
-            <p className="mt-2 text-gray-600">초대코드를 받으셨나요? 5분 만에 시작하세요</p>
+            <h2 className={`text-3xl font-bold ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>학생 회원가입</h2>
+            <p className={`mt-2 ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>초대코드를 받으셨나요? 5분 만에 시작하세요</p>
           </div>
 
           {/* 회원가입 폼 */}
@@ -717,8 +723,8 @@ const StudentSignupPage = () => {
 
               {/* 로그인 링크 */}
               <div className="text-center text-sm">
-                <span className="text-gray-600">이미 계정이 있으신가요? </span>
-                <Link to="/login" className="text-primary-600 hover:text-primary-700 font-medium">
+                <span className={currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}>이미 계정이 있으신가요? </span>
+                <Link to="/login" className={`font-medium ${currentTheme === 'dark' ? 'text-primary-400 hover:text-primary-300' : 'text-primary-600 hover:text-primary-700'}`}>
                   로그인
                 </Link>
               </div>

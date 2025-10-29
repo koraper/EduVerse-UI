@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, Link, useLocation } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
+import { useTheme } from '@/contexts/ThemeContext'
 import { Button, Input, Card } from '@/components/common'
 import PasswordStrengthIndicator from '@/components/common/PasswordStrengthIndicator'
 import { INPUT_LIMITS } from '@/utils/inputValidation'
@@ -11,6 +12,7 @@ const LoginPage = () => {
   const navigate = useNavigate()
   const location = useLocation()
   const { login, updateUser } = useAuth()
+  const { currentTheme } = useTheme()
 
   const [formData, setFormData] = useState({
     email: '',
@@ -132,7 +134,11 @@ const LoginPage = () => {
       {/* 랜딩 헤더 */}
       <LandingHeader />
 
-      <div className="min-h-screen bg-gradient-to-br from-primary-50 to-secondary-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 pt-24">
+      <div className={`min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 pt-24 transition-colors duration-300 ${
+        currentTheme === 'dark'
+          ? 'bg-gradient-to-br from-gray-900 to-gray-800'
+          : 'bg-gradient-to-br from-primary-50 to-secondary-50'
+      }`}>
         <div className="max-w-md w-full min-w-[500px]">
         {/* 로고 및 헤더 */}
         <div className="text-center mb-8">
@@ -141,8 +147,8 @@ const LoginPage = () => {
               E
             </div>
           </div>
-          <h2 className="text-3xl font-bold text-gray-900">EduVerse에 로그인</h2>
-          <p className="mt-2 text-gray-600">계정에 로그인하여 학습을 시작하세요</p>
+          <h2 className={`text-3xl font-bold ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>EduVerse에 로그인</h2>
+          <p className={`mt-2 ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>계정에 로그인하여 학습을 시작하세요</p>
         </div>
 
         {/* 로그인 폼 카드 */}
@@ -201,7 +207,7 @@ const LoginPage = () => {
                   // TODO: 계정(이메일) 찾기 페이지로 이동
                   alert('계정 찾기 기능은 추후 구현 예정입니다')
                 }}
-                className="text-primary-600 hover:text-primary-700 font-medium"
+                className={`font-medium ${currentTheme === 'dark' ? 'text-primary-400 hover:text-primary-300' : 'text-primary-600 hover:text-primary-700'}`}
               >
                 계정(이메일) 찾기
               </button>
@@ -211,7 +217,7 @@ const LoginPage = () => {
                   // TODO: 비밀번호 찾기 페이지로 이동
                   alert('비밀번호 찾기 기능은 추후 구현 예정입니다')
                 }}
-                className="text-primary-600 hover:text-primary-700 font-medium"
+                className={`font-medium ${currentTheme === 'dark' ? 'text-primary-400 hover:text-primary-300' : 'text-primary-600 hover:text-primary-700'}`}
               >
                 비밀번호 찾기
               </button>
@@ -230,8 +236,8 @@ const LoginPage = () => {
 
             {/* 회원가입 링크 */}
             <div className="text-center text-sm">
-              <span className="text-gray-600">계정이 없으신가요? </span>
-              <Link to="/student/signup" className="text-primary-600 hover:text-primary-700 font-medium">
+              <span className={currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}>계정이 없으신가요? </span>
+              <Link to="/student/signup" className={`font-medium ${currentTheme === 'dark' ? 'text-primary-400 hover:text-primary-300' : 'text-primary-600 hover:text-primary-700'}`}>
                 회원가입
               </Link>
             </div>
