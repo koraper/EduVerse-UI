@@ -1,5 +1,6 @@
 import { forwardRef, useState } from 'react'
 import type { InputProps } from './types'
+import { useTheme } from '@/contexts/ThemeContext'
 import InputCounter from './InputCounter'
 import { limitInputLength } from '@/utils/inputValidation'
 
@@ -24,6 +25,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     },
     ref
   ) => {
+    const { currentTheme } = useTheme()
     const [internalValue, setInternalValue] = useState((propValue as string) || '')
     const [showPassword, setShowPassword] = useState(false)
     const value = propValue !== undefined ? (propValue as string) : internalValue
@@ -31,12 +33,18 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     const displayType = isPasswordField && showPassword ? 'text' : type
     const maxLength = propMaxLength
     // 기본 input 스타일
-    const baseStyles = 'block w-full rounded-lg border transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-1 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-100'
+    const baseStyles = `block w-full rounded-lg border transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-1 disabled:opacity-50 disabled:cursor-not-allowed ${
+      currentTheme === 'dark'
+        ? 'disabled:bg-gray-700 bg-gray-800 text-white'
+        : 'disabled:bg-gray-100 bg-white text-gray-900'
+    }`
 
     // 에러 상태에 따른 스타일
     const stateStyles = error
       ? 'border-error-500 focus:border-error-500 focus:ring-error-500'
-      : 'border-gray-300 focus:border-primary-500 focus:ring-primary-500'
+      : currentTheme === 'dark'
+        ? 'border-gray-700 focus:border-primary-500 focus:ring-primary-500'
+        : 'border-gray-300 focus:border-primary-500 focus:ring-primary-500'
 
     // Size 스타일
     const sizeStyles = {
@@ -78,13 +86,13 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     return (
       <div className="w-full">
         {label && (
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className={`block text-sm font-medium mb-1 ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
             {label}
           </label>
         )}
         <div className="relative">
           {leftIcon && (
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+            <div className={`absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none ${currentTheme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`}>
               {leftIcon}
             </div>
           )}
@@ -103,7 +111,11 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
               type="button"
               onClick={() => setShowPassword(!showPassword)}
               disabled={disabled}
-              className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 transition-colors disabled:cursor-not-allowed"
+              className={`absolute inset-y-0 right-0 pr-3 flex items-center transition-colors disabled:cursor-not-allowed ${
+                currentTheme === 'dark'
+                  ? 'text-gray-500 hover:text-gray-400'
+                  : 'text-gray-400 hover:text-gray-600'
+              }`}
               aria-label={showPassword ? '비밀번호 숨기기' : '비밀번호 보이기'}
             >
               {showPassword ? (
@@ -121,7 +133,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
               )}
             </button>
           ) : rightIcon ? (
-            <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-gray-400">
+            <div className={`absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none ${currentTheme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`}>
               {rightIcon}
             </div>
           ) : null}
@@ -143,7 +155,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           <p className="mt-1 text-sm text-error-600">{error}</p>
         )}
         {!error && helperText && (
-          <p className="mt-1 text-sm text-gray-500">{helperText}</p>
+          <p className={`mt-1 text-sm ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>{helperText}</p>
         )}
       </div>
     )
