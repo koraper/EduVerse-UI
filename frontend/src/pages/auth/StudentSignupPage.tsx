@@ -733,7 +733,11 @@ const StudentSignupPage = () => {
 
           {/* 홈으로 돌아가기 */}
           <div className="flex items-center justify-center gap-4 mt-4">
-            <Link to="/" className="text-gray-600 hover:text-gray-900 text-sm">
+            <Link to="/" className={`text-sm transition-colors ${
+              currentTheme === 'dark'
+                ? 'text-gray-400 hover:text-gray-200'
+                : 'text-gray-600 hover:text-gray-900'
+            }`}>
               ← 홈으로 돌아가기
             </Link>
           </div>
