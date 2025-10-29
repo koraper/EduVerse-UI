@@ -444,7 +444,10 @@ const StudentDashboardPage = () => {
                     {/* 7. 과제 성공률: progress bar chart (15/18개), chart 위에 % 표시 */}
                     <div className="mb-6">
                       <div className="flex items-center justify-between mb-1">
-                        <span className="text-xs font-medium text-gray-600">과제 성공률</span>
+                        <div className="flex items-center gap-1">
+                          <span className="text-xs font-medium text-gray-600">과제 성공률</span>
+                          <span className="text-xs text-gray-500">(참여한 수업 한정)</span>
+                        </div>
                         <span className="text-xs font-semibold text-emerald-600">{course.assignmentSuccessRate}%</span>
                       </div>
                       <div className="text-xs text-gray-500 mb-2">총 18개 과제 중 {Math.round((course.assignmentSuccessRate / 100) * 18)}개 성공</div>
