@@ -325,7 +325,7 @@ const ProgressPage = () => {
               <h1 className={`text-3xl font-bold ${
                 currentTheme === 'dark' ? 'text-white' : 'text-gray-900'
               }`}>
-                나의 성장 일기
+                나의 성장 기록
               </h1>
               <p className={`mt-2 ${
                 currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'
