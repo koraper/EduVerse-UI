@@ -4,21 +4,20 @@ import { useToast } from '@/components/common/ToastContext'
 import { useFont } from '@/contexts/FontContext'
 import { useTheme } from '@/contexts/ThemeContext'
 import type { FontType } from '@/contexts/FontContext'
-import DashboardLayout from '@/components/layout/DashboardLayout'
+import StudentLayout from '@/components/layout/StudentLayout'
 import Card from '@/components/common/Card'
 import Input from '@/components/common/Input'
 import Button from '@/components/common/Button'
 import Badge from '@/components/common/Badge'
 import PasswordStrengthIndicator from '@/components/common/PasswordStrengthIndicator'
 import { INPUT_LIMITS } from '@/utils/inputValidation'
-import { validatePassword, hasConsecutiveChars } from '@/utils/passwordValidation'
+import { validatePassword } from '@/utils/passwordValidation'
 import {
   validateName,
   validateEmail,
   validatePhone,
   validateDepartment,
   validateTextField,
-  FORM_INPUT_LIMITS,
 } from '@/utils/formValidation'
 
 const SettingsPage = () => {
@@ -26,7 +25,6 @@ const SettingsPage = () => {
   const { addToast } = useToast()
   const { currentFont, setFont } = useFont()
   const { currentTheme, setTheme } = useTheme()
-  const [activeTab, setActiveTab] = useState<'profile' | 'password' | 'notifications' | 'appearance'>('profile')
   const [isLoading, setIsLoading] = useState(false)
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
 
@@ -404,30 +402,6 @@ const SettingsPage = () => {
     return true
   }
 
-  const tabs = [
-    { id: 'profile' as const, name: '내 프로필', icon: (
-      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-      </svg>
-    )},
-    { id: 'password' as const, name: '비밀번호 변경', icon: (
-      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-      </svg>
-    )},
-    { id: 'notifications' as const, name: '알림 설정', icon: (
-      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-      </svg>
-    )},
-    { id: 'appearance' as const, name: '기타 설정', icon: (
-      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-      </svg>
-    )},
-  ]
-
   const fontOptions: Array<{ value: FontType; name: string; description: string }> = [
     { value: 'pretendard', name: 'Pretendard (Noto Sans KR)', description: '깔끔하고 균형잡힌 현대적 폰트' },
     { value: 'poppins', name: 'Poppins', description: '부드럽고 친근한 산세리프 폰트' },
@@ -435,7 +409,7 @@ const SettingsPage = () => {
   ]
 
   return (
-    <DashboardLayout>
+    <StudentLayout>
       <div className="space-y-6">
         {/* 헤더 */}
         <div>
@@ -467,43 +441,11 @@ const SettingsPage = () => {
           </div>
         )}
 
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-          {/* 사이드 탭 */}
-          <div className="lg:col-span-1">
-            <Card>
-              <div className="p-2">
-                <nav className="space-y-1">
-                  {tabs.map((tab) => (
-                    <button
-                      key={tab.id}
-                      onClick={() => {
-                        setActiveTab(tab.id)
-                        setMessage(null)
-                      }}
-                      className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
-                        activeTab === tab.id
-                          ? 'bg-primary-50 text-primary-700 font-medium'
-                          : 'text-gray-700 hover:bg-gray-50'
-                      }`}
-                    >
-                      <span className={activeTab === tab.id ? 'text-primary-600' : 'text-gray-500'}>
-                        {tab.icon}
-                      </span>
-                      <span className="text-sm">{tab.name}</span>
-                    </button>
-                  ))}
-                </nav>
-              </div>
-            </Card>
-          </div>
-
-          {/* 메인 컨텐츠 */}
-          <div className="lg:col-span-3">
+        <div>
             <Card>
               <div className="p-6">
-                {/* 프로필 탭 */}
-                {activeTab === 'profile' && (
-                  <div>
+                {/* 프로필 섹션 */}
+                <div>
                     {/* 프로필 헤더 */}
                     <div className="flex items-center justify-between mb-6 pb-6 border-b border-gray-200">
                       <div className="flex items-center space-x-4">
@@ -749,12 +691,10 @@ const SettingsPage = () => {
                         </div>
                       </div>
                     </div>
-                  </div>
-                )}
+                </div>
 
-                {/* 비밀번호 변경 탭 */}
-                {activeTab === 'password' && (
-                  <div>
+                {/* 비밀번호 변경 섹션 */}
+                <div className="mt-8 pt-8 border-t border-gray-200">
                     <h2 className="text-lg font-semibold text-gray-900 mb-6">비밀번호 변경</h2>
                     <form onSubmit={handlePasswordSubmit} className="space-y-6">
                       <div>
@@ -848,12 +788,10 @@ const SettingsPage = () => {
                         </Button>
                       </div>
                     </form>
-                  </div>
-                )}
+                </div>
 
-                {/* 알림 설정 탭 */}
-                {activeTab === 'notifications' && (
-                  <div>
+                {/* 알림 설정 섹션 */}
+                <div className="mt-8 pt-8 border-t border-gray-200">
                     <h2 className="text-lg font-semibold text-gray-900 mb-6">알림 설정</h2>
                     <form onSubmit={handleNotificationSubmit} className="space-y-6">
                       <div className="space-y-4">
@@ -984,13 +922,11 @@ const SettingsPage = () => {
                         </Button>
                       </div>
                     </form>
-                  </div>
-                )}
+                </div>
 
-                {/* 글꼴 설정 탭 */}
-                {activeTab === 'appearance' && (
-                  <div>
-                    <h2 className="text-lg font-semibold text-gray-900 mb-6">기타 설정</h2>
+                {/* 기타 설정 섹션 */}
+                <div className="mt-8 pt-8 border-t border-gray-200">
+                  <h2 className="text-lg font-semibold text-gray-900 mb-6">기타 설정</h2>
 
                     {/* 테마 설정 섹션 */}
                     <div className="mb-8">
@@ -1113,14 +1049,12 @@ const SettingsPage = () => {
                         </p>
                       </div>
                     </div>
-                  </div>
-                )}
+                </div>
               </div>
             </Card>
-          </div>
         </div>
       </div>
-    </DashboardLayout>
+    </StudentLayout>
   )
 }
 
