@@ -22,6 +22,8 @@ interface Course {
   totalLessons: number
   participationRate: number
   assignmentSuccessRate: number
+  currentWeek?: number
+  currentLessonTitle?: string
 }
 
 const StudentDashboardPage = () => {
@@ -57,6 +59,8 @@ const StudentDashboardPage = () => {
         totalLessons: 12,
         participationRate: 67,
         assignmentSuccessRate: 83,
+        currentWeek: 8,
+        currentLessonTitle: '이진 탐색 트리',
       },
       {
         id: 2,
@@ -73,6 +77,8 @@ const StudentDashboardPage = () => {
         totalLessons: 12,
         participationRate: 75,
         assignmentSuccessRate: 91,
+        currentWeek: 9,
+        currentLessonTitle: '동적 프로그래밍 기초',
       },
       {
         id: 3,
@@ -105,6 +111,8 @@ const StudentDashboardPage = () => {
         totalLessons: 16,
         participationRate: 94,
         assignmentSuccessRate: 94,
+        currentWeek: 16,
+        currentLessonTitle: '프로젝트 최종 발표',
       },
     ],
     []
@@ -373,6 +381,14 @@ const StudentDashboardPage = () => {
                     <div className="mb-4 pb-4 border-b border-gray-200">
                       <p className="text-xs text-gray-500">{course.semester} - {course.section}</p>
                     </div>
+
+                    {/* 현재 진행 중인 주차 정보 */}
+                    {course.currentWeek && course.currentLessonTitle && (
+                      <div className="mb-4 p-3 bg-blue-50 rounded-lg border border-blue-200">
+                        <p className="text-xs text-blue-600 font-medium mb-1">현재 진행 중인 강의</p>
+                        <p className="text-sm font-semibold text-blue-900">{course.currentWeek}주차: {course.currentLessonTitle}</p>
+                      </div>
+                    )}
 
                     {/* 5. 수업 진행율: progress bar chart (8/12차시), chart 위에 % 표시 */}
                     <div className="mb-4">
