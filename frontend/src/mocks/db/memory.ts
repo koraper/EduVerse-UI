@@ -16,6 +16,7 @@ import {
   seedWeeklySessions,
   seedEnrollments,
   seedAdminLogs,
+  seedQuestions,
 } from './seed'
 import {
   loadFromStorage,
@@ -35,7 +36,7 @@ let classes: Class[] = storedData?.data.classes || [...seedClasses]
 let weeklySessions:  WeeklySession[] = storedData?.data.weeklySessions || [...seedWeeklySessions]
 let enrollments: Enrollment[] = storedData?.data.enrollments || [...seedEnrollments]
 let submissions: Submission[] = storedData?.data.submissions || []
-let questions: Question[] = storedData?.data.questions || []
+let questions: Question[] = storedData?.data.questions || [...seedQuestions]
 let answers: Answer[] = storedData?.data.answers || []
 let adminLogs: AdminLog[] = storedData?.data.adminLogs || [...seedAdminLogs]
 
@@ -44,6 +45,14 @@ const storageEnabled = isStorageAvailable()
 if (!storageEnabled) {
   console.warn('[Mock DB] localStorage를 사용할 수 없습니다. 새로고침 시 데이터가 초기화됩니다.')
 }
+
+// 디버깅: 초기화된 데이터 확인
+console.log('[Mock DB] Initialized with:', {
+  users: users.length,
+  questions: questions.length,
+  curricula: curricula.length,
+  classes: classes.length,
+})
 
 /**
  * 데이터 변경 후 localStorage에 동기화
@@ -71,6 +80,7 @@ export const db = {
     findAll: () => users,
     findById: (id: number) => users.find((u) => u.id === id),
     findByEmail: (email: string) => users.find((u) => u.email === email),
+    findByToken: (token: string) => users.find((u) => u.email === token.split('@')[0] + '@eduverse.com'),
     create: (user: Omit<User, 'id'>) => {
       const newUser = { ...user, id: users.length + 1 }
       users.push(newUser)

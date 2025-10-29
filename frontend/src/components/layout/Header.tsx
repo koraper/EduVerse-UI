@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import { useTheme } from '@/contexts/ThemeContext'
-import { Sun, Moon, Bell, HelpCircle, ChevronDown, Home, Settings, LogOut } from 'lucide-react'
+import { Sun, Moon, Bell, HelpCircle, ChevronDown, Home, Settings, LogOut, MessageCircle } from 'lucide-react'
 import Button from '@/components/common/Button'
 import ComingSoonModal from '@/components/common/ComingSoonModal'
 
@@ -215,6 +215,24 @@ const Header = () => {
                       </>
                     )}
                   </button>
+
+                  {/* 학생 전용 - 질의응답 메뉴 */}
+                  {user?.role === 'student' && (
+                    <button
+                      onClick={() => {
+                        setIsProfileMenuOpen(false)
+                        navigate('/student/qna')
+                      }}
+                      className={`w-full px-4 py-2 text-left text-sm flex items-center space-x-2 ${
+                        currentTheme === 'dark'
+                          ? 'text-gray-300 hover:bg-gray-700'
+                          : 'text-gray-700 hover:bg-gray-100'
+                      }`}
+                    >
+                      <MessageCircle className="w-5 h-5" />
+                      <span>질의응답</span>
+                    </button>
+                  )}
                 </div>
 
                 {/* 로그아웃 */}

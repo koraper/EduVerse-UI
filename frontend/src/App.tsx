@@ -10,6 +10,7 @@ import StudentSignupPage from '@/pages/auth/StudentSignupPage'
 import VerifyEmailPage from '@/pages/auth/VerifyEmailPage'
 import StudentDashboardPage from '@/pages/student/StudentDashboardPage'
 import LearningPage from '@/pages/student/LearningPage'
+import QnaPage from '@/pages/student/QnaPage'
 import ProfessorDashboardPage from '@/pages/professor/ProfessorDashboardPage'
 import AdminDashboardPage from '@/pages/admin/AdminDashboardPage'
 import ProfilePage from '@/pages/profile/ProfilePage'
@@ -57,6 +58,7 @@ function App() {
           {/* 역할별 대시보드 */}
           <Route path="/student/dashboard" element={<StudentDashboardPage />} />
           <Route path="/student/course/:courseId/planner" element={<LearningPage />} />
+          <Route path="/student/qna" element={<QnaPage />} />
           <Route path="/professor/dashboard" element={<ProfessorDashboardPage />} />
           <Route path="/admin/dashboard" element={<AdminDashboardPage />} />
 

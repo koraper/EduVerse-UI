@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clear Mock DB Storage</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      max-width: 600px;
+      margin: 50px auto;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+    .card {
+      background: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    button {
+      background: #e63946;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+    button:hover {
+      background: #d62828;
+    }
+    .success {
+      background: #06d6a0;
+      color: white;
+      padding: 12px;
+      border-radius: 6px;
+      margin-top: 20px;
+      display: none;
+    }
+    .info {
+      background: #f0f0f0;
+      padding: 15px;
+      border-radius: 6px;
+      margin-top: 15px;
+      font-family: monospace;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>🗑️ Clear Mock DB Storage</h1>
+    <p>이 페이지는 EduVerse의 MockDB localStorage 데이터를 초기화합니다.</p>
+
+    <div class="info">
+      <strong>현재 저장된 키:</strong>
+      <div id="keys"></div>
+    </div>
+
+    <button onclick="clearStorage()">localStorage 초기화</button>
+
+    <div class="success" id="success">
+      ✅ localStorage가 초기화되었습니다! <br>
+      이제 메인 페이지로 이동하여 새로고침하세요.
+    </div>
+  </div>
+
+  <script>
+    // 현재 저장된 키 표시
+    function showKeys() {
+      const keys = Object.keys(localStorage).filter(k => k.startsWith('__mockDB'));
+      const keysDiv = document.getElementById('keys');
+      if (keys.length === 0) {
+        keysDiv.innerHTML = '<div style="color: #999;">저장된 데이터가 없습니다.</div>';
+      } else {
+        keysDiv.innerHTML = keys.map(k => `<div>• ${k}</div>`).join('');
+      }
+    }
+
+    // localStorage 초기화
+    function clearStorage() {
+      const keys = Object.keys(localStorage).filter(k => k.startsWith('__mockDB'));
+      keys.forEach(key => localStorage.removeItem(key));
+
+      document.getElementById('success').style.display = 'block';
+      showKeys();
+
+      setTimeout(() => {
+        window.location.href = '/';
+      }, 2000);
+    }
+
+    // 페이지 로드 시 키 표시
+    showKeys();
+  </script>
+</body>
+</html>
