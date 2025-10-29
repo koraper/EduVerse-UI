@@ -15,6 +15,13 @@ interface Course {
   students: number
   progress: number
   status: 'pending' | 'ongoing' | 'completed'
+  department: string
+  semester: string
+  section: string
+  completedLessons: number
+  totalLessons: number
+  participationRate: number
+  assignmentSuccessRate: number
 }
 
 const StudentDashboardPage = () => {
@@ -45,6 +52,13 @@ const StudentDashboardPage = () => {
         students: 45,
         progress: 65,
         status: 'ongoing',
+        department: '컴퓨터공학과',
+        semester: '2025년 1학기',
+        section: 'A반',
+        completedLessons: 8,
+        totalLessons: 12,
+        participationRate: 67,
+        assignmentSuccessRate: 83,
       },
       {
         id: 2,
@@ -54,6 +68,13 @@ const StudentDashboardPage = () => {
         students: 38,
         progress: 78,
         status: 'ongoing',
+        department: '컴퓨터공학과',
+        semester: '2025년 1학기',
+        section: 'B반',
+        completedLessons: 9,
+        totalLessons: 12,
+        participationRate: 75,
+        assignmentSuccessRate: 91,
       },
       {
         id: 3,
@@ -63,6 +84,13 @@ const StudentDashboardPage = () => {
         students: 52,
         progress: 45,
         status: 'pending',
+        department: '정보통신과',
+        semester: '2025년 1학기',
+        section: 'A반',
+        completedLessons: 0,
+        totalLessons: 15,
+        participationRate: 0,
+        assignmentSuccessRate: 0,
       },
       {
         id: 4,
@@ -72,6 +100,13 @@ const StudentDashboardPage = () => {
         students: 35,
         progress: 82,
         status: 'completed',
+        department: '컴퓨터공학과',
+        semester: '2024년 2학기',
+        section: 'C반',
+        completedLessons: 16,
+        totalLessons: 16,
+        participationRate: 94,
+        assignmentSuccessRate: 94,
       },
     ],
     []
@@ -347,41 +382,73 @@ const StudentDashboardPage = () => {
                   {filteredCourses.map((course) => (
                     <Card key={course.id}>
                       <div className="p-6 flex flex-col h-full">
-                        <div className="mb-4">
-                          <div className="flex items-start justify-between mb-2">
-                            <div className="flex-1">
-                              <h3 className="text-base font-semibold text-gray-900">{course.name}</h3>
-                              <p className="text-xs text-gray-500 mt-1">{course.professor}</p>
-                            </div>
-                            <Badge variant="primary">{course.code}</Badge>
-                          </div>
+                        {/* 1. 수업명 */}
+                        <div className="mb-2">
+                          <h3 className="text-base font-semibold text-gray-900">{course.name}</h3>
                         </div>
 
+                        {/* 2. 담당교수명 */}
+                        <div className="mb-3">
+                          <p className="text-sm text-gray-600">{course.professor}</p>
+                        </div>
+
+                        {/* 3. 학과명 */}
+                        <div className="mb-2">
+                          <Badge variant="secondary">{course.department}</Badge>
+                        </div>
+
+                        {/* 4. 학기/반정보 (2025년 1학기 A반) */}
+                        <div className="mb-4 pb-4 border-b border-gray-200">
+                          <p className="text-xs text-gray-500">{course.semester} {course.section}</p>
+                        </div>
+
+                        {/* 5. 수업 진행율: progress bar chart (8/12차시), chart 위에 % 표시 */}
                         <div className="mb-4">
-                          <div className="flex items-center justify-between mb-2">
-                            <span className="text-xs font-medium text-gray-600">학습 진도</span>
-                            <span className="text-xs font-semibold text-primary-600">{course.progress}%</span>
+                          <div className="flex items-center justify-between mb-1">
+                            <span className="text-xs font-medium text-gray-600">수업 진행율</span>
+                            <span className="text-xs font-semibold text-primary-600">{Math.round((course.completedLessons / course.totalLessons) * 100)}%</span>
                           </div>
+                          <div className="text-xs text-gray-500 mb-2">{course.completedLessons}/{course.totalLessons}차시</div>
                           <div className="w-full bg-gray-200 rounded-full h-2">
                             <div
                               className="bg-primary-600 h-2 rounded-full transition-all duration-300"
-                              style={{ width: `${course.progress}%` }}
+                              style={{ width: `${(course.completedLessons / course.totalLessons) * 100}%` }}
                             />
                           </div>
                         </div>
 
-                        <div className="grid grid-cols-2 gap-3 mb-4 text-xs">
-                          <div>
-                            <p className="text-gray-500">수강생</p>
-                            <p className="font-semibold text-gray-900">{course.students}명</p>
+                        {/* 6. 수업 참여율: progress bar chart (6/12차시), chart 위에 % 표시 */}
+                        <div className="mb-4">
+                          <div className="flex items-center justify-between mb-1">
+                            <span className="text-xs font-medium text-gray-600">수업 참여율</span>
+                            <span className="text-xs font-semibold text-blue-600">{course.participationRate}%</span>
                           </div>
-                          <div>
-                            <p className="text-gray-500">진도율</p>
-                            <p className="font-semibold text-gray-900">{course.progress}%</p>
+                          <div className="text-xs text-gray-500 mb-2">{Math.round((course.participationRate / 100) * course.totalLessons)}/{course.totalLessons}차시</div>
+                          <div className="w-full bg-gray-200 rounded-full h-2">
+                            <div
+                              className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+                              style={{ width: `${course.participationRate}%` }}
+                            />
                           </div>
                         </div>
 
-                        <button className="w-full mt-auto pt-4 px-4 py-2.5 bg-primary-600 text-white rounded-lg hover:bg-primary-700 active:bg-primary-800 font-medium text-sm transition-colors">
+                        {/* 7. 과제 성공율: progress bar chart (15/18개), chart 위에 % 표시 */}
+                        <div className="mb-6">
+                          <div className="flex items-center justify-between mb-1">
+                            <span className="text-xs font-medium text-gray-600">과제 성공율</span>
+                            <span className="text-xs font-semibold text-emerald-600">{course.assignmentSuccessRate}%</span>
+                          </div>
+                          <div className="text-xs text-gray-500 mb-2">{Math.round((course.assignmentSuccessRate / 100) * 18)}/18개</div>
+                          <div className="w-full bg-gray-200 rounded-full h-2">
+                            <div
+                              className="bg-emerald-600 h-2 rounded-full transition-all duration-300"
+                              style={{ width: `${course.assignmentSuccessRate}%` }}
+                            />
+                          </div>
+                        </div>
+
+                        {/* 8. 학습하기 버튼 */}
+                        <button className="w-full mt-auto px-4 py-2.5 bg-primary-600 text-white rounded-lg hover:bg-primary-700 active:bg-primary-800 font-medium text-sm transition-colors">
                           학습하기
                         </button>
                       </div>
