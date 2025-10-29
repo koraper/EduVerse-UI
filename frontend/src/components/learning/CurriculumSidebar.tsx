@@ -175,6 +175,30 @@ const CurriculumSidebar = ({
     }
   }
 
+  // 필터 버튼의 클래스를 결정하는 헬퍼 함수
+  const getFilterButtonClasses = (filterType: LessonFilter, filterColor: string) => {
+    const isActive = activeFilter === filterType;
+    const isDark = currentTheme === 'dark';
+
+    const baseClasses = 'px-3 py-1.5 text-xs font-medium rounded-md transition-all';
+
+    if (isActive) {
+      // 활성 상태일 때의 스타일
+      const activeColorClasses = {
+        primary: isDark ? 'bg-primary-600' : 'bg-primary-500',
+        blue: isDark ? 'bg-blue-600' : 'bg-blue-500',
+        gray: isDark ? 'bg-gray-600' : 'bg-gray-500',
+        green: isDark ? 'bg-green-600' : 'bg-green-500',
+      }[filterColor] || (isDark ? 'bg-primary-600' : 'bg-primary-500');
+      
+      return `${baseClasses} ${activeColorClasses} text-white shadow-md`;
+    } else {
+      // 비활성 상태일 때의 스타일
+      const inactiveClasses = isDark ? 'text-gray-400 hover:text-gray-300' : 'text-gray-600 hover:text-gray-700';
+      return `${baseClasses} ${inactiveClasses}`;
+    }
+  };
+
   return (
     <aside className={`w-80 border-r flex flex-col transition-colors duration-300 ${
       currentTheme === 'dark'
@@ -526,57 +550,25 @@ const CurriculumSidebar = ({
           }`}>
           <button
             onClick={() => setActiveFilter('all')}
-            className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all ${
-              activeFilter === 'all'
-                ? currentTheme === 'dark'
-                  ? 'bg-primary-600 text-white shadow-md'
-                  : 'bg-primary-500 text-white shadow-md'
-                : currentTheme === 'dark'
-                ? 'text-gray-400 hover:text-gray-300'
-                : 'text-gray-600 hover:text-gray-700'
-            }`}
+            className={getFilterButtonClasses('all', 'primary')}
           >
             전체
           </button>
           <button
             onClick={() => setActiveFilter('in_progress')}
-            className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all ${
-              activeFilter === 'in_progress'
-                ? currentTheme === 'dark'
-                  ? 'bg-blue-600 text-white shadow-md'
-                  : 'bg-blue-500 text-white shadow-md'
-                : currentTheme === 'dark'
-                ? 'text-gray-400 hover:text-gray-300'
-                : 'text-gray-600 hover:text-gray-700'
-            }`}
+            className={getFilterButtonClasses('in_progress', 'blue')}
           >
             수업 중
           </button>
           <button
             onClick={() => setActiveFilter('absent')}
-            className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all ${
-              activeFilter === 'absent'
-                ? currentTheme === 'dark'
-                  ? 'bg-gray-600 text-white shadow-md'
-                  : 'bg-gray-500 text-white shadow-md'
-                : currentTheme === 'dark'
-                ? 'text-gray-400 hover:text-gray-300'
-                : 'text-gray-600 hover:text-gray-700'
-            }`}
+            className={getFilterButtonClasses('absent', 'gray')}
           >
             불참
           </button>
           <button
             onClick={() => setActiveFilter('completed')}
-            className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all ${
-              activeFilter === 'completed'
-                ? currentTheme === 'dark'
-                  ? 'bg-green-600 text-white shadow-md'
-                  : 'bg-green-500 text-white shadow-md'
-                : currentTheme === 'dark'
-                ? 'text-gray-400 hover:text-gray-300'
-                : 'text-gray-600 hover:text-gray-700'
-            }`}
+            className={getFilterButtonClasses('completed', 'green')}
           >
             참여
           </button>

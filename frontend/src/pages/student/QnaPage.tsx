@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import { useTheme } from '@/contexts/ThemeContext'
@@ -29,19 +29,17 @@ const QnaPage = () => {
   const { currentTheme } = useTheme()
   const handleError = useApiError()
 
-  // URL 파라미터에서 필터 값 가져오기
-  const filterParam = searchParams.get('filter')
-  const initialFilter = (filterParam === 'pending' || filterParam === 'answered') ? filterParam : 'all'
-
   const [questions, setQuestions] = useState<Question[]>([])
-  const [filteredQuestions, setFilteredQuestions] = useState<Question[]>([])
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
-  const [statusFilter, setStatusFilter] = useState<'all' | 'pending' | 'answered'>(initialFilter)
   const [selectedQuestion, setSelectedQuestion] = useState<Question | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [newQuestion, setNewQuestion] = useState('')
   const [selectedLessonId, setSelectedLessonId] = useState<number | null>(null)
+
+  // URL 파라미터에서 현재 필터 값 가져오기 (상태 없이 직접 계산)
+  const filterParam = searchParams.get('filter')
+  const statusFilter = (filterParam === 'pending' || filterParam === 'answered') ? filterParam : 'all'
 
   // Auth check
   useEffect(() => {
@@ -55,32 +53,28 @@ const QnaPage = () => {
     }
   }, [user, authLoading, navigate])
 
-  // URL 파라미터 변경 감지하여 필터 업데이트
-  useEffect(() => {
-    const filterParam = searchParams.get('filter')
-    if (filterParam === 'pending' || filterParam === 'answered') {
-      setStatusFilter(filterParam)
-    } else if (filterParam === null) {
-      setStatusFilter('all')
-    }
-  }, [searchParams])
-
   // Fetch questions
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
         setLoading(true)
+        console.log('[QnA Page] Fetching questions for user:', user?.id, user?.name)
         const response = await fetch('/api/student/qna', {
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`
           }
         })
 
+        console.log('[QnA Page] Response status:', response.status, response.ok)
+
         if (!response.ok) throw await response.json()
 
         const data = await response.json()
+        console.log('[QnA Page] Received data:', data)
+        console.log('[QnA Page] Questions count:', data.data?.length || 0)
         setQuestions(data.data || [])
       } catch (error) {
+        console.error('[QnA Page] Error fetching questions:', error)
         handleError(error)
       } finally {
         setLoading(false)
@@ -92,8 +86,8 @@ const QnaPage = () => {
     }
   }, [user, handleError])
 
-  // Filter questions
-  useEffect(() => {
+  // Filter questions - useMemo로 변경하여 불필요한 리렌더링 방지
+  const filteredQuestions = useMemo(() => {
     let filtered = questions
 
     // Status filter
@@ -111,16 +105,15 @@ const QnaPage = () => {
       )
     }
 
-    setFilteredQuestions(filtered)
+    return filtered
   }, [questions, statusFilter, searchTerm])
 
-  // 필터 변경 핸들러 - URL 파라미터도 함께 업데이트
+  // 필터 변경 핸들러 - URL만 업데이트 (상태는 useEffect에서 자동 동기화)
   const handleFilterChange = (filter: 'all' | 'pending' | 'answered') => {
-    setStatusFilter(filter)
     if (filter === 'all') {
-      setSearchParams({}) // 파라미터 제거
+      setSearchParams({}, { replace: true }) // 파라미터 제거, replace로 깜빡임 방지
     } else {
-      setSearchParams({ filter }) // 파라미터 설정
+      setSearchParams({ filter }, { replace: true }) // 파라미터 설정, replace로 깜빡임 방지
     }
   }
 

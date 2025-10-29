@@ -53,6 +53,8 @@ console.log('[Mock DB] Initialized with:', {
   curricula: curricula.length,
   classes: classes.length,
 })
+console.log('[Mock DB] Questions detail:', questions)
+console.log('[Mock DB] Student 1 questions:', questions.filter(q => q.studentId === 1))
 
 /**
  * 데이터 변경 후 localStorage에 동기화

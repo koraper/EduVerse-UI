@@ -5,7 +5,7 @@
  */
 
 const STORAGE_KEY = 'eduverse-mock-db'
-const STORAGE_VERSION = '1.1' // Questions 추가로 버전 업데이트
+const STORAGE_VERSION = '1.2' // Questions 디버깅을 위한 버전 업데이트
 
 export interface StorageData {
   version: string
