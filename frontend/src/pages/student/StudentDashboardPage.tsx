@@ -26,6 +26,7 @@ interface Course {
   currentWeek?: number
   currentLessonTitle?: string
   isCompletedLesson?: boolean
+  language: 'C' | 'Python' | 'Java' | 'JavaScript' | 'TypeScript' | 'Go' | 'Rust' | 'C++' | 'C#'
 }
 
 const StudentDashboardPage = () => {
@@ -64,6 +65,7 @@ const StudentDashboardPage = () => {
         assignmentSuccessRate: 83,
         currentWeek: 8,
         currentLessonTitle: '이진 탐색 트리',
+        language: 'C',
       },
       {
         id: 2,
@@ -83,6 +85,7 @@ const StudentDashboardPage = () => {
         currentWeek: 9,
         currentLessonTitle: '동적 프로그래밍 기초',
         isCompletedLesson: true,
+        language: 'Python',
       },
       {
         id: 3,
@@ -99,6 +102,7 @@ const StudentDashboardPage = () => {
         totalLessons: 15,
         participationRate: 0,
         assignmentSuccessRate: 0,
+        language: 'Java',
       },
       {
         id: 4,
@@ -115,6 +119,7 @@ const StudentDashboardPage = () => {
         totalLessons: 16,
         participationRate: 94,
         assignmentSuccessRate: 94,
+        language: 'JavaScript',
       },
     ],
     []
@@ -249,7 +254,7 @@ const StudentDashboardPage = () => {
 
         {/* 헤더 */}
         <div>
-          <h1 className={`text-2xl sm:text-3xl font-bold ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>대시보드</h1>
+          <h1 className={`text-2xl sm:text-3xl font-bold ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>홈</h1>
           <p className={`mt-1 text-sm ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
             수강 중인 과목을 한눈에 확인하고 관리하세요
           </p>
@@ -381,18 +386,25 @@ const StudentDashboardPage = () => {
               {filteredCourses.map((course) => (
                 <Card key={course.id} hoverable>
                   <div className="p-6 flex flex-col h-full">
-                    {/* 1. 수업명과 상태 배지 */}
+                    {/* 1. 수업명과 배지들 */}
                     <div className="mb-3 flex items-start justify-between gap-3">
                       <h3 className={`text-lg font-semibold flex-1 ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{course.name}</h3>
-                      <Badge variant={
-                        course.status === 'pending' ? 'secondary' :
-                        course.status === 'ongoing' ? 'primary' :
-                        'success'
-                      } className="flex-shrink-0">
-                        {course.status === 'pending' ? '예정' :
-                         course.status === 'ongoing' ? '진행 중' :
-                         '완료'}
-                      </Badge>
+                      <div className="flex items-center gap-2 flex-shrink-0">
+                        {/* 언어 배지 */}
+                        <span className="inline-flex items-center px-2.5 py-0.5 text-xs font-bold text-purple-600">
+                          {course.language}
+                        </span>
+                        {/* 상태 배지 */}
+                        <Badge variant={
+                          course.status === 'pending' ? 'secondary' :
+                          course.status === 'ongoing' ? 'primary' :
+                          'success'
+                        } className="flex-shrink-0">
+                          {course.status === 'pending' ? '예정' :
+                           course.status === 'ongoing' ? '진행 중' :
+                           '완료'}
+                        </Badge>
+                      </div>
                     </div>
 
                     {/* 2. 담당교수명 & 3. 학과명배지 */}
