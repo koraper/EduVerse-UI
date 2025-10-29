@@ -381,8 +381,8 @@ const StudentDashboardPage = () => {
                           </div>
                         </div>
 
-                        <button className="w-full mt-auto pt-4 border-t border-gray-200 text-primary-600 hover:text-primary-700 font-medium text-sm transition-colors">
-                          학습하기 →
+                        <button className="w-full mt-auto pt-4 px-4 py-2.5 bg-primary-600 text-white rounded-lg hover:bg-primary-700 active:bg-primary-800 font-medium text-sm transition-colors">
+                          학습하기
                         </button>
                       </div>
                     </Card>

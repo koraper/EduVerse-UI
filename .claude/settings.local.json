@@ -40,7 +40,8 @@
       "Bash(sed -i \"s/import type { SelectOption } from ''@\\/components\\/common''//\" src/pages/auth/RegisterPage.tsx)",
       "Bash(git log -3 --format='%h %s')",
       "Bash(findstr:*)",
-      "Bash(taskkill:*)"
+      "Bash(taskkill:*)",
+      "Bash(hover:bg-primary-700 active:bg-primary-800\"\n\n개선점:\n1. 명확한 버튼 모양\n   - 파란색 배경(bg-primary-600)으로 시각적 강조\n   - 흰색 텍스트로 대비 향상\n   - 라운드 모서리(rounded-lg)로 모던한 느낌\n\n2. 향상된 인터랙션\n   - hover: 더 진한 파랑(primary-700)\n   - active: 가장 진한 파랑(primary-800)\n   - 명확한 피드백 제공\n\n3. 더 나은 클릭 가능성\n   - 충분한 padding (px-4 py-2.5)\n   - 전체 너비 버튼 (w-full)\n   - 화살표 제거로 깔끔함\n\n4. 일관성\n   - 초대코드 입력, 필터 초기화 버튼과 동일한 스타일\n   - 전체 UI의 일관성 유지\n\n🤖 Generated with Claude Code\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")"
     ],
     "deny": [],
     "ask": []
