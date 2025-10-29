@@ -10,6 +10,8 @@ interface Lesson {
   week: number
   status: 'completed' | 'in_progress' | 'upcoming'
   completedAt?: string
+  classDate?: string // 수업일
+  attendance?: 'completed' | 'incomplete' | 'absent' // 참석 및 과제 완료 여부
 }
 
 interface CourseInfo {
@@ -54,6 +56,45 @@ const CurriculumSidebar = ({
     }
   }
 
+  const getAttendanceBadge = (attendance?: 'completed' | 'incomplete' | 'absent') => {
+    if (!attendance) return null
+
+    switch (attendance) {
+      case 'completed':
+        return (
+          <span className={`px-2 py-0.5 text-xs font-medium rounded ${
+            currentTheme === 'dark'
+              ? 'bg-green-900/30 text-green-400'
+              : 'bg-green-100 text-green-700'
+          }`}>
+            완료
+          </span>
+        )
+      case 'incomplete':
+        return (
+          <span className={`px-2 py-0.5 text-xs font-medium rounded ${
+            currentTheme === 'dark'
+              ? 'bg-yellow-900/30 text-yellow-400'
+              : 'bg-yellow-100 text-yellow-700'
+          }`}>
+            미완료
+          </span>
+        )
+      case 'absent':
+        return (
+          <span className={`px-2 py-0.5 text-xs font-medium rounded ${
+            currentTheme === 'dark'
+              ? 'bg-gray-700 text-gray-400'
+              : 'bg-gray-200 text-gray-600'
+          }`}>
+            불참
+          </span>
+        )
+      default:
+        return null
+    }
+  }
+
   const progressPercentage = Math.round((completedLessons / totalLessons) * 100)
 
   // 필터링 및 정렬된 차시 목록
@@ -73,13 +114,13 @@ const CurriculumSidebar = ({
   const getLanguageBadgeColor = (language: string) => {
     switch (language) {
       case 'Python':
-        return 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
+        return 'bg-blue-600 text-white dark:bg-blue-900/30 dark:text-blue-400'
       case 'Java':
-        return 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400'
+        return 'bg-orange-600 text-white dark:bg-orange-900/30 dark:text-orange-400'
       case 'JavaScript':
-        return 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400'
+        return 'bg-yellow-600 text-white dark:bg-yellow-900/30 dark:text-yellow-400'
       default:
-        return 'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300'
+        return 'bg-gray-600 text-white dark:bg-gray-700 dark:text-gray-300'
     }
   }
 
@@ -364,13 +405,17 @@ const CurriculumSidebar = ({
                 key={lesson.id}
                 onClick={() => onLessonSelect(lesson.id)}
                 className={`w-full text-left p-3 rounded-lg transition-all duration-200 ${
-                  isActive
+                  lesson.status === 'in_progress'
+                    ? currentTheme === 'dark'
+                      ? 'bg-red-900/20 border-2 border-red-600 hover:bg-red-900/30 animate-pulse'
+                      : 'bg-red-50 border-2 border-red-400 hover:bg-red-100 shadow-lg shadow-red-200/50'
+                    : isActive
                     ? currentTheme === 'dark'
                       ? 'bg-primary-900 border-2 border-primary-600'
-                      : 'bg-primary-50 border-2 border-primary-600'
+                      : 'bg-primary-50 border-2 border-primary-600 shadow-md'
                     : currentTheme === 'dark'
                     ? 'bg-gray-700 hover:bg-gray-650 border-2 border-transparent'
-                    : 'bg-gray-50 hover:bg-gray-100 border-2 border-transparent'
+                    : 'bg-white hover:bg-gray-50 border-2 border-gray-200 hover:border-gray-300 shadow-sm hover:shadow-md'
                 }`}
               >
                 <div className="flex items-start gap-3">
@@ -381,39 +426,50 @@ const CurriculumSidebar = ({
 
                   {/* 차시 정보 */}
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className={`text-xs font-medium ${
-                        currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-500'
-                      }`}>
-                        {lesson.week}차시
-                      </span>
-                      {lesson.status === 'in_progress' && (
-                        <span className="px-2 py-0.5 text-xs font-medium bg-blue-100 text-blue-700 rounded-full">
-                          진행중
+                    {/* 첫 번째 줄: N차시 + 수업일 */}
+                    <div className="flex items-center justify-between gap-2 mb-1">
+                      <div className="flex items-center gap-2">
+                        <span className={`text-xs font-medium ${
+                          currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+                        }`}>
+                          {lesson.week}차시
+                        </span>
+                        {lesson.status === 'in_progress' && (
+                          <span className={`px-2 py-0.5 text-xs font-medium rounded-full ${
+                            currentTheme === 'dark'
+                              ? 'bg-red-900/30 text-red-400'
+                              : 'bg-red-100 text-red-700'
+                          }`}>
+                            수업 중
+                          </span>
+                        )}
+                      </div>
+                      {lesson.classDate && lesson.status !== 'upcoming' && (
+                        <span className={`text-xs ${
+                          currentTheme === 'dark' ? 'text-gray-500' : 'text-gray-500'
+                        }`}>
+                          {lesson.classDate}
                         </span>
                       )}
                     </div>
-                    <p className={`text-sm font-medium truncate ${
-                      isActive
-                        ? currentTheme === 'dark'
-                          ? 'text-white'
-                          : 'text-gray-900'
-                        : currentTheme === 'dark'
-                        ? 'text-gray-300'
-                        : 'text-gray-700'
-                    }`}>
-                      {lesson.title}
-                    </p>
 
-                    {/* 완료 시간 */}
-                    {lesson.completedAt && (
-                      <div className={`flex items-center gap-1 mt-1 text-xs ${
-                        currentTheme === 'dark' ? 'text-gray-500' : 'text-gray-500'
+                    {/* 두 번째 줄: 차시 제목 + 참석/과제 완료 여부 */}
+                    <div className="flex items-center justify-between gap-2">
+                      <p className={`text-sm font-medium truncate flex-1 ${
+                        isActive
+                          ? currentTheme === 'dark'
+                            ? 'text-white'
+                            : 'text-gray-900'
+                          : currentTheme === 'dark'
+                          ? 'text-gray-300'
+                          : 'text-gray-700'
                       }`}>
-                        <Clock className="w-3 h-3" />
-                        <span>{lesson.completedAt}</span>
+                        {lesson.title}
+                      </p>
+                      <div className="flex-shrink-0">
+                        {getAttendanceBadge(lesson.attendance)}
                       </div>
-                    )}
+                    </div>
                   </div>
                 </div>
               </button>

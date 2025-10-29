@@ -13,6 +13,8 @@ interface Lesson {
   week: number
   status: 'completed' | 'in_progress' | 'upcoming'
   completedAt?: string
+  classDate?: string
+  attendance?: 'completed' | 'incomplete' | 'absent'
 }
 
 interface CourseData {
@@ -46,18 +48,18 @@ const LearningPage = () => {
     totalLessons: 12,
     completedLessons: 3,
     lessons: [
-      { id: 1, title: '변수와 자료형', week: 1, status: 'completed', completedAt: '2025-10-20' },
-      { id: 2, title: '조건문과 반복문', week: 2, status: 'completed', completedAt: '2025-10-22' },
-      { id: 3, title: '함수의 이해', week: 3, status: 'completed', completedAt: '2025-10-25' },
-      { id: 4, title: '리스트와 튜플', week: 4, status: 'in_progress' },
-      { id: 5, title: '딕셔너리와 집합', week: 5, status: 'upcoming' },
-      { id: 6, title: '문자열 처리', week: 6, status: 'upcoming' },
-      { id: 7, title: '파일 입출력', week: 7, status: 'upcoming' },
-      { id: 8, title: '예외 처리', week: 8, status: 'upcoming' },
-      { id: 9, title: '모듈과 패키지', week: 9, status: 'upcoming' },
-      { id: 10, title: '클래스와 객체', week: 10, status: 'upcoming' },
-      { id: 11, title: '상속과 다형성', week: 11, status: 'upcoming' },
-      { id: 12, title: '종합 프로젝트', week: 12, status: 'upcoming' },
+      { id: 1, title: '변수와 자료형', week: 1, status: 'completed', completedAt: '2025-10-20', classDate: '10/20', attendance: 'completed' },
+      { id: 2, title: '조건문과 반복문', week: 2, status: 'completed', completedAt: '2025-10-22', classDate: '10/22', attendance: 'completed' },
+      { id: 3, title: '함수의 이해', week: 3, status: 'completed', completedAt: '2025-10-25', classDate: '10/25', attendance: 'incomplete' },
+      { id: 4, title: '리스트와 튜플', week: 4, status: 'in_progress', classDate: '10/27', attendance: 'incomplete' },
+      { id: 5, title: '딕셔너리와 집합', week: 5, status: 'upcoming', classDate: '10/29' },
+      { id: 6, title: '문자열 처리', week: 6, status: 'upcoming', classDate: '11/01' },
+      { id: 7, title: '파일 입출력', week: 7, status: 'upcoming', classDate: '11/03' },
+      { id: 8, title: '예외 처리', week: 8, status: 'upcoming', classDate: '11/05' },
+      { id: 9, title: '모듈과 패키지', week: 9, status: 'upcoming', classDate: '11/08' },
+      { id: 10, title: '클래스와 객체', week: 10, status: 'upcoming', classDate: '11/10' },
+      { id: 11, title: '상속과 다형성', week: 11, status: 'upcoming', classDate: '11/12' },
+      { id: 12, title: '종합 프로젝트', week: 12, status: 'upcoming', classDate: '11/15' },
     ]
   })
 
