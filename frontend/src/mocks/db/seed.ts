@@ -1,4 +1,4 @@
-import type { User, Curriculum, Class, WeeklySession, Enrollment, AdminLog } from './schema'
+import type { User, Curriculum, Class, WeeklySession, Enrollment, AdminLog, Question } from './schema'
 
 // 초기 사용자 데이터
 export const seedUsers: User[] = [
@@ -383,3 +383,84 @@ function generateAdminLogs(): AdminLog[] {
 
 // 관리자 활동 로그 데이터
 export const seedAdminLogs: AdminLog[] = generateAdminLogs()
+
+// 질의응답 데이터
+export const seedQuestions: Question[] = [
+  {
+    id: 1,
+    studentId: 1,
+    classId: 1,
+    weekNumber: 2,
+    title: '조건문과 반복문',
+    content: 'for문과 while문의 차이점이 무엇인가요? 언제 어떤 것을 사용하는 것이 좋을까요?',
+    priority: 'normal',
+    answered: true,
+    createdAt: '2025-10-22',
+  },
+  {
+    id: 2,
+    studentId: 1,
+    classId: 1,
+    weekNumber: 3,
+    title: '함수의 이해',
+    content: '함수에서 return 문이 없으면 어떻게 되나요? None이 반환되는 것이 맞나요?',
+    priority: 'normal',
+    answered: true,
+    createdAt: '2025-10-25',
+  },
+  {
+    id: 3,
+    studentId: 1,
+    classId: 1,
+    weekNumber: 4,
+    title: '리스트와 튜플',
+    content: '리스트 슬라이싱에서 [::-1]은 어떤 의미인가요? 리스트를 역순으로 만드는 다른 방법도 있나요?',
+    priority: 'urgent',
+    answered: false,
+    createdAt: '2025-10-27',
+  },
+  {
+    id: 4,
+    studentId: 1,
+    classId: 1,
+    weekNumber: 4,
+    title: '리스트와 튜플',
+    content: '튜플은 불변이라고 했는데, 튜플 안에 리스트가 있으면 그 리스트는 변경 가능한가요?',
+    priority: 'normal',
+    answered: false,
+    createdAt: '2025-10-28',
+  },
+  {
+    id: 5,
+    studentId: 1,
+    classId: 1,
+    weekNumber: 5,
+    title: '딕셔너리와 집합',
+    content: '딕셔너리의 get() 메서드와 []를 사용한 접근의 차이점이 무엇인가요?',
+    priority: 'normal',
+    answered: true,
+    createdAt: '2025-10-29',
+  },
+  {
+    id: 6,
+    studentId: 1,
+    classId: 1,
+    weekNumber: 3,
+    title: '함수의 이해',
+    content: '재귀함수가 무엇인지 이해가 잘 안 됩니다. 간단한 예제로 설명해주실 수 있나요?',
+    priority: 'normal',
+    answered: true,
+    createdAt: '2025-10-26',
+  },
+  {
+    id: 7,
+    studentId: 1,
+    classId: 1,
+    weekNumber: 2,
+    title: '조건문과 반복문',
+    content: 'break와 continue의 차이가 헷갈립니다. 실제 사용 예를 보여주실 수 있나요?',
+    priority: 'normal',
+    answered: false,
+    createdAt: '2025-10-23',
+  },
+]
