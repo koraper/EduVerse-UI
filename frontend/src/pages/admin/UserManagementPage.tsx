@@ -201,7 +201,7 @@ const UserManagementPage = () => {
         setTotalUsers(data.data.pagination?.total || data.data.users.length)
         setTotalPages(data.data.pagination?.totalPages || Math.ceil(data.data.users.length / itemsPerPage))
       } else {
-        throw new Error(data.message || '사용자 조회에 실패했습니다')
+        throw new Error(data.message || '사용자 조회에 실패했습니다.')
       }
     } catch (error) {
       handleError(error)
@@ -218,7 +218,7 @@ const UserManagementPage = () => {
     if (!createName.trim()) {
       errors.createName = '이름을 입력해주세요'
     } else if (createName.length > 50) {
-      errors.createName = '이름은 50자 이내여야 합니다'
+      errors.createName = '이름은 50자 이내여야 합니다.'
     }
 
     // 이메일 검증
@@ -232,9 +232,9 @@ const UserManagementPage = () => {
     if (!createPassword.trim()) {
       errors.createPassword = '비밀번호를 입력해주세요'
     } else if (createPassword.length < 6) {
-      errors.createPassword = '비밀번호는 6자 이상이어야 합니다'
+      errors.createPassword = '비밀번호는 6자 이상이어야 합니다.'
     } else if (createPassword.length > 50) {
-      errors.createPassword = '비밀번호는 50자 이내여야 합니다'
+      errors.createPassword = '비밀번호는 50자 이내여야 합니다.'
     }
 
     setCreateErrors(errors)
@@ -270,7 +270,7 @@ const UserManagementPage = () => {
 
       const data = await response.json()
       if (data.status === 'success') {
-        addToast('사용자가 생성되었습니다', { variant: 'success' })
+        addToast('사용자가 생성되었습니다.', { variant: 'success' })
         setIsCreateModalOpen(false)
         setCreateEmail('')
         setCreateName('')
@@ -281,7 +281,7 @@ const UserManagementPage = () => {
         setCurrentPage(1)
         await fetchUsers()
       } else {
-        throw new Error(data.message || '사용자 생성에 실패했습니다')
+        throw new Error(data.message || '사용자 생성에 실패했습니다.')
       }
     } catch (error) {
       handleError(error)
@@ -345,13 +345,13 @@ const UserManagementPage = () => {
         if (data.data?.logCreated) {
           addToast('사용자 상태가 변경되었습니다 (관리 로그 기록됨)', { variant: 'success' })
         } else {
-          addToast('사용자 상태가 변경되었습니다', { variant: 'success' })
+          addToast('사용자 상태가 변경되었습니다.', { variant: 'success' })
           console.warn('관리 로그가 기록되지 않았습니다:', data.data)
         }
 
         fetchUsers()
       } else {
-        throw new Error(data.message || '사용자 상태 변경에 실패했습니다')
+        throw new Error(data.message || '사용자 상태 변경에 실패했습니다.')
       }
     } catch (error) {
       handleError(error)
@@ -419,7 +419,7 @@ const UserManagementPage = () => {
 
     // 사용자 이름 확인 (공백 제거 후 비교)
     if (deleteConfirmName.trim() !== deleteUser.name) {
-      addToast('사용자 이름이 일치하지 않습니다', { variant: 'warning' })
+      addToast('사용자 이름이 일치하지 않습니다.', { variant: 'warning' })
       return
     }
 
@@ -448,10 +448,10 @@ const UserManagementPage = () => {
         setDeletePassword('')
         setDeleteConfirmName('')
 
-        addToast('사용자가 삭제되었습니다', { variant: 'success' })
+        addToast('사용자가 삭제되었습니다.', { variant: 'success' })
         fetchUsers()
       } else {
-        throw new Error(data.message || '사용자 삭제에 실패했습니다')
+        throw new Error(data.message || '사용자 삭제에 실패했습니다.')
       }
     } catch (error) {
       handleError(error)
@@ -478,7 +478,7 @@ const UserManagementPage = () => {
     }
 
     if (editName.trim().length < 2 || editName.trim().length > 50) {
-      addToast('이름은 2-50자 사이여야 합니다', { variant: 'warning' })
+      addToast('이름은 2-50자 사이여야 합니다.', { variant: 'warning' })
       return
     }
 
@@ -490,7 +490,7 @@ const UserManagementPage = () => {
     // 이메일 형식 검증
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     if (!emailRegex.test(editEmail.trim())) {
-      addToast('올바른 이메일 형식이 아닙니다', { variant: 'warning' })
+      addToast('올바른 이메일 형식이 아닙니다.', { variant: 'warning' })
       return
     }
 
@@ -524,10 +524,10 @@ const UserManagementPage = () => {
         setEditEmail('')
         setEditRole('student')
 
-        addToast('사용자 정보가 수정되었습니다', { variant: 'success' })
+        addToast('사용자 정보가 수정되었습니다.', { variant: 'success' })
         fetchUsers()
       } else {
-        throw new Error(data.message || '사용자 정보 수정에 실패했습니다')
+        throw new Error(data.message || '사용자 정보 수정에 실패했습니다.')
       }
     } catch (error) {
       handleError(error)
@@ -559,7 +559,7 @@ const UserManagementPage = () => {
   // 내보내기 함수
   const handleExportCSV = async () => {
     if (users.length === 0) {
-      addToast('내보낼 데이터가 없습니다', { variant: 'warning' })
+      addToast('내보낼 데이터가 없습니다.', { variant: 'warning' })
       return
     }
 
@@ -579,10 +579,10 @@ const UserManagementPage = () => {
 
       const filename = getFilenameWithDate('사용자관리', 'csv')
       exportToCSV(exportData, { filename })
-      addToast('CSV 파일이 다운로드되었습니다', { variant: 'success' })
+      addToast('CSV 파일이 다운로드되었습니다.', { variant: 'success' })
     } catch (error) {
       console.error('CSV 내보내기 실패:', error)
-      addToast('CSV 내보내기에 실패했습니다', { variant: 'error' })
+      addToast('CSV 내보내기에 실패했습니다.', { variant: 'error' })
     } finally {
       setIsExporting(false)
     }
@@ -590,7 +590,7 @@ const UserManagementPage = () => {
 
   const handleExportXLSX = async () => {
     if (users.length === 0) {
-      addToast('내보낼 데이터가 없습니다', { variant: 'warning' })
+      addToast('내보낼 데이터가 없습니다.', { variant: 'warning' })
       return
     }
 
@@ -610,10 +610,10 @@ const UserManagementPage = () => {
 
       const filename = getFilenameWithDate('사용자관리', 'xlsx')
       exportToXLSX(exportData, { filename, sheetName: '사용자' })
-      addToast('XLSX 파일이 다운로드되었습니다', { variant: 'success' })
+      addToast('XLSX 파일이 다운로드되었습니다.', { variant: 'success' })
     } catch (error) {
       console.error('XLSX 내보내기 실패:', error)
-      addToast('XLSX 내보내기에 실패했습니다', { variant: 'error' })
+      addToast('XLSX 내보내기에 실패했습니다.', { variant: 'error' })
     } finally {
       setIsExporting(false)
     }
@@ -642,7 +642,7 @@ const UserManagementPage = () => {
   // 일괄 상태 변경
   const handleBulkStatusChange = async () => {
     if (selectedUserIds.length === 0) {
-      addToast('선택된 사용자가 없습니다', { variant: 'warning' })
+      addToast('선택된 사용자가 없습니다.', { variant: 'warning' })
       return
     }
 
@@ -679,7 +679,7 @@ const UserManagementPage = () => {
         setSelectedUserIds([])
         fetchUsers()
       } else {
-        throw new Error('모든 사용자 상태 변경에 실패했습니다')
+        throw new Error('모든 사용자 상태 변경에 실패했습니다.')
       }
     } catch (error) {
       handleError(error)
@@ -691,7 +691,7 @@ const UserManagementPage = () => {
   // 일괄 삭제
   const handleBulkDelete = async () => {
     if (selectedUserIds.length === 0) {
-      addToast('선택된 사용자가 없습니다', { variant: 'warning' })
+      addToast('선택된 사용자가 없습니다.', { variant: 'warning' })
       return
     }
 
@@ -727,7 +727,7 @@ const UserManagementPage = () => {
         setSelectedUserIds([])
         fetchUsers()
       } else {
-        throw new Error('모든 사용자 삭제에 실패했습니다')
+        throw new Error('모든 사용자 삭제에 실패했습니다.')
       }
     } catch (error) {
       handleError(error)
