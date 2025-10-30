@@ -1132,7 +1132,7 @@ const CurriculumManagementPage = () => {
                           <div className="flex items-center justify-center space-x-1">
                             <button
                               onClick={() => handleViewDetails(curriculum)}
-                              className="px-2 py-1 bg-slate-500 text-white rounded hover:bg-slate-600 transition-colors duration-200 text-[11px] flex items-center gap-0.5"
+                              className="px-2 py-1 bg-slate-600 text-white rounded hover:bg-slate-700 transition-colors duration-200 text-[11px] flex items-center gap-0.5"
                             >
                               <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -1142,7 +1142,7 @@ const CurriculumManagementPage = () => {
                             </button>
                             <button
                               onClick={() => handleOpenEditModal(curriculum)}
-                              className="px-2 py-1 bg-emerald-500 text-white rounded hover:bg-emerald-600 transition-colors duration-200 text-[11px] flex items-center gap-0.5"
+                              className="px-2 py-1 bg-emerald-600 text-white rounded hover:bg-emerald-700 transition-colors duration-200 text-[11px] flex items-center gap-0.5"
                             >
                               <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
