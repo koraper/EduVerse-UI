@@ -14,7 +14,7 @@ import Autocomplete from '@/components/common/Autocomplete'
 import Select from '@/components/common/Select'
 import Skeleton, { CardSkeleton, StatCardSkeleton } from '@/components/common/Skeleton'
 import { useClientSearchSuggestions } from '@/hooks/useSearchSuggestions'
-import { exportToCSV, exportToXLSX, getFilenameWithDate, formatDate } from '@/utils/export'
+import { exportToJSON, exportToXLSX, getFilenameWithDate, formatDate } from '@/utils/export'
 import { ChevronDown } from 'lucide-react'
 
 interface Curriculum {
@@ -514,8 +514,8 @@ const CurriculumManagementPage = () => {
     }
   }
 
-  // CSV 내보내기
-  const handleExportCSV = () => {
+  // JSON 내보내기
+  const handleExportJSON = () => {
     const exportData = filteredCurriculums.map((curriculum) => ({
       'ID': curriculum.id,
       '커리큘럼명': curriculum.name,
@@ -526,9 +526,9 @@ const CurriculumManagementPage = () => {
       '생성일': formatDate(curriculum.createdAt),
     }))
 
-    const filename = getFilenameWithDate('커리큘럼목록', 'csv')
-    exportToCSV(exportData, { filename })
-    addToast('CSV 파일이 다운로드되었습니다.', { variant: 'success' })
+    const filename = getFilenameWithDate('커리큘럼목록', 'json')
+    exportToJSON(exportData, { filename })
+    addToast('JSON 파일이 다운로드되었습니다.', { variant: 'success' })
   }
 
   // XLSX 내보내기
@@ -946,13 +946,13 @@ const CurriculumManagementPage = () => {
                 <Button
                   variant="ghost"
                   size="sm"
-                  onClick={handleExportCSV}
+                  onClick={handleExportJSON}
                   disabled={filteredCurriculums.length === 0}
                 >
                   <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                   </svg>
-                  CSV
+                  JSON
                 </Button>
                 <Button
                   variant="ghost"
@@ -963,7 +963,7 @@ const CurriculumManagementPage = () => {
                   <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                   </svg>
-                  Excel
+                  xlsx
                 </Button>
               </div>
             </div>

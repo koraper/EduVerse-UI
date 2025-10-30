@@ -47,6 +47,30 @@ export const exportToCSV = <T extends Record<string, any>>(
 }
 
 /**
+ * JSON 형식으로 데이터를 내보냅니다
+ */
+export const exportToJSON = <T extends Record<string, any>>(
+  data: T[],
+  options: ExportOptions
+): void => {
+  if (!data || data.length === 0) {
+    console.warn('내보낼 데이터가 없습니다.')
+    return
+  }
+
+  try {
+    // JSON 문자열 생성 (들여쓰기 포함)
+    const jsonContent = JSON.stringify(data, null, 2)
+
+    // Blob 생성 및 다운로드
+    downloadFile(jsonContent, options.filename, 'application/json;charset=utf-8;')
+  } catch (error) {
+    console.error('JSON 내보내기 실패:', error)
+    throw error
+  }
+}
+
+/**
  * XLSX(Excel) 형식으로 데이터를 내보냅니다
  */
 export const exportToXLSX = <T extends Record<string, any>>(
