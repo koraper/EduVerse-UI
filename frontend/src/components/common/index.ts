@@ -11,6 +11,7 @@ export { default as Loading } from './Loading'
 export { default as ComingSoonModal } from './ComingSoonModal'
 export { default as ErrorBoundary } from './ErrorBoundary'
 export { default as InputCounter } from './InputCounter'
+export { default as StepProgress } from './StepProgress'
 
 // Toast 관련 내보내기
 export { default as Toast } from './Toast'
