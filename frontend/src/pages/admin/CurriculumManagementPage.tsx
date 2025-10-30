@@ -1361,7 +1361,7 @@ const CurriculumManagementPage = () => {
         isOpen={isStructureGuideOpen}
         onClose={() => setIsStructureGuideOpen(false)}
         title="EduVerse 커리큘럼 시나리오 구조 가이드"
-        size="large"
+        size="xl"
       >
         <div className="space-y-6 max-h-[70vh] overflow-y-auto">
           {/* 개요 */}

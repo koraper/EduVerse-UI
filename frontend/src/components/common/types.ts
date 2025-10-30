@@ -16,9 +16,9 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 // Input 컴포넌트 타입
 export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size'> {
-  label?: string
-  error?: string
-  helperText?: string
+  label?: ReactNode
+  error?: string | boolean
+  helperText?: ReactNode
   size?: ButtonSize
   leftIcon?: ReactNode
   rightIcon?: ReactNode
@@ -29,9 +29,9 @@ export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 
 
 // Textarea 컴포넌트 타입
 export interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
-  label?: string
-  error?: string
-  helperText?: string
+  label?: ReactNode
+  error?: string | boolean
+  helperText?: ReactNode
   resize?: boolean
   showLengthCounter?: boolean
   onLengthChange?: (length: number) => void
@@ -45,9 +45,9 @@ export interface SelectOption {
 }
 
 export interface SelectProps extends Omit<SelectHTMLAttributes<HTMLSelectElement>, 'size'> {
-  label?: string
-  error?: string
-  helperText?: string
+  label?: ReactNode
+  error?: string | boolean
+  helperText?: ReactNode
   size?: ButtonSize
   options?: SelectOption[]
   placeholder?: string

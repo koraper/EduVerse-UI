@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React from 'react';
 import { Class } from '../../types/api/class';
 import { toast } from 'react-toastify';

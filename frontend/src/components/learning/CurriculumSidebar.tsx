@@ -26,6 +26,8 @@ interface CourseInfo {
 
 interface CurriculumSidebarProps {
   lessons: Lesson[]
+  currentLessonId?: number
+  onLessonSelect?: (lessonId: number) => void
   totalLessons: number
   completedLessons: number
   courseInfo?: CourseInfo

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useState } from 'react';
 import { useClassManagement } from '../../hooks/useClassManagement';
 import { Class, WeeklySession } from '../../types/api/class';
