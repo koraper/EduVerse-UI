@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduVerse 디자인 시스템 v2.0</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'noto': ['Noto Sans KR', 'sans-serif'],
+                        'poppins': ['Poppins', 'sans-serif'],
+                        'mono': ['Fira Code', 'monospace']
+                    },
+                    colors: {
+                        primary: {
+                            50: '#ecfeff',
+                            100: '#cffafe',
+                            200: '#a5f3fc',
+                            300: '#67e8f9',
+                            400: '#22d3ee',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e'
+                        },
+                        success: {
+                            50: '#ecfdf5',
+                            500: '#10b981',
+                            600: '#059669'
+                        },
+                        warning: {
+                            50: '#fffbeb',
+                            500: '#f59e0b',
+                            600: '#d97706'
+                        },
+                        error: {
+                            50: '#fef2f2',
+                            500: '#ef4444',
+                            600: '#dc2626'
+                        },
+                        info: {
+                            50: '#eff6ff',
+                            500: '#3b82f6',
+                            600: '#2563eb'
+                        }
+                    },
+                    animation: {
+                        blob: 'blob 7s infinite'
+                    },
+                    keyframes: {
+                        blob: {
+                            '0%, 100%': { transform: 'translate(0, 0) scale(1)' },
+                            '25%': { transform: 'translate(20px, -50px) scale(1.1)' },
+                            '50%': { transform: 'translate(-20px, 20px) scale(1)' },
+                            '75%': { transform: 'translate(-50px, -10px) scale(0.9)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* 커스텀 스크롤바 */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #94a3b8;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #64748b;
+        }
+        .dark ::-webkit-scrollbar-track {
+            background: #1e293b;
+        }
+        .dark ::-webkit-scrollbar-thumb {
+            background: #475569;
+        }
+        .dark ::-webkit-scrollbar-thumb:hover {
+            background: #64748b;
+        }
+
+        /* 부드러운 스크롤 */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* 코드 블록 스타일 */
+        .code-block {
+            background: #1e293b;
+            border-radius: 8px;
+            padding: 1rem;
+            overflow-x: auto;
+        }
+
+        /* Sticky 사이드바 */
+        .sticky-sidebar {
+            position: sticky;
+            top: 5rem;
+            height: calc(100vh - 6rem);
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body class="font-noto">
+    <!-- 헤더 -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-4">
+                    <h1 class="text-xl font-bold text-gray-900 dark:text-white">
+                        EduVerse 디자인 시스템
+                    </h1>
+                    <span class="px-2 py-1 text-xs font-medium bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-400 rounded">
+                        v2.0
+                    </span>
+                </div>
+                <div class="flex items-center gap-4">
+                    <!-- 폰트 선택 -->
+                    <select id="fontSelector" class="px-3 py-1 text-sm border border-gray-200 dark:border-gray-700 rounded bg-white dark:bg-gray-800 text-gray-900 dark:text-white">
+                        <option value="noto">Noto Sans KR</option>
+                        <option value="poppins">Poppins</option>
+                        <option value="mono">Fira Code</option>
+                    </select>
+                    <!-- 테마 토글 -->
+                    <button onclick="toggleTheme()" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                        <i data-lucide="sun" class="w-5 h-5 text-gray-600 dark:text-gray-400 dark:hidden"></i>
+                        <i data-lucide="moon" class="w-5 h-5 text-gray-600 dark:text-gray-400 hidden dark:block"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="flex pt-16">
+        <!-- 사이드바 네비게이션 -->
+        <aside class="w-64 border-r border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
+            <nav class="sticky-sidebar p-4">
+                <ul class="space-y-1">
+                    <li><a href="#overview" class="nav-link">1. 개요</a></li>
+                    <li><a href="#theme" class="nav-link">2. 테마 시스템</a></li>
+                    <li><a href="#colors" class="nav-link">3. 컬러 시스템</a></li>
+                    <li><a href="#typography" class="nav-link">4. 타이포그래피</a></li>
+                    <li><a href="#spacing" class="nav-link">5. 간격 시스템</a></li>
+                    <li><a href="#components" class="nav-link">6. 컴포넌트</a></li>
+                    <li><a href="#layout" class="nav-link">7. 레이아웃</a></li>
+                    <li><a href="#animation" class="nav-link">8. 애니메이션</a></li>
+                    <li><a href="#responsive" class="nav-link">9. 반응형</a></li>
+                    <li><a href="#icons" class="nav-link">10. 아이콘</a></li>
+                    <li><a href="#accessibility" class="nav-link">11. 접근성</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- 메인 콘텐츠 -->
+        <main class="flex-1 bg-white dark:bg-gray-900">
+            <div class="max-w-6xl mx-auto px-8 py-8">
+                <!-- 1. 개요 -->
+                <section id="overview" class="mb-16">
+                    <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-6">1. 개요</h2>
+
+                    <div class="bg-gradient-to-r from-primary-500 to-purple-600 rounded-lg p-6 text-white mb-8">
+                        <h3 class="text-2xl font-bold mb-4">EduVerse 디자인 시스템</h3>
+                        <p class="text-lg opacity-90 mb-4">
+                            오프라인 강의실 환경에 최적화된 프로그래밍 교육 플랫폼의 디자인 가이드
+                        </p>
+                        <div class="flex items-center gap-4 text-sm">
+                            <span class="flex items-center gap-1">
+                                <i data-lucide="calendar" class="w-4 h-4"></i>
+                                최종 수정: 2025-10-29
+                            </span>
+                            <span class="flex items-center gap-1">
+                                <i data-lucide="user" class="w-4 h-4"></i>
+                                작성자: Claude AI
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div class="card">
+                            <div class="flex items-start gap-3">
+                                <div class="w-10 h-10 rounded-full bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center">
+                                    <i data-lucide="palette" class="w-5 h-5 text-primary-600 dark:text-primary-400"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-gray-900 dark:text-white mb-1">다중 테마 지원</h4>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400">다크/라이트/시스템 테마</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="flex items-start gap-3">
+                                <div class="w-10 h-10 rounded-full bg-success-100 dark:bg-success-900/30 flex items-center justify-center">
+                                    <i data-lucide="layout" class="w-5 h-5 text-success-600 dark:text-success-400"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-gray-900 dark:text-white mb-1">직관적 인터페이스</h4>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400">즉시 사용 가능한 UI</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="flex items-start gap-3">
+                                <div class="w-10 h-10 rounded-full bg-warning-100 dark:bg-warning-900/30 flex items-center justify-center">
+                                    <i data-lucide="zap" class="w-5 h-5 text-warning-600 dark:text-warning-400"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-gray-900 dark:text-white mb-1">실시간 피드백</h4>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400">시각적 상태 표현</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 2. 테마 시스템 -->
+                <section id="theme" class="mb-16">
+                    <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-6">2. 테마 시스템</h2>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                        <div class="card hover:shadow-lg transition-shadow">
+                            <div class="flex items-center gap-3 mb-3">
+                                <i data-lucide="moon" class="w-6 h-6 text-gray-700 dark:text-gray-300"></i>
+                                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Dark Mode</h3>
+                            </div>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">저조도 환경, 장시간 코딩에 최적화</p>
+                        </div>
+                        <div class="card hover:shadow-lg transition-shadow">
+                            <div class="flex items-center gap-3 mb-3">
+                                <i data-lucide="sun" class="w-6 h-6 text-yellow-500"></i>
+                                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Light Mode</h3>
+                            </div>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">밝은 환경, 문서 작업에 적합</p>
+                        </div>
+                        <div class="card hover:shadow-lg transition-shadow">
+                            <div class="flex items-center gap-3 mb-3">
+                                <i data-lucide="monitor" class="w-6 h-6 text-blue-500"></i>
+                                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">System Mode</h3>
+                            </div>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">OS 설정 자동 따름 (기본값)</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-6">
+                        <h4 class="font-semibold text-gray-900 dark:text-white mb-4">테마 구현 예시</h4>
+                        <div class="code-block">
+                            <pre class="text-sm text-gray-300"><code>// Tailwind 다크 모드 클래스 사용
+&lt;div className="bg-white dark:bg-gray-900 text-gray-900 dark:text-white"&gt;
+    콘텐츠
+&lt;/div&gt;</code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 3. 컬러 시스템 -->
+                <section id="colors" class="mb-16">
+                    <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-6">3. 컬러 시스템</h2>
+
+                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">Primary Colors (Cyan)</h3>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 mb-8">
+                        <div class="text-center">
+                            <div class="h-20 bg-primary-50 rounded-lg mb-2"></div>
+                            <p class="text-xs font-medium text-gray-700 dark:text-gray-300">50</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">#ecfeff</p>
+                        </div>
+                        <div class="text-center">
+                            <div class="h-20 bg-primary-100 rounded-lg mb-2"></div>
+                            <p class="text-xs font-medium text-gray-700 dark:text-gray-300">100</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">#cffafe</p>
+                        </div>
+                        <div class="text-center">
+                            <div class="h-20 bg-primary-500 rounded-lg mb-2"></div>
+                            <p class="text-xs font-medium text-gray-700 dark:text-gray-300">500</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">#0ea5e9</p>
+                        </div>
+                        <div class="text-center">
+                            <div class="h-20 bg-primary-600 rounded-lg mb-2"></div>
+                            <p class="text-xs font-medium text-gray-700 dark:text-gray-300">600</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">#0284c7</p>
+                        </div>
+                        <div class="text-center">
+                            <div class="h-20 bg-primary-700 rounded-lg mb-2"></div>
+                            <p class="text-xs font-medium text-gray-700 dark:text-gray-300">700</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">#0369a1</p>
+                        </div>
+                    </div>
+
+                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">Semantic Colors</h3>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                        <div class="card">
+                            <div class="h-16 bg-success-500 rounded mb-3"></div>
+                            <p class="font-medium text-gray-900 dark:text-white">Success</p>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">#10b981</p>
+                        </div>
+                        <div class="card">
+                            <div class="h-16 bg-warning-500 rounded mb-3"></div>
+                            <p class="font-medium text-gray-900 dark:text-white">Warning</p>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">#f59e0b</p>
+                        </div>
+                        <div class="card">
+                            <div class="h-16 bg-error-500 rounded mb-3"></div>
+                            <p class="font-medium text-gray-900 dark:text-white">Error</p>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">#ef4444</p>
+                        </div>
+                        <div class="card">
+                            <div class="h-16 bg-info-500 rounded mb-3"></div>
+                            <p class="font-medium text-gray-900 dark:text-white">Info</p>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">#3b82f6</p>
+                        </div>
+                    </div>
+
+                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">Gray Scale</h3>
+                    <div class="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-9 gap-2">
+                        <div class="text-center">
+                            <div class="h-16 bg-gray-50 border rounded mb-1"></div>
+                            <p class="text-xs">50</p>
+                        </div>
+                        <div class="text-center">
+                            <div class="h-16 bg-gray-100 rounded mb-1"></div>
+                            <p class="text-xs">100</p>
+                        </div>
+                        <div class="text-center">
+                            <div class="h-16 bg-gray-200 rounded mb-1"></div>
+                            <p class="text-xs">200</p>
+                        </div>
+                        <div class="text-center">
+                            <div class="h-16 bg-gray-300 rounded mb-1"></div>
+                            <p class="text-xs">300</p>
+                        </div>
+                        <div class="text-center">
+                            <div class="h-16 bg-gray-400 rounded mb-1"></div>
+                            <p class="text-xs">400</p>
+                        </div>
+                        <div class="text-center">
+                            <div class="h-16 bg-gray-500 rounded mb-1"></div>
+                            <p class="text-xs">500</p>
+                        </div>
+                        <div class="text-center">
+                            <div class="h-16 bg-gray-600 rounded mb-1"></div>
+                            <p class="text-xs text-white">600</p>
+                        </div>
+                        <div class="text-center">
+                            <div class="h-16 bg-gray-700 rounded mb-1"></div>
+                            <p class="text-xs text-white">700</p>
+                        </div>
+                        <div class="text-center">
+                            <div class="h-16 bg-gray-800 rounded mb-1"></div>
+                            <p class="text-xs text-white">800</p>
+                        </div>
+                        <div class="text-center">
+                            <div class="h-16 bg-gray-900 rounded mb-1"></div>
+                            <p class="text-xs text-white">900</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 4. 타이포그래피 -->
+                <section id="typography" class="mb-16">
+                    <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-6">4. 타이포그래피</h2>
+
+                    <div class="space-y-4 mb-8">
+                        <div class="card">
+                            <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">text-4xl (36px)</p>
+                            <p class="text-4xl font-bold text-gray-900 dark:text-white">대제목 Typography</p>
+                        </div>
+                        <div class="card">
+                            <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">text-3xl (30px)</p>
+                            <p class="text-3xl font-bold text-gray-900 dark:text-white">페이지 제목 Typography</p>
+                        </div>
+                        <div class="card">
+                            <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">text-2xl (24px)</p>
+                            <p class="text-2xl font-semibold text-gray-900 dark:text-white">섹션 제목 Typography</p>
+                        </div>
+                        <div class="card">
+                            <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">text-xl (20px)</p>
+                            <p class="text-xl font-semibold text-gray-900 dark:text-white">소제목 Typography</p>
+                        </div>
+                        <div class="card">
+                            <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">text-lg (18px)</p>
+                            <p class="text-lg text-gray-900 dark:text-white">강조 본문 Typography</p>
+                        </div>
+                        <div class="card">
+                            <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">text-base (16px)</p>
+                            <p class="text-base text-gray-900 dark:text-white">기본 본문 Typography</p>
+                        </div>
+                        <div class="card">
+                            <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">text-sm (14px)</p>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">보조 텍스트 Typography</p>
+                        </div>
+                        <div class="card">
+                            <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">text-xs (12px)</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-500">캡션 텍스트 Typography</p>
+                        </div>
+                    </div>
+
+                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">Font Weights</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="card">
+                            <p class="font-normal text-gray-900 dark:text-white">Normal (400)</p>
+                        </div>
+                        <div class="card">
+                            <p class="font-medium text-gray-900 dark:text-white">Medium (500)</p>
+                        </div>
+                        <div class="card">
+                            <p class="font-semibold text-gray-900 dark:text-white">Semibold (600)</p>
+                        </div>
+                        <div class="card">
+                            <p class="font-bold text-gray-900 dark:text-white">Bold (700)</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 5. 간격 시스템 -->
+                <section id="spacing" class="mb-16">
+                    <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-6">5. 간격 시스템</h2>
+
+                    <div class="space-y-2 mb-8">
+                        <div class="flex items-center gap-4">
+                            <span class="text-sm font-medium text-gray-600 dark:text-gray-400 w-16">p-0</span>
+                            <div class="flex-1 bg-primary-500 h-0"></div>
+                            <span class="text-xs text-gray-500">0px</span>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <span class="text-sm font-medium text-gray-600 dark:text-gray-400 w-16">p-1</span>
+                            <div class="bg-primary-500 h-4 w-1"></div>
+                            <span class="text-xs text-gray-500">4px</span>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <span class="text-sm font-medium text-gray-600 dark:text-gray-400 w-16">p-2</span>
+                            <div class="bg-primary-500 h-4 w-2"></div>
+                            <span class="text-xs text-gray-500">8px</span>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <span class="text-sm font-medium text-gray-600 dark:text-gray-400 w-16">p-3</span>
+                            <div class="bg-primary-500 h-4 w-3"></div>
+                            <span class="text-xs text-gray-500">12px</span>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <span class="text-sm font-medium text-gray-600 dark:text-gray-400 w-16">p-4</span>
+                            <div class="bg-primary-500 h-4 w-4"></div>
+                            <span class="text-xs text-gray-500">16px</span>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <span class="text-sm font-medium text-gray-600 dark:text-gray-400 w-16">p-6</span>
+                            <div class="bg-primary-500 h-4 w-6"></div>
+                            <span class="text-xs text-gray-500">24px</span>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <span class="text-sm font-medium text-gray-600 dark:text-gray-400 w-16">p-8</span>
+                            <div class="bg-primary-500 h-4 w-8"></div>
+                            <span class="text-xs text-gray-500">32px</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 6. 컴포넌트 -->
+                <section id="components" class="mb-16">
+                    <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-6">6. 컴포넌트</h2>
+
+                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">Buttons</h3>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                        <button class="btn btn-primary">Primary</button>
+                        <button class="btn btn-secondary">Secondary</button>
+                        <button class="btn btn-success">Success</button>
+                        <button class="btn btn-warning">Warning</button>
+                        <button class="btn btn-error">Error</button>
+                        <button class="btn btn-ghost">Ghost</button>
+                        <button class="btn btn-outline">Outline</button>
+                        <button class="btn btn-primary" disabled>Disabled</button>
+                    </div>
+
+                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">Inputs</h3>
+                    <div class="space-y-4 mb-8">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                이메일
+                            </label>
+                            <input
+                                type="email"
+                                placeholder="email@example.com"
+                                class="input"
+                            >
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                비밀번호
+                            </label>
+                            <input
+                                type="password"
+                                placeholder="••••••••"
+                                class="input"
+                            >
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                메시지
+                            </label>
+                            <textarea
+                                placeholder="내용을 입력하세요..."
+                                rows="3"
+                                class="input"
+                            ></textarea>
+                        </div>
+                    </div>
+
+                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">Badges</h3>
+                    <div class="flex flex-wrap gap-2 mb-8">
+                        <span class="badge badge-primary">Primary</span>
+                        <span class="badge badge-success">Success</span>
+                        <span class="badge badge-warning">Warning</span>
+                        <span class="badge badge-error">Error</span>
+                        <span class="badge badge-info">Info</span>
+                        <span class="badge badge-gray">Gray</span>
+                    </div>
+
+                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">Cards</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="card hover:shadow-lg transition-shadow">
+                            <h4 class="font-semibold text-gray-900 dark:text-white mb-2">기본 카드</h4>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">
+                                기본 카드 컴포넌트입니다. 호버 시 그림자 효과가 나타납니다.
+                            </p>
+                        </div>
+                        <div class="card border-2 border-primary-500">
+                            <h4 class="font-semibold text-gray-900 dark:text-white mb-2">테두리 카드</h4>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">
+                                Primary 색상의 테두리가 있는 카드입니다.
+                            </p>
+                        </div>
+                        <div class="card bg-gradient-to-br from-primary-500 to-purple-600 text-white">
+                            <h4 class="font-semibold mb-2">그라디언트 카드</h4>
+                            <p class="text-sm opacity-90">
+                                그라디언트 배경이 적용된 카드입니다.
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 7. 레이아웃 -->
+                <section id="layout" class="mb-16">
+                    <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-6">7. 레이아웃</h2>
+
+                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">Grid System</h3>
+                    <div class="space-y-4 mb-8">
+                        <div class="grid grid-cols-1 gap-2">
+                            <div class="bg-primary-100 dark:bg-primary-900/30 p-4 rounded text-center text-sm">1 Column</div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div class="bg-primary-100 dark:bg-primary-900/30 p-4 rounded text-center text-sm">1/2</div>
+                            <div class="bg-primary-100 dark:bg-primary-900/30 p-4 rounded text-center text-sm">1/2</div>
+                        </div>
+                        <div class="grid grid-cols-3 gap-2">
+                            <div class="bg-primary-100 dark:bg-primary-900/30 p-4 rounded text-center text-sm">1/3</div>
+                            <div class="bg-primary-100 dark:bg-primary-900/30 p-4 rounded text-center text-sm">1/3</div>
+                            <div class="bg-primary-100 dark:bg-primary-900/30 p-4 rounded text-center text-sm">1/3</div>
+                        </div>
+                        <div class="grid grid-cols-4 gap-2">
+                            <div class="bg-primary-100 dark:bg-primary-900/30 p-4 rounded text-center text-sm">1/4</div>
+                            <div class="bg-primary-100 dark:bg-primary-900/30 p-4 rounded text-center text-sm">1/4</div>
+                            <div class="bg-primary-100 dark:bg-primary-900/30 p-4 rounded text-center text-sm">1/4</div>
+                            <div class="bg-primary-100 dark:bg-primary-900/30 p-4 rounded text-center text-sm">1/4</div>
+                        </div>
+                    </div>
+
+                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">Container Widths</h3>
+                    <div class="space-y-2">
+                        <div class="bg-gray-100 dark:bg-gray-800 p-4 rounded">
+                            <div class="max-w-sm mx-auto bg-primary-500 text-white p-2 rounded text-center text-sm">max-w-sm (384px)</div>
+                        </div>
+                        <div class="bg-gray-100 dark:bg-gray-800 p-4 rounded">
+                            <div class="max-w-md mx-auto bg-primary-500 text-white p-2 rounded text-center text-sm">max-w-md (448px)</div>
+                        </div>
+                        <div class="bg-gray-100 dark:bg-gray-800 p-4 rounded">
+                            <div class="max-w-lg mx-auto bg-primary-500 text-white p-2 rounded text-center text-sm">max-w-lg (512px)</div>
+                        </div>
+                        <div class="bg-gray-100 dark:bg-gray-800 p-4 rounded">
+                            <div class="max-w-2xl mx-auto bg-primary-500 text-white p-2 rounded text-center text-sm">max-w-2xl (672px)</div>
+                        </div>
+                        <div class="bg-gray-100 dark:bg-gray-800 p-4 rounded">
+                            <div class="max-w-4xl mx-auto bg-primary-500 text-white p-2 rounded text-center text-sm">max-w-4xl (896px)</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 8. 애니메이션 -->
+                <section id="animation" class="mb-16">
+                    <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-6">8. 애니메이션</h2>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                        <div class="card">
+                            <div class="w-16 h-16 bg-primary-500 rounded-lg mb-3 transition-transform hover:scale-110"></div>
+                            <p class="font-medium text-gray-900 dark:text-white">Scale</p>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">hover:scale-110</p>
+                        </div>
+                        <div class="card">
+                            <div class="w-16 h-16 bg-success-500 rounded-lg mb-3 transition-transform hover:rotate-12"></div>
+                            <p class="font-medium text-gray-900 dark:text-white">Rotate</p>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">hover:rotate-12</p>
+                        </div>
+                        <div class="card">
+                            <div class="w-16 h-16 bg-warning-500 rounded-lg mb-3 animate-pulse"></div>
+                            <p class="font-medium text-gray-900 dark:text-white">Pulse</p>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">animate-pulse</p>
+                        </div>
+                    </div>
+
+                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">Blob Animation</h3>
+                    <div class="relative h-64 bg-gradient-to-br from-primary-50 to-purple-50 dark:from-gray-800 dark:to-gray-900 rounded-lg overflow-hidden">
+                        <div class="absolute top-10 left-10 w-32 h-32 bg-primary-500/30 rounded-full animate-blob"></div>
+                        <div class="absolute top-20 right-10 w-32 h-32 bg-purple-500/30 rounded-full animate-blob animation-delay-2000"></div>
+                        <div class="absolute bottom-10 left-20 w-32 h-32 bg-pink-500/30 rounded-full animate-blob animation-delay-4000"></div>
+                    </div>
+                </section>
+
+                <!-- 9. 반응형 디자인 -->
+                <section id="responsive" class="mb-16">
+                    <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-6">9. 반응형 디자인</h2>
+
+                    <div class="overflow-x-auto mb-8">
+                        <table class="w-full">
+                            <thead>
+                                <tr class="border-b border-gray-200 dark:border-gray-700">
+                                    <th class="text-left py-2 px-4 font-medium text-gray-900 dark:text-white">브레이크포인트</th>
+                                    <th class="text-left py-2 px-4 font-medium text-gray-900 dark:text-white">최소 너비</th>
+                                    <th class="text-left py-2 px-4 font-medium text-gray-900 dark:text-white">디바이스</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="border-b border-gray-200 dark:border-gray-700">
+                                    <td class="py-2 px-4 text-gray-600 dark:text-gray-400">기본</td>
+                                    <td class="py-2 px-4 text-gray-600 dark:text-gray-400">0px</td>
+                                    <td class="py-2 px-4 text-gray-600 dark:text-gray-400">모바일 (세로)</td>
+                                </tr>
+                                <tr class="border-b border-gray-200 dark:border-gray-700">
+                                    <td class="py-2 px-4 text-gray-600 dark:text-gray-400">sm</td>
+                                    <td class="py-2 px-4 text-gray-600 dark:text-gray-400">640px</td>
+                                    <td class="py-2 px-4 text-gray-600 dark:text-gray-400">모바일 (가로)</td>
+                                </tr>
+                                <tr class="border-b border-gray-200 dark:border-gray-700">
+                                    <td class="py-2 px-4 text-gray-600 dark:text-gray-400">md</td>
+                                    <td class="py-2 px-4 text-gray-600 dark:text-gray-400">768px</td>
+                                    <td class="py-2 px-4 text-gray-600 dark:text-gray-400">태블릿</td>
+                                </tr>
+                                <tr class="border-b border-gray-200 dark:border-gray-700">
+                                    <td class="py-2 px-4 text-gray-600 dark:text-gray-400">lg</td>
+                                    <td class="py-2 px-4 text-gray-600 dark:text-gray-400">1024px</td>
+                                    <td class="py-2 px-4 text-gray-600 dark:text-gray-400">데스크톱</td>
+                                </tr>
+                                <tr class="border-b border-gray-200 dark:border-gray-700">
+                                    <td class="py-2 px-4 text-gray-600 dark:text-gray-400">xl</td>
+                                    <td class="py-2 px-4 text-gray-600 dark:text-gray-400">1280px</td>
+                                    <td class="py-2 px-4 text-gray-600 dark:text-gray-400">큰 데스크톱</td>
+                                </tr>
+                                <tr class="border-b border-gray-200 dark:border-gray-700">
+                                    <td class="py-2 px-4 text-gray-600 dark:text-gray-400">2xl</td>
+                                    <td class="py-2 px-4 text-gray-600 dark:text-gray-400">1536px</td>
+                                    <td class="py-2 px-4 text-gray-600 dark:text-gray-400">초대형 화면</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-6">
+                        <h4 class="font-semibold text-gray-900 dark:text-white mb-4">반응형 그리드 예시</h4>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                            <div class="bg-primary-100 dark:bg-primary-900/30 p-4 rounded text-center text-sm">Item 1</div>
+                            <div class="bg-primary-100 dark:bg-primary-900/30 p-4 rounded text-center text-sm">Item 2</div>
+                            <div class="bg-primary-100 dark:bg-primary-900/30 p-4 rounded text-center text-sm">Item 3</div>
+                            <div class="bg-primary-100 dark:bg-primary-900/30 p-4 rounded text-center text-sm">Item 4</div>
+                        </div>
+                        <p class="mt-4 text-sm text-gray-600 dark:text-gray-400">
+                            화면 크기에 따라: 1열 → 2열 → 3열 → 4열
+                        </p>
+                    </div>
+                </section>
+
+                <!-- 10. 아이콘 -->
+                <section id="icons" class="mb-16">
+                    <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-6">10. 아이콘</h2>
+
+                    <div class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-4 mb-8">
+                        <div class="card flex flex-col items-center justify-center p-4">
+                            <i data-lucide="home" class="w-6 h-6 text-gray-700 dark:text-gray-300 mb-2"></i>
+                            <span class="text-xs">Home</span>
+                        </div>
+                        <div class="card flex flex-col items-center justify-center p-4">
+                            <i data-lucide="settings" class="w-6 h-6 text-gray-700 dark:text-gray-300 mb-2"></i>
+                            <span class="text-xs">Settings</span>
+                        </div>
+                        <div class="card flex flex-col items-center justify-center p-4">
+                            <i data-lucide="user" class="w-6 h-6 text-gray-700 dark:text-gray-300 mb-2"></i>
+                            <span class="text-xs">User</span>
+                        </div>
+                        <div class="card flex flex-col items-center justify-center p-4">
+                            <i data-lucide="search" class="w-6 h-6 text-gray-700 dark:text-gray-300 mb-2"></i>
+                            <span class="text-xs">Search</span>
+                        </div>
+                        <div class="card flex flex-col items-center justify-center p-4">
+                            <i data-lucide="bell" class="w-6 h-6 text-gray-700 dark:text-gray-300 mb-2"></i>
+                            <span class="text-xs">Bell</span>
+                        </div>
+                        <div class="card flex flex-col items-center justify-center p-4">
+                            <i data-lucide="mail" class="w-6 h-6 text-gray-700 dark:text-gray-300 mb-2"></i>
+                            <span class="text-xs">Mail</span>
+                        </div>
+                        <div class="card flex flex-col items-center justify-center p-4">
+                            <i data-lucide="heart" class="w-6 h-6 text-gray-700 dark:text-gray-300 mb-2"></i>
+                            <span class="text-xs">Heart</span>
+                        </div>
+                        <div class="card flex flex-col items-center justify-center p-4">
+                            <i data-lucide="star" class="w-6 h-6 text-gray-700 dark:text-gray-300 mb-2"></i>
+                            <span class="text-xs">Star</span>
+                        </div>
+                    </div>
+
+                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">아이콘 크기</h3>
+                    <div class="flex items-center gap-6">
+                        <div class="text-center">
+                            <i data-lucide="trophy" class="w-4 h-4 text-gray-700 dark:text-gray-300 mb-2"></i>
+                            <p class="text-xs text-gray-500">w-4 h-4</p>
+                        </div>
+                        <div class="text-center">
+                            <i data-lucide="trophy" class="w-5 h-5 text-gray-700 dark:text-gray-300 mb-2"></i>
+                            <p class="text-xs text-gray-500">w-5 h-5</p>
+                        </div>
+                        <div class="text-center">
+                            <i data-lucide="trophy" class="w-6 h-6 text-gray-700 dark:text-gray-300 mb-2"></i>
+                            <p class="text-xs text-gray-500">w-6 h-6</p>
+                        </div>
+                        <div class="text-center">
+                            <i data-lucide="trophy" class="w-8 h-8 text-gray-700 dark:text-gray-300 mb-2"></i>
+                            <p class="text-xs text-gray-500">w-8 h-8</p>
+                        </div>
+                        <div class="text-center">
+                            <i data-lucide="trophy" class="w-10 h-10 text-gray-700 dark:text-gray-300 mb-2"></i>
+                            <p class="text-xs text-gray-500">w-10 h-10</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 11. 접근성 -->
+                <section id="accessibility" class="mb-16">
+                    <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-6">11. 접근성</h2>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="card">
+                            <h3 class="font-semibold text-gray-900 dark:text-white mb-3">색상 대비</h3>
+                            <ul class="space-y-2 text-sm text-gray-600 dark:text-gray-400">
+                                <li>• 일반 텍스트: 4.5:1 이상</li>
+                                <li>• 큰 텍스트 (18px+): 3:1 이상</li>
+                                <li>• UI 컴포넌트: 3:1 이상</li>
+                                <li>• WCAG AA 기준 준수</li>
+                            </ul>
+                        </div>
+                        <div class="card">
+                            <h3 class="font-semibold text-gray-900 dark:text-white mb-3">키보드 네비게이션</h3>
+                            <ul class="space-y-2 text-sm text-gray-600 dark:text-gray-400">
+                                <li>• Tab 키로 모든 요소 접근 가능</li>
+                                <li>• 포커스 시각적 표시</li>
+                                <li>• 모달 포커스 트랩</li>
+                                <li>• ESC 키로 닫기 지원</li>
+                            </ul>
+                        </div>
+                        <div class="card">
+                            <h3 class="font-semibold text-gray-900 dark:text-white mb-3">ARIA 속성</h3>
+                            <ul class="space-y-2 text-sm text-gray-600 dark:text-gray-400">
+                                <li>• 역할(role) 정의</li>
+                                <li>• 상태(aria-pressed) 표시</li>
+                                <li>• 라이브 영역 알림</li>
+                                <li>• 레이블 제공</li>
+                            </ul>
+                        </div>
+                        <div class="card">
+                            <h3 class="font-semibold text-gray-900 dark:text-white mb-3">스크린 리더</h3>
+                            <ul class="space-y-2 text-sm text-gray-600 dark:text-gray-400">
+                                <li>• 숨겨진 라벨 제공</li>
+                                <li>• 설명 텍스트 연결</li>
+                                <li>• 의미있는 대체 텍스트</li>
+                                <li>• 논리적 읽기 순서</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </main>
+    </div>
+
+    <style>
+        /* 버튼 스타일 */
+        .btn {
+            @apply px-4 py-2 rounded-lg font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2;
+        }
+        .btn-primary {
+            @apply bg-primary-500 text-white hover:bg-primary-600 focus:ring-primary-500;
+        }
+        .btn-secondary {
+            @apply bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white hover:bg-gray-300 dark:hover:bg-gray-600;
+        }
+        .btn-success {
+            @apply bg-success-500 text-white hover:bg-success-600 focus:ring-success-500;
+        }
+        .btn-warning {
+            @apply bg-warning-500 text-white hover:bg-warning-600 focus:ring-warning-500;
+        }
+        .btn-error {
+            @apply bg-error-500 text-white hover:bg-error-600 focus:ring-error-500;
+        }
+        .btn-ghost {
+            @apply hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-900 dark:text-white;
+        }
+        .btn-outline {
+            @apply border-2 border-primary-500 text-primary-500 hover:bg-primary-500 hover:text-white;
+        }
+        .btn:disabled {
+            @apply opacity-50 cursor-not-allowed;
+        }
+
+        /* 인풋 스타일 */
+        .input {
+            @apply w-full px-3 py-2 border border-gray-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent;
+        }
+
+        /* 카드 스타일 */
+        .card {
+            @apply p-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm;
+        }
+
+        /* 배지 스타일 */
+        .badge {
+            @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+        }
+        .badge-primary {
+            @apply bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-400;
+        }
+        .badge-success {
+            @apply bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-400;
+        }
+        .badge-warning {
+            @apply bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-400;
+        }
+        .badge-error {
+            @apply bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-400;
+        }
+        .badge-info {
+            @apply bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-400;
+        }
+        .badge-gray {
+            @apply bg-gray-100 dark:bg-gray-900/30 text-gray-800 dark:text-gray-400;
+        }
+
+        /* 네비게이션 링크 */
+        .nav-link {
+            @apply block px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors;
+        }
+
+        /* 애니메이션 딜레이 */
+        .animation-delay-2000 {
+            animation-delay: 2s;
+        }
+        .animation-delay-4000 {
+            animation-delay: 4s;
+        }
+    </style>
+
+    <script>
+        // Lucide 아이콘 초기화
+        lucide.createIcons();
+
+        // 테마 토글
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.classList.contains('dark') ? 'dark' : 'light';
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+
+            if (newTheme === 'dark') {
+                html.classList.add('dark');
+            } else {
+                html.classList.remove('dark');
+            }
+
+            localStorage.setItem('theme', newTheme);
+            lucide.createIcons();
+        }
+
+        // 폰트 변경
+        document.getElementById('fontSelector').addEventListener('change', function(e) {
+            document.body.className = document.body.className.replace(/font-\w+/, '');
+            document.body.classList.add('font-' + e.target.value);
+        });
+
+        // 초기 테마 설정
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        if (savedTheme === 'dark') {
+            document.documentElement.classList.add('dark');
+        }
+
+        // 부드러운 스크롤
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // 페이지 로드 시 아이콘 재생성
+        setTimeout(() => {
+            lucide.createIcons();
+        }, 100);
+    </script>
+</body>
+</html>

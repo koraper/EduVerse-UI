@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduVerse - 목업 네비게이션</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'noto': ['Noto Sans KR', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: {
+                            50: '#ecfeff',
+                            100: '#cffafe',
+                            200: '#a5f3fc',
+                            300: '#67e8f9',
+                            400: '#22d3ee',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="font-noto bg-gray-50 dark:bg-gray-900 transition-colors">
+    <!-- Header -->
+    <header class="sticky top-0 z-50 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+        <div class="px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <h1 class="text-2xl font-bold text-primary-600 dark:text-primary-400">EduVerse Mockup</h1>
+                </div>
+
+                <div class="flex items-center gap-4">
+                    <!-- Theme Toggle -->
+                    <button onclick="toggleTheme()" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                        <i data-lucide="sun" class="w-5 h-5 dark:hidden"></i>
+                        <i data-lucide="moon" class="w-5 h-5 hidden dark:block"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="min-h-screen py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-6xl mx-auto">
+            <!-- Welcome Section -->
+            <div class="mb-12">
+                <h2 class="text-4xl font-bold text-gray-900 dark:text-white mb-4">EduVerse UI 목업</h2>
+                <p class="text-xl text-gray-600 dark:text-gray-400">오프라인 강의실 환경에 최적화된 프로그래밍 교육 플랫폼의 인터페이스 설계</p>
+            </div>
+
+            <!-- Admin Section -->
+            <section class="mb-12">
+                <div class="mb-6">
+                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2 mb-2">
+                        <i data-lucide="shield" class="w-6 h-6 text-blue-600 dark:text-blue-400"></i>
+                        관리자 페이지
+                    </h3>
+                    <p class="text-gray-600 dark:text-gray-400">시스템 전체를 관리하는 관리자용 대시보드 및 관리 도구</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <!-- Dashboard -->
+                    <a href="admin/dashboard.html" class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6 hover:shadow-lg transition-shadow">
+                        <div class="flex items-center gap-3 mb-4">
+                            <i data-lucide="layout-dashboard" class="w-8 h-8 text-blue-600 dark:text-blue-400"></i>
+                            <h4 class="text-lg font-semibold text-gray-900 dark:text-white">관리자 대시보드</h4>
+                        </div>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm">전체 시스템 현황 및 사용자 통계를 한눈에 확인</p>
+                        <div class="mt-4 flex items-center text-primary-600 dark:text-primary-400 text-sm font-medium">
+                            이동 <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
+                        </div>
+                    </a>
+
+                    <!-- Users -->
+                    <a href="admin/users.html" class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6 hover:shadow-lg transition-shadow">
+                        <div class="flex items-center gap-3 mb-4">
+                            <i data-lucide="users" class="w-8 h-8 text-green-600 dark:text-green-400"></i>
+                            <h4 class="text-lg font-semibold text-gray-900 dark:text-white">사용자 관리</h4>
+                        </div>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm">전체 사용자 조회 및 권한 관리</p>
+                        <div class="mt-4 flex items-center text-primary-600 dark:text-primary-400 text-sm font-medium">
+                            이동 <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
+                        </div>
+                    </a>
+
+                    <!-- Courses -->
+                    <a href="admin/courses.html" class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6 hover:shadow-lg transition-shadow">
+                        <div class="flex items-center gap-3 mb-4">
+                            <i data-lucide="book" class="w-8 h-8 text-purple-600 dark:text-purple-400"></i>
+                            <h4 class="text-lg font-semibold text-gray-900 dark:text-white">코스 관리</h4>
+                        </div>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm">전체 코스 및 학기 관리</p>
+                        <div class="mt-4 flex items-center text-primary-600 dark:text-primary-400 text-sm font-medium">
+                            이동 <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
+                        </div>
+                    </a>
+
+                    <!-- Classes -->
+                    <a href="admin/classes.html" class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6 hover:shadow-lg transition-shadow">
+                        <div class="flex items-center gap-3 mb-4">
+                            <i data-lucide="school" class="w-8 h-8 text-yellow-600 dark:text-yellow-400"></i>
+                            <h4 class="text-lg font-semibold text-gray-900 dark:text-white">수업 관리</h4>
+                        </div>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm">진행 중인 전체 수업 현황 및 통계</p>
+                        <div class="mt-4 flex items-center text-primary-600 dark:text-primary-400 text-sm font-medium">
+                            이동 <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
+                        </div>
+                    </a>
+
+                    <!-- Reports -->
+                    <a href="admin/reports.html" class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6 hover:shadow-lg transition-shadow">
+                        <div class="flex items-center gap-3 mb-4">
+                            <i data-lucide="bar-chart-2" class="w-8 h-8 text-red-600 dark:text-red-400"></i>
+                            <h4 class="text-lg font-semibold text-gray-900 dark:text-white">리포트</h4>
+                        </div>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm">시스템 통계 및 분석 보고서</p>
+                        <div class="mt-4 flex items-center text-primary-600 dark:text-primary-400 text-sm font-medium">
+                            이동 <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
+                        </div>
+                    </a>
+
+                    <!-- Settings -->
+                    <a href="admin/settings.html" class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6 hover:shadow-lg transition-shadow">
+                        <div class="flex items-center gap-3 mb-4">
+                            <i data-lucide="settings" class="w-8 h-8 text-orange-600 dark:text-orange-400"></i>
+                            <h4 class="text-lg font-semibold text-gray-900 dark:text-white">시스템 설정</h4>
+                        </div>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm">시스템 설정 및 보안 관리</p>
+                        <div class="mt-4 flex items-center text-primary-600 dark:text-primary-400 text-sm font-medium">
+                            이동 <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
+                        </div>
+                    </a>
+                </div>
+            </section>
+
+            <!-- Professor Section -->
+            <section>
+                <div class="mb-6">
+                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2 mb-2">
+                        <i data-lucide="book-open" class="w-6 h-6 text-green-600 dark:text-green-400"></i>
+                        교수자 페이지
+                    </h3>
+                    <p class="text-gray-600 dark:text-gray-400">수업 운영 및 학생 관리를 위한 교수자용 도구</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <!-- Dashboard -->
+                    <a href="professor/dashboard.html" class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6 hover:shadow-lg transition-shadow">
+                        <div class="flex items-center gap-3 mb-4">
+                            <i data-lucide="layout-dashboard" class="w-8 h-8 text-blue-600 dark:text-blue-400"></i>
+                            <h4 class="text-lg font-semibold text-gray-900 dark:text-white">대시보드</h4>
+                        </div>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm">수업 운영 현황 및 진행상황 확인</p>
+                        <div class="mt-4 flex items-center text-primary-600 dark:text-primary-400 text-sm font-medium">
+                            이동 <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
+                        </div>
+                    </a>
+
+                    <!-- Class Management -->
+                    <a href="professor/class-manage.html" class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6 hover:shadow-lg transition-shadow">
+                        <div class="flex items-center gap-3 mb-4">
+                            <i data-lucide="book-open" class="w-8 h-8 text-purple-600 dark:text-purple-400"></i>
+                            <h4 class="text-lg font-semibold text-gray-900 dark:text-white">수업 관리</h4>
+                        </div>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm">수업 콘텐츠 및 학습 자료 관리</p>
+                        <div class="mt-4 flex items-center text-primary-600 dark:text-primary-400 text-sm font-medium">
+                            이동 <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
+                        </div>
+                    </a>
+
+                    <!-- Monitoring -->
+                    <a href="professor/monitoring.html" class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6 hover:shadow-lg transition-shadow">
+                        <div class="flex items-center gap-3 mb-4">
+                            <i data-lucide="eye" class="w-8 h-8 text-cyan-600 dark:text-cyan-400"></i>
+                            <h4 class="text-lg font-semibold text-gray-900 dark:text-white">실시간 모니터링</h4>
+                        </div>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm">Code Peek - 학생 코드 실시간 확인</p>
+                        <div class="mt-4 flex items-center text-primary-600 dark:text-primary-400 text-sm font-medium">
+                            이동 <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
+                        </div>
+                    </a>
+
+                    <!-- Student Management -->
+                    <a href="professor/students.html" class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6 hover:shadow-lg transition-shadow">
+                        <div class="flex items-center gap-3 mb-4">
+                            <i data-lucide="users" class="w-8 h-8 text-green-600 dark:text-green-400"></i>
+                            <h4 class="text-lg font-semibold text-gray-900 dark:text-white">학생 관리</h4>
+                        </div>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm">수강 학생 관리 및 성적 입력</p>
+                        <div class="mt-4 flex items-center text-primary-600 dark:text-primary-400 text-sm font-medium">
+                            이동 <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
+                        </div>
+                    </a>
+
+                    <!-- Assignments -->
+                    <a href="professor/assignments.html" class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6 hover:shadow-lg transition-shadow">
+                        <div class="flex items-center gap-3 mb-4">
+                            <i data-lucide="clipboard-list" class="w-8 h-8 text-yellow-600 dark:text-yellow-400"></i>
+                            <h4 class="text-lg font-semibold text-gray-900 dark:text-white">과제 관리</h4>
+                        </div>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm">학생 과제 관리 및 채점</p>
+                        <div class="mt-4 flex items-center text-primary-600 dark:text-primary-400 text-sm font-medium">
+                            이동 <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
+                        </div>
+                    </a>
+
+                    <!-- Analytics -->
+                    <a href="professor/analytics.html" class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6 hover:shadow-lg transition-shadow">
+                        <div class="flex items-center gap-3 mb-4">
+                            <i data-lucide="bar-chart-2" class="w-8 h-8 text-red-600 dark:text-red-400"></i>
+                            <h4 class="text-lg font-semibold text-gray-900 dark:text-white">분석</h4>
+                        </div>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm">수업 진행상황 및 학생 성과 분석</p>
+                        <div class="mt-4 flex items-center text-primary-600 dark:text-primary-400 text-sm font-medium">
+                            이동 <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
+                        </div>
+                    </a>
+                </div>
+            </section>
+
+            <!-- Info Section -->
+            <section class="mt-16 bg-primary-50 dark:bg-primary-900/20 rounded-lg border border-primary-200 dark:border-primary-800 p-8">
+                <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">디자인 시스템</h4>
+                <ul class="space-y-2 text-gray-700 dark:text-gray-300">
+                    <li class="flex items-center gap-2">
+                        <i data-lucide="check" class="w-4 h-4 text-green-600 dark:text-green-400"></i>
+                        다크/라이트 테마 지원
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <i data-lucide="check" class="w-4 h-4 text-green-600 dark:text-green-400"></i>
+                        Tailwind CSS 기반 반응형 디자인
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <i data-lucide="check" class="w-4 h-4 text-green-600 dark:text-green-400"></i>
+                        Lucide 아이콘 사용
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <i data-lucide="check" class="w-4 h-4 text-green-600 dark:text-green-400"></i>
+                        Noto Sans KR 한글 폰트
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <i data-lucide="check" class="w-4 h-4 text-green-600 dark:text-green-400"></i>
+                        교육 현장 최적화 UI/UX
+                    </li>
+                </ul>
+            </section>
+        </div>
+    </main>
+
+    <footer class="bg-gray-100 dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 py-8 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-6xl mx-auto text-center text-gray-600 dark:text-gray-400">
+            <p>EduVerse UI 목업 - Advanced Design System</p>
+        </div>
+    </footer>
+
+    <script>
+        // Theme toggle
+        function toggleTheme() {
+            document.documentElement.classList.toggle('dark');
+            localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+        }
+
+        // Load saved theme
+        if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        }
+
+        // Initialize Lucide icons
+        lucide.createIcons();
+    </script>
+</body>
+</html>

@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduVerse - 관리자 대시보드</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'noto': ['Noto Sans KR', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: {
+                            50: '#ecfeff',
+                            100: '#cffafe',
+                            200: '#a5f3fc',
+                            300: '#67e8f9',
+                            400: '#22d3ee',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="font-noto bg-gray-50 dark:bg-gray-900 transition-colors">
+    <!-- Header -->
+    <header class="sticky top-0 z-50 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+        <div class="px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <h1 class="text-xl font-bold text-primary-600 dark:text-primary-400">EduVerse Admin</h1>
+                </div>
+
+                <div class="flex items-center gap-4">
+                    <!-- Theme Toggle -->
+                    <button onclick="toggleTheme()" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                        <i data-lucide="sun" class="w-5 h-5 dark:hidden"></i>
+                        <i data-lucide="moon" class="w-5 h-5 hidden dark:block"></i>
+                    </button>
+
+                    <!-- Notifications -->
+                    <button class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 relative">
+                        <i data-lucide="bell" class="w-5 h-5"></i>
+                        <span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+                    </button>
+
+                    <!-- Profile -->
+                    <div class="flex items-center gap-2">
+                        <div class="w-8 h-8 bg-primary-500 rounded-full flex items-center justify-center text-white text-sm font-medium">
+                            관
+                        </div>
+                        <span class="hidden sm:block text-sm text-gray-700 dark:text-gray-300">관리자</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="flex h-screen pt-16">
+        <!-- Sidebar -->
+        <nav class="w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 -mt-16 pt-16">
+            <div class="p-4">
+                <ul class="space-y-2">
+                    <li>
+                        <a href="dashboard.html" class="flex items-center gap-3 px-3 py-2 rounded-lg bg-primary-50 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400">
+                            <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+                            <span>대시보드</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="users.html" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300">
+                            <i data-lucide="users" class="w-5 h-5"></i>
+                            <span>사용자 관리</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="courses.html" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300">
+                            <i data-lucide="book" class="w-5 h-5"></i>
+                            <span>코스 관리</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="classes.html" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300">
+                            <i data-lucide="school" class="w-5 h-5"></i>
+                            <span>수업 관리</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="reports.html" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300">
+                            <i data-lucide="bar-chart-2" class="w-5 h-5"></i>
+                            <span>리포트</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="settings.html" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300">
+                            <i data-lucide="settings" class="w-5 h-5"></i>
+                            <span>시스템 설정</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="flex-1 overflow-auto">
+            <div class="p-6">
+                <!-- Page Header -->
+                <div class="mb-6">
+                    <h2 class="text-2xl font-bold text-gray-900 dark:text-white">시스템 대시보드</h2>
+                    <p class="text-gray-600 dark:text-gray-400">전체 시스템 현황을 한눈에 확인하세요</p>
+                </div>
+
+                <!-- Stats Cards -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                    <div class="bg-white dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700">
+                        <div class="flex items-center justify-between mb-2">
+                            <div class="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
+                                <i data-lucide="users" class="w-6 h-6 text-blue-600 dark:text-blue-400"></i>
+                            </div>
+                            <span class="text-sm text-green-600 dark:text-green-400">+12%</span>
+                        </div>
+                        <div class="text-2xl font-bold text-gray-900 dark:text-white">1,234</div>
+                        <div class="text-sm text-gray-600 dark:text-gray-400">전체 사용자</div>
+                    </div>
+
+                    <div class="bg-white dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700">
+                        <div class="flex items-center justify-between mb-2">
+                            <div class="p-2 bg-green-100 dark:bg-green-900/30 rounded-lg">
+                                <i data-lucide="activity" class="w-6 h-6 text-green-600 dark:text-green-400"></i>
+                            </div>
+                            <span class="text-sm text-green-600 dark:text-green-400">+8%</span>
+                        </div>
+                        <div class="text-2xl font-bold text-gray-900 dark:text-white">842</div>
+                        <div class="text-sm text-gray-600 dark:text-gray-400">활성 사용자</div>
+                    </div>
+
+                    <div class="bg-white dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700">
+                        <div class="flex items-center justify-between mb-2">
+                            <div class="p-2 bg-purple-100 dark:bg-purple-900/30 rounded-lg">
+                                <i data-lucide="book-open" class="w-6 h-6 text-purple-600 dark:text-purple-400"></i>
+                            </div>
+                            <span class="text-sm text-gray-600 dark:text-gray-400">0</span>
+                        </div>
+                        <div class="text-2xl font-bold text-gray-900 dark:text-white">45</div>
+                        <div class="text-sm text-gray-600 dark:text-gray-400">진행 중인 수업</div>
+                    </div>
+
+                    <div class="bg-white dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700">
+                        <div class="flex items-center justify-between mb-2">
+                            <div class="p-2 bg-yellow-100 dark:bg-yellow-900/30 rounded-lg">
+                                <i data-lucide="server" class="w-6 h-6 text-yellow-600 dark:text-yellow-400"></i>
+                            </div>
+                            <span class="text-sm text-green-600 dark:text-green-400">정상</span>
+                        </div>
+                        <div class="text-2xl font-bold text-gray-900 dark:text-white">98.5%</div>
+                        <div class="text-sm text-gray-600 dark:text-gray-400">시스템 가용성</div>
+                    </div>
+                </div>
+
+                <!-- Charts Section -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                    <!-- User Growth Chart -->
+                    <div class="bg-white dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700">
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">사용자 증가 추이</h3>
+                        <div class="h-64 flex items-center justify-center text-gray-400">
+                            <div class="text-center">
+                                <i data-lucide="bar-chart-2" class="w-12 h-12 mx-auto mb-2"></i>
+                                <p>차트 영역</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- System Health -->
+                    <div class="bg-white dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700">
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">시스템 상태</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <div class="flex justify-between mb-1">
+                                    <span class="text-sm text-gray-600 dark:text-gray-400">CPU 사용률</span>
+                                    <span class="text-sm font-medium text-gray-900 dark:text-white">45%</span>
+                                </div>
+                                <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                                    <div class="bg-green-500 h-2 rounded-full" style="width: 45%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between mb-1">
+                                    <span class="text-sm text-gray-600 dark:text-gray-400">메모리 사용률</span>
+                                    <span class="text-sm font-medium text-gray-900 dark:text-white">62%</span>
+                                </div>
+                                <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                                    <div class="bg-yellow-500 h-2 rounded-full" style="width: 62%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between mb-1">
+                                    <span class="text-sm text-gray-600 dark:text-gray-400">디스크 사용률</span>
+                                    <span class="text-sm font-medium text-gray-900 dark:text-white">78%</span>
+                                </div>
+                                <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                                    <div class="bg-orange-500 h-2 rounded-full" style="width: 78%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between mb-1">
+                                    <span class="text-sm text-gray-600 dark:text-gray-400">네트워크 대역폭</span>
+                                    <span class="text-sm font-medium text-gray-900 dark:text-white">35%</span>
+                                </div>
+                                <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                                    <div class="bg-green-500 h-2 rounded-full" style="width: 35%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Activities -->
+                <div class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+                    <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">최근 활동</h3>
+                    </div>
+                    <div class="p-6">
+                        <div class="space-y-4">
+                            <div class="flex items-start gap-3">
+                                <div class="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
+                                    <i data-lucide="user-plus" class="w-4 h-4 text-blue-600 dark:text-blue-400"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <p class="text-sm text-gray-900 dark:text-white">새로운 사용자 가입</p>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400">김학생 (student@example.com) - 5분 전</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <div class="p-2 bg-green-100 dark:bg-green-900/30 rounded-lg">
+                                    <i data-lucide="book" class="w-4 h-4 text-green-600 dark:text-green-400"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <p class="text-sm text-gray-900 dark:text-white">새로운 수업 개설</p>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400">Python 기초 프로그래밍 - 30분 전</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <div class="p-2 bg-yellow-100 dark:bg-yellow-900/30 rounded-lg">
+                                    <i data-lucide="alert-circle" class="w-4 h-4 text-yellow-600 dark:text-yellow-400"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <p class="text-sm text-gray-900 dark:text-white">시스템 경고</p>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400">디스크 사용률 75% 초과 - 1시간 전</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <div class="p-2 bg-purple-100 dark:bg-purple-900/30 rounded-lg">
+                                    <i data-lucide="check-circle" class="w-4 h-4 text-purple-600 dark:text-purple-400"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <p class="text-sm text-gray-900 dark:text-white">백업 완료</p>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400">일일 자동 백업 성공 - 3시간 전</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Theme toggle
+        function toggleTheme() {
+            document.documentElement.classList.toggle('dark');
+            localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+        }
+
+        // Load saved theme
+        if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        }
+
+        // Initialize Lucide icons
+        lucide.createIcons();
+    </script>
+</body>
+</html>
