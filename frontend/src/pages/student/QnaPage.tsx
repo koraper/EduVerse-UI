@@ -3,9 +3,10 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import { useTheme } from '@/contexts/ThemeContext'
 import StudentLayout from '@/components/layout/StudentLayout'
-import { Card, Badge, Button, Input, Modal } from '@/components/common'
+import { Card, Badge, Button, Input, Modal, InputCounter } from '@/components/common'
 import { MessageCircle, MessageSquare, Search, Filter, Send, CheckCircle2, Clock, Calendar, BookOpen, ArrowLeft } from 'lucide-react'
 import { useApiError } from '@/hooks/useApiError'
+import { limitInputLength, INPUT_LIMITS } from '@/utils/inputValidation'
 
 interface Question {
   id: number
@@ -547,14 +548,19 @@ const QnaPage = () => {
               </label>
               <textarea
                 value={newQuestion}
-                onChange={(e) => setNewQuestion(e.target.value)}
+                onChange={(e) => setNewQuestion(limitInputLength(e.target.value, INPUT_LIMITS.content))}
                 placeholder="질문 내용을 입력하세요..."
                 rows={6}
+                maxLength={INPUT_LIMITS.content}
                 className={`w-full px-4 py-2 rounded-lg border resize-none ${
                   currentTheme === 'dark'
                     ? 'bg-gray-800 border-gray-700 text-white placeholder-gray-500'
                     : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
                 }`}
+              />
+              <InputCounter
+                currentLength={newQuestion.length}
+                maxLength={INPUT_LIMITS.content}
               />
             </div>
 

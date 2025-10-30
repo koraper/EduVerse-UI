@@ -8,6 +8,7 @@ interface InputCounterProps {
   currentLength: number
   maxLength: number
   showPercentage?: boolean
+  showProgressBar?: boolean
   showWarning?: boolean
 }
 
@@ -21,6 +22,7 @@ const InputCounter = ({
   currentLength,
   maxLength,
   showPercentage = true,
+  showProgressBar = true,
   showWarning = true,
 }: InputCounterProps) => {
   const remaining = getRemainingCharacters('x'.repeat(currentLength), maxLength)
@@ -53,25 +55,27 @@ const InputCounter = ({
   return (
     <div className="space-y-2">
       {/* 숫자 표시 */}
-      <div className="flex items-center justify-between">
-        <span className={`text-sm font-medium ${statusColors[status]}`}>
-          {formatInputLimitInfo(currentLength, maxLength)}
-        </span>
-
+      <div className="flex items-center justify-end">
         {showPercentage && (
-          <span className={`text-xs ${statusColors[status]}`}>
+          <span className={`text-xs ${statusColors[status]} mr-2`}>
             {Math.round((currentLength / maxLength) * 100)}%
           </span>
         )}
+
+        <span className={`text-sm font-medium ${statusColors[status]}`}>
+          {formatInputLimitInfo(currentLength, maxLength)}
+        </span>
       </div>
 
       {/* 진행 바 */}
-      <div className={`w-full h-2 rounded-full ${barColors[status]} overflow-hidden`}>
-        <div
-          className={`h-full rounded-full transition-all duration-200 ${fillColors[status]}`}
-          style={{ width: `${usagePercentage}%` }}
-        />
-      </div>
+      {showProgressBar && (
+        <div className={`w-full h-2 rounded-full ${barColors[status]} overflow-hidden`}>
+          <div
+            className={`h-full rounded-full transition-all duration-200 ${fillColors[status]}`}
+            style={{ width: `${usagePercentage}%` }}
+          />
+        </div>
+      )}
 
       {/* 경고 메시지 */}
       {showWarning && (

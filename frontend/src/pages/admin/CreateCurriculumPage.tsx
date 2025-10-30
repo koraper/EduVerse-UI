@@ -334,6 +334,8 @@ const CreateCurriculumPage = () => {
                   <InputCounter
                     currentLength={createName.length}
                     maxLength={INPUT_LIMITS.title}
+                    showPercentage={false}
+                    showProgressBar={false}
                   />
                 </div>
 
@@ -401,7 +403,8 @@ const CreateCurriculumPage = () => {
                     <InputCounter
                       currentLength={createDescription.length}
                       maxLength={INPUT_LIMITS.description}
-                      showPercentage={true}
+                      showPercentage={false}
+                      showProgressBar={false}
                       showWarning={true}
                     />
                   </div>
