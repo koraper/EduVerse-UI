@@ -10,11 +10,13 @@ import Badge from '@/components/common/Badge'
 import Modal from '@/components/common/Modal'
 import Button from '@/components/common/Button'
 import Input from '@/components/common/Input'
+import InputCounter from '@/components/common/InputCounter'
 import Autocomplete from '@/components/common/Autocomplete'
 import Select from '@/components/common/Select'
 import Skeleton, { CardSkeleton, StatCardSkeleton } from '@/components/common/Skeleton'
 import { useClientSearchSuggestions } from '@/hooks/useSearchSuggestions'
 import { exportToCSV, exportToXLSX, getFilenameWithDate, formatDate } from '@/utils/export'
+import { INPUT_LIMITS, limitInputLength } from '@/utils/inputValidation'
 
 interface Class {
   id: number
@@ -1659,7 +1661,7 @@ const ClassManagementPage = () => {
             </label>
             <textarea
               value={createDescription}
-              onChange={(e) => setCreateDescription(e.target.value)}
+              onChange={(e) => setCreateDescription(limitInputLength(e.target.value, INPUT_LIMITS.description))}
               placeholder="수업 설명 입력"
               rows={3}
               className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 ${
@@ -1668,6 +1670,14 @@ const ClassManagementPage = () => {
                   : 'bg-white border-gray-300 text-gray-900'
               }`}
             />
+            <div className="mt-2">
+              <InputCounter
+                currentLength={createDescription.length}
+                maxLength={INPUT_LIMITS.description}
+                showPercentage={true}
+                showWarning={true}
+              />
+            </div>
           </div>
 
           <div className={`flex items-center justify-end space-x-3 pt-4 border-t ${currentTheme === 'dark' ? 'border-gray-700' : 'border-gray-200'}`}>
@@ -1768,7 +1778,7 @@ const ClassManagementPage = () => {
             </label>
             <textarea
               value={editDescription}
-              onChange={(e) => setEditDescription(e.target.value)}
+              onChange={(e) => setEditDescription(limitInputLength(e.target.value, INPUT_LIMITS.description))}
               placeholder="수업 설명 입력"
               rows={3}
               className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 ${
@@ -1777,6 +1787,14 @@ const ClassManagementPage = () => {
                   : 'bg-white border-gray-300 text-gray-900'
               }`}
             />
+            <div className="mt-2">
+              <InputCounter
+                currentLength={editDescription.length}
+                maxLength={INPUT_LIMITS.description}
+                showPercentage={true}
+                showWarning={true}
+              />
+            </div>
           </div>
 
           <div className={`flex items-center justify-end space-x-3 pt-4 border-t ${currentTheme === 'dark' ? 'border-gray-700' : 'border-gray-200'}`}>

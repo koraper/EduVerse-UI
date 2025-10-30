@@ -8,8 +8,10 @@ import DashboardLayout from '@/components/layout/DashboardLayout'
 import Card from '@/components/common/Card'
 import Button from '@/components/common/Button'
 import Input from '@/components/common/Input'
+import InputCounter from '@/components/common/InputCounter'
 import Select from '@/components/common/Select'
 import { ArrowLeft, FileUp, Edit3, Database, CheckCircle } from 'lucide-react'
+import { INPUT_LIMITS, limitInputLength } from '@/utils/inputValidation'
 
 const CreateCurriculumPage = () => {
   const navigate = useNavigate()
@@ -70,6 +72,8 @@ const CreateCurriculumPage = () => {
     }
     if (!createDescription.trim()) {
       errors.createDescription = '설명을 입력해주세요'
+    } else if (createDescription.length > INPUT_LIMITS.description) {
+      errors.createDescription = `설명은 최대 ${INPUT_LIMITS.description}자까지 입력 가능합니다`
     }
 
     setCreateErrors(errors)
@@ -318,13 +322,18 @@ const CreateCurriculumPage = () => {
                 {/* 커리큘럼명 */}
                 <div>
                   <label className={`block text-sm font-medium mb-2 ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
-                    커리큘럼명(courseTitle) <span className="text-error-500">*</span>
+                    커리큘럼명 <span className="text-error-500">*</span>
                   </label>
                   <Input
                     value={createName}
-                    onChange={(e) => setCreateName(e.target.value)}
+                    onChange={(e) => setCreateName(limitInputLength(e.target.value, INPUT_LIMITS.title))}
                     placeholder="예: Python 기초 프로그래밍"
                     error={createErrors.createName}
+                    maxLength={INPUT_LIMITS.title}
+                  />
+                  <InputCounter
+                    currentLength={createName.length}
+                    maxLength={INPUT_LIMITS.title}
                   />
                 </div>
 
@@ -377,7 +386,7 @@ const CreateCurriculumPage = () => {
                   </label>
                   <textarea
                     value={createDescription}
-                    onChange={(e) => setCreateDescription(e.target.value)}
+                    onChange={(e) => setCreateDescription(limitInputLength(e.target.value, INPUT_LIMITS.description))}
                     placeholder="커리큘럼에 대한 설명을 입력하세요"
                     rows={4}
                     className={`w-full px-4 py-2 rounded-lg border transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-1 ${
@@ -388,6 +397,14 @@ const CreateCurriculumPage = () => {
                           : 'bg-white border-gray-300 text-gray-900 focus:border-primary-500 focus:ring-primary-500'
                     }`}
                   />
+                  <div className="mt-2">
+                    <InputCounter
+                      currentLength={createDescription.length}
+                      maxLength={INPUT_LIMITS.description}
+                      showPercentage={true}
+                      showWarning={true}
+                    />
+                  </div>
                   {createErrors.createDescription && (
                     <p className="mt-1 text-sm text-error-600">{createErrors.createDescription}</p>
                   )}

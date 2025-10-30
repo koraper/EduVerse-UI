@@ -10,12 +10,14 @@ import Badge from '@/components/common/Badge'
 import Modal from '@/components/common/Modal'
 import Button from '@/components/common/Button'
 import Input from '@/components/common/Input'
+import InputCounter from '@/components/common/InputCounter'
 import Autocomplete from '@/components/common/Autocomplete'
 import Select from '@/components/common/Select'
 import Skeleton, { CardSkeleton, StatCardSkeleton } from '@/components/common/Skeleton'
 import { useClientSearchSuggestions } from '@/hooks/useSearchSuggestions'
 import { exportToJSON, exportToXLSX, getFilenameWithDate, formatDate } from '@/utils/export'
 import { ChevronDown } from 'lucide-react'
+import { INPUT_LIMITS, limitInputLength } from '@/utils/inputValidation'
 
 interface Curriculum {
   id: number
@@ -259,6 +261,8 @@ const CurriculumManagementPage = () => {
     }
     if (!createDescription.trim()) {
       errors.createDescription = '설명을 입력해주세요'
+    } else if (createDescription.length > INPUT_LIMITS.description) {
+      errors.createDescription = `설명은 최대 ${INPUT_LIMITS.description}자까지 입력 가능합니다`
     }
 
     setCreateErrors(errors)
@@ -373,6 +377,8 @@ const CurriculumManagementPage = () => {
     }
     if (!editDescription.trim()) {
       errors.editDescription = '설명을 입력해주세요'
+    } else if (editDescription.length > INPUT_LIMITS.description) {
+      errors.editDescription = `설명은 최대 ${INPUT_LIMITS.description}자까지 입력 가능합니다`
     }
 
     setEditErrors(errors)
@@ -1390,7 +1396,7 @@ const CurriculumManagementPage = () => {
             </label>
             <textarea
               value={createDescription}
-              onChange={(e) => setCreateDescription(e.target.value)}
+              onChange={(e) => setCreateDescription(limitInputLength(e.target.value, INPUT_LIMITS.description))}
               placeholder="커리큘럼에 대한 설명을 입력하세요"
               rows={3}
               className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 ${
@@ -1399,6 +1405,14 @@ const CurriculumManagementPage = () => {
                   : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
               }`}
             />
+            <div className="mt-2">
+              <InputCounter
+                currentLength={createDescription.length}
+                maxLength={INPUT_LIMITS.description}
+                showPercentage={true}
+                showWarning={true}
+              />
+            </div>
             {createErrors.createDescription && (
               <p className="text-sm text-red-600 mt-1">{createErrors.createDescription}</p>
             )}
@@ -1539,7 +1553,7 @@ const CurriculumManagementPage = () => {
             </label>
             <textarea
               value={editDescription}
-              onChange={(e) => setEditDescription(e.target.value)}
+              onChange={(e) => setEditDescription(limitInputLength(e.target.value, INPUT_LIMITS.description))}
               placeholder="커리큘럼에 대한 설명을 입력하세요"
               rows={3}
               className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 ${
@@ -1548,6 +1562,14 @@ const CurriculumManagementPage = () => {
                   : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
               }`}
             />
+            <div className="mt-2">
+              <InputCounter
+                currentLength={editDescription.length}
+                maxLength={INPUT_LIMITS.description}
+                showPercentage={true}
+                showWarning={true}
+              />
+            </div>
             {editErrors.editDescription && (
               <p className="text-sm text-red-600 mt-1">{editErrors.editDescription}</p>
             )}
