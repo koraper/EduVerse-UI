@@ -1414,7 +1414,7 @@ export const adminHandlers = [
 
       // 날짜 범위 필터링
       const now = new Date()
-      let filterDate = new Date()
+      const filterDate = new Date()
 
       if (dateRange === '7d') {
         filterDate.setDate(now.getDate() - 7)

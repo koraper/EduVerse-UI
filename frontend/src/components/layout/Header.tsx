@@ -3,7 +3,6 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import { useTheme } from '@/contexts/ThemeContext'
 import { Sun, Moon, Bell, HelpCircle, ChevronDown, Home, Settings, LogOut, MessageCircle } from 'lucide-react'
-import Button from '@/components/common/Button'
 import ComingSoonModal from '@/components/common/ComingSoonModal'
 
 const Header = () => {

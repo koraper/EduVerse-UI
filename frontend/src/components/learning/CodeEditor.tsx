@@ -1,6 +1,6 @@
 import { useTheme } from '@/contexts/ThemeContext'
 import { Card } from '@/components/common'
-import { Code, RotateCcw, Type, Minus, Plus } from 'lucide-react'
+import { Code, RotateCcw, Type } from 'lucide-react'
 
 interface CodeEditorProps {
   code: string

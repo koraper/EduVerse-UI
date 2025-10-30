@@ -44,8 +44,7 @@ const CurriculumSidebar = ({
   courseInfo,
   averageScore,
   conceptUnderstanding, // 새롭게 추가된 prop
-  codeApplication,      // 새롭게 추가된 prop
-  totalLearningHours // 기존 prop
+  codeApplication      // 새롭게 추가된 prop
 }: CurriculumSidebarProps) => {
   const navigate = useNavigate()
   const { currentTheme } = useTheme()
@@ -180,9 +179,10 @@ const CurriculumSidebar = ({
   const absentAttendance = lessons.filter(l => l.attendance === 'absent').length;
   const totalAttendanceRecords = completedAttendance + incompleteAttendance + absentAttendance;
 
-  const completedAttendanceWidth = totalAttendanceRecords > 0 ? (completedAttendance / totalAttendanceRecords) * 100 : 0;
-  const incompleteAttendanceWidth = totalAttendanceRecords > 0 ? (incompleteAttendance / totalAttendanceRecords) * 100 : 0;
-  const absentAttendanceWidth = totalAttendanceRecords > 0 ? (absentAttendance / totalAttendanceRecords) * 100 : 0;
+  // 나중에 사용할 수 있도록 주석 처리
+  // const completedAttendanceWidth = totalAttendanceRecords > 0 ? (completedAttendance / totalAttendanceRecords) * 100 : 0;
+  // const incompleteAttendanceWidth = totalAttendanceRecords > 0 ? (incompleteAttendance / totalAttendanceRecords) * 100 : 0;
+  // const absentAttendanceWidth = totalAttendanceRecords > 0 ? (absentAttendance / totalAttendanceRecords) * 100 : 0;
 
 
   const progressPercentage = Math.round((completedLessons / totalLessons) * 100)

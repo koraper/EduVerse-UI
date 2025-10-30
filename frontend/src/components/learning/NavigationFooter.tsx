@@ -10,11 +10,11 @@ interface NavigationFooterProps {
 }
 
 const NavigationFooter = ({
-  currentLessonId,
-  totalLessons,
-  isCompleted,
-  onPrevious,
-  onNext
+  currentLessonId: _currentLessonId,
+  totalLessons: _totalLessons,
+  isCompleted: _isCompleted,
+  onPrevious: _onPrevious,
+  onNext: _onNext
 }: NavigationFooterProps) => {
   const { currentTheme } = useTheme()
 

@@ -34,14 +34,15 @@ const LearningContent_Toggle = ({
     { level: 'advanced' as const, label: '심화', emoji: '🔴' }
   ]
 
-  const getDifficultyIndex = (level: string) => {
-    switch (level) {
-      case 'basic': return 0
-      case 'intermediate': return 1
-      case 'advanced': return 2
-      default: return 0
-    }
-  }
+  // 나중에 사용할 수 있도록 주석 처리
+  // const getDifficultyIndex = (level: string) => {
+  //   switch (level) {
+  //     case 'basic': return 0
+  //     case 'intermediate': return 1
+  //     case 'advanced': return 2
+  //     default: return 0
+  //   }
+  // }
 
   return (
     <Card>

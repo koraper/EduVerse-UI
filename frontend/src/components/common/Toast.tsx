@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import type { ToastProps } from './types'
 
-const Toast = ({ id, message, variant = 'info', duration, onClose, action }: ToastProps) => {
+const Toast = ({ message, variant = 'info', duration, onClose, action }: ToastProps) => {
   // 자동 닫기 타이머 설정 (duration이 명시적으로 설정된 경우)
   useEffect(() => {
     if (duration && duration > 0) {

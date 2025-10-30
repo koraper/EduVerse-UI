@@ -15,7 +15,7 @@ interface FontProviderProps {
 
 export const FontProvider = ({ children }: FontProviderProps) => {
   const [currentFont, setCurrentFont] = useState<FontType>('pretendard')
-  const [isLoading, setIsLoading] = useState(true)
+  const [, setIsLoading] = useState(true)
 
   // 초기화: localStorage에서 저장된 폰트 로드
   useEffect(() => {

@@ -5,7 +5,6 @@ import {
   handleFetchError,
   getToastVariantForErrorType,
   type ApiErrorInfo,
-  type ApiErrorType,
 } from '@/utils/apiError'
 
 export interface UseApiErrorOptions {

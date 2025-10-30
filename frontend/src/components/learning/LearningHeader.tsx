@@ -16,17 +16,13 @@ interface LearningHeaderProps {
 
 const LearningHeader = ({
   courseName,
-  lessonTitle,
-  lessonWeek,
-  progress,
   onGoBack,
   onToggleSidebar,
   isSidebarOpen
 }: LearningHeaderProps) => {
   const navigate = useNavigate()
-  const { courseId } = useParams<{ courseId: string }>()
   const { currentTheme, setTheme } = useTheme()
-  const { user, logout, token } = useAuth()
+  const { user, logout } = useAuth()
   const [currentTime, setCurrentTime] = useState(new Date())
   const [showUserMenu, setShowUserMenu] = useState(false)
   const userMenuRef = useRef<HTMLDivElement>(null)
