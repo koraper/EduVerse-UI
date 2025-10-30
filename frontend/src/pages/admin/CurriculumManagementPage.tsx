@@ -1618,6 +1618,7 @@ const CurriculumManagementPage = () => {
               onChange={(e) => setDeletePassword(e.target.value)}
               placeholder="관리자 비밀번호를 입력하세요"
               error={!!deleteError && !deletePassword}
+              autoComplete="new-password"
             />
           </div>
 
@@ -1631,6 +1632,7 @@ const CurriculumManagementPage = () => {
               onChange={(e) => setDeleteConfirmName(e.target.value)}
               placeholder={`"${deleteCurriculum?.name}" 을(를) 입력하세요`}
               error={!!deleteError && deleteConfirmName !== deleteCurriculum?.name}
+              autoComplete="off"
             />
             <p className={`mt-1 text-xs ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
               삭제를 확인하려면 위의 커리큘럼명을 정확히 입력하세요
