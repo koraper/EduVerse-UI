@@ -318,7 +318,7 @@ const CreateCurriculumPage = () => {
                 {/* 커리큘럼명 */}
                 <div>
                   <label className={`block text-sm font-medium mb-2 ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
-                    커리큘럼명 <span className="text-error-500">*</span>
+                    커리큘럼명(courseTitle) <span className="text-error-500">*</span>
                   </label>
                   <Input
                     value={createName}
@@ -350,7 +350,7 @@ const CreateCurriculumPage = () => {
                 {/* 주차 수 */}
                 <div>
                   <label className={`block text-sm font-medium mb-2 ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
-                    주차 수 <span className="text-error-500">*</span>
+                    차시 <span className="text-error-500">*</span>
                   </label>
                   <Input
                     type="number"
@@ -364,8 +364,8 @@ const CreateCurriculumPage = () => {
                   />
                   <p className={`mt-1 text-xs ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
                     {creationMethod === 'upload' && uploadedData
-                      ? '파일에서 자동으로 계산된 주차 수입니다.'
-                      : '1주차부터 52주차까지 설정할 수 있습니다.'
+                      ? '파일에서 자동으로 계산된 차시입니다.'
+                      : '1차시부터 16차시까지 설정할 수 있습니다.'
                     }
                   </p>
                 </div>
@@ -537,7 +537,8 @@ const CreateCurriculumPage = () => {
                     variant="primary"
                     onClick={handleNext}
                     disabled={
-                      currentStep === 1 && (!creationMethod || (creationMethod === 'upload' && !uploadedFile))
+                      (currentStep === 1 && (!creationMethod || (creationMethod === 'upload' && !uploadedFile))) ||
+                      (currentStep === 2 && (!createName.trim() || !createLanguage || !createWeeks || !createDescription.trim()))
                     }
                   >
                     다음
