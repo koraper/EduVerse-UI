@@ -24,6 +24,7 @@ const CreateCurriculumPage = () => {
   // Step state
   const [currentStep, setCurrentStep] = useState(1)
   const [creationMethod, setCreationMethod] = useState<'manual' | 'upload' | ''>('')
+  const [uploadedFile, setUploadedFile] = useState<File | null>(null)
 
   // Form state
   const [createName, setCreateName] = useState('')
@@ -72,6 +73,22 @@ const CreateCurriculumPage = () => {
 
     setCreateErrors(errors)
     return Object.keys(errors).length === 0
+  }
+
+  // 파일 업로드 핸들러
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    const fileExtension = file.name.split('.').pop()?.toLowerCase()
+    if (fileExtension !== 'json' && fileExtension !== 'xlsx') {
+      addToast('JSON 또는 xlsx 파일만 업로드할 수 있습니다.', { variant: 'error' })
+      e.target.value = '' // Reset input
+      return
+    }
+
+    setUploadedFile(file)
+    addToast(`${file.name} 파일이 선택되었습니다.`, { variant: 'success' })
   }
 
   // Step navigation
@@ -192,26 +209,43 @@ const CreateCurriculumPage = () => {
                   </button>
 
                   {/* 파일 업로드 */}
-                  <button
-                    onClick={() => setCreationMethod('upload')}
-                    className={`p-6 rounded-lg border-2 transition-all ${
-                      creationMethod === 'upload'
-                        ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20'
-                        : currentTheme === 'dark'
-                        ? 'border-gray-700 hover:border-gray-600 bg-gray-800'
-                        : 'border-gray-300 hover:border-gray-400 bg-white'
-                    }`}
-                  >
-                    <FileUp className={`w-12 h-12 mx-auto mb-4 ${
-                      creationMethod === 'upload' ? 'text-primary-500' : currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'
-                    }`} />
-                    <h3 className={`text-lg font-semibold mb-2 ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-                      파일 업로드
-                    </h3>
-                    <p className={`text-sm ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
-                      JSON 또는 엑셀 파일을 업로드하여 생성합니다.
-                    </p>
-                  </button>
+                  <div className="relative">
+                    <input
+                      type="file"
+                      id="file-upload"
+                      accept=".json,.xlsx"
+                      onChange={handleFileUpload}
+                      className="hidden"
+                    />
+                    <button
+                      onClick={() => {
+                        setCreationMethod('upload')
+                        document.getElementById('file-upload')?.click()
+                      }}
+                      className={`w-full p-6 rounded-lg border-2 transition-all ${
+                        creationMethod === 'upload'
+                          ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20'
+                          : currentTheme === 'dark'
+                          ? 'border-gray-700 hover:border-gray-600 bg-gray-800'
+                          : 'border-gray-300 hover:border-gray-400 bg-white'
+                      }`}
+                    >
+                      <FileUp className={`w-12 h-12 mx-auto mb-4 ${
+                        creationMethod === 'upload' ? 'text-primary-500' : currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'
+                      }`} />
+                      <h3 className={`text-lg font-semibold mb-2 ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
+                        파일 업로드
+                      </h3>
+                      <p className={`text-sm ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
+                        JSON 또는 엑셀 파일을 업로드하여 생성합니다.
+                      </p>
+                      {uploadedFile && (
+                        <p className={`mt-3 text-xs font-medium ${currentTheme === 'dark' ? 'text-primary-400' : 'text-primary-600'}`}>
+                          선택됨: {uploadedFile.name}
+                        </p>
+                      )}
+                    </button>
+                  </div>
                 </div>
               </div>
             )}
