@@ -374,6 +374,7 @@ const CreateCurriculumPage = () => {
                   <Button
                     variant="primary"
                     onClick={handleNext}
+                    disabled={currentStep === 1 && !creationMethod}
                   >
                     다음
                   </Button>
