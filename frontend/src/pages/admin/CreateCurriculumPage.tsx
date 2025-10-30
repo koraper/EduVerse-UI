@@ -537,7 +537,7 @@ const CreateCurriculumPage = () => {
               <div>
                 {currentStep > 1 && currentStep < 4 && (
                   <Button
-                    variant="ghost"
+                    variant="secondary"
                     onClick={handlePrevious}
                   >
                     이전
@@ -546,7 +546,7 @@ const CreateCurriculumPage = () => {
               </div>
               <div className="flex items-center space-x-3">
                 <Button
-                  variant="ghost"
+                  variant="secondary"
                   onClick={handleCancel}
                   disabled={isCreating}
                 >
