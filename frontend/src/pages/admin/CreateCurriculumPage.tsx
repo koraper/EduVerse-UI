@@ -25,6 +25,7 @@ const CreateCurriculumPage = () => {
   const [currentStep, setCurrentStep] = useState(1)
   const [creationMethod, setCreationMethod] = useState<'manual' | 'upload' | ''>('')
   const [uploadedFile, setUploadedFile] = useState<File | null>(null)
+  const [uploadedData, setUploadedData] = useState<any>(null)
 
   // Form state
   const [createName, setCreateName] = useState('')
@@ -76,7 +77,7 @@ const CreateCurriculumPage = () => {
   }
 
   // 파일 업로드 핸들러
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (!file) return
 
@@ -88,7 +89,37 @@ const CreateCurriculumPage = () => {
     }
 
     setUploadedFile(file)
-    addToast(`${file.name} 파일이 선택되었습니다.`, { variant: 'success' })
+
+    // JSON 파일 파싱
+    if (fileExtension === 'json') {
+      try {
+        const text = await file.text()
+        const data = JSON.parse(text)
+
+        // 데이터 유효성 검증
+        if (!data.courseTitle || !data.weeks || !Array.isArray(data.weeks)) {
+          addToast('올바른 커리큘럼 JSON 형식이 아닙니다.', { variant: 'error' })
+          setUploadedFile(null)
+          e.target.value = ''
+          return
+        }
+
+        setUploadedData(data)
+
+        // Step 2 폼 자동 입력
+        setCreateName(data.courseTitle)
+        setCreateWeeks(data.weeks.length.toString())
+
+        addToast(`${file.name} 파일이 성공적으로 로드되었습니다.`, { variant: 'success' })
+      } catch (error) {
+        addToast('JSON 파일 파싱에 실패했습니다.', { variant: 'error' })
+        setUploadedFile(null)
+        e.target.value = ''
+      }
+    } else {
+      // xlsx 파일 처리는 나중에 구현
+      addToast(`${file.name} 파일이 선택되었습니다. (xlsx 파싱은 추후 구현 예정)`, { variant: 'info' })
+    }
   }
 
   // Step navigation
@@ -257,6 +288,29 @@ const CreateCurriculumPage = () => {
                   기본 정보를 입력하세요.
                 </h2>
 
+                {/* 파일 업로드 시 파일 정보 표시 */}
+                {creationMethod === 'upload' && uploadedFile && (
+                  <div className={`p-4 rounded-lg border ${currentTheme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-blue-50 border-blue-200'}`}>
+                    <h3 className={`text-sm font-semibold mb-2 ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
+                      업로드된 파일
+                    </h3>
+                    <div className="flex items-center space-x-2">
+                      <FileUp className={`w-4 h-4 ${currentTheme === 'dark' ? 'text-primary-400' : 'text-primary-600'}`} />
+                      <span className={`text-sm ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
+                        {uploadedFile.name}
+                      </span>
+                      <span className={`text-xs ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
+                        ({(uploadedFile.size / 1024).toFixed(2)} KB)
+                      </span>
+                    </div>
+                    {uploadedData && (
+                      <p className={`mt-2 text-xs ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
+                        자동 추출: {uploadedData.weeks?.length}주차, {uploadedData.weeks?.reduce((acc: number, w: any) => acc + w.cycles?.length || 0, 0)}개 사이클
+                      </p>
+                    )}
+                  </div>
+                )}
+
                 {/* 커리큘럼명 */}
                 <div>
                   <label className={`block text-sm font-medium mb-2 ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
@@ -302,9 +356,13 @@ const CreateCurriculumPage = () => {
                     min="1"
                     max="52"
                     error={createErrors.createWeeks}
+                    disabled={creationMethod === 'upload' && uploadedData}
                   />
                   <p className={`mt-1 text-xs ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
-                    1주차부터 52주차까지 설정할 수 있습니다.
+                    {creationMethod === 'upload' && uploadedData
+                      ? '파일에서 자동으로 계산된 주차 수입니다.'
+                      : '1주차부터 52주차까지 설정할 수 있습니다.'
+                    }
                   </p>
                 </div>
 
@@ -337,19 +395,79 @@ const CreateCurriculumPage = () => {
             {currentStep === 3 && (
               <div className="space-y-6">
                 <h2 className={`text-xl font-semibold ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-                  상세 데이터를 입력하세요.
+                  {creationMethod === 'upload' && uploadedData ? '업로드된 데이터를 확인하세요.' : '상세 데이터를 입력하세요.'}
                 </h2>
-                <div className={`p-6 rounded-lg border ${currentTheme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-gray-50 border-gray-200'}`}>
-                  <Database className={`w-16 h-16 mx-auto mb-4 ${currentTheme === 'dark' ? 'text-gray-600' : 'text-gray-400'}`} />
-                  <p className={`text-center ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
-                    주차별 학습 목표 및 과제 데이터를 입력하는 기능이 추가될 예정입니다.
-                  </p>
-                </div>
+
+                {/* 파일 업로드 시 통계 정보 */}
+                {creationMethod === 'upload' && uploadedData && (
+                  <>
+                    {/* 커리큘럼 통계 */}
+                    <div className={`p-4 rounded-lg border ${currentTheme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-blue-50 border-blue-200'}`}>
+                      <h3 className={`text-sm font-semibold mb-3 ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
+                        📊 커리큘럼 통계
+                      </h3>
+                      <div className="grid grid-cols-3 gap-4 text-center">
+                        <div>
+                          <p className={`text-2xl font-bold ${currentTheme === 'dark' ? 'text-primary-400' : 'text-primary-600'}`}>
+                            {uploadedData.weeks?.length || 0}
+                          </p>
+                          <p className={`text-xs ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>총 주차</p>
+                        </div>
+                        <div>
+                          <p className={`text-2xl font-bold ${currentTheme === 'dark' ? 'text-primary-400' : 'text-primary-600'}`}>
+                            {uploadedData.weeks?.reduce((acc: number, w: any) => acc + (w.cycles?.length || 0), 0) || 0}
+                          </p>
+                          <p className={`text-xs ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>총 사이클</p>
+                        </div>
+                        <div>
+                          <p className={`text-2xl font-bold ${currentTheme === 'dark' ? 'text-primary-400' : 'text-primary-600'}`}>
+                            {(uploadedData.weeks?.reduce((acc: number, w: any) => acc + (w.cycles?.length || 0), 0) / (uploadedData.weeks?.length || 1)).toFixed(1)}
+                          </p>
+                          <p className={`text-xs ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>평균 사이클/주</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* 주차별 구조 */}
+                    <div className={`p-4 rounded-lg border ${currentTheme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'}`}>
+                      <h3 className={`text-sm font-semibold mb-3 ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
+                        📚 주차별 구조
+                      </h3>
+                      <div className="space-y-2 max-h-64 overflow-y-auto">
+                        {uploadedData.weeks?.map((week: any, index: number) => (
+                          <div
+                            key={index}
+                            className={`p-3 rounded border ${currentTheme === 'dark' ? 'bg-gray-900 border-gray-700' : 'bg-gray-50 border-gray-200'}`}
+                          >
+                            <div className="flex justify-between items-center">
+                              <span className={`text-sm font-medium ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
+                                Week {week.week}: {week.title}
+                              </span>
+                              <span className={`text-xs px-2 py-1 rounded ${currentTheme === 'dark' ? 'bg-primary-900 text-primary-300' : 'bg-primary-100 text-primary-700'}`}>
+                                {week.cycles?.length || 0} 사이클
+                              </span>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </>
+                )}
+
+                {/* 직접 입력 시 메시지 */}
+                {creationMethod === 'manual' && (
+                  <div className={`p-6 rounded-lg border ${currentTheme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-gray-50 border-gray-200'}`}>
+                    <Database className={`w-16 h-16 mx-auto mb-4 ${currentTheme === 'dark' ? 'text-gray-600' : 'text-gray-400'}`} />
+                    <p className={`text-center ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
+                      주차별 학습 목표 및 과제 데이터를 입력하는 기능이 추가될 예정입니다.
+                    </p>
+                  </div>
+                )}
 
                 {/* 입력된 정보 요약 */}
                 <div className={`p-4 rounded-lg border ${currentTheme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'}`}>
                   <h3 className={`text-sm font-semibold mb-3 ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-                    입력된 정보 확인
+                    ✅ 입력된 정보 확인
                   </h3>
                   <div className="space-y-2 text-sm">
                     <div className="flex justify-between">
@@ -364,6 +482,12 @@ const CreateCurriculumPage = () => {
                       <span className={currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}>주차 수:</span>
                       <span className={currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}>{createWeeks || '-'}</span>
                     </div>
+                    {creationMethod === 'upload' && uploadedFile && (
+                      <div className="flex justify-between">
+                        <span className={currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}>업로드 파일:</span>
+                        <span className={currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}>{uploadedFile.name}</span>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
