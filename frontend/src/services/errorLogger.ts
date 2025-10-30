@@ -84,7 +84,7 @@ class ErrorLogger {
     this.saveLogsToStorage()
 
     // 콘솔에 출력 (개발 모드)
-    if (process.env.NODE_ENV === 'development') {
+    if (import.meta.env.DEV) {
       this.logToConsole(entry)
     }
 
@@ -319,7 +319,7 @@ export function setupGlobalErrorHandlers() {
   })
 
   // 콘솔 에러 메서드 오버라이드 (개발용)
-  if (process.env.NODE_ENV === 'development') {
+  if (import.meta.env.DEV) {
     const originalError = console.error
     console.error = function (...args: any[]) {
       errorLogger.warn('Console Error', undefined, { args })

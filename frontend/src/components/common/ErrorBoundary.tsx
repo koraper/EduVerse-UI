@@ -48,7 +48,7 @@ class ErrorBoundary extends Component<Props, State> {
     }
 
     // 개발 환경에서 콘솔에 에러 출력
-    if (process.env.NODE_ENV === 'development') {
+    if (import.meta.env.DEV) {
       console.error('Error Boundary caught an error:', error, errorInfo)
     }
   }
@@ -101,7 +101,7 @@ class ErrorBoundary extends Component<Props, State> {
               </p>
 
               {/* 개발 환경 에러 상세 정보 */}
-              {process.env.NODE_ENV === 'development' && this.state.error && (
+              {import.meta.env.DEV && this.state.error && (
                 <div className="mb-6 p-4 bg-gray-50 rounded border border-gray-200">
                   <h2 className="font-semibold text-sm text-gray-900 mb-2">
                     개발자 정보:

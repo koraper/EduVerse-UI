@@ -195,7 +195,7 @@ const SettingsPage = () => {
       department: user?.department || '',
       studentId: user?.studentId || '',
     })
-    setProfileErrors({ name: '', email: '', phone: '', department: '', bio: '' })
+    setProfileErrors({ name: '', email: '', phone: '', department: '', bio: '', studentId: '' })
     setMessage(null)
   }
 

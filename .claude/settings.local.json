@@ -14,7 +14,9 @@
       "Bash(cat:*)",
       "Bash(taskkill:*)",
       "Bash(pkill:*)",
-      "Bash(npm install:*)"
+      "Bash(npm install:*)",
+      "Bash(npm run build:*)",
+      "Bash(npx vite build)"
     ],
     "deny": [],
     "ask": []

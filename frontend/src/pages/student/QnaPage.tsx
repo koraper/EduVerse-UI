@@ -27,7 +27,7 @@ const QnaPage = () => {
   const [searchParams, setSearchParams] = useSearchParams()
   const { user, loading: authLoading } = useAuth()
   const { currentTheme } = useTheme()
-  const handleError = useApiError()
+  const { handleError } = useApiError()
 
   const [questions, setQuestions] = useState<Question[]>([])
   const [loading, setLoading] = useState(true)

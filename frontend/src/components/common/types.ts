@@ -80,7 +80,7 @@ export interface CardProps {
 }
 
 // Badge 컴포넌트 타입
-export type BadgeVariant = 'primary' | 'secondary' | 'success' | 'warning' | 'error' | 'info' | 'blue' | 'purple'
+export type BadgeVariant = 'primary' | 'secondary' | 'success' | 'warning' | 'error' | 'info' | 'blue' | 'purple' | 'gray'
 export type BadgeSize = 'sm' | 'md' | 'lg'
 
 export interface BadgeProps {
@@ -90,6 +90,7 @@ export interface BadgeProps {
   pill?: boolean
   dot?: boolean
   className?: string
+  onClick?: () => void
 }
 
 // Spinner 컴포넌트 타입

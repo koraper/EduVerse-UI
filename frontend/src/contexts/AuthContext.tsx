@@ -22,6 +22,7 @@ interface AuthContextType {
   logout: () => void
   updateUser: (updatedUser: User) => void
   isLoading: boolean
+  loading: boolean // alias for isLoading
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
@@ -160,7 +161,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   }
 
   return (
-    <AuthContext.Provider value={{ user, token, login, register, logout, updateUser, isLoading }}>
+    <AuthContext.Provider value={{ user, token, login, register, logout, updateUser, isLoading, loading: isLoading }}>
       {children}
     </AuthContext.Provider>
   )

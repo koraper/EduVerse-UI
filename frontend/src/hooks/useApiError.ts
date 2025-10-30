@@ -43,7 +43,7 @@ export const useApiError = (options: UseApiErrorOptions = {}) => {
       }
 
       // 개발자 콘솔에도 에러 출력
-      if (process.env.NODE_ENV === 'development') {
+      if (import.meta.env.DEV) {
         console.error('[API Error]', errorInfo)
       }
 
@@ -76,7 +76,7 @@ export const useApiError = (options: UseApiErrorOptions = {}) => {
       }
 
       // 개발자 콘솔에도 에러 출력
-      if (process.env.NODE_ENV === 'development') {
+      if (import.meta.env.DEV) {
         console.error('[API Error]', errorInfo)
       }
 

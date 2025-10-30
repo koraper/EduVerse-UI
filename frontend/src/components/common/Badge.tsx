@@ -7,6 +7,7 @@ const Badge = ({
   pill = false,
   dot = false,
   className = '',
+  onClick,
 }: BadgeProps) => {
   // 기본 스타일
   const baseStyles = 'inline-flex items-center font-medium transition-colors'
@@ -21,6 +22,7 @@ const Badge = ({
     info: 'bg-blue-100 text-blue-800',
     blue: 'bg-blue-100 text-blue-800',
     purple: 'bg-purple-100 text-purple-800',
+    gray: 'bg-gray-100 text-gray-800',
   }
 
   // Size 스타일
@@ -43,13 +45,14 @@ const Badge = ({
     info: 'bg-blue-500',
     blue: 'bg-blue-500',
     purple: 'bg-purple-500',
+    gray: 'bg-gray-500',
   }
 
   // 최종 클래스명 조합
-  const combinedClassName = `${baseStyles} ${variantStyles[variant]} ${sizeStyles[size]} ${shapeStyles} ${className}`.trim()
+  const combinedClassName = `${baseStyles} ${variantStyles[variant]} ${sizeStyles[size]} ${shapeStyles} ${onClick ? 'cursor-pointer hover:opacity-80' : ''} ${className}`.trim()
 
   return (
-    <span className={combinedClassName}>
+    <span className={combinedClassName} onClick={onClick}>
       {dot && (
         <span
           className={`w-1.5 h-1.5 rounded-full mr-1.5 ${dotVariantStyles[variant]}`}

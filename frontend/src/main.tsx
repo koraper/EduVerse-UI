@@ -9,7 +9,7 @@ setupGlobalErrorHandlers()
 
 // MSW 초기화 (개발 환경에서만)
 async function enableMocking() {
-  if (process.env.NODE_ENV !== 'development') {
+  if (!import.meta.env.DEV) {
     return
   }
 

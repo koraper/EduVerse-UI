@@ -1,11 +1,11 @@
 import { useNavigate, useLocation } from 'react-router-dom'
-import { useMemo } from 'react'
+import { useMemo, type ReactElement } from 'react'
 import { useAuth } from '@/contexts/AuthContext'
 
 interface MenuItem {
   name: string
   path: string
-  icon: JSX.Element
+  icon: ReactElement
   roles?: ('professor' | 'admin')[]
 }
 
