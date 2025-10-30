@@ -983,7 +983,7 @@ const CurriculumManagementPage = () => {
                   </div>
                   <div className="flex items-center space-x-2">
                     <Button
-                      variant="outline"
+                      variant="primary"
                       size="sm"
                       onClick={() => {
                         setBulkStatus('active')
@@ -997,7 +997,7 @@ const CurriculumManagementPage = () => {
                       상태 변경
                     </Button>
                     <Button
-                      variant="ghost"
+                      variant="secondary"
                       size="sm"
                       onClick={() => setSelectedCurriculumIds([])}
                       className="text-xs"
