@@ -23,7 +23,8 @@
       "Bash(for file in mocks/handlers/admin.ts mocks/handlers/professor/class.ts mocks/handlers/auth.ts)",
       "Bash(find:*)",
       "Bash(xargs -I {} bash -c 'echo \"\"\"\"=== {} ===\"\"\"\" && grep -n \"\"\"\"다[\\x27\\\"\"\"\">]\"\"\"\" {} | grep -v \"\"\"\"다\\.\"\"\"\" | head -20')",
-      "Bash(node analyze_scenario.js:*)"
+      "Bash(node analyze_scenario.js:*)",
+      "Bash(node add_feedback_adv.js:*)"
     ],
     "deny": [],
     "ask": []

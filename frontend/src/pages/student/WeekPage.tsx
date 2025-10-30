@@ -38,25 +38,25 @@ const WeekPage = () => {
   const [testResults, setTestResults] = useState<any[]>([])
   const [isExecuting, setIsExecuting] = useState(false)
 
-  // Mock 데이터 (추후 API로 대체)
+  // Mock 데이터 (scenario-latest.json 기반)
   const [courseData] = useState<CourseData>({
     id: Number(courseId) || 1,
-    name: 'Python 기초 프로그래밍',
+    name: 'LogiCore Tech 신입 개발자 과정',
     totalLessons: 12,
     completedLessons: 3,
     lessons: [
-      { id: 1, title: '변수와 자료형', week: 1, status: 'completed', completedAt: '2025-10-20' },
-      { id: 2, title: '조건문과 반복문', week: 2, status: 'completed', completedAt: '2025-10-22' },
-      { id: 3, title: '함수의 이해', week: 3, status: 'completed', completedAt: '2025-10-25' },
-      { id: 4, title: '리스트와 튜플', week: 4, status: 'in_progress' },
-      { id: 5, title: '딕셔너리와 집합', week: 5, status: 'upcoming' },
-      { id: 6, title: '문자열 처리', week: 6, status: 'upcoming' },
-      { id: 7, title: '파일 입출력', week: 7, status: 'upcoming' },
-      { id: 8, title: '예외 처리', week: 8, status: 'upcoming' },
-      { id: 9, title: '모듈과 패키지', week: 9, status: 'upcoming' },
-      { id: 10, title: '클래스와 객체', week: 10, status: 'upcoming' },
-      { id: 11, title: '상속과 다형성', week: 11, status: 'upcoming' },
-      { id: 12, title: '종합 프로젝트', week: 12, status: 'upcoming' },
+      { id: 1, title: '첫 코드 작성과 데이터 저장', week: 1, status: 'completed', completedAt: '2025-10-20' },
+      { id: 2, title: '데이터 가공하기: 연산자와 문자열', week: 2, status: 'completed', completedAt: '2025-10-22' },
+      { id: 3, title: '흐름 제어: 조건과 반복으로 똑똑한 코드 만들기', week: 3, status: 'completed', completedAt: '2025-10-25' },
+      { id: 4, title: '코드 재사용의 시작: 함수 정의와 활용', week: 4, status: 'in_progress' },
+      { id: 5, title: '자료구조 (1): 순서가 있는 데이터 묶음, 리스트와 튜플', week: 5, status: 'upcoming' },
+      { id: 6, title: '자료구조 (2): Key-Value 데이터, 딕셔너리와 집합', week: 6, status: 'upcoming' },
+      { id: 7, title: '모듈화 및 중간 점검: 나만의 유틸리티 모듈 만들기', week: 7, status: 'upcoming' },
+      { id: 8, title: '객체 지향 프로그래밍 (1): 클래스와 객체의 이해', week: 8, status: 'upcoming' },
+      { id: 9, title: '객체 지향 프로그래밍 (2): 상속을 통한 코드 확장', week: 9, status: 'upcoming' },
+      { id: 10, title: '파일 처리와 예외 관리: 데이터 영구 저장 및 오류 대응', week: 10, status: 'upcoming' },
+      { id: 11, title: '파이썬 생태계 첫걸음: 표준 라이브러리와 외부 패키지', week: 11, status: 'upcoming' },
+      { id: 12, title: '최종 프로젝트: 주소록 관리 프로그램 제작', week: 12, status: 'upcoming' },
     ]
   })
 
