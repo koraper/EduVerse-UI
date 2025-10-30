@@ -1147,19 +1147,6 @@ const CurriculumManagementPage = () => {
                               수정
                             </button>
                             <button
-                              onClick={() => handleToggleArchive(curriculum)}
-                              className={`px-2 py-1 text-white rounded transition-colors duration-200 text-[11px] flex items-center gap-0.5 ${
-                                curriculum.status === 'active'
-                                  ? 'bg-amber-500 hover:bg-amber-600'
-                                  : 'bg-blue-500 hover:bg-blue-600'
-                              }`}
-                            >
-                              <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
-                              </svg>
-                              {curriculum.status === 'active' ? '보관' : '활성'}
-                            </button>
-                            <button
                               onClick={() => handleOpenDeleteModal(curriculum)}
                               disabled={curriculum.classCount ? curriculum.classCount > 0 : false}
                               className={`px-2 py-1 rounded transition-colors duration-200 text-[11px] flex items-center gap-0.5 ${
