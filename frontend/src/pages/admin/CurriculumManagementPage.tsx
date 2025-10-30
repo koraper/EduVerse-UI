@@ -984,7 +984,7 @@ const CurriculumManagementPage = () => {
                       선택 해제
                     </Button>
                     <Button
-                      variant="ghost"
+                      variant="secondary"
                       size="sm"
                       onClick={handleExportJSON}
                       disabled={filteredCurriculums.length === 0}
@@ -996,7 +996,7 @@ const CurriculumManagementPage = () => {
                       JSON
                     </Button>
                     <Button
-                      variant="ghost"
+                      variant="secondary"
                       size="sm"
                       onClick={handleExportXLSX}
                       disabled={filteredCurriculums.length === 0}
