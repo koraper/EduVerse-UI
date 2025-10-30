@@ -34,6 +34,7 @@ const GradesPage = lazy(() => import('@/pages/grades/GradesPage'))
 const StudentsPage = lazy(() => import('@/pages/students/StudentsPage'))
 const CurriculumPage = lazy(() => import('@/pages/curriculum/CurriculumPage'))
 const CurriculumManagementPage = lazy(() => import('@/pages/admin/CurriculumManagementPage'))
+const CreateCurriculumPage = lazy(() => import('@/pages/admin/CreateCurriculumPage'))
 
 function App() {
   return (
@@ -81,6 +82,7 @@ function App() {
                     <Route path="/admin/settings" element={<SystemSettingsPage />} />
                     <Route path="/admin/analytics" element={<AdminAnalyticsPage />} />
                     <Route path="/admin/curricula" element={<CurriculumManagementPage />} />
+                    <Route path="/admin/curricula/create" element={<CreateCurriculumPage />} />
 
                     {/* 공통 페이지 */}
                     <Route path="/profile" element={<ProfilePage />} />
