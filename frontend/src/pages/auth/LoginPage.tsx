@@ -77,8 +77,10 @@ const LoginPage = () => {
     setIsLoading(true)
 
     try {
-      // 개발 환경: 학생 로그인 bypass
-      if (isDevelopment) {
+      // 개발 환경: 학생만 로그인 bypass (관리자/교수는 실제 로그인)
+      const isAdminOrProfessor = formData.email.includes('admin') || formData.email.includes('professor')
+
+      if (isDevelopment && !isAdminOrProfessor) {
         // 약간의 로딩 시간 시뮬레이션
         await new Promise(resolve => setTimeout(resolve, 500))
 
@@ -104,6 +106,7 @@ const LoginPage = () => {
         return
       }
 
+      // 관리자/교수 또는 프로덕션 환경: 실제 로그인 API 호출
       const user = await login(formData.email, formData.password)
 
       // 역할별 대시보드로 리다이렉트
