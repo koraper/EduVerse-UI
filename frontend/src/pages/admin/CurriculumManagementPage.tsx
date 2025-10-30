@@ -1159,7 +1159,13 @@ const CurriculumManagementPage = () => {
                             </button>
                             <button
                               onClick={() => handleOpenDeleteModal(curriculum)}
-                              className="px-2 py-1 bg-rose-500 text-white rounded hover:bg-rose-600 transition-colors duration-200 text-[11px] flex items-center gap-0.5"
+                              disabled={curriculum.classCount ? curriculum.classCount > 0 : false}
+                              className={`px-2 py-1 rounded transition-colors duration-200 text-[11px] flex items-center gap-0.5 ${
+                                curriculum.classCount && curriculum.classCount > 0
+                                  ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                                  : 'bg-rose-500 text-white hover:bg-rose-600'
+                              }`}
+                              title={curriculum.classCount && curriculum.classCount > 0 ? `${curriculum.classCount}개의 수업과 연결되어 삭제할 수 없습니다` : '커리큘럼 삭제'}
                             >
                               <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
