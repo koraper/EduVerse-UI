@@ -128,6 +128,10 @@ const CreateCurriculumPage = () => {
       addToast('생성 방법을 선택해주세요.', { variant: 'warning' })
       return
     }
+    if (currentStep === 1 && creationMethod === 'upload' && !uploadedFile) {
+      addToast('파일을 업로드해주세요.', { variant: 'warning' })
+      return
+    }
     if (currentStep === 2 && !validateCreateForm()) {
       return
     }
@@ -532,7 +536,9 @@ const CreateCurriculumPage = () => {
                   <Button
                     variant="primary"
                     onClick={handleNext}
-                    disabled={currentStep === 1 && !creationMethod}
+                    disabled={
+                      currentStep === 1 && (!creationMethod || (creationMethod === 'upload' && !uploadedFile))
+                    }
                   >
                     다음
                   </Button>
