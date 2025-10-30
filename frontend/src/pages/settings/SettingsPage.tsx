@@ -150,7 +150,7 @@ const SettingsPage = () => {
         }
 
         // Toast 성공 알림
-        addToast('프로필이 성공적으로 저장되었습니다', { variant: 'success' })
+        addToast('프로필이 성공적으로 저장되었습니다.', { variant: 'success' })
 
         // 편집 모드에서 뷰 모드로 전환
         setIsEditing(false)
@@ -171,15 +171,15 @@ const SettingsPage = () => {
           if (data.data?.user) {
             updateUser(data.data.user)
           }
-          addToast('프로필이 성공적으로 저장되었습니다', { variant: 'success' })
+          addToast('프로필이 성공적으로 저장되었습니다.', { variant: 'success' })
           setIsEditing(false)
           setMessage(null)
         } else {
-          addToast(data.message || '프로필 업데이트에 실패했습니다', { variant: 'error' })
+          addToast(data.message || '프로필 업데이트에 실패했습니다.', { variant: 'error' })
         }
       }
     } catch (error: any) {
-      addToast('서버 오류가 발생했습니다', { variant: 'error' })
+      addToast('서버 오류가 발생했습니다.', { variant: 'error' })
     } finally {
       setIsLoading(false)
     }
@@ -205,11 +205,11 @@ const SettingsPage = () => {
 
     // 유효성 검사
     if (!/^[가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z0-9\s]*$/.test(value)) {
-      setProfileErrors({ ...profileErrors, name: '한글, 영문, 숫자, 공백만 입력 가능합니다' })
+      setProfileErrors({ ...profileErrors, name: '한글, 영문, 숫자, 공백만 입력 가능합니다.' })
     } else if (value.trim().length > 0 && value.trim().length < 2) {
-      setProfileErrors({ ...profileErrors, name: '이름은 최소 2자 이상이어야 합니다' })
+      setProfileErrors({ ...profileErrors, name: '이름은 최소 2자 이상이어야 합니다.' })
     } else if (value.trim().length > 50) {
-      setProfileErrors({ ...profileErrors, name: '이름은 최대 50자까지 입력 가능합니다' })
+      setProfileErrors({ ...profileErrors, name: '이름은 최대 50자까지 입력 가능합니다.' })
     } else {
       setProfileErrors({ ...profileErrors, name: '' })
     }
@@ -220,9 +220,9 @@ const SettingsPage = () => {
 
     // 유효성 검사
     if (!/^[a-zA-Z0-9]*$/.test(value)) {
-      setProfileErrors({ ...profileErrors, studentId: '영문과 숫자만 입력 가능합니다' })
+      setProfileErrors({ ...profileErrors, studentId: '영문과 숫자만 입력 가능합니다.' })
     } else if (value.length > 20) {
-      setProfileErrors({ ...profileErrors, studentId: '학번은 최대 20자까지 입력 가능합니다' })
+      setProfileErrors({ ...profileErrors, studentId: '학번은 최대 20자까지 입력 가능합니다.' })
     } else {
       setProfileErrors({ ...profileErrors, studentId: '' })
     }
@@ -233,7 +233,7 @@ const SettingsPage = () => {
 
     // 유효성 검사
     if (!/^[0-9-]*$/.test(value)) {
-      setProfileErrors({ ...profileErrors, phone: '숫자와 하이픈(-)만 입력 가능합니다' })
+      setProfileErrors({ ...profileErrors, phone: '숫자와 하이픈(-)만 입력 가능합니다.' })
     } else {
       setProfileErrors({ ...profileErrors, phone: '' })
     }
@@ -244,9 +244,9 @@ const SettingsPage = () => {
 
     // 유효성 검사
     if (!/^[가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z0-9\s]*$/.test(value)) {
-      setProfileErrors({ ...profileErrors, department: '한글, 영문, 숫자, 공백만 입력 가능합니다' })
+      setProfileErrors({ ...profileErrors, department: '한글, 영문, 숫자, 공백만 입력 가능합니다.' })
     } else if (value.trim().length > 100) {
-      setProfileErrors({ ...profileErrors, department: '소속은 최대 100자까지 입력 가능합니다' })
+      setProfileErrors({ ...profileErrors, department: '소속은 최대 100자까지 입력 가능합니다.' })
     } else {
       setProfileErrors({ ...profileErrors, department: '' })
     }
@@ -256,7 +256,7 @@ const SettingsPage = () => {
     setProfileForm({ ...profileForm, bio: value })
 
     if (value.trim().length > 500) {
-      setProfileErrors({ ...profileErrors, bio: '최대 500자까지 입력 가능합니다' })
+      setProfileErrors({ ...profileErrors, bio: '최대 500자까지 입력 가능합니다.' })
     } else {
       setProfileErrors({ ...profileErrors, bio: '' })
     }
@@ -279,7 +279,7 @@ const SettingsPage = () => {
       const validation = validatePassword(passwordForm.newPassword)
       if (!validation.valid) {
         // 첫 번째 에러 메시지 표시
-        newErrors.newPassword = validation.errors[0] || '비밀번호가 정책을 충족하지 않습니다'
+        newErrors.newPassword = validation.errors[0] || '비밀번호가 정책을 충족하지 않습니다.'
         isValid = false
       }
     }
@@ -288,7 +288,7 @@ const SettingsPage = () => {
       newErrors.confirmPassword = '비밀번호 확인을 입력해주세요'
       isValid = false
     } else if (passwordForm.newPassword !== passwordForm.confirmPassword) {
-      newErrors.confirmPassword = '비밀번호가 일치하지 않습니다'
+      newErrors.confirmPassword = '비밀번호가 일치하지 않습니다.'
       isValid = false
     }
 
@@ -311,7 +311,7 @@ const SettingsPage = () => {
         // 개발 모드: 모든 과정이 성공한 것으로 처리
         await new Promise((resolve) => setTimeout(resolve, 800))
 
-        addToast('비밀번호가 성공적으로 변경되었습니다', { variant: 'success' })
+        addToast('비밀번호가 성공적으로 변경되었습니다.', { variant: 'success' })
         setPasswordForm({ currentPassword: '', newPassword: '', confirmPassword: '' })
       } else {
         // 프로덕션 모드: 실제 API 요청
@@ -330,14 +330,14 @@ const SettingsPage = () => {
         const data = await response.json()
 
         if (data.status === 'success') {
-          addToast('비밀번호가 성공적으로 변경되었습니다', { variant: 'success' })
+          addToast('비밀번호가 성공적으로 변경되었습니다.', { variant: 'success' })
           setPasswordForm({ currentPassword: '', newPassword: '', confirmPassword: '' })
         } else {
-          addToast(data.message || '비밀번호 변경에 실패했습니다', { variant: 'error' })
+          addToast(data.message || '비밀번호 변경에 실패했습니다.', { variant: 'error' })
         }
       }
     } catch (error: any) {
-      addToast('서버 오류가 발생했습니다', { variant: 'error' })
+      addToast('서버 오류가 발생했습니다.', { variant: 'error' })
     } finally {
       setIsLoading(false)
     }
@@ -355,7 +355,7 @@ const SettingsPage = () => {
         // 개발 모드: 모든 과정이 성공한 것으로 처리
         await new Promise((resolve) => setTimeout(resolve, 800))
 
-        addToast('알림 설정이 저장되었습니다', { variant: 'success' })
+        addToast('알림 설정이 저장되었습니다.', { variant: 'success' })
       } else {
         // 프로덕션 모드: 실제 API 요청
         const response = await fetch('/api/profile/notifications', {
@@ -370,13 +370,13 @@ const SettingsPage = () => {
         const data = await response.json()
 
         if (data.status === 'success') {
-          addToast('알림 설정이 저장되었습니다', { variant: 'success' })
+          addToast('알림 설정이 저장되었습니다.', { variant: 'success' })
         } else {
-          addToast(data.message || '설정 저장에 실패했습니다', { variant: 'error' })
+          addToast(data.message || '설정 저장에 실패했습니다.', { variant: 'error' })
         }
       }
     } catch (error: any) {
-      addToast('서버 오류가 발생했습니다', { variant: 'error' })
+      addToast('서버 오류가 발생했습니다.', { variant: 'error' })
     } finally {
       setIsLoading(false)
     }
@@ -518,7 +518,7 @@ const SettingsPage = () => {
                             onChange={(e) => setProfileForm({ ...profileForm, email: e.target.value })}
                             disabled={true}
                             error={profileErrors.email}
-                            helperText="이메일은 수정할 수 없습니다"
+                            helperText="이메일은 수정할 수 없습니다."
                             leftIcon={
                               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
@@ -933,9 +933,9 @@ const SettingsPage = () => {
                       <h3 className={`text-md font-semibold ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'} mb-4`}>테마</h3>
                       <div className="space-y-3">
                         {[
-                          { value: 'system' as const, name: '시스템', description: '운영 체제 설정에 따라 자동으로 변경됩니다' },
-                          { value: 'light' as const, name: '라이트', description: '밝은 테마를 항상 사용합니다' },
-                          { value: 'dark' as const, name: '다크', description: '어두운 테마를 항상 사용합니다' },
+                          { value: 'system' as const, name: '시스템', description: '운영 체제 설정에 따라 자동으로 변경됩니다.' },
+                          { value: 'light' as const, name: '라이트', description: '밝은 테마를 항상 사용합니다.' },
+                          { value: 'dark' as const, name: '다크', description: '어두운 테마를 항상 사용합니다.' },
                         ].map((option) => (
                           <div
                             key={option.value}
