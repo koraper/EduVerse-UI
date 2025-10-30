@@ -2091,4 +2091,61 @@ export const adminHandlers = [
       )
     }
   }),
+
+  // 커리큘럼 상태 변경 (보관/활성)
+  http.patch('/api/admin/curriculums/:id/status', async ({ request, params }) => {
+    try {
+      const authHeader = request.headers.get('Authorization')
+      if (!authHeader) {
+        return HttpResponse.json(
+          { status: 'error', message: '인증이 필요합니다.' },
+          { status: 401 }
+        )
+      }
+
+      const token = authHeader.replace('Bearer ', '')
+      const userId = parseInt(token.split('-').pop() || '0')
+      const user = db.users.findById(userId)
+
+      if (user.role !== 'admin') {
+        return HttpResponse.json(
+          { status: 'error', message: '관리자 권한이 필요합니다.' },
+          { status: 403 }
+        )
+      }
+
+      const curriculumId = parseInt(params.id as string)
+      const curriculum = db.curricula.findById(curriculumId)
+
+      if (!curriculum) {
+        return HttpResponse.json(
+          { status: 'error', message: '커리큘럼을 찾을 수 없습니다.' },
+          { status: 404 }
+        )
+      }
+
+      const body = await request.json() as any
+      const newStatus = body.status as 'active' | 'archived'
+
+      db.curricula.update(curriculumId, { status: newStatus })
+
+      db.activityLogs.create({
+        userId: user.id,
+        action: 'change_user_status',
+        targetType: 'curriculum',
+        targetId: curriculumId,
+        details: JSON.stringify({ oldStatus: curriculum.status, newStatus }),
+      })
+
+      return HttpResponse.json({
+        status: 'success',
+        message: `커리큘럼이 ${newStatus === 'archived' ? '보관' : '활성'}되었습니다.`,
+      })
+    } catch (error: any) {
+      return HttpResponse.json(
+        { status: 'error', message: '서버 오류가 발생했습니다.' },
+        { status: 500 }
+      )
+    }
+  }),
 ]

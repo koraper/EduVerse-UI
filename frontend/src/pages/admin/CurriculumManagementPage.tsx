@@ -83,6 +83,13 @@ const CurriculumManagementPage = () => {
   const [isCreating, setIsCreating] = useState(false)
   const [createErrors, setCreateErrors] = useState<Record<string, string>>({})
 
+  // 커리큘럼 수정 - 비밀번호 확인 모달
+  const [isEditPasswordModalOpen, setIsEditPasswordModalOpen] = useState(false)
+  const [editPasswordCurriculum, setEditPasswordCurriculum] = useState<Curriculum | null>(null)
+  const [editPassword, setEditPassword] = useState('')
+  const [editPasswordError, setEditPasswordError] = useState('')
+  const [isVerifyingEditPassword, setIsVerifyingEditPassword] = useState(false)
+
   // 커리큘럼 수정 모달
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
   const [editCurriculum, setEditCurriculum] = useState<Curriculum | null>(null)
@@ -301,14 +308,57 @@ const CurriculumManagementPage = () => {
     }
   }
 
-  // 수정 모달 열기
+  // 수정 - 비밀번호 확인 모달 열기
   const handleOpenEditModal = (curriculum: Curriculum) => {
-    setEditCurriculum(curriculum)
-    setEditName(curriculum.name)
-    setEditWeeks(curriculum.weeks.toString())
-    setEditDescription(curriculum.description)
-    setEditErrors({})
-    setIsEditModalOpen(true)
+    setEditPasswordCurriculum(curriculum)
+    setEditPassword('')
+    setEditPasswordError('')
+    setIsEditPasswordModalOpen(true)
+  }
+
+  // 수정 - 비밀번호 확인
+  const handleVerifyEditPassword = async () => {
+    if (!editPassword.trim()) {
+      setEditPasswordError('비밀번호를 입력해주세요')
+      return
+    }
+
+    setIsVerifyingEditPassword(true)
+    setEditPasswordError('')
+
+    try {
+      const response = await fetch('/api/auth/verify-password', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({ password: editPassword }),
+      })
+
+      const data = await response.json()
+
+      if (response.ok && data.status === 'success') {
+        // 비밀번호 확인 성공 - 수정 모달 열기
+        setIsEditPasswordModalOpen(false)
+        setEditPassword('')
+
+        if (editPasswordCurriculum) {
+          setEditCurriculum(editPasswordCurriculum)
+          setEditName(editPasswordCurriculum.name)
+          setEditWeeks(editPasswordCurriculum.weeks.toString())
+          setEditDescription(editPasswordCurriculum.description)
+          setEditErrors({})
+          setIsEditModalOpen(true)
+        }
+      } else {
+        setEditPasswordError(data.message || '비밀번호가 일치하지 않습니다')
+      }
+    } catch (error: any) {
+      setEditPasswordError(error.message || '비밀번호 확인에 실패했습니다')
+    } finally {
+      setIsVerifyingEditPassword(false)
+    }
   }
 
   // 수정 폼 검증
@@ -429,6 +479,38 @@ const CurriculumManagementPage = () => {
       handleError(error)
     } finally {
       setIsDeleting(false)
+    }
+  }
+
+  // 커리큘럼 보관/활성화
+  const handleToggleArchive = async (curriculum: Curriculum) => {
+    const newStatus = curriculum.status === 'active' ? 'archived' : 'active'
+    const actionText = newStatus === 'archived' ? '보관' : '활성화'
+
+    try {
+      const response = await fetch(`/api/admin/curriculums/${curriculum.id}/status`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({ status: newStatus }),
+      })
+
+      if (!response.ok) {
+        await handleResponseError(response)
+        return
+      }
+
+      const data = await response.json()
+      if (data.status === 'success') {
+        addToast(`커리큘럼이 ${actionText}되었습니다`, { variant: 'success' })
+        fetchCurriculums()
+      } else {
+        throw new Error(data.message || `커리큘럼 ${actionText}에 실패했습니다`)
+      }
+    } catch (error) {
+      handleError(error)
     }
   }
 
@@ -715,16 +797,14 @@ const CurriculumManagementPage = () => {
             <div className="p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className={`text-sm font-medium ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>수강 중인 수업</p>
+                  <p className={`text-sm font-medium ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>생성 된 수업</p>
                   <p className={`mt-2 text-3xl font-bold ${currentTheme === 'dark' ? 'text-blue-400' : 'text-blue-600'}`}>{totalClasses}</p>
                 </div>
                 <div className={`w-12 h-12 rounded-lg flex items-center justify-center ${
                   currentTheme === 'dark' ? 'bg-blue-500/20' : 'bg-blue-50'
                 }`}>
                   <svg className={`w-6 h-6 ${currentTheme === 'dark' ? 'text-blue-400' : 'text-blue-600'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 14l9-5-9-5-9 5 9 5z" />
-                    <path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                   </svg>
                 </div>
               </div>
@@ -918,16 +998,6 @@ const CurriculumManagementPage = () => {
                     <Button
                       variant="ghost"
                       size="sm"
-                      onClick={() => setIsBulkDeleteModalOpen(true)}
-                    >
-                      <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                      </svg>
-                      삭제
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
                       onClick={() => setSelectedCurriculumIds([])}
                     >
                       선택 해제
@@ -1054,12 +1124,12 @@ const CurriculumManagementPage = () => {
                           )}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-center">
-                          <div className="flex items-center justify-center space-x-2">
+                          <div className="flex items-center justify-center space-x-1">
                             <button
                               onClick={() => handleViewDetails(curriculum)}
-                              className="px-3 py-1.5 bg-slate-500 text-white rounded-md hover:bg-slate-600 transition-colors duration-200 font-medium text-xs flex items-center gap-1"
+                              className="px-2 py-1 bg-slate-500 text-white rounded hover:bg-slate-600 transition-colors duration-200 text-[11px] flex items-center gap-0.5"
                             >
-                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                               </svg>
@@ -1067,18 +1137,31 @@ const CurriculumManagementPage = () => {
                             </button>
                             <button
                               onClick={() => handleOpenEditModal(curriculum)}
-                              className="px-3 py-1.5 bg-emerald-500 text-white rounded-md hover:bg-emerald-600 transition-colors duration-200 font-medium text-xs flex items-center gap-1"
+                              className="px-2 py-1 bg-emerald-500 text-white rounded hover:bg-emerald-600 transition-colors duration-200 text-[11px] flex items-center gap-0.5"
                             >
-                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                               </svg>
                               수정
                             </button>
                             <button
-                              onClick={() => handleOpenDeleteModal(curriculum)}
-                              className="px-3 py-1.5 bg-rose-500 text-white rounded-md hover:bg-rose-600 transition-colors duration-200 font-medium text-xs flex items-center gap-1"
+                              onClick={() => handleToggleArchive(curriculum)}
+                              className={`px-2 py-1 text-white rounded transition-colors duration-200 text-[11px] flex items-center gap-0.5 ${
+                                curriculum.status === 'active'
+                                  ? 'bg-amber-500 hover:bg-amber-600'
+                                  : 'bg-blue-500 hover:bg-blue-600'
+                              }`}
                             >
-                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
+                              </svg>
+                              {curriculum.status === 'active' ? '보관' : '활성'}
+                            </button>
+                            <button
+                              onClick={() => handleOpenDeleteModal(curriculum)}
+                              className="px-2 py-1 bg-rose-500 text-white rounded hover:bg-rose-600 transition-colors duration-200 text-[11px] flex items-center gap-0.5"
+                            >
+                              <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                               </svg>
                               삭제
@@ -1193,43 +1276,42 @@ const CurriculumManagementPage = () => {
               </h3>
               <div className="space-y-3">
                 <div className="flex items-start">
-                  <span className={`text-sm w-28 flex-shrink-0 ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>커리큘럼명:</span>
+                  <span className={`text-sm w-28 flex-shrink-0 ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>#:</span>
+                  <span className={`text-sm font-medium ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{selectedCurriculum.id}</span>
+                </div>
+                <div className="flex items-start">
+                  <span className={`text-sm w-28 flex-shrink-0 ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>커리큘럼:</span>
                   <span className={`text-sm font-medium ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{selectedCurriculum.name}</span>
                 </div>
                 <div className="flex items-start">
-                  <span className={`text-sm w-28 flex-shrink-0 ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>프로그래밍 언어:</span>
-                  <Badge variant="primary">{selectedCurriculum.language}</Badge>
-                </div>
-                <div className="flex items-start">
-                  <span className={`text-sm w-28 flex-shrink-0 ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>주차 수:</span>
-                  <span className={`text-sm font-medium ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{selectedCurriculum.weeks}주</span>
-                </div>
-                <div className="flex items-start">
-                  <span className={`text-sm w-28 flex-shrink-0 ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>생성일:</span>
+                  <span className={`text-sm w-28 flex-shrink-0 ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>등록일:</span>
                   <span className={`text-sm font-medium ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
                     {new Date(selectedCurriculum.createdAt).toLocaleDateString('ko-KR')}
                   </span>
                 </div>
                 <div className="flex items-start">
+                  <span className={`text-sm w-28 flex-shrink-0 ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>언어:</span>
+                  <Badge variant="primary">{selectedCurriculum.language}</Badge>
+                </div>
+                <div className="flex items-start">
+                  <span className={`text-sm w-28 flex-shrink-0 ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>차시:</span>
+                  <span className={`text-sm font-medium ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{selectedCurriculum.weeks}주</span>
+                </div>
+                <div className="flex items-start">
+                  <span className={`text-sm w-28 flex-shrink-0 ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>생성 수업:</span>
+                  <span className={`text-sm font-medium ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{curriculumDetails.classCount || 0}개</span>
+                </div>
+                <div className="flex items-start">
+                  <span className={`text-sm w-28 flex-shrink-0 ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>상태:</span>
+                  {selectedCurriculum.status === 'active' ? (
+                    <Badge variant="success">활성</Badge>
+                  ) : (
+                    <Badge variant="gray">보관</Badge>
+                  )}
+                </div>
+                <div className="flex items-start">
                   <span className={`text-sm w-28 flex-shrink-0 ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>설명:</span>
                   <span className={`text-sm ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>{selectedCurriculum.description}</span>
-                </div>
-              </div>
-            </div>
-
-            {/* 사용 현황 */}
-            <div>
-              <h3 className={`text-sm font-semibold mb-3 pb-2 border-b ${
-                currentTheme === 'dark'
-                  ? 'text-white border-gray-700'
-                  : 'text-gray-900 border-gray-200'
-              }`}>
-                사용 현황
-              </h3>
-              <div className="space-y-3">
-                <div className="flex items-start">
-                  <span className={`text-sm w-28 flex-shrink-0 ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>생성 한 수업:</span>
-                  <span className={`text-sm font-medium ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{curriculumDetails.classCount || 0}개</span>
                 </div>
               </div>
             </div>
@@ -1347,6 +1429,65 @@ const CurriculumManagementPage = () => {
               loading={isCreating}
             >
               생성
+            </Button>
+          </div>
+        </div>
+      </Modal>
+
+      {/* 커리큘럼 수정 - 비밀번호 확인 모달 */}
+      <Modal
+        isOpen={isEditPasswordModalOpen}
+        onClose={() => {
+          setIsEditPasswordModalOpen(false)
+          setEditPassword('')
+          setEditPasswordError('')
+        }}
+        title="비밀번호 확인"
+      >
+        <div className="space-y-4">
+          <p className={`text-sm ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
+            커리큘럼을 수정하려면 관리자 비밀번호를 입력해주세요.
+          </p>
+
+          <div>
+            <label className={`block text-sm font-medium mb-2 ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
+              비밀번호
+            </label>
+            <Input
+              type="password"
+              value={editPassword}
+              onChange={(e) => setEditPassword(e.target.value)}
+              onKeyPress={(e) => {
+                if (e.key === 'Enter' && !isVerifyingEditPassword) {
+                  handleVerifyEditPassword()
+                }
+              }}
+              placeholder="관리자 비밀번호를 입력하세요"
+              disabled={isVerifyingEditPassword}
+            />
+            {editPasswordError && (
+              <p className="mt-2 text-sm text-error-600">{editPasswordError}</p>
+            )}
+          </div>
+
+          <div className="flex items-center justify-end space-x-3 pt-4">
+            <Button
+              variant="ghost"
+              onClick={() => {
+                setIsEditPasswordModalOpen(false)
+                setEditPassword('')
+                setEditPasswordError('')
+              }}
+              disabled={isVerifyingEditPassword}
+            >
+              취소
+            </Button>
+            <Button
+              variant="primary"
+              onClick={handleVerifyEditPassword}
+              disabled={isVerifyingEditPassword}
+            >
+              {isVerifyingEditPassword ? '확인 중...' : '확인'}
             </Button>
           </div>
         </div>

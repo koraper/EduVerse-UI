@@ -189,5 +189,65 @@ export const authHandlers = [
       { status: 401 }
     )
   }),
+
+  // 비밀번호 확인
+  http.post('/api/auth/verify-password', async ({ request }) => {
+    try {
+      const body = await request.json() as any
+      const authHeader = request.headers.get('Authorization')
+      console.log('[MSW] 비밀번호 확인 요청:', body)
+
+      if (!authHeader) {
+        return HttpResponse.json(
+          {
+            status: 'error',
+            message: '인증되지 않은 사용자입니다.',
+          },
+          { status: 401 }
+        )
+      }
+
+      // 토큰에서 사용자 ID 추출 (mock-jwt-token-{userId} 형식)
+      const token = authHeader.replace('Bearer ', '')
+      const userId = parseInt(token.split('-').pop() || '0')
+
+      const user = db.users.findById(userId)
+
+      if (!user) {
+        return HttpResponse.json(
+          {
+            status: 'error',
+            message: '사용자를 찾을 수 없습니다.',
+          },
+          { status: 404 }
+        )
+      }
+
+      // 비밀번호 확인
+      if (user.password !== body.password) {
+        return HttpResponse.json(
+          {
+            status: 'error',
+            message: '비밀번호가 일치하지 않습니다.',
+          },
+          { status: 401 }
+        )
+      }
+
+      return HttpResponse.json({
+        status: 'success',
+        message: '비밀번호가 확인되었습니다.',
+      })
+    } catch (error) {
+      console.error('[MSW] 비밀번호 확인 핸들러 에러:', error)
+      return HttpResponse.json(
+        {
+          status: 'error',
+          message: '서버 오류가 발생했습니다.',
+        },
+        { status: 500 }
+      )
+    }
+  }),
 ]
 
