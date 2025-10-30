@@ -707,32 +707,17 @@ const CurriculumManagementPage = () => {
             <h1 className={`text-2xl sm:text-3xl font-bold ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>커리큘럼 관리</h1>
             <p className={`mt-1 text-sm ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>프로그래밍 커리큘럼을 생성, 수정, 관리하세요</p>
           </div>
-          <div className="flex items-center space-x-3">
-            {isDevelopment && (
-              <Button
-                variant="outline"
-                onClick={() => setIsStructureGuideOpen(true)}
-              >
-                <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                커리큘럼 구조
-              </Button>
-            )}
+          {isDevelopment && (
             <Button
-              variant="primary"
-              onClick={() => {
-                setCreateName('')
-                setCreateLanguage('')
-                setCreateWeeks('')
-                setCreateDescription('')
-                setCreateErrors({})
-                setIsCreateModalOpen(true)
-              }}
+              variant="outline"
+              onClick={() => setIsStructureGuideOpen(true)}
             >
-              커리큘럼 추가
+              <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              커리큘럼 구조
             </Button>
-          </div>
+          )}
         </div>
 
         {/* 통계 카드 */}
@@ -932,6 +917,24 @@ const CurriculumManagementPage = () => {
                   </div>
                 )}
               </div>
+              {/* 커리큘럼 추가 버튼 */}
+              <Button
+                variant="primary"
+                size="sm"
+                onClick={() => {
+                  setCreateName('')
+                  setCreateLanguage('')
+                  setCreateWeeks('')
+                  setCreateDescription('')
+                  setCreateErrors({})
+                  setIsCreateModalOpen(true)
+                }}
+              >
+                <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                </svg>
+                커리큘럼
+              </Button>
             </div>
 
             {/* 결과 카운트 */}
