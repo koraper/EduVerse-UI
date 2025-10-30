@@ -93,7 +93,7 @@ class ErrorBoundary extends Component<Props, State> {
 
               {/* 에러 메시지 */}
               <h1 className="text-center text-2xl font-bold text-gray-900 mb-2">
-                문제가 발생했습니다
+                문제가 발생했습니다.
               </h1>
               <p className="text-center text-gray-600 text-sm mb-6">
                 페이지를 표시하는 중에 예상치 못한 오류가 발생했습니다.

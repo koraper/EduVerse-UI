@@ -26,7 +26,7 @@ const CTASection = () => {
                   </svg>
                   <div>
                     <h4 className="font-semibold text-white">신용카드 불필요</h4>
-                    <p className="text-gray-400">무료 플랜으로 시작하고, 필요할 때 업그레이드하세요</p>
+                    <p className="text-gray-400">무료 플랜으로 시작하고, 필요할 때 업그레이드하세요.</p>
                   </div>
                 </div>
 
@@ -36,7 +36,7 @@ const CTASection = () => {
                   </svg>
                   <div>
                     <h4 className="font-semibold text-white">5분만에 설정 완료</h4>
-                    <p className="text-gray-400">간단한 회원가입으로 바로 수업을 시작할 수 있습니다</p>
+                    <p className="text-gray-400">간단한 회원가입으로 바로 수업을 시작할 수 있습니다.</p>
                   </div>
                 </div>
 
@@ -46,7 +46,7 @@ const CTASection = () => {
                   </svg>
                   <div>
                     <h4 className="font-semibold text-white">24/7 고객 지원</h4>
-                    <p className="text-gray-400">언제든지 문의하실 수 있는 지원팀이 대기 중입니다</p>
+                    <p className="text-gray-400">언제든지 문의하실 수 있는 지원팀이 대기 중입니다.</p>
                   </div>
                 </div>
               </div>
