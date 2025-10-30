@@ -177,7 +177,7 @@ const CurriculumSidebar = ({
   const completedAttendance = lessons.filter(l => l.attendance === 'completed').length;
   const incompleteAttendance = lessons.filter(l => l.attendance === 'incomplete').length;
   const absentAttendance = lessons.filter(l => l.attendance === 'absent').length;
-  const totalAttendanceRecords = completedAttendance + incompleteAttendance + absentAttendance;
+  const _totalAttendanceRecords = completedAttendance + incompleteAttendance + absentAttendance;
 
   // 나중에 사용할 수 있도록 주석 처리
   // const completedAttendanceWidth = totalAttendanceRecords > 0 ? (completedAttendance / totalAttendanceRecords) * 100 : 0;

@@ -57,7 +57,7 @@ export const professorClassHandlers = [
    */
   http.post('/api/classes', async ({ request }) => {
     const professorId = getCurrentProfessorId();
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+     
     const newClassData = (await request.json()) as any;
 
     const curriculum = db.curricula.findById(newClassData.curriculumId);
@@ -106,7 +106,7 @@ export const professorClassHandlers = [
    */
   http.put('/api/classes/:id', async ({ params, request }) => {
     const classId = Number(params.id);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+     
     const updatedData = (await request.json()) as any;
 
     const existingClass = db.classes.findById(classId);

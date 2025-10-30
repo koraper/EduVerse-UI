@@ -161,7 +161,7 @@ const Sidebar = () => {
     }
 
     return [dashboardMenu, ...roleSpecificItems]
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, [user?.role])
 
   const isActive = (path: string) => {

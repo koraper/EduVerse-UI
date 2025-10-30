@@ -42,7 +42,7 @@ const Autocomplete = forwardRef<HTMLInputElement, AutocompleteProps<any>>(
       maxSuggestions = 10,
       clearOnSelect = false,
     },
-    ref
+    _ref
   ) => {
     const [isOpen, setIsOpen] = useState(false)
     const [highlightedIndex, setHighlightedIndex] = useState(-1)
