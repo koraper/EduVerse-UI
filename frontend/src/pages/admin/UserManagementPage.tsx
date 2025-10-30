@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
+import { useTheme } from '@/contexts/ThemeContext'
 import { useApiError } from '@/hooks/useApiError'
 import { useToast } from '@/components/common'
 import DashboardLayout from '@/components/layout/DashboardLayout'
@@ -31,6 +32,7 @@ interface User {
 const UserManagementPage = () => {
   const navigate = useNavigate()
   const { user: currentUser, token, isLoading: authLoading } = useAuth()
+  const { currentTheme } = useTheme()
   const { handleResponseError, handleError } = useApiError({
     onAuthError: () => navigate('/login'),
     onPermissionError: () => navigate('/admin/dashboard'),
@@ -743,8 +745,8 @@ const UserManagementPage = () => {
         <div className="space-y-6">
           {/* 헤더 */}
           <div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">사용자 관리</h1>
-            <p className="mt-1 text-sm text-gray-600">전체 사용자를 조회하고 관리하세요</p>
+            <h1 className={`text-2xl sm:text-3xl font-bold ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>사용자 관리</h1>
+            <p className={`mt-1 text-sm ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>전체 사용자를 조회하고 관리하세요</p>
           </div>
 
           {/* 통계 스켈레톤 */}
@@ -777,8 +779,8 @@ const UserManagementPage = () => {
         {/* 헤더 */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">사용자 관리</h1>
-            <p className="mt-1 text-sm text-gray-600">전체 사용자를 조회하고 관리하세요</p>
+            <h1 className={`text-2xl sm:text-3xl font-bold ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>사용자 관리</h1>
+            <p className={`mt-1 text-sm ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>전체 사용자를 조회하고 관리하세요</p>
           </div>
           <Button
             variant="primary"
@@ -793,26 +795,26 @@ const UserManagementPage = () => {
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           <Card>
             <div className="p-4 text-center">
-              <p className="text-sm text-gray-600">전체</p>
-              <p className="text-2xl font-bold text-gray-900 mt-1">{stats.total}</p>
+              <p className={`text-sm ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>전체</p>
+              <p className={`text-2xl font-bold mt-1 ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{stats.total}</p>
             </div>
           </Card>
           <Card>
             <div className="p-4 text-center">
-              <p className="text-sm text-gray-600">학생</p>
-              <p className="text-2xl font-bold text-success-600 mt-1">{stats.students}</p>
+              <p className={`text-sm ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>학생</p>
+              <p className={`text-2xl font-bold mt-1 ${currentTheme === 'dark' ? 'text-success-400' : 'text-success-600'}`}>{stats.students}</p>
             </div>
           </Card>
           <Card>
             <div className="p-4 text-center">
-              <p className="text-sm text-gray-600">교수</p>
-              <p className="text-2xl font-bold text-blue-600 mt-1">{stats.professors}</p>
+              <p className={`text-sm ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>교수</p>
+              <p className={`text-2xl font-bold mt-1 ${currentTheme === 'dark' ? 'text-blue-400' : 'text-blue-600'}`}>{stats.professors}</p>
             </div>
           </Card>
           <Card>
             <div className="p-4 text-center">
-              <p className="text-sm text-gray-600">관리자</p>
-              <p className="text-2xl font-bold text-purple-600 mt-1">{stats.admins}</p>
+              <p className={`text-sm ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>관리자</p>
+              <p className={`text-2xl font-bold mt-1 ${currentTheme === 'dark' ? 'text-purple-400' : 'text-purple-600'}`}>{stats.admins}</p>
             </div>
           </Card>
         </div>
@@ -834,8 +836,8 @@ const UserManagementPage = () => {
                   placeholder="이메일 또는 이름 검색..."
                   renderSuggestion={(user) => (
                     <div className="flex flex-col">
-                      <span className="font-medium">{user.name}</span>
-                      <span className="text-xs text-gray-500">{user.email}</span>
+                      <span className={`font-medium ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{user.name}</span>
+                      <span className={`text-xs ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>{user.email}</span>
                     </div>
                   )}
                   getSuggestionKey={(user) => user.id}
@@ -869,7 +871,7 @@ const UserManagementPage = () => {
             </div>
 
             {/* 내보내기 & 대량 작업 버튼 */}
-            <div className="mt-4 pt-4 border-t border-gray-200 space-y-3">
+            <div className={`mt-4 pt-4 border-t space-y-3 ${currentTheme === 'dark' ? 'border-gray-700' : 'border-gray-200'}`}>
               {/* 내보내기 버튼 */}
               <div className="flex flex-wrap gap-2">
                 <Button
@@ -892,8 +894,12 @@ const UserManagementPage = () => {
 
               {/* 대량 작업 버튼 */}
               {selectedUserIds.length > 0 && (
-                <div className="flex items-center gap-3 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-                  <span className="text-sm font-medium text-blue-900">
+                <div className={`flex items-center gap-3 p-3 border rounded-lg ${
+                  currentTheme === 'dark'
+                    ? 'bg-blue-900/30 border-blue-700'
+                    : 'bg-blue-50 border-blue-200'
+                }`}>
+                  <span className={`text-sm font-medium ${currentTheme === 'dark' ? 'text-blue-300' : 'text-blue-900'}`}>
                     {selectedUserIds.length}명 선택됨
                   </span>
                   <div className="flex gap-2 ml-auto">
@@ -942,7 +948,7 @@ const UserManagementPage = () => {
         <Card>
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-gray-50 border-b border-gray-200">
+              <thead className={`border-b ${currentTheme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-gray-50 border-gray-200'}`}>
                 <tr>
                   <th className="px-4 py-3 text-center w-12">
                     <input
@@ -952,39 +958,39 @@ const UserManagementPage = () => {
                       className="w-4 h-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500"
                     />
                   </th>
-                  <th className="px-6 py-3 text-center text-sm font-semibold text-gray-700 uppercase tracking-wider">
+                  <th className={`px-6 py-3 text-center text-sm font-semibold uppercase tracking-wider ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
                     ID
                   </th>
-                  <th className="px-6 py-3 text-center text-sm font-semibold text-gray-700 uppercase tracking-wider">
+                  <th className={`px-6 py-3 text-center text-sm font-semibold uppercase tracking-wider ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
                     이메일
                   </th>
-                  <th className="px-6 py-3 text-center text-sm font-semibold text-gray-700 uppercase tracking-wider">
+                  <th className={`px-6 py-3 text-center text-sm font-semibold uppercase tracking-wider ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
                     이름
                   </th>
-                  <th className="px-6 py-3 text-center text-sm font-semibold text-gray-700 uppercase tracking-wider">
+                  <th className={`px-6 py-3 text-center text-sm font-semibold uppercase tracking-wider ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
                     역할
                   </th>
-                  <th className="px-6 py-3 text-center text-sm font-semibold text-gray-700 uppercase tracking-wider">
+                  <th className={`px-6 py-3 text-center text-sm font-semibold uppercase tracking-wider ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
                     상태
                   </th>
-                  <th className="px-6 py-3 text-center text-sm font-semibold text-gray-700 uppercase tracking-wider">
+                  <th className={`px-6 py-3 text-center text-sm font-semibold uppercase tracking-wider ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
                     인증
                   </th>
-                  <th className="px-6 py-3 text-center text-sm font-semibold text-gray-700 uppercase tracking-wider">
+                  <th className={`px-6 py-3 text-center text-sm font-semibold uppercase tracking-wider ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
                     마지막 로그인
                   </th>
-                  <th className="px-6 py-3 text-center text-sm font-semibold text-gray-700 uppercase tracking-wider">
+                  <th className={`px-6 py-3 text-center text-sm font-semibold uppercase tracking-wider ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
                     가입일
                   </th>
-                  <th className="px-6 py-3 text-center text-sm font-semibold text-gray-700 uppercase tracking-wider">
+                  <th className={`px-6 py-3 text-center text-sm font-semibold uppercase tracking-wider ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
                     작업
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
+              <tbody className={`divide-y ${currentTheme === 'dark' ? 'divide-gray-700' : 'divide-gray-200'}`}>
                 {users.length === 0 ? (
                   <tr>
-                    <td colSpan={10} className="px-6 py-12 text-center text-gray-500">
+                    <td colSpan={10} className={`px-6 py-12 text-center ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
                       {searchQuery || roleFilter !== 'all' || statusFilter !== 'all'
                         ? '검색 결과가 없습니다'
                         : '사용자가 없습니다'}
@@ -994,7 +1000,7 @@ const UserManagementPage = () => {
                   users.map((user) => {
                     const isSelectable = user.id !== currentUser?.id && user.role !== 'admin'
                     return (
-                      <tr key={user.id} className="hover:bg-gray-50">
+                      <tr key={user.id} className={currentTheme === 'dark' ? 'hover:bg-gray-700' : 'hover:bg-gray-50'}>
                         <td className="px-4 py-4 text-center">
                           {isSelectable ? (
                             <input
@@ -1004,16 +1010,16 @@ const UserManagementPage = () => {
                               className="w-4 h-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500"
                             />
                           ) : (
-                            <span className="text-gray-300">-</span>
+                            <span className={currentTheme === 'dark' ? 'text-gray-600' : 'text-gray-300'}>-</span>
                           )}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center">
+                        <td className={`px-6 py-4 whitespace-nowrap text-sm text-center ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-900'}`}>
                           {user.id}
                         </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center">
+                      <td className={`px-6 py-4 whitespace-nowrap text-sm text-center ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-900'}`}>
                         {user.email}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 text-center">
+                      <td className={`px-6 py-4 whitespace-nowrap text-sm font-medium text-center ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
                         {user.name}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-center">
@@ -1024,14 +1030,14 @@ const UserManagementPage = () => {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-center">
                         {user.emailVerified ? (
-                          <span className="inline-flex items-center text-sm text-success-600">
+                          <span className={`inline-flex items-center text-sm ${currentTheme === 'dark' ? 'text-success-400' : 'text-success-600'}`}>
                             <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
                               <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                             </svg>
                             인증됨
                           </span>
                         ) : (
-                          <span className="inline-flex items-center text-sm text-gray-500">
+                          <span className={`inline-flex items-center text-sm ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
                             <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
                               <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
                             </svg>
@@ -1039,17 +1045,17 @@ const UserManagementPage = () => {
                           </span>
                         )}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
+                      <td className={`px-6 py-4 whitespace-nowrap text-sm text-center ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
                         {user.lastLoginAt ? formatDateTime(user.lastLoginAt) : '로그인 기록 없음'}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
+                      <td className={`px-6 py-4 whitespace-nowrap text-sm text-center ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
                         {new Date(user.createdAt).toLocaleDateString('ko-KR')}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-center">
                         <div className="flex items-center justify-center space-x-3">
                           <button
                             onClick={() => handleViewDetail(user)}
-                            className="text-blue-600 hover:text-blue-800 font-medium"
+                            className={`font-medium ${currentTheme === 'dark' ? 'text-blue-400 hover:text-blue-300' : 'text-blue-600 hover:text-blue-800'}`}
                           >
                             상세
                           </button>
@@ -1057,19 +1063,19 @@ const UserManagementPage = () => {
                             <>
                               <button
                                 onClick={() => handleEditUser(user)}
-                                className="text-success-600 hover:text-success-800 font-medium"
+                                className={`font-medium ${currentTheme === 'dark' ? 'text-success-400 hover:text-success-300' : 'text-success-600 hover:text-success-800'}`}
                               >
                                 수정
                               </button>
                               <button
                                 onClick={() => handleChangeUserStatus(user)}
-                                className="text-primary-600 hover:text-primary-800 font-medium"
+                                className={`font-medium ${currentTheme === 'dark' ? 'text-primary-400 hover:text-primary-300' : 'text-primary-600 hover:text-primary-800'}`}
                               >
                                 상태
                               </button>
                               <button
                                 onClick={() => handleDeleteUser(user)}
-                                className="text-error-600 hover:text-error-800 font-medium"
+                                className={`font-medium ${currentTheme === 'dark' ? 'text-error-400 hover:text-error-300' : 'text-error-600 hover:text-error-800'}`}
                               >
                                 삭제
                               </button>
@@ -1087,9 +1093,13 @@ const UserManagementPage = () => {
 
           {/* 페이지네이션 */}
           {totalPages > 1 && (
-            <div className="px-6 py-4 border-t border-gray-200 bg-gray-50">
+            <div className={`px-6 py-4 border-t ${
+              currentTheme === 'dark'
+                ? 'border-gray-700 bg-gray-800'
+                : 'border-gray-200 bg-gray-50'
+            }`}>
               <div className="flex items-center justify-between">
-                <div className="text-sm text-gray-700">
+                <div className={`text-sm ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
                   <span className="font-medium">{totalUsers}</span>개 중{' '}
                   <span className="font-medium">{(currentPage - 1) * itemsPerPage + 1}</span>-
                   <span className="font-medium">
@@ -1104,8 +1114,12 @@ const UserManagementPage = () => {
                     disabled={currentPage === 1}
                     className={`px-4 py-2 text-sm font-medium rounded-lg border transition-colors ${
                       currentPage === 1
-                        ? 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed'
-                        : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
+                        ? currentTheme === 'dark'
+                          ? 'bg-gray-800 text-gray-600 border-gray-700 cursor-not-allowed'
+                          : 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed'
+                        : currentTheme === 'dark'
+                          ? 'bg-gray-700 text-gray-300 border-gray-600 hover:bg-gray-600'
+                          : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
                     }`}
                   >
                     <div className="flex items-center">
@@ -1116,7 +1130,7 @@ const UserManagementPage = () => {
                     </div>
                   </button>
 
-                  <div className="text-sm text-gray-700">
+                  <div className={`text-sm ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
                     페이지 <span className="font-medium">{currentPage}</span> /{' '}
                     <span className="font-medium">{totalPages}</span>
                   </div>
@@ -1126,8 +1140,12 @@ const UserManagementPage = () => {
                     disabled={currentPage === totalPages}
                     className={`px-4 py-2 text-sm font-medium rounded-lg border transition-colors ${
                       currentPage === totalPages
-                        ? 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed'
-                        : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
+                        ? currentTheme === 'dark'
+                          ? 'bg-gray-800 text-gray-600 border-gray-700 cursor-not-allowed'
+                          : 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed'
+                        : currentTheme === 'dark'
+                          ? 'bg-gray-700 text-gray-300 border-gray-600 hover:bg-gray-600'
+                          : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
                     }`}
                   >
                     <div className="flex items-center">
@@ -1157,28 +1175,32 @@ const UserManagementPage = () => {
           <div className="space-y-6">
             {/* 기본 정보 */}
             <div>
-              <h3 className="text-sm font-semibold text-gray-900 mb-3 pb-2 border-b border-gray-200">
+              <h3 className={`text-sm font-semibold mb-3 pb-2 border-b ${
+                currentTheme === 'dark'
+                  ? 'text-white border-gray-700'
+                  : 'text-gray-900 border-gray-200'
+              }`}>
                 기본 정보
               </h3>
               <div className="space-y-3">
                 <div className="flex items-start">
-                  <span className="text-sm text-gray-600 w-28 flex-shrink-0">ID:</span>
-                  <span className="text-sm font-medium text-gray-900">{detailUser.id}</span>
+                  <span className={`text-sm w-28 flex-shrink-0 ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>ID:</span>
+                  <span className={`text-sm font-medium ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{detailUser.id}</span>
                 </div>
                 <div className="flex items-start">
-                  <span className="text-sm text-gray-600 w-28 flex-shrink-0">이름:</span>
-                  <span className="text-sm font-medium text-gray-900">{detailUser.name}</span>
+                  <span className={`text-sm w-28 flex-shrink-0 ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>이름:</span>
+                  <span className={`text-sm font-medium ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{detailUser.name}</span>
                 </div>
                 <div className="flex items-start">
-                  <span className="text-sm text-gray-600 w-28 flex-shrink-0">이메일:</span>
-                  <span className="text-sm font-medium text-gray-900">{detailUser.email}</span>
+                  <span className={`text-sm w-28 flex-shrink-0 ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>이메일:</span>
+                  <span className={`text-sm font-medium ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{detailUser.email}</span>
                 </div>
                 <div className="flex items-start">
-                  <span className="text-sm text-gray-600 w-28 flex-shrink-0">역할:</span>
+                  <span className={`text-sm w-28 flex-shrink-0 ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>역할:</span>
                   <div>{getRoleBadge(detailUser.role)}</div>
                 </div>
                 <div className="flex items-start">
-                  <span className="text-sm text-gray-600 w-28 flex-shrink-0">상태:</span>
+                  <span className={`text-sm w-28 flex-shrink-0 ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>상태:</span>
                   <div>{getStatusBadge(detailUser.status)}</div>
                 </div>
               </div>
@@ -1186,21 +1208,25 @@ const UserManagementPage = () => {
 
             {/* 인증 정보 */}
             <div>
-              <h3 className="text-sm font-semibold text-gray-900 mb-3 pb-2 border-b border-gray-200">
+              <h3 className={`text-sm font-semibold mb-3 pb-2 border-b ${
+                currentTheme === 'dark'
+                  ? 'text-white border-gray-700'
+                  : 'text-gray-900 border-gray-200'
+              }`}>
                 인증 정보
               </h3>
               <div className="space-y-3">
                 <div className="flex items-start">
-                  <span className="text-sm text-gray-600 w-28 flex-shrink-0">이메일 인증:</span>
+                  <span className={`text-sm w-28 flex-shrink-0 ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>이메일 인증:</span>
                   {detailUser.emailVerified ? (
-                    <span className="inline-flex items-center text-sm text-success-600">
+                    <span className={`inline-flex items-center text-sm ${currentTheme === 'dark' ? 'text-success-400' : 'text-success-600'}`}>
                       <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
                         <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                       </svg>
                       인증됨
                     </span>
                   ) : (
-                    <span className="inline-flex items-center text-sm text-gray-500">
+                    <span className={`inline-flex items-center text-sm ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
                       <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
                         <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
                       </svg>
@@ -1213,17 +1239,21 @@ const UserManagementPage = () => {
 
             {/* 활동 정보 */}
             <div>
-              <h3 className="text-sm font-semibold text-gray-900 mb-3 pb-2 border-b border-gray-200">
+              <h3 className={`text-sm font-semibold mb-3 pb-2 border-b ${
+                currentTheme === 'dark'
+                  ? 'text-white border-gray-700'
+                  : 'text-gray-900 border-gray-200'
+              }`}>
                 활동 정보
               </h3>
               <div className="space-y-3">
                 <div className="flex items-start">
-                  <span className="text-sm text-gray-600 w-28 flex-shrink-0">가입일:</span>
-                  <span className="text-sm font-medium text-gray-900">{formatDateTime(detailUser.createdAt)}</span>
+                  <span className={`text-sm w-28 flex-shrink-0 ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>가입일:</span>
+                  <span className={`text-sm font-medium ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{formatDateTime(detailUser.createdAt)}</span>
                 </div>
                 <div className="flex items-start">
-                  <span className="text-sm text-gray-600 w-28 flex-shrink-0">마지막 로그인:</span>
-                  <span className="text-sm font-medium text-gray-900">
+                  <span className={`text-sm w-28 flex-shrink-0 ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>마지막 로그인:</span>
+                  <span className={`text-sm font-medium ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
                     {detailUser.lastLoginAt ? formatDateTime(detailUser.lastLoginAt) : '로그인 기록 없음'}
                   </span>
                 </div>
@@ -1231,7 +1261,7 @@ const UserManagementPage = () => {
             </div>
 
             {/* 닫기 버튼 */}
-            <div className="flex items-center justify-end pt-4 border-t border-gray-200">
+            <div className={`flex items-center justify-end pt-4 border-t ${currentTheme === 'dark' ? 'border-gray-700' : 'border-gray-200'}`}>
               <Button
                 variant="primary"
                 onClick={() => {
@@ -1260,23 +1290,27 @@ const UserManagementPage = () => {
         <div className="space-y-4">
           {selectedUser && (
             <>
-              <div className="p-4 bg-gray-50 border border-gray-200 rounded-lg mb-4">
+              <div className={`p-4 border rounded-lg mb-4 ${
+                currentTheme === 'dark'
+                  ? 'bg-gray-800 border-gray-700'
+                  : 'bg-gray-50 border-gray-200'
+              }`}>
                 <div className="space-y-2">
-                  <p className="text-sm text-gray-600">
-                    사용자: <span className="font-semibold text-gray-900">{selectedUser.name}</span>
+                  <p className={`text-sm ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
+                    사용자: <span className={`font-semibold ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{selectedUser.name}</span>
                   </p>
-                  <p className="text-sm text-gray-600">
-                    이메일: <span className="font-semibold text-gray-900">{selectedUser.email}</span>
+                  <p className={`text-sm ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
+                    이메일: <span className={`font-semibold ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{selectedUser.email}</span>
                   </p>
                   <div className="flex items-center">
-                    <span className="text-sm text-gray-600 mr-2">현재 상태:</span>
+                    <span className={`text-sm mr-2 ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>현재 상태:</span>
                     {getStatusBadge(selectedUser.status)}
                   </div>
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className={`block text-sm font-medium mb-2 ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
                   변경할 상태 <span className="text-error-500">*</span>
                 </label>
                 <Select
@@ -1290,12 +1324,16 @@ const UserManagementPage = () => {
               </div>
 
               {newStatus === 'suspended' && (
-                <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                <div className={`p-4 border rounded-lg ${
+                  currentTheme === 'dark'
+                    ? 'bg-yellow-900/30 border-yellow-700'
+                    : 'bg-yellow-50 border-yellow-200'
+                }`}>
                   <div className="flex items-start">
-                    <svg className="w-5 h-5 text-yellow-600 mt-0.5 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <svg className={`w-5 h-5 mt-0.5 mr-3 flex-shrink-0 ${currentTheme === 'dark' ? 'text-yellow-400' : 'text-yellow-600'}`} fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
                     </svg>
-                    <p className="text-sm font-medium text-yellow-800">
+                    <p className={`text-sm font-medium ${currentTheme === 'dark' ? 'text-yellow-300' : 'text-yellow-800'}`}>
                       정지된 사용자는 로그인할 수 없습니다
                     </p>
                   </div>
@@ -1303,7 +1341,7 @@ const UserManagementPage = () => {
               )}
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className={`block text-sm font-medium mb-2 ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
                   사유 {newStatus === 'suspended' && <span className="text-error-500">*</span>}
                 </label>
                 <textarea
@@ -1311,13 +1349,17 @@ const UserManagementPage = () => {
                   onChange={(e) => setStatusReason(e.target.value.slice(0, 500))}
                   rows={4}
                   maxLength={500}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent ${
+                    currentTheme === 'dark'
+                      ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400'
+                      : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
+                  }`}
                   placeholder={newStatus === 'suspended' ? '정지 사유를 입력하세요... (필수, 500자 이내)' : '변경 사유를 입력하세요... (선택, 500자 이내)'}
                 />
-                <p className="mt-1 text-xs text-gray-500">{statusReason.length}/500자</p>
+                <p className={`mt-1 text-xs ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>{statusReason.length}/500자</p>
               </div>
 
-              <div className="flex items-center justify-end space-x-3 pt-4">
+              <div className={`flex items-center justify-end space-x-3 pt-4 ${currentTheme === 'dark' ? 'border-t border-gray-700' : ''}`}>
                 <Button
                   variant="ghost"
                   onClick={() => {
@@ -1358,14 +1400,18 @@ const UserManagementPage = () => {
         <div className="space-y-4">
           {editUser && (
             <>
-              <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg mb-4">
+              <div className={`p-4 border rounded-lg mb-4 ${
+                currentTheme === 'dark'
+                  ? 'bg-blue-900/30 border-blue-700'
+                  : 'bg-blue-50 border-blue-200'
+              }`}>
                 <div className="flex items-start">
-                  <svg className="w-5 h-5 text-blue-600 mt-0.5 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                  <svg className={`w-5 h-5 mt-0.5 mr-3 flex-shrink-0 ${currentTheme === 'dark' ? 'text-blue-400' : 'text-blue-600'}`} fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
                   </svg>
                   <div>
-                    <p className="text-sm font-medium text-blue-800 mb-1">사용자 정보를 수정합니다</p>
-                    <p className="text-xs text-blue-700">
+                    <p className={`text-sm font-medium mb-1 ${currentTheme === 'dark' ? 'text-blue-300' : 'text-blue-800'}`}>사용자 정보를 수정합니다</p>
+                    <p className={`text-xs ${currentTheme === 'dark' ? 'text-blue-400' : 'text-blue-700'}`}>
                       현재 사용자: <span className="font-semibold">{editUser.name}</span> ({editUser.email})
                     </p>
                   </div>
@@ -1373,7 +1419,7 @@ const UserManagementPage = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className={`block text-sm font-medium mb-2 ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
                   이름 <span className="text-error-500">*</span>
                 </label>
                 <Input
@@ -1383,11 +1429,11 @@ const UserManagementPage = () => {
                   placeholder="이름 (2-50자)"
                   maxLength={50}
                 />
-                <p className="mt-1 text-xs text-gray-500">{editName.length}/50자</p>
+                <p className={`mt-1 text-xs ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>{editName.length}/50자</p>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className={`block text-sm font-medium mb-2 ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
                   이메일 <span className="text-error-500">*</span>
                 </label>
                 <Input
@@ -1399,7 +1445,7 @@ const UserManagementPage = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className={`block text-sm font-medium mb-2 ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
                   역할 <span className="text-error-500">*</span>
                 </label>
                 <Select
@@ -1412,7 +1458,7 @@ const UserManagementPage = () => {
                 </Select>
               </div>
 
-              <div className="flex items-center justify-end space-x-3 pt-4 border-t border-gray-200">
+              <div className={`flex items-center justify-end space-x-3 pt-4 border-t ${currentTheme === 'dark' ? 'border-gray-700' : 'border-gray-200'}`}>
                 <Button
                   variant="ghost"
                   onClick={() => {
@@ -1453,37 +1499,45 @@ const UserManagementPage = () => {
         <div className="space-y-4">
           {deleteUser && (
             <>
-              <div className="p-4 bg-error-50 border border-error-200 rounded-lg mb-4">
+              <div className={`p-4 border rounded-lg mb-4 ${
+                currentTheme === 'dark'
+                  ? 'bg-error-900/30 border-error-700'
+                  : 'bg-error-50 border-error-200'
+              }`}>
                 <div className="flex items-start">
-                  <svg className="w-5 h-5 text-error-600 mt-0.5 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                  <svg className={`w-5 h-5 mt-0.5 mr-3 flex-shrink-0 ${currentTheme === 'dark' ? 'text-error-400' : 'text-error-600'}`} fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
                   </svg>
                   <div>
-                    <p className="text-sm font-medium text-error-800 mb-1">⚠️ 경고: 이 작업은 되돌릴 수 없습니다</p>
-                    <p className="text-xs text-error-700">
+                    <p className={`text-sm font-medium mb-1 ${currentTheme === 'dark' ? 'text-error-300' : 'text-error-800'}`}>⚠️ 경고: 이 작업은 되돌릴 수 없습니다</p>
+                    <p className={`text-xs ${currentTheme === 'dark' ? 'text-error-400' : 'text-error-700'}`}>
                       사용자와 관련된 모든 데이터가 삭제됩니다.
                     </p>
                   </div>
                 </div>
               </div>
 
-              <div className="p-4 bg-gray-50 border border-gray-200 rounded-lg">
+              <div className={`p-4 border rounded-lg ${
+                currentTheme === 'dark'
+                  ? 'bg-gray-800 border-gray-700'
+                  : 'bg-gray-50 border-gray-200'
+              }`}>
                 <div className="space-y-2">
-                  <p className="text-sm text-gray-600">
-                    사용자: <span className="font-semibold text-gray-900">{deleteUser.name}</span>
+                  <p className={`text-sm ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
+                    사용자: <span className={`font-semibold ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{deleteUser.name}</span>
                   </p>
-                  <p className="text-sm text-gray-600">
-                    이메일: <span className="font-semibold text-gray-900">{deleteUser.email}</span>
+                  <p className={`text-sm ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
+                    이메일: <span className={`font-semibold ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{deleteUser.email}</span>
                   </p>
                   <div className="flex items-center">
-                    <span className="text-sm text-gray-600 mr-2">역할:</span>
+                    <span className={`text-sm mr-2 ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>역할:</span>
                     {getRoleBadge(deleteUser.role)}
                   </div>
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className={`block text-sm font-medium mb-2 ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
                   관리자 비밀번호 <span className="text-error-500">*</span>
                 </label>
                 <Input
@@ -1494,11 +1548,11 @@ const UserManagementPage = () => {
                   autoComplete="off"
                   minLength={3}
                 />
-                <p className="mt-1 text-xs text-gray-500">보안을 위해 비밀번호를 입력해주세요 (3자 이상)</p>
+                <p className={`mt-1 text-xs ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>보안을 위해 비밀번호를 입력해주세요 (3자 이상)</p>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className={`block text-sm font-medium mb-2 ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
                   사용자 이름 확인 <span className="text-error-500">*</span>
                 </label>
                 <Input
@@ -1508,12 +1562,12 @@ const UserManagementPage = () => {
                   placeholder={`삭제하려면 "${deleteUser.name}" 입력`}
                   maxLength={50}
                 />
-                <p className="mt-1 text-xs text-gray-500">
-                  확인을 위해 <span className="font-semibold text-gray-700">{deleteUser.name}</span>을(를) 정확히 입력하세요
+                <p className={`mt-1 text-xs ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
+                  확인을 위해 <span className={`font-semibold ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>{deleteUser.name}</span>을(를) 정확히 입력하세요
                 </p>
               </div>
 
-              <div className="flex items-center justify-end space-x-3 pt-4 border-t border-gray-200">
+              <div className={`flex items-center justify-end space-x-3 pt-4 border-t ${currentTheme === 'dark' ? 'border-gray-700' : 'border-gray-200'}`}>
                 <Button
                   variant="ghost"
                   onClick={() => {
@@ -1550,16 +1604,20 @@ const UserManagementPage = () => {
         title="일괄 상태 변경"
       >
         <div className="space-y-4">
-          <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+          <div className={`p-4 border rounded-lg ${
+            currentTheme === 'dark'
+              ? 'bg-blue-900/30 border-blue-700'
+              : 'bg-blue-50 border-blue-200'
+          }`}>
             <div className="flex items-start">
-              <svg className="w-5 h-5 text-blue-600 mt-0.5 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+              <svg className={`w-5 h-5 mt-0.5 mr-3 flex-shrink-0 ${currentTheme === 'dark' ? 'text-blue-400' : 'text-blue-600'}`} fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
               </svg>
               <div>
-                <p className="text-sm font-medium text-blue-800 mb-1">
+                <p className={`text-sm font-medium mb-1 ${currentTheme === 'dark' ? 'text-blue-300' : 'text-blue-800'}`}>
                   선택한 {selectedUserIds.length}명의 사용자 상태를 변경합니다
                 </p>
-                <p className="text-xs text-blue-700">
+                <p className={`text-xs ${currentTheme === 'dark' ? 'text-blue-400' : 'text-blue-700'}`}>
                   이 작업은 즉시 적용되며, 각 사용자에 대한 로그가 기록됩니다.
                 </p>
               </div>
@@ -1567,7 +1625,7 @@ const UserManagementPage = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className={`block text-sm font-medium mb-2 ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
               변경할 상태 <span className="text-error-500">*</span>
             </label>
             <Select
@@ -1581,12 +1639,16 @@ const UserManagementPage = () => {
           </div>
 
           {bulkStatus === 'suspended' && (
-            <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+            <div className={`p-4 border rounded-lg ${
+              currentTheme === 'dark'
+                ? 'bg-yellow-900/30 border-yellow-700'
+                : 'bg-yellow-50 border-yellow-200'
+            }`}>
               <div className="flex items-start">
-                <svg className="w-5 h-5 text-yellow-600 mt-0.5 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                <svg className={`w-5 h-5 mt-0.5 mr-3 flex-shrink-0 ${currentTheme === 'dark' ? 'text-yellow-400' : 'text-yellow-600'}`} fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
                 </svg>
-                <p className="text-sm font-medium text-yellow-800">
+                <p className={`text-sm font-medium ${currentTheme === 'dark' ? 'text-yellow-300' : 'text-yellow-800'}`}>
                   정지된 사용자는 로그인할 수 없습니다
                 </p>
               </div>
@@ -1594,7 +1656,7 @@ const UserManagementPage = () => {
           )}
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className={`block text-sm font-medium mb-2 ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
               사유 {bulkStatus === 'suspended' && <span className="text-error-500">*</span>}
             </label>
             <textarea
@@ -1602,13 +1664,17 @@ const UserManagementPage = () => {
               onChange={(e) => setBulkStatusReason(e.target.value.slice(0, 500))}
               rows={4}
               maxLength={500}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent ${
+                currentTheme === 'dark'
+                  ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400'
+                  : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
+              }`}
               placeholder={bulkStatus === 'suspended' ? '정지 사유를 입력하세요... (필수, 500자 이내)' : '변경 사유를 입력하세요... (선택, 500자 이내)'}
             />
-            <p className="mt-1 text-xs text-gray-500">{bulkStatusReason.length}/500자</p>
+            <p className={`mt-1 text-xs ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>{bulkStatusReason.length}/500자</p>
           </div>
 
-          <div className="flex items-center justify-end space-x-3 pt-4 border-t border-gray-200">
+          <div className={`flex items-center justify-end space-x-3 pt-4 border-t ${currentTheme === 'dark' ? 'border-gray-700' : 'border-gray-200'}`}>
             <Button
               variant="ghost"
               onClick={() => {
@@ -1641,16 +1707,20 @@ const UserManagementPage = () => {
         title="일괄 사용자 삭제"
       >
         <div className="space-y-4">
-          <div className="p-4 bg-error-50 border border-error-200 rounded-lg">
+          <div className={`p-4 border rounded-lg ${
+            currentTheme === 'dark'
+              ? 'bg-error-900/30 border-error-700'
+              : 'bg-error-50 border-error-200'
+          }`}>
             <div className="flex items-start">
-              <svg className="w-5 h-5 text-error-600 mt-0.5 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+              <svg className={`w-5 h-5 mt-0.5 mr-3 flex-shrink-0 ${currentTheme === 'dark' ? 'text-error-400' : 'text-error-600'}`} fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
               </svg>
               <div>
-                <p className="text-sm font-medium text-error-800 mb-1">
+                <p className={`text-sm font-medium mb-1 ${currentTheme === 'dark' ? 'text-error-300' : 'text-error-800'}`}>
                   ⚠️ 경고: 이 작업은 되돌릴 수 없습니다
                 </p>
-                <p className="text-xs text-error-700">
+                <p className={`text-xs ${currentTheme === 'dark' ? 'text-error-400' : 'text-error-700'}`}>
                   선택한 {selectedUserIds.length}명의 사용자와 관련된 모든 데이터가 삭제됩니다.
                 </p>
               </div>
@@ -1658,7 +1728,7 @@ const UserManagementPage = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className={`block text-sm font-medium mb-2 ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
               관리자 비밀번호 <span className="text-error-500">*</span>
             </label>
             <Input
@@ -1669,10 +1739,10 @@ const UserManagementPage = () => {
               autoComplete="off"
               minLength={3}
             />
-            <p className="mt-1 text-xs text-gray-500">보안을 위해 비밀번호를 입력해주세요 (3자 이상)</p>
+            <p className={`mt-1 text-xs ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>보안을 위해 비밀번호를 입력해주세요 (3자 이상)</p>
           </div>
 
-          <div className="flex items-center justify-end space-x-3 pt-4 border-t border-gray-200">
+          <div className={`flex items-center justify-end space-x-3 pt-4 border-t ${currentTheme === 'dark' ? 'border-gray-700' : 'border-gray-200'}`}>
             <Button
               variant="ghost"
               onClick={() => {
@@ -1709,7 +1779,7 @@ const UserManagementPage = () => {
       >
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className={`block text-sm font-medium mb-2 ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
               이름 <span className="text-error-500">*</span>
             </label>
             <Input
@@ -1723,7 +1793,7 @@ const UserManagementPage = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className={`block text-sm font-medium mb-2 ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
               이메일 <span className="text-error-500">*</span>
             </label>
             <Input
@@ -1736,7 +1806,7 @@ const UserManagementPage = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className={`block text-sm font-medium mb-2 ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
               비밀번호 <span className="text-error-500">*</span>
             </label>
             <Input
@@ -1747,25 +1817,25 @@ const UserManagementPage = () => {
               autoComplete="new-password"
               error={createErrors.createPassword}
             />
-            <p className="mt-1 text-xs text-gray-500">
+            <p className={`mt-1 text-xs ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
               비밀번호는 6자 이상 50자 이내여야 합니다
             </p>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className={`block text-sm font-medium mb-2 ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
               역할 <span className="text-error-500">*</span>
             </label>
             <Select value={createRole} onChange={(e) => setCreateRole(e.target.value as 'student' | 'professor')}>
               <option value="student">학생</option>
               <option value="professor">교수</option>
             </Select>
-            <p className="mt-1 text-xs text-gray-500">
+            <p className={`mt-1 text-xs ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
               관리자는 이 화면에서 생성할 수 없습니다
             </p>
           </div>
 
-          <div className="flex items-center justify-end space-x-3 pt-4 border-t border-gray-200">
+          <div className={`flex items-center justify-end space-x-3 pt-4 border-t ${currentTheme === 'dark' ? 'border-gray-700' : 'border-gray-200'}`}>
             <Button
               variant="ghost"
               onClick={() => {

@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
+import { useTheme } from '@/contexts/ThemeContext'
 import { useApiError } from '@/hooks/useApiError'
 import { useToast } from '@/components/common'
 import DashboardLayout from '@/components/layout/DashboardLayout'
@@ -34,6 +35,7 @@ interface Class {
 const ClassManagementPage = () => {
   const navigate = useNavigate()
   const { user, token, isLoading: authLoading } = useAuth()
+  const { currentTheme } = useTheme()
   const { handleError, handleResponseError } = useApiError({
     onAuthError: () => navigate('/login'),
     onPermissionError: () => navigate('/admin/dashboard'),
@@ -862,8 +864,8 @@ const ClassManagementPage = () => {
         {/* 헤더 */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">수업 관리</h1>
-            <p className="mt-1 text-sm text-gray-600">모든 수업의 현황을 확인하고 관리하세요</p>
+            <h1 className={`text-2xl sm:text-3xl font-bold ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>수업 관리</h1>
+            <p className={`mt-1 text-sm ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>모든 수업의 현황을 확인하고 관리하세요</p>
           </div>
           <Button
             variant="primary"
@@ -887,11 +889,11 @@ const ClassManagementPage = () => {
             <div className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">총 수업</p>
-                  <p className="mt-2 text-3xl font-bold text-gray-900">{totalClasses}</p>
+                  <p className={`text-sm font-medium ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>총 수업</p>
+                  <p className={`mt-2 text-3xl font-bold ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{totalClasses}</p>
                 </div>
-                <div className="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center">
-                  <svg className="w-6 h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="w-12 h-12 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center">
+                  <svg className="w-6 h-6 text-primary-600 dark:text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                   </svg>
                 </div>
@@ -903,11 +905,11 @@ const ClassManagementPage = () => {
             <div className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">진행 중</p>
-                  <p className="mt-2 text-3xl font-bold text-success-600">{activeClasses}</p>
+                  <p className={`text-sm font-medium ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>진행 중</p>
+                  <p className={`mt-2 text-3xl font-bold ${currentTheme === 'dark' ? 'text-success-400' : 'text-success-600'}`}>{activeClasses}</p>
                 </div>
-                <div className="w-12 h-12 bg-success-100 rounded-lg flex items-center justify-center">
-                  <svg className="w-6 h-6 text-success-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="w-12 h-12 bg-success-100 dark:bg-success-900/30 rounded-lg flex items-center justify-center">
+                  <svg className="w-6 h-6 text-success-600 dark:text-success-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                 </div>
@@ -919,11 +921,11 @@ const ClassManagementPage = () => {
             <div className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">준비 중</p>
-                  <p className="mt-2 text-3xl font-bold text-warning-600">{draftClasses}</p>
+                  <p className={`text-sm font-medium ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>준비 중</p>
+                  <p className={`mt-2 text-3xl font-bold ${currentTheme === 'dark' ? 'text-warning-400' : 'text-warning-600'}`}>{draftClasses}</p>
                 </div>
-                <div className="w-12 h-12 bg-warning-100 rounded-lg flex items-center justify-center">
-                  <svg className="w-6 h-6 text-warning-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="w-12 h-12 bg-warning-100 dark:bg-warning-900/30 rounded-lg flex items-center justify-center">
+                  <svg className="w-6 h-6 text-warning-600 dark:text-warning-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4v.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                 </div>
@@ -935,11 +937,11 @@ const ClassManagementPage = () => {
             <div className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">완료됨</p>
-                  <p className="mt-2 text-3xl font-bold text-gray-600">{archivedClasses}</p>
+                  <p className={`text-sm font-medium ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>완료됨</p>
+                  <p className={`mt-2 text-3xl font-bold ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>{archivedClasses}</p>
                 </div>
-                <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
-                  <svg className="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className={`w-12 h-12 rounded-lg flex items-center justify-center ${currentTheme === 'dark' ? 'bg-gray-700' : 'bg-gray-100'}`}>
+                  <svg className={`w-6 h-6 ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
                 </div>
@@ -951,11 +953,11 @@ const ClassManagementPage = () => {
             <div className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">수강 학생</p>
-                  <p className="mt-2 text-3xl font-bold text-gray-900">{totalStudents}</p>
+                  <p className={`text-sm font-medium ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>수강 학생</p>
+                  <p className={`mt-2 text-3xl font-bold ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{totalStudents}</p>
                 </div>
-                <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
-                  <svg className="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center">
+                  <svg className="w-6 h-6 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
                   </svg>
                 </div>
@@ -993,7 +995,11 @@ const ClassManagementPage = () => {
               <select
                 value={filterProfessor}
                 onChange={(e) => setFilterProfessor(e.target.value)}
-                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition"
+                className={`px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition ${
+                  currentTheme === 'dark'
+                    ? 'bg-gray-700 border-gray-600 text-white'
+                    : 'bg-white border-gray-300 text-gray-900'
+                }`}
               >
                 <option value="all">전체 교수</option>
                 {professors.map((prof) => (
@@ -1005,7 +1011,11 @@ const ClassManagementPage = () => {
               <select
                 value={filterStatus}
                 onChange={(e) => setFilterStatus(e.target.value)}
-                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition"
+                className={`px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition ${
+                  currentTheme === 'dark'
+                    ? 'bg-gray-700 border-gray-600 text-white'
+                    : 'bg-white border-gray-300 text-gray-900'
+                }`}
               >
                 <option value="all">모두 보기</option>
                 <option value="active">진행 중</option>
@@ -1051,11 +1061,15 @@ const ClassManagementPage = () => {
 
             {/* 고급 필터 패널 */}
             {showAdvancedFilters && (
-              <div className="mb-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
+              <div className={`mb-4 p-4 rounded-lg border ${
+                currentTheme === 'dark'
+                  ? 'bg-gray-800 border-gray-700'
+                  : 'bg-gray-50 border-gray-200'
+              }`}>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {/* 날짜 범위 필터 */}
                   <div className="space-y-2">
-                    <label className="block text-sm font-medium text-gray-700">
+                    <label className={`block text-sm font-medium ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
                       생성일 범위
                     </label>
                     <div className="flex items-center space-x-2">
@@ -1063,15 +1077,23 @@ const ClassManagementPage = () => {
                         type="date"
                         value={filterDateFrom}
                         onChange={(e) => setFilterDateFrom(e.target.value)}
-                        className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition text-sm"
+                        className={`flex-1 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition text-sm ${
+                          currentTheme === 'dark'
+                            ? 'bg-gray-700 border-gray-600 text-white'
+                            : 'bg-white border-gray-300 text-gray-900'
+                        }`}
                         placeholder="시작일"
                       />
-                      <span className="text-gray-500">~</span>
+                      <span className={currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-500'}>~</span>
                       <input
                         type="date"
                         value={filterDateTo}
                         onChange={(e) => setFilterDateTo(e.target.value)}
-                        className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition text-sm"
+                        className={`flex-1 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition text-sm ${
+                          currentTheme === 'dark'
+                            ? 'bg-gray-700 border-gray-600 text-white'
+                            : 'bg-white border-gray-300 text-gray-900'
+                        }`}
                         placeholder="종료일"
                       />
                     </div>
@@ -1079,7 +1101,7 @@ const ClassManagementPage = () => {
 
                   {/* 학점 범위 필터 */}
                   <div className="space-y-2">
-                    <label className="block text-sm font-medium text-gray-700">
+                    <label className={`block text-sm font-medium ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
                       학점 범위
                     </label>
                     <div className="flex items-center space-x-2">
@@ -1089,17 +1111,25 @@ const ClassManagementPage = () => {
                         onChange={(e) => setFilterCreditsMin(e.target.value)}
                         min="0"
                         max="9"
-                        className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition text-sm"
+                        className={`flex-1 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition text-sm ${
+                          currentTheme === 'dark'
+                            ? 'bg-gray-700 border-gray-600 text-white'
+                            : 'bg-white border-gray-300 text-gray-900'
+                        }`}
                         placeholder="최소"
                       />
-                      <span className="text-gray-500">~</span>
+                      <span className={currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-500'}>~</span>
                       <input
                         type="number"
                         value={filterCreditsMax}
                         onChange={(e) => setFilterCreditsMax(e.target.value)}
                         min="0"
                         max="9"
-                        className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition text-sm"
+                        className={`flex-1 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition text-sm ${
+                          currentTheme === 'dark'
+                            ? 'bg-gray-700 border-gray-600 text-white'
+                            : 'bg-white border-gray-300 text-gray-900'
+                        }`}
                         placeholder="최대"
                       />
                     </div>
@@ -1108,9 +1138,9 @@ const ClassManagementPage = () => {
 
                 {/* 활성 필터 표시 */}
                 {(filterDateFrom || filterDateTo || filterCreditsMin || filterCreditsMax) && (
-                  <div className="mt-3 pt-3 border-t border-gray-200">
+                  <div className={`mt-3 pt-3 border-t ${currentTheme === 'dark' ? 'border-gray-700' : 'border-gray-200'}`}>
                     <div className="flex items-center flex-wrap gap-2">
-                      <span className="text-xs font-medium text-gray-600">활성 필터:</span>
+                      <span className={`text-xs font-medium ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>활성 필터:</span>
                       {filterDateFrom && (
                         <Badge variant="info" size="sm">
                           {filterDateFrom}부터
@@ -1138,13 +1168,13 @@ const ClassManagementPage = () => {
             )}
 
             {/* 결과 및 내보내기 */}
-            <div className="flex items-center justify-between mb-4 pb-4 border-b border-gray-200">
+            <div className={`flex items-center justify-between mb-4 pb-4 border-b ${currentTheme === 'dark' ? 'border-gray-700' : 'border-gray-200'}`}>
               <div className="flex items-center space-x-4">
-                <div className="text-sm text-gray-600">
-                  총 <span className="font-semibold text-gray-900">{filteredClasses.length}</span>개의 수업
+                <div className={`text-sm ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
+                  총 <span className={`font-semibold ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{filteredClasses.length}</span>개의 수업
                 </div>
                 {selectedClassIds.length > 0 && (
-                  <div className="text-sm text-primary-600 font-medium">
+                  <div className={`text-sm font-medium ${currentTheme === 'dark' ? 'text-primary-400' : 'text-primary-600'}`}>
                     {selectedClassIds.length}개 선택됨
                   </div>
                 )}
@@ -1207,8 +1237,8 @@ const ClassManagementPage = () => {
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="border-b border-gray-200">
-                    <th className="px-4 py-3 text-center font-medium text-gray-700 w-12">
+                  <tr className={`border-b ${currentTheme === 'dark' ? 'border-gray-700' : 'border-gray-200'}`}>
+                    <th className={`px-4 py-3 text-center font-medium w-12 ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
                       <input
                         type="checkbox"
                         checked={selectedClassIds.length === filteredClasses.length && filteredClasses.length > 0}
@@ -1216,20 +1246,20 @@ const ClassManagementPage = () => {
                         className="w-4 h-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500"
                       />
                     </th>
-                    <th className="px-4 py-3 text-center text-sm font-semibold text-gray-700">수업명</th>
-                    <th className="px-4 py-3 text-center text-sm font-semibold text-gray-700">수업코드</th>
-                    <th className="px-4 py-3 text-center text-sm font-semibold text-gray-700">교수</th>
-                    <th className="px-4 py-3 text-center text-sm font-semibold text-gray-700">학점</th>
-                    <th className="px-4 py-3 text-center text-sm font-semibold text-gray-700">진행률</th>
-                    <th className="px-4 py-3 text-center text-sm font-semibold text-gray-700">학생</th>
-                    <th className="px-4 py-3 text-center text-sm font-semibold text-gray-700">상태</th>
-                    <th className="px-4 py-3 text-center text-sm font-semibold text-gray-700">작업</th>
+                    <th className={`px-4 py-3 text-center text-sm font-semibold ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>수업명</th>
+                    <th className={`px-4 py-3 text-center text-sm font-semibold ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>수업코드</th>
+                    <th className={`px-4 py-3 text-center text-sm font-semibold ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>교수</th>
+                    <th className={`px-4 py-3 text-center text-sm font-semibold ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>학점</th>
+                    <th className={`px-4 py-3 text-center text-sm font-semibold ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>진행률</th>
+                    <th className={`px-4 py-3 text-center text-sm font-semibold ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>학생</th>
+                    <th className={`px-4 py-3 text-center text-sm font-semibold ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>상태</th>
+                    <th className={`px-4 py-3 text-center text-sm font-semibold ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>작업</th>
                   </tr>
                 </thead>
                 <tbody>
                   {filteredClasses.length > 0 ? (
                     filteredClasses.map((cls, index) => (
-                      <tr key={cls.id} className={index !== filteredClasses.length - 1 ? 'border-b border-gray-100' : ''}>
+                      <tr key={cls.id} className={index !== filteredClasses.length - 1 ? `border-b ${currentTheme === 'dark' ? 'border-gray-700' : 'border-gray-100'}` : ''}>
                         <td className="px-4 py-4 text-center">
                           <input
                             type="checkbox"
@@ -1240,25 +1270,25 @@ const ClassManagementPage = () => {
                         </td>
                         <td className="px-4 py-4 text-center">
                           <div>
-                            <p className="font-medium text-gray-900">{cls.name}</p>
-                            <p className="text-xs text-gray-500">{cls.department}</p>
+                            <p className={`font-medium ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{cls.name}</p>
+                            <p className={`text-xs ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>{cls.department}</p>
                           </div>
                         </td>
-                        <td className="px-4 py-4 text-center text-gray-700">{cls.code}</td>
-                        <td className="px-4 py-4 text-center text-gray-700">{cls.professor}</td>
-                        <td className="px-4 py-4 text-center text-gray-700">{cls.credits}</td>
+                        <td className={`px-4 py-4 text-center ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>{cls.code}</td>
+                        <td className={`px-4 py-4 text-center ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>{cls.professor}</td>
+                        <td className={`px-4 py-4 text-center ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>{cls.credits}</td>
                         <td className="px-4 py-4 text-center">
                           <div className="flex items-center justify-center space-x-2">
-                            <div className="w-16 h-2 bg-gray-200 rounded-full overflow-hidden">
+                            <div className={`w-16 h-2 rounded-full overflow-hidden ${currentTheme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'}`}>
                               <div
                                 className="h-full bg-primary-600 rounded-full"
                                 style={{ width: `${(cls.currentWeek / cls.totalWeeks) * 100}%` }}
                               />
                             </div>
-                            <span className="text-xs text-gray-600">{cls.currentWeek}/{cls.totalWeeks}</span>
+                            <span className={`text-xs ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>{cls.currentWeek}/{cls.totalWeeks}</span>
                           </div>
                         </td>
-                        <td className="px-4 py-4 text-center text-gray-700">{cls.students}</td>
+                        <td className={`px-4 py-4 text-center ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>{cls.students}</td>
                         <td className="px-4 py-4 text-center">
                           <Badge variant={getStatusColor(cls.status)}>
                             {getStatusLabel(cls.status)}
@@ -1268,19 +1298,19 @@ const ClassManagementPage = () => {
                           <div className="flex items-center justify-center space-x-2">
                             <button
                               onClick={() => handleViewDetails(cls)}
-                              className="text-blue-600 hover:text-blue-800 font-medium text-xs"
+                              className={currentTheme === 'dark' ? 'text-blue-400 hover:text-blue-300 font-medium text-xs' : 'text-blue-600 hover:text-blue-800 font-medium text-xs'}
                             >
                               상세
                             </button>
                             <button
                               onClick={() => handleOpenEditModal(cls)}
-                              className="text-green-600 hover:text-green-800 font-medium text-xs"
+                              className={currentTheme === 'dark' ? 'text-green-400 hover:text-green-300 font-medium text-xs' : 'text-green-600 hover:text-green-800 font-medium text-xs'}
                             >
                               수정
                             </button>
                             <button
                               onClick={() => handleOpenDeleteModal(cls)}
-                              className="text-red-600 hover:text-red-800 font-medium text-xs"
+                              className={currentTheme === 'dark' ? 'text-red-400 hover:text-red-300 font-medium text-xs' : 'text-red-600 hover:text-red-800 font-medium text-xs'}
                             >
                               삭제
                             </button>
@@ -1290,7 +1320,7 @@ const ClassManagementPage = () => {
                     ))
                   ) : (
                     <tr>
-                      <td colSpan={8} className="px-4 py-8 text-center text-gray-500">
+                      <td colSpan={8} className={`px-4 py-8 text-center ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
                         검색 결과가 없습니다.
                       </td>
                     </tr>
@@ -1322,40 +1352,44 @@ const ClassManagementPage = () => {
           <div className="space-y-6">
             {/* 기본 정보 */}
             <div>
-              <h3 className="text-sm font-semibold text-gray-900 mb-3 pb-2 border-b border-gray-200">
+              <h3 className={`text-sm font-semibold mb-3 pb-2 border-b ${
+                currentTheme === 'dark'
+                  ? 'text-white border-gray-700'
+                  : 'text-gray-900 border-gray-200'
+              }`}>
                 기본 정보
               </h3>
               <div className="space-y-3">
                 <div className="flex items-start">
-                  <span className="text-sm text-gray-600 w-28 flex-shrink-0">수업명:</span>
-                  <span className="text-sm font-medium text-gray-900">{selectedClass.name}</span>
+                  <span className={`text-sm w-28 flex-shrink-0 ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>수업명:</span>
+                  <span className={`text-sm font-medium ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{selectedClass.name}</span>
                 </div>
                 <div className="flex items-start">
-                  <span className="text-sm text-gray-600 w-28 flex-shrink-0">수업코드:</span>
-                  <span className="text-sm font-medium text-gray-900">{selectedClass.code}</span>
+                  <span className={`text-sm w-28 flex-shrink-0 ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>수업코드:</span>
+                  <span className={`text-sm font-medium ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{selectedClass.code}</span>
                 </div>
                 <div className="flex items-start">
-                  <span className="text-sm text-gray-600 w-28 flex-shrink-0">학과:</span>
-                  <span className="text-sm font-medium text-gray-900">{selectedClass.department}</span>
+                  <span className={`text-sm w-28 flex-shrink-0 ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>학과:</span>
+                  <span className={`text-sm font-medium ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{selectedClass.department}</span>
                 </div>
                 <div className="flex items-start">
-                  <span className="text-sm text-gray-600 w-28 flex-shrink-0">학점:</span>
-                  <span className="text-sm font-medium text-gray-900">{selectedClass.credits}학점</span>
+                  <span className={`text-sm w-28 flex-shrink-0 ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>학점:</span>
+                  <span className={`text-sm font-medium ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{selectedClass.credits}학점</span>
                 </div>
                 <div className="flex items-start">
-                  <span className="text-sm text-gray-600 w-28 flex-shrink-0">담당 교수:</span>
-                  <span className="text-sm font-medium text-gray-900">{selectedClass.professor}</span>
+                  <span className={`text-sm w-28 flex-shrink-0 ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>담당 교수:</span>
+                  <span className={`text-sm font-medium ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{selectedClass.professor}</span>
                 </div>
                 <div className="flex items-start">
-                  <span className="text-sm text-gray-600 w-28 flex-shrink-0">상태:</span>
+                  <span className={`text-sm w-28 flex-shrink-0 ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>상태:</span>
                   <Badge variant={getStatusColor(selectedClass.status)}>
                     {getStatusLabel(selectedClass.status)}
                   </Badge>
                 </div>
                 {selectedClass.description && (
                   <div className="flex items-start">
-                    <span className="text-sm text-gray-600 w-28 flex-shrink-0">설명:</span>
-                    <span className="text-sm text-gray-700">{selectedClass.description}</span>
+                    <span className={`text-sm w-28 flex-shrink-0 ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>설명:</span>
+                    <span className={`text-sm ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>{selectedClass.description}</span>
                   </div>
                 )}
               </div>
@@ -1363,29 +1397,33 @@ const ClassManagementPage = () => {
 
             {/* 진행 상태 */}
             <div>
-              <h3 className="text-sm font-semibold text-gray-900 mb-3 pb-2 border-b border-gray-200">
+              <h3 className={`text-sm font-semibold mb-3 pb-2 border-b ${
+                currentTheme === 'dark'
+                  ? 'text-white border-gray-700'
+                  : 'text-gray-900 border-gray-200'
+              }`}>
                 진행 상태
               </h3>
               <div className="space-y-3">
                 <div className="flex items-start">
-                  <span className="text-sm text-gray-600 w-28 flex-shrink-0">주차 진행:</span>
+                  <span className={`text-sm w-28 flex-shrink-0 ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>주차 진행:</span>
                   <div className="flex-1">
                     <div className="flex items-center space-x-3">
-                      <div className="flex-1 h-3 bg-gray-200 rounded-full overflow-hidden">
+                      <div className={`flex-1 h-3 rounded-full overflow-hidden ${currentTheme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'}`}>
                         <div
                           className="h-full bg-primary-600 rounded-full transition-all"
                           style={{ width: `${(selectedClass.currentWeek / selectedClass.totalWeeks) * 100}%` }}
                         />
                       </div>
-                      <span className="text-sm font-medium text-gray-900">
+                      <span className={`text-sm font-medium ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
                         {selectedClass.currentWeek} / {selectedClass.totalWeeks}주
                       </span>
                     </div>
                   </div>
                 </div>
                 <div className="flex items-start">
-                  <span className="text-sm text-gray-600 w-28 flex-shrink-0">생성일:</span>
-                  <span className="text-sm font-medium text-gray-900">
+                  <span className={`text-sm w-28 flex-shrink-0 ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>생성일:</span>
+                  <span className={`text-sm font-medium ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
                     {new Date(selectedClass.createdDate).toLocaleDateString('ko-KR')}
                   </span>
                 </div>
@@ -1394,8 +1432,8 @@ const ClassManagementPage = () => {
 
             {/* 수강 학생 정보 */}
             <div>
-              <div className="flex items-center justify-between mb-3 pb-2 border-b border-gray-200">
-                <h3 className="text-sm font-semibold text-gray-900">
+              <div className={`flex items-center justify-between mb-3 pb-2 border-b ${currentTheme === 'dark' ? 'border-gray-700' : 'border-gray-200'}`}>
+                <h3 className={`text-sm font-semibold ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
                   수강 학생 정보 ({classStudents.length}명)
                 </h3>
                 <div className="flex gap-2">
@@ -1429,7 +1467,11 @@ const ClassManagementPage = () => {
                   <select
                     value={studentSortBy}
                     onChange={(e) => setStudentSortBy(e.target.value as 'name' | 'enrolledAt')}
-                    className="px-2 py-1 text-xs border border-gray-300 rounded focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none"
+                    className={`px-2 py-1 text-xs border rounded focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none ${
+                      currentTheme === 'dark'
+                        ? 'bg-gray-700 border-gray-600 text-white'
+                        : 'bg-white border-gray-300 text-gray-900'
+                    }`}
                   >
                     <option value="enrolledAt">등록일 (최신순)</option>
                     <option value="name">이름순</option>
@@ -1441,9 +1483,13 @@ const ClassManagementPage = () => {
                 <Skeleton variant="rectangular" height={120} />
               ) : classStudents.length > 0 ? (
                 <div>
-                  <div className="max-h-64 overflow-y-auto border border-gray-200 rounded-lg">
+                  <div className={`max-h-64 overflow-y-auto border rounded-lg ${currentTheme === 'dark' ? 'border-gray-700' : 'border-gray-200'}`}>
                     <table className="w-full text-sm">
-                      <thead className="bg-gray-50 border-b border-gray-200 sticky top-0">
+                      <thead className={`border-b sticky top-0 ${
+                        currentTheme === 'dark'
+                          ? 'bg-gray-800 border-gray-700'
+                          : 'bg-gray-50 border-gray-200'
+                      }`}>
                         <tr>
                           <th className="px-3 py-2 text-left w-6">
                             <input
@@ -1460,15 +1506,15 @@ const ClassManagementPage = () => {
                               className="w-4 h-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500 cursor-pointer"
                             />
                           </th>
-                          <th className="px-3 py-2 text-left text-xs font-medium text-gray-600">이름</th>
-                          <th className="px-3 py-2 text-left text-xs font-medium text-gray-600">이메일</th>
-                          <th className="px-3 py-2 text-left text-xs font-medium text-gray-600">등록일</th>
-                          <th className="px-3 py-2 text-center text-xs font-medium text-gray-600">작업</th>
+                          <th className={`px-3 py-2 text-left text-xs font-medium ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>이름</th>
+                          <th className={`px-3 py-2 text-left text-xs font-medium ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>이메일</th>
+                          <th className={`px-3 py-2 text-left text-xs font-medium ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>등록일</th>
+                          <th className={`px-3 py-2 text-center text-xs font-medium ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>작업</th>
                         </tr>
                       </thead>
-                      <tbody className="divide-y divide-gray-100">
+                      <tbody className={`divide-y ${currentTheme === 'dark' ? 'divide-gray-700' : 'divide-gray-100'}`}>
                         {filteredAndSortedStudents.map((student) => (
-                          <tr key={student.id} className="hover:bg-gray-50">
+                          <tr key={student.id} className={currentTheme === 'dark' ? 'hover:bg-gray-700' : 'hover:bg-gray-50'}>
                             <td className="px-3 py-2 text-center">
                               <input
                                 type="checkbox"
@@ -1483,15 +1529,15 @@ const ClassManagementPage = () => {
                                 className="w-4 h-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500 cursor-pointer"
                               />
                             </td>
-                            <td className="px-3 py-2 text-gray-900 font-medium">{student.name}</td>
-                            <td className="px-3 py-2 text-gray-600 text-xs">{student.email}</td>
-                            <td className="px-3 py-2 text-gray-600 text-xs">
+                            <td className={`px-3 py-2 font-medium ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{student.name}</td>
+                            <td className={`px-3 py-2 text-xs ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>{student.email}</td>
+                            <td className={`px-3 py-2 text-xs ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
                               {new Date(student.enrolledAt).toLocaleDateString('ko-KR')}
                             </td>
                             <td className="px-3 py-2 text-center">
                               <button
                                 onClick={() => handleRemoveStudent(student.id)}
-                                className="text-red-600 hover:text-red-800 font-medium text-xs"
+                                className={currentTheme === 'dark' ? 'text-red-400 hover:text-red-300 font-medium text-xs' : 'text-red-600 hover:text-red-800 font-medium text-xs'}
                               >
                                 제거
                               </button>
@@ -1503,14 +1549,18 @@ const ClassManagementPage = () => {
                   </div>
                 </div>
               ) : (
-                <div className="text-sm text-gray-500 py-4 text-center border border-gray-200 rounded-lg">
+                <div className={`text-sm py-4 text-center border rounded-lg ${
+                  currentTheme === 'dark'
+                    ? 'text-gray-400 border-gray-700'
+                    : 'text-gray-500 border-gray-200'
+                }`}>
                   수강 학생이 없습니다
                 </div>
               )}
             </div>
 
             {/* 닫기 버튼 */}
-            <div className="flex items-center justify-end pt-4 border-t border-gray-200">
+            <div className={`flex items-center justify-end pt-4 border-t ${currentTheme === 'dark' ? 'border-gray-700' : 'border-gray-200'}`}>
               <Button
                 variant="primary"
                 onClick={() => {
@@ -1524,7 +1574,7 @@ const ClassManagementPage = () => {
             </div>
           </div>
         ) : (
-          <div className="text-center py-8 text-gray-500">
+          <div className={`text-center py-8 ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
             수업 정보를 불러올 수 없습니다.
           </div>
         )}
@@ -1538,7 +1588,7 @@ const ClassManagementPage = () => {
       >
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className={`block text-sm font-medium mb-2 ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
               수업명 <span className="text-red-500">*</span>
             </label>
             <Input
@@ -1551,7 +1601,7 @@ const ClassManagementPage = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className={`block text-sm font-medium mb-2 ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
               수업 코드 <span className="text-red-500">*</span>
             </label>
             <Input
@@ -1564,7 +1614,7 @@ const ClassManagementPage = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className={`block text-sm font-medium mb-2 ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
               교수 <span className="text-red-500">*</span>
             </label>
             <Select
@@ -1584,7 +1634,7 @@ const ClassManagementPage = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className={`block text-sm font-medium mb-2 ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
               커리큘럼 <span className="text-red-500">*</span>
             </label>
             <Select
@@ -1604,7 +1654,7 @@ const ClassManagementPage = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className={`block text-sm font-medium mb-2 ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
               설명
             </label>
             <textarea
@@ -1612,11 +1662,15 @@ const ClassManagementPage = () => {
               onChange={(e) => setCreateDescription(e.target.value)}
               placeholder="수업 설명 입력"
               rows={3}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+              className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 ${
+                currentTheme === 'dark'
+                  ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400'
+                  : 'bg-white border-gray-300 text-gray-900'
+              }`}
             />
           </div>
 
-          <div className="flex items-center justify-end space-x-3 pt-4 border-t border-gray-200">
+          <div className={`flex items-center justify-end space-x-3 pt-4 border-t ${currentTheme === 'dark' ? 'border-gray-700' : 'border-gray-200'}`}>
             <Button
               variant="ghost"
               onClick={() => setIsCreateModalOpen(false)}
@@ -1643,7 +1697,7 @@ const ClassManagementPage = () => {
       >
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className={`block text-sm font-medium mb-2 ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
               수업명 <span className="text-red-500">*</span>
             </label>
             <Input
@@ -1656,7 +1710,7 @@ const ClassManagementPage = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className={`block text-sm font-medium mb-2 ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
               수업 코드 <span className="text-red-500">*</span>
             </label>
             <Input
@@ -1669,7 +1723,7 @@ const ClassManagementPage = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className={`block text-sm font-medium mb-2 ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
               교수 <span className="text-red-500">*</span>
             </label>
             <Select
@@ -1689,7 +1743,7 @@ const ClassManagementPage = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className={`block text-sm font-medium mb-2 ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
               커리큘럼 <span className="text-red-500">*</span>
             </label>
             <Select
@@ -1709,7 +1763,7 @@ const ClassManagementPage = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className={`block text-sm font-medium mb-2 ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
               설명
             </label>
             <textarea
@@ -1717,11 +1771,15 @@ const ClassManagementPage = () => {
               onChange={(e) => setEditDescription(e.target.value)}
               placeholder="수업 설명 입력"
               rows={3}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+              className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 ${
+                currentTheme === 'dark'
+                  ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400'
+                  : 'bg-white border-gray-300 text-gray-900'
+              }`}
             />
           </div>
 
-          <div className="flex items-center justify-end space-x-3 pt-4 border-t border-gray-200">
+          <div className={`flex items-center justify-end space-x-3 pt-4 border-t ${currentTheme === 'dark' ? 'border-gray-700' : 'border-gray-200'}`}>
             <Button
               variant="ghost"
               onClick={() => setIsEditModalOpen(false)}
@@ -1756,7 +1814,7 @@ const ClassManagementPage = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className={`block text-sm font-medium mb-2 ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
               관리자 비밀번호 <span className="text-red-500">*</span>
             </label>
             <Input
@@ -1770,7 +1828,7 @@ const ClassManagementPage = () => {
             )}
           </div>
 
-          <div className="flex items-center justify-end space-x-3 pt-4 border-t border-gray-200">
+          <div className={`flex items-center justify-end space-x-3 pt-4 border-t ${currentTheme === 'dark' ? 'border-gray-700' : 'border-gray-200'}`}>
             <Button
               variant="ghost"
               onClick={() => setIsDeleteModalOpen(false)}
@@ -1800,14 +1858,14 @@ const ClassManagementPage = () => {
       >
         <div className="space-y-4">
           <div>
-            <p className="text-sm text-gray-600 mb-4">
+            <p className={`text-sm mb-4 ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
               <span className="font-medium">{selectedClass?.name}</span> 수업에 추가할 학생을 선택하세요.
             </p>
           </div>
 
           {/* 검색 필드 */}
           <div className="flex items-center space-x-2">
-            <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className={`w-5 h-5 ${currentTheme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
             <input
@@ -1815,12 +1873,16 @@ const ClassManagementPage = () => {
               placeholder="학생 이름이나 이메일로 검색..."
               value={searchStudentTerm}
               onChange={(e) => setSearchStudentTerm(e.target.value)}
-              className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none text-sm"
+              className={`flex-1 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none text-sm ${
+                currentTheme === 'dark'
+                  ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400'
+                  : 'bg-white border-gray-300 text-gray-900'
+              }`}
             />
             {searchStudentTerm && (
               <button
                 onClick={() => setSearchStudentTerm('')}
-                className="text-gray-400 hover:text-gray-600"
+                className={currentTheme === 'dark' ? 'text-gray-500 hover:text-gray-400' : 'text-gray-400 hover:text-gray-600'}
               >
                 ✕
               </button>
@@ -1828,7 +1890,11 @@ const ClassManagementPage = () => {
           </div>
 
           {/* 학생 목록 (체크박스) */}
-          <div className="border border-gray-200 rounded-lg p-4 max-h-64 overflow-y-auto">
+          <div className={`border rounded-lg p-4 max-h-64 overflow-y-auto ${
+            currentTheme === 'dark'
+              ? 'border-gray-700 bg-gray-800'
+              : 'border-gray-200 bg-white'
+          }`}>
             {filteredAvailableStudents.length > 0 ? (
               <div className="space-y-2">
                 {filteredAvailableStudents.map((student) => (
@@ -1850,14 +1916,14 @@ const ClassManagementPage = () => {
                       htmlFor={`student-${student.id}`}
                       className="ml-3 flex-1 cursor-pointer"
                     >
-                      <div className="text-sm font-medium text-gray-900">{student.name}</div>
-                      <div className="text-xs text-gray-500">{student.email}</div>
+                      <div className={`text-sm font-medium ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{student.name}</div>
+                      <div className={`text-xs ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>{student.email}</div>
                     </label>
                   </div>
                 ))}
               </div>
             ) : (
-              <div className="text-sm text-gray-500 text-center py-8">
+              <div className={`text-sm text-center py-8 ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
                 추가할 학생이 없습니다.
               </div>
             )}
@@ -1889,7 +1955,7 @@ const ClassManagementPage = () => {
           </div>
 
           {/* 액션 버튼 */}
-          <div className="flex items-center justify-end space-x-3 pt-4 border-t border-gray-200">
+          <div className={`flex items-center justify-end space-x-3 pt-4 border-t ${currentTheme === 'dark' ? 'border-gray-700' : 'border-gray-200'}`}>
             <Button
               variant="ghost"
               onClick={() => {
@@ -1930,19 +1996,23 @@ const ClassManagementPage = () => {
           </div>
 
           {selectedRemoveStudent && (
-            <div className="border border-gray-200 rounded-lg p-4 space-y-3">
+            <div className={`border rounded-lg p-4 space-y-3 ${
+              currentTheme === 'dark'
+                ? 'border-gray-700 bg-gray-800'
+                : 'border-gray-200 bg-white'
+            }`}>
               <div>
-                <p className="text-xs text-gray-500 mb-1">학생 이름</p>
-                <p className="font-medium text-gray-900">{selectedRemoveStudent.name}</p>
+                <p className={`text-xs mb-1 ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>학생 이름</p>
+                <p className={`font-medium ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{selectedRemoveStudent.name}</p>
               </div>
               <div>
-                <p className="text-xs text-gray-500 mb-1">이메일</p>
-                <p className="font-medium text-gray-900">{selectedRemoveStudent.email}</p>
+                <p className={`text-xs mb-1 ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>이메일</p>
+                <p className={`font-medium ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{selectedRemoveStudent.email}</p>
               </div>
             </div>
           )}
 
-          <div className="flex items-center justify-end space-x-3 pt-4 border-t border-gray-200">
+          <div className={`flex items-center justify-end space-x-3 pt-4 border-t ${currentTheme === 'dark' ? 'border-gray-700' : 'border-gray-200'}`}>
             <Button
               variant="ghost"
               onClick={() => {
@@ -1978,7 +2048,7 @@ const ClassManagementPage = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className={`block text-sm font-medium mb-2 ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
               변경할 상태 <span className="text-red-500">*</span>
             </label>
             <Select
@@ -1992,7 +2062,7 @@ const ClassManagementPage = () => {
             </Select>
           </div>
 
-          <div className="flex items-center justify-end space-x-3 pt-4 border-t border-gray-200">
+          <div className={`flex items-center justify-end space-x-3 pt-4 border-t ${currentTheme === 'dark' ? 'border-gray-700' : 'border-gray-200'}`}>
             <Button
               variant="ghost"
               onClick={() => setIsBulkStatusModalOpen(false)}

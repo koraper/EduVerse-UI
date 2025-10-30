@@ -2,12 +2,14 @@ import { useState, useEffect } from 'react'
 import type { ReactNode } from 'react'
 import Header from './Header'
 import Sidebar from './Sidebar'
+import { useTheme } from '@/contexts/ThemeContext'
 
 interface DashboardLayoutProps {
   children: ReactNode
 }
 
 const DashboardLayout = ({ children }: DashboardLayoutProps) => {
+  const { currentTheme } = useTheme()
   const [isSidebarOpen, setIsSidebarOpen] = useState(true)
   const [isMobile, setIsMobile] = useState(false)
 
@@ -37,13 +39,19 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   }, [isMobile, isSidebarOpen])
 
   return (
-    <div className="min-h-screen lg:min-w-[1280px] flex flex-col bg-gray-50">
+    <div className={`min-h-screen lg:min-w-[1280px] flex flex-col ${
+      currentTheme === 'dark' ? 'bg-gray-900' : 'bg-gray-50'
+    }`}>
       <Header />
 
       <div className="flex flex-1 relative">
         {/* 데스크톱 사이드바 - 화면에 고정 */}
         {!isMobile && isSidebarOpen && (
-          <div className="fixed left-0 top-[64px] bottom-0 w-64 bg-white border-r border-gray-200 flex flex-col z-20 overflow-y-auto">
+          <div className={`fixed left-0 top-[64px] bottom-0 w-64 border-r flex flex-col z-20 overflow-y-auto ${
+            currentTheme === 'dark'
+              ? 'bg-gray-800 border-gray-700'
+              : 'bg-white border-gray-200'
+          }`}>
             <Sidebar />
           </div>
         )}
@@ -61,7 +69,9 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
             />
 
             {/* 사이드바 */}
-            <div className="fixed inset-y-0 left-0 z-50 w-64 bg-white transform transition-transform duration-300 ease-in-out overflow-y-auto">
+            <div className={`fixed inset-y-0 left-0 z-50 w-64 transform transition-transform duration-300 ease-in-out overflow-y-auto ${
+              currentTheme === 'dark' ? 'bg-gray-800' : 'bg-white'
+            }`}>
               <Sidebar />
             </div>
           </>
@@ -70,7 +80,11 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
         {/* 사이드바 토글 버튼 - 화면에 고정 */}
         <button
           onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-          className={`fixed top-[106px] ${isSidebarOpen ? 'left-64' : 'left-0'} -translate-x-1/2 z-30 p-2 bg-white border border-gray-300 rounded-full shadow-md text-gray-600 hover:text-primary-600 hover:border-primary-500 transition-all duration-300`}
+          className={`fixed top-[106px] ${isSidebarOpen ? 'left-64' : 'left-0'} -translate-x-1/2 z-30 p-2 border rounded-full shadow-md transition-all duration-300 ${
+            currentTheme === 'dark'
+              ? 'bg-gray-800 border-gray-600 text-gray-400 hover:text-primary-400 hover:border-primary-500'
+              : 'bg-white border-gray-300 text-gray-600 hover:text-primary-600 hover:border-primary-500'
+          }`}
           title={isSidebarOpen ? '사이드바 접기' : '사이드바 펼치기'}
         >
           {isSidebarOpen ? (

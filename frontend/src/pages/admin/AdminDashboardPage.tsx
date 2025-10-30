@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
+import { useTheme } from '@/contexts/ThemeContext'
 import { useApiError } from '@/hooks/useApiError'
 import { useToast } from '@/components/common'
 import DashboardLayout from '@/components/layout/DashboardLayout'
@@ -36,6 +37,7 @@ type DateRangeFilter = '7d' | '30d' | '90d' | 'all'
 const AdminDashboardPage = () => {
   const navigate = useNavigate()
   const { user, token, isLoading: authLoading } = useAuth()
+  const { currentTheme } = useTheme()
   const { handleResponseError, handleError } = useApiError({
     onAuthError: () => navigate('/login'),
     onPermissionError: () => navigate('/admin/dashboard'),
@@ -245,8 +247,8 @@ const AdminDashboardPage = () => {
       <DashboardLayout>
         <div className="space-y-6">
           <div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">관리자 대시보드</h1>
-            <p className="mt-1 text-sm text-gray-600">시스템 전체 현황을 확인하세요</p>
+            <h1 className={`text-2xl sm:text-3xl font-bold ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>관리자 대시보드</h1>
+            <p className={`mt-1 text-sm ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>시스템 전체 현황을 확인하세요</p>
           </div>
 
           <Card>
@@ -255,20 +257,24 @@ const AdminDashboardPage = () => {
                 <div className="flex-1">
                   <div className="flex items-center space-x-3 mb-3">
                     <div className="flex-shrink-0">
-                      <svg className="h-5 w-5 text-error-600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                      <svg className={`h-5 w-5 ${currentTheme === 'dark' ? 'text-error-400' : 'text-error-600'}`} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                         <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
                       </svg>
                     </div>
-                    <h3 className="text-lg font-medium text-error-900">데이터 로드 실패</h3>
+                    <h3 className={`text-lg font-medium ${currentTheme === 'dark' ? 'text-error-300' : 'text-error-900'}`}>데이터 로드 실패</h3>
                   </div>
-                  <p className="text-sm text-error-700 mb-4">
+                  <p className={`text-sm mb-4 ${currentTheme === 'dark' ? 'text-error-400' : 'text-error-700'}`}>
                     관리자 데이터를 불러올 수 없습니다. 잠시 후 다시 시도해주세요.
                   </p>
                 </div>
               </div>
               <button
                 onClick={fetchAdminData}
-                className="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 rounded-lg transition-colors"
+                className={`inline-flex items-center px-4 py-2 text-sm font-medium text-white rounded-lg transition-colors ${
+                  currentTheme === 'dark'
+                    ? 'bg-primary-600 hover:bg-primary-500'
+                    : 'bg-primary-600 hover:bg-primary-700'
+                }`}
               >
                 <svg className="w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                   <path fillRule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 1119.414 5.414 1 1 0 11-1.414-1.414A5.002 5.002 0 004.059 6.101H7a1 1 0 110 2H4a1 1 0 01-1-1V3a1 1 0 011-1z" clipRule="evenodd" />
@@ -287,8 +293,8 @@ const AdminDashboardPage = () => {
       <div className="space-y-6">
         {/* 헤더 */}
         <div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">관리자 대시보드</h1>
-          <p className="mt-1 text-sm text-gray-600">시스템 전체 현황을 확인하세요</p>
+          <h1 className={`text-2xl sm:text-3xl font-bold ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>관리자 대시보드</h1>
+          <p className={`mt-1 text-sm ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>시스템 전체 현황을 확인하세요</p>
         </div>
 
         {/* 통계 카드 */}
@@ -297,18 +303,18 @@ const AdminDashboardPage = () => {
             <div className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">전체 사용자</p>
-                  <p className="mt-2 text-3xl font-bold text-gray-900">{stats?.totalUsers || 0}</p>
+                  <p className={`text-sm font-medium ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>전체 사용자</p>
+                  <p className={`mt-2 text-3xl font-bold ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{stats?.totalUsers || 0}</p>
                 </div>
-                <div className="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center">
-                  <svg className="w-6 h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="w-12 h-12 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center">
+                  <svg className="w-6 h-6 text-primary-600 dark:text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
                   </svg>
                 </div>
               </div>
               <div className="mt-4 flex items-center justify-between text-sm">
-                <span className="text-gray-500">학생: {stats?.totalStudents || 0}명</span>
-                <span className="text-gray-500">교수: {stats?.totalProfessors || 0}명</span>
+                <span className={currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-500'}>학생: {stats?.totalStudents || 0}명</span>
+                <span className={currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-500'}>교수: {stats?.totalProfessors || 0}명</span>
               </div>
             </div>
           </Card>
@@ -317,17 +323,17 @@ const AdminDashboardPage = () => {
             <div className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">진행 중인 수업</p>
-                  <p className="mt-2 text-3xl font-bold text-gray-900">{stats?.activeClasses || 0}</p>
+                  <p className={`text-sm font-medium ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>진행 중인 수업</p>
+                  <p className={`mt-2 text-3xl font-bold ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{stats?.activeClasses || 0}</p>
                 </div>
-                <div className="w-12 h-12 bg-success-100 rounded-lg flex items-center justify-center">
-                  <svg className="w-6 h-6 text-success-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="w-12 h-12 bg-success-100 dark:bg-success-900/30 rounded-lg flex items-center justify-center">
+                  <svg className="w-6 h-6 text-success-600 dark:text-success-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                   </svg>
                 </div>
               </div>
               <div className="mt-4">
-                <span className="text-xs text-gray-500">
+                <span className={`text-xs ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
                   전체 수업: {stats?.totalClasses || 0}개
                 </span>
               </div>
@@ -338,17 +344,17 @@ const AdminDashboardPage = () => {
             <div className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">총 수강 신청</p>
-                  <p className="mt-2 text-3xl font-bold text-gray-900">{stats?.totalEnrollments || 0}</p>
+                  <p className={`text-sm font-medium ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>총 수강 신청</p>
+                  <p className={`mt-2 text-3xl font-bold ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{stats?.totalEnrollments || 0}</p>
                 </div>
-                <div className="w-12 h-12 bg-warning-100 rounded-lg flex items-center justify-center">
-                  <svg className="w-6 h-6 text-warning-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="w-12 h-12 bg-warning-100 dark:bg-warning-900/30 rounded-lg flex items-center justify-center">
+                  <svg className="w-6 h-6 text-warning-600 dark:text-warning-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                   </svg>
                 </div>
               </div>
               <div className="mt-4">
-                <span className="text-xs text-success-600 font-medium">
+                <span className={`text-xs font-medium ${currentTheme === 'dark' ? 'text-success-400' : 'text-success-600'}`}>
                   활성 등록만 집계
                 </span>
               </div>
@@ -359,46 +365,62 @@ const AdminDashboardPage = () => {
         {/* 빠른 액션 */}
         <Card>
           <div className="p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">빠른 작업</h2>
+            <h2 className={`text-lg font-semibold mb-4 ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>빠른 작업</h2>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
               <button
                 onClick={() => navigate('/admin/users')}
-                className="flex flex-col items-center justify-center p-4 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors"
+                className={`flex flex-col items-center justify-center p-4 rounded-lg transition-colors ${
+                  currentTheme === 'dark'
+                    ? 'bg-gray-800 hover:bg-gray-700'
+                    : 'bg-gray-50 hover:bg-gray-100'
+                }`}
               >
-                <svg className="w-8 h-8 text-primary-600 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className={`w-8 h-8 mb-2 ${currentTheme === 'dark' ? 'text-primary-400' : 'text-primary-600'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
                 </svg>
-                <span className="text-sm font-medium text-gray-900">사용자 관리</span>
+                <span className={`text-sm font-medium ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>사용자 관리</span>
               </button>
 
               <button
                 onClick={() => navigate('/admin/classes')}
-                className="flex flex-col items-center justify-center p-4 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors"
+                className={`flex flex-col items-center justify-center p-4 rounded-lg transition-colors ${
+                  currentTheme === 'dark'
+                    ? 'bg-gray-800 hover:bg-gray-700'
+                    : 'bg-gray-50 hover:bg-gray-100'
+                }`}
               >
-                <svg className="w-8 h-8 text-success-600 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className={`w-8 h-8 mb-2 ${currentTheme === 'dark' ? 'text-success-400' : 'text-success-600'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                 </svg>
-                <span className="text-sm font-medium text-gray-900">수업 관리</span>
+                <span className={`text-sm font-medium ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>수업 관리</span>
               </button>
 
               <button
                 onClick={() => navigate('/admin/curricula')}
-                className="flex flex-col items-center justify-center p-4 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors"
+                className={`flex flex-col items-center justify-center p-4 rounded-lg transition-colors ${
+                  currentTheme === 'dark'
+                    ? 'bg-gray-800 hover:bg-gray-700'
+                    : 'bg-gray-50 hover:bg-gray-100'
+                }`}
               >
-                <svg className="w-8 h-8 text-warning-600 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className={`w-8 h-8 mb-2 ${currentTheme === 'dark' ? 'text-warning-400' : 'text-warning-600'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                 </svg>
-                <span className="text-sm font-medium text-gray-900">커리큘럼 관리</span>
+                <span className={`text-sm font-medium ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>커리큘럼 관리</span>
               </button>
 
               <button
                 onClick={() => navigate('/admin/logs')}
-                className="flex flex-col items-center justify-center p-4 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors"
+                className={`flex flex-col items-center justify-center p-4 rounded-lg transition-colors ${
+                  currentTheme === 'dark'
+                    ? 'bg-gray-800 hover:bg-gray-700'
+                    : 'bg-gray-50 hover:bg-gray-100'
+                }`}
               >
-                <svg className="w-8 h-8 text-purple-600 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className={`w-8 h-8 mb-2 ${currentTheme === 'dark' ? 'text-purple-400' : 'text-purple-600'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
-                <span className="text-sm font-medium text-gray-900">로그 관리</span>
+                <span className={`text-sm font-medium ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>로그 관리</span>
               </button>
             </div>
           </div>
@@ -408,10 +430,14 @@ const AdminDashboardPage = () => {
         <Card>
           <div className="p-6">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-semibold text-gray-900">최근 관리 활동</h2>
+              <h2 className={`text-lg font-semibold ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>최근 관리 활동</h2>
               <button
                 onClick={() => navigate('/admin/logs')}
-                className="text-sm text-primary-600 hover:text-primary-700 font-medium"
+                className={`text-sm font-medium ${
+                  currentTheme === 'dark'
+                    ? 'text-primary-400 hover:text-primary-300'
+                    : 'text-primary-600 hover:text-primary-700'
+                }`}
               >
                 전체 보기 →
               </button>
@@ -422,7 +448,7 @@ const AdminDashboardPage = () => {
               {/* 검색창 */}
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <svg className="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className={`h-5 w-5 ${currentTheme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                   </svg>
                 </div>
@@ -431,14 +457,18 @@ const AdminDashboardPage = () => {
                   placeholder="관리자명, 대상명 또는 액션 검색..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
+                  className={`block w-full pl-10 pr-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 sm:text-sm ${
+                    currentTheme === 'dark'
+                      ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400'
+                      : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
+                  }`}
                 />
                 {searchQuery && (
                   <button
                     onClick={() => setSearchQuery('')}
                     className="absolute inset-y-0 right-0 pr-3 flex items-center"
                   >
-                    <svg className="h-5 w-5 text-gray-400 hover:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className={`h-5 w-5 ${currentTheme === 'dark' ? 'text-gray-500 hover:text-gray-400' : 'text-gray-400 hover:text-gray-600'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                     </svg>
                   </button>
@@ -476,13 +506,17 @@ const AdminDashboardPage = () => {
               {/* 활성 필터 표시 */}
               {(actionFilter !== 'all' || dateRangeFilter !== '30d' || searchQuery !== '') && (
                 <div className="flex items-center flex-wrap gap-2">
-                  <span className="text-xs text-gray-500">활성 필터:</span>
+                  <span className={`text-xs ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>활성 필터:</span>
                   {actionFilter !== 'all' && (
-                    <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-primary-100 text-primary-800">
+                    <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
+                      currentTheme === 'dark'
+                        ? 'bg-primary-900/30 text-primary-300'
+                        : 'bg-primary-100 text-primary-800'
+                    }`}>
                       액션: {actionFilter}
                       <button
                         onClick={() => setActionFilter('all')}
-                        className="ml-1 hover:text-primary-900"
+                        className={`ml-1 ${currentTheme === 'dark' ? 'hover:text-primary-200' : 'hover:text-primary-900'}`}
                       >
                         <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -491,11 +525,15 @@ const AdminDashboardPage = () => {
                     </span>
                   )}
                   {dateRangeFilter !== '30d' && (
-                    <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                    <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
+                      currentTheme === 'dark'
+                        ? 'bg-blue-900/30 text-blue-300'
+                        : 'bg-blue-100 text-blue-800'
+                    }`}>
                       기간: {dateRangeFilter === '7d' ? '최근 7일' : dateRangeFilter === '90d' ? '최근 90일' : '전체 기간'}
                       <button
                         onClick={() => setDateRangeFilter('30d')}
-                        className="ml-1 hover:text-blue-900"
+                        className={`ml-1 ${currentTheme === 'dark' ? 'hover:text-blue-200' : 'hover:text-blue-900'}`}
                       >
                         <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -504,11 +542,15 @@ const AdminDashboardPage = () => {
                     </span>
                   )}
                   {searchQuery !== '' && (
-                    <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                    <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
+                      currentTheme === 'dark'
+                        ? 'bg-green-900/30 text-green-300'
+                        : 'bg-green-100 text-green-800'
+                    }`}>
                       검색: "{searchQuery}"
                       <button
                         onClick={() => setSearchQuery('')}
-                        className="ml-1 hover:text-green-900"
+                        className={`ml-1 ${currentTheme === 'dark' ? 'hover:text-green-200' : 'hover:text-green-900'}`}
                       >
                         <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -522,7 +564,7 @@ const AdminDashboardPage = () => {
                       setDateRangeFilter('30d')
                       setSearchQuery('')
                     }}
-                    className="text-xs text-gray-500 hover:text-gray-700 underline"
+                    className={`text-xs underline ${currentTheme === 'dark' ? 'text-gray-400 hover:text-gray-300' : 'text-gray-500 hover:text-gray-700'}`}
                   >
                     모두 지우기
                   </button>
@@ -531,11 +573,11 @@ const AdminDashboardPage = () => {
             </div>
 
             {recentActivity.length === 0 ? (
-              <div className="text-center py-8 text-gray-500">
+              <div className={`text-center py-8 ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
                 최근 활동이 없습니다
               </div>
             ) : filteredActivities.length === 0 ? (
-              <div className="text-center py-8 text-gray-500">
+              <div className={`text-center py-8 ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
                 필터 조건에 맞는 활동이 없습니다
               </div>
             ) : (
@@ -544,21 +586,29 @@ const AdminDashboardPage = () => {
                   {paginatedActivities.map((activity) => (
                     <div
                       key={activity.id}
-                      className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                      className={`flex items-center justify-between p-3 rounded-lg transition-colors ${
+                        currentTheme === 'dark'
+                          ? 'bg-gray-800 hover:bg-gray-700'
+                          : 'bg-gray-50 hover:bg-gray-100'
+                      }`}
                     >
                       <div className="flex items-center space-x-3 flex-1">
-                        <div className="w-10 h-10 bg-primary-100 rounded-full flex items-center justify-center flex-shrink-0">
-                          <svg className="w-5 h-5 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${
+                          currentTheme === 'dark'
+                            ? 'bg-primary-900/30'
+                            : 'bg-primary-100'
+                        }`}>
+                          <svg className={`w-5 h-5 ${currentTheme === 'dark' ? 'text-primary-400' : 'text-primary-600'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                           </svg>
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className="text-sm text-gray-900">
+                          <p className={`text-sm ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
                             <span className="font-medium">{activity.adminName}</span>님이{' '}
                             <span className="font-medium">{activity.targetName}</span> 사용자를{' '}
                             <span className="font-medium">{activity.action}</span>
                           </p>
-                          <p className="text-xs text-gray-500 mt-1">{timeAgo(activity.timestamp)}</p>
+                          <p className={`text-xs mt-1 ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>{timeAgo(activity.timestamp)}</p>
                         </div>
                       </div>
                       {getActionBadge(activity.action)}
@@ -568,8 +618,10 @@ const AdminDashboardPage = () => {
 
                 {/* 페이지네이션 */}
                 {totalActivityPages > 1 && (
-                  <div className="flex items-center justify-between mt-4 pt-4 border-t border-gray-200">
-                    <div className="text-sm text-gray-600">
+                  <div className={`flex items-center justify-between mt-4 pt-4 border-t ${
+                    currentTheme === 'dark' ? 'border-gray-700' : 'border-gray-200'
+                  }`}>
+                    <div className={`text-sm ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
                       {filteredActivities.length}개 중 {((activityPage - 1) * ACTIVITIES_PER_PAGE) + 1}-
                       {Math.min(activityPage * ACTIVITIES_PER_PAGE, filteredActivities.length)}개 표시
                     </div>
@@ -577,17 +629,25 @@ const AdminDashboardPage = () => {
                       <button
                         onClick={() => setActivityPage((prev) => Math.max(1, prev - 1))}
                         disabled={activityPage === 1}
-                        className="px-3 py-1 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                        className={`px-3 py-1 text-sm font-medium border rounded-md disabled:opacity-50 disabled:cursor-not-allowed ${
+                          currentTheme === 'dark'
+                            ? 'text-gray-300 bg-gray-800 border-gray-600 hover:bg-gray-700'
+                            : 'text-gray-700 bg-white border-gray-300 hover:bg-gray-50'
+                        }`}
                       >
                         이전
                       </button>
-                      <span className="text-sm text-gray-600">
+                      <span className={`text-sm ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
                         {activityPage} / {totalActivityPages}
                       </span>
                       <button
                         onClick={() => setActivityPage((prev) => Math.min(totalActivityPages, prev + 1))}
                         disabled={activityPage === totalActivityPages}
-                        className="px-3 py-1 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                        className={`px-3 py-1 text-sm font-medium border rounded-md disabled:opacity-50 disabled:cursor-not-allowed ${
+                          currentTheme === 'dark'
+                            ? 'text-gray-300 bg-gray-800 border-gray-600 hover:bg-gray-700'
+                            : 'text-gray-700 bg-white border-gray-300 hover:bg-gray-50'
+                        }`}
                       >
                         다음
                       </button>

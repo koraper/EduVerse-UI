@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
+import { useTheme } from '@/contexts/ThemeContext'
 import { useApiError } from '@/hooks/useApiError'
 import { useToast } from '@/components/common'
 import DashboardLayout from '@/components/layout/DashboardLayout'
@@ -29,6 +30,7 @@ interface Curriculum {
 const CurriculumManagementPage = () => {
   const navigate = useNavigate()
   const { user, token, isLoading: authLoading } = useAuth()
+  const { currentTheme } = useTheme()
   const { handleError, handleResponseError } = useApiError({
     onAuthError: () => navigate('/login'),
     onPermissionError: () => navigate('/admin/dashboard'),
@@ -557,8 +559,8 @@ const CurriculumManagementPage = () => {
         {/* 헤더 */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">커리큘럼 관리</h1>
-            <p className="mt-1 text-sm text-gray-600">프로그래밍 커리큘럼을 생성, 수정, 관리하세요</p>
+            <h1 className={`text-2xl sm:text-3xl font-bold ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>커리큘럼 관리</h1>
+            <p className={`mt-1 text-sm ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>프로그래밍 커리큘럼을 생성, 수정, 관리하세요</p>
           </div>
           <div className="flex items-center space-x-3">
             {isDevelopment && (
@@ -594,11 +596,11 @@ const CurriculumManagementPage = () => {
             <div className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">총 커리큘럼</p>
-                  <p className="mt-2 text-3xl font-bold text-gray-900">{totalCurriculums}</p>
+                  <p className={`text-sm font-medium ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>총 커리큘럼</p>
+                  <p className={`mt-2 text-3xl font-bold ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{totalCurriculums}</p>
                 </div>
-                <div className="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center">
-                  <svg className="w-6 h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="w-12 h-12 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center">
+                  <svg className="w-6 h-6 text-primary-600 dark:text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                   </svg>
                 </div>
@@ -610,11 +612,11 @@ const CurriculumManagementPage = () => {
             <div className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">활성 커리큘럼</p>
-                  <p className="mt-2 text-3xl font-bold text-success-600">{activeCurriculums}</p>
+                  <p className={`text-sm font-medium ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>활성 커리큘럼</p>
+                  <p className={`mt-2 text-3xl font-bold ${currentTheme === 'dark' ? 'text-success-400' : 'text-success-600'}`}>{activeCurriculums}</p>
                 </div>
-                <div className="w-12 h-12 bg-success-100 rounded-lg flex items-center justify-center">
-                  <svg className="w-6 h-6 text-success-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="w-12 h-12 bg-success-100 dark:bg-success-900/30 rounded-lg flex items-center justify-center">
+                  <svg className="w-6 h-6 text-success-600 dark:text-success-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                 </div>
@@ -626,11 +628,11 @@ const CurriculumManagementPage = () => {
             <div className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">보관 커리큘럼</p>
-                  <p className="mt-2 text-3xl font-bold text-gray-600">{archivedCurriculums}</p>
+                  <p className={`text-sm font-medium ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>보관 커리큘럼</p>
+                  <p className={`mt-2 text-3xl font-bold ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>{archivedCurriculums}</p>
                 </div>
-                <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
-                  <svg className="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className={`w-12 h-12 rounded-lg flex items-center justify-center ${currentTheme === 'dark' ? 'bg-gray-800' : 'bg-gray-100'}`}>
+                  <svg className={`w-6 h-6 ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
                   </svg>
                 </div>
@@ -642,11 +644,11 @@ const CurriculumManagementPage = () => {
             <div className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">수강 중인 수업</p>
-                  <p className="mt-2 text-3xl font-bold text-blue-600">{totalClasses}</p>
+                  <p className={`text-sm font-medium ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>수강 중인 수업</p>
+                  <p className={`mt-2 text-3xl font-bold ${currentTheme === 'dark' ? 'text-blue-400' : 'text-blue-600'}`}>{totalClasses}</p>
                 </div>
-                <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                  <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center">
+                  <svg className="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
                   </svg>
                 </div>
@@ -684,7 +686,11 @@ const CurriculumManagementPage = () => {
               <select
                 value={filterLanguage}
                 onChange={(e) => setFilterLanguage(e.target.value)}
-                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition"
+                className={`px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition ${
+                  currentTheme === 'dark'
+                    ? 'bg-gray-700 border-gray-600 text-white'
+                    : 'bg-white border-gray-300 text-gray-900'
+                }`}
               >
                 <option value="all">모든 언어</option>
                 <option value="C">C</option>
@@ -695,7 +701,11 @@ const CurriculumManagementPage = () => {
               <select
                 value={filterStatus}
                 onChange={(e) => setFilterStatus(e.target.value)}
-                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition"
+                className={`px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition ${
+                  currentTheme === 'dark'
+                    ? 'bg-gray-700 border-gray-600 text-white'
+                    : 'bg-white border-gray-300 text-gray-900'
+                }`}
               >
                 <option value="all">모든 상태</option>
                 <option value="active">활성</option>
@@ -705,8 +715,8 @@ const CurriculumManagementPage = () => {
 
             {/* 결과 카운트 */}
             <div className="flex items-center justify-between mb-4">
-              <div className="text-sm text-gray-600">
-                총 <span className="font-semibold text-gray-900">{filteredCurriculums.length}</span>개의 커리큘럼
+              <div className={`text-sm ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
+                총 <span className={`font-semibold ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{filteredCurriculums.length}</span>개의 커리큘럼
               </div>
               <div className="flex items-center space-x-2">
                 <Button
@@ -736,13 +746,17 @@ const CurriculumManagementPage = () => {
 
             {/* 대량 작업 패널 */}
             {selectedCurriculumIds.length > 0 && (
-              <div className="mb-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+              <div className={`mb-4 p-4 border rounded-lg ${
+                currentTheme === 'dark'
+                  ? 'bg-blue-900/20 border-blue-700'
+                  : 'bg-blue-50 border-blue-200'
+              }`}>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-2">
-                    <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className={`w-5 h-5 ${currentTheme === 'dark' ? 'text-blue-400' : 'text-blue-600'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
                     </svg>
-                    <span className="text-sm font-medium text-blue-900">
+                    <span className={`text-sm font-medium ${currentTheme === 'dark' ? 'text-blue-300' : 'text-blue-900'}`}>
                       {selectedCurriculumIds.length}개 선택됨
                     </span>
                   </div>
@@ -785,7 +799,11 @@ const CurriculumManagementPage = () => {
             {/* 커리큘럼 테이블 */}
             <div className="overflow-x-auto">
               <table className="w-full">
-                <thead className="bg-gray-50 border-b border-gray-200">
+                <thead className={`border-b ${
+                  currentTheme === 'dark'
+                    ? 'bg-gray-800 border-gray-700'
+                    : 'bg-gray-50 border-gray-200'
+                }`}>
                   <tr>
                     <th className="px-4 py-3 text-center w-12">
                       <input
@@ -795,40 +813,60 @@ const CurriculumManagementPage = () => {
                         className="w-4 h-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500"
                       />
                     </th>
-                    <th className="px-6 py-3 text-center text-sm font-semibold text-gray-700 uppercase tracking-wider">
+                    <th className={`px-6 py-3 text-center text-sm font-semibold uppercase tracking-wider ${
+                      currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'
+                    }`}>
                       ID
                     </th>
-                    <th className="px-6 py-3 text-center text-sm font-semibold text-gray-700 uppercase tracking-wider">
+                    <th className={`px-6 py-3 text-center text-sm font-semibold uppercase tracking-wider ${
+                      currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'
+                    }`}>
                       커리큘럼명
                     </th>
-                    <th className="px-6 py-3 text-center text-sm font-semibold text-gray-700 uppercase tracking-wider">
+                    <th className={`px-6 py-3 text-center text-sm font-semibold uppercase tracking-wider ${
+                      currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'
+                    }`}>
                       언어
                     </th>
-                    <th className="px-6 py-3 text-center text-sm font-semibold text-gray-700 uppercase tracking-wider">
+                    <th className={`px-6 py-3 text-center text-sm font-semibold uppercase tracking-wider ${
+                      currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'
+                    }`}>
                       주차
                     </th>
-                    <th className="px-6 py-3 text-center text-sm font-semibold text-gray-700 uppercase tracking-wider">
+                    <th className={`px-6 py-3 text-center text-sm font-semibold uppercase tracking-wider ${
+                      currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'
+                    }`}>
                       상태
                     </th>
-                    <th className="px-6 py-3 text-center text-sm font-semibold text-gray-700 uppercase tracking-wider">
+                    <th className={`px-6 py-3 text-center text-sm font-semibold uppercase tracking-wider ${
+                      currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'
+                    }`}>
                       수강 수업
                     </th>
-                    <th className="px-6 py-3 text-center text-sm font-semibold text-gray-700 uppercase tracking-wider">
+                    <th className={`px-6 py-3 text-center text-sm font-semibold uppercase tracking-wider ${
+                      currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'
+                    }`}>
                       생성일
                     </th>
-                    <th className="px-6 py-3 text-center text-sm font-semibold text-gray-700 uppercase tracking-wider">
+                    <th className={`px-6 py-3 text-center text-sm font-semibold uppercase tracking-wider ${
+                      currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'
+                    }`}>
                       작업
                     </th>
                   </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
+                <tbody className={`divide-y ${
+                  currentTheme === 'dark'
+                    ? 'bg-gray-800 divide-gray-700'
+                    : 'bg-white divide-gray-200'
+                }`}>
                   {filteredCurriculums.length === 0 ? (
                     <tr>
                       <td colSpan={9} className="px-6 py-12 text-center">
-                        <svg className="w-12 h-12 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg className={`w-12 h-12 mx-auto mb-4 ${currentTheme === 'dark' ? 'text-gray-600' : 'text-gray-400'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                         </svg>
-                        <p className="text-gray-500">
+                        <p className={currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-500'}>
                           {searchTerm || filterLanguage !== 'all'
                             ? '검색 결과가 없습니다'
                             : '커리큘럼이 없습니다'}
@@ -837,7 +875,7 @@ const CurriculumManagementPage = () => {
                     </tr>
                   ) : (
                     filteredCurriculums.map((curriculum) => (
-                      <tr key={curriculum.id} className="hover:bg-gray-50">
+                      <tr key={curriculum.id} className={currentTheme === 'dark' ? 'hover:bg-gray-700' : 'hover:bg-gray-50'}>
                         <td className="px-4 py-4 text-center">
                           <input
                             type="checkbox"
@@ -846,19 +884,19 @@ const CurriculumManagementPage = () => {
                             className="w-4 h-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500"
                           />
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center">
+                        <td className={`px-6 py-4 whitespace-nowrap text-sm text-center ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-900'}`}>
                           {curriculum.id}
                         </td>
-                        <td className="px-6 py-4 text-sm font-medium text-gray-900 text-center">
+                        <td className={`px-6 py-4 text-sm font-medium text-center ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
                           <div className="max-w-xs mx-auto">
                             <div className="font-semibold">{curriculum.name}</div>
-                            <div className="text-xs text-gray-500 mt-1 line-clamp-1">{curriculum.description}</div>
+                            <div className={`text-xs mt-1 line-clamp-1 ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>{curriculum.description}</div>
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-center">
                           <Badge variant="primary">{curriculum.language}</Badge>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center">
+                        <td className={`px-6 py-4 whitespace-nowrap text-sm text-center ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-900'}`}>
                           {curriculum.weeks}주
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-center">
@@ -868,10 +906,10 @@ const CurriculumManagementPage = () => {
                             <Badge variant="gray">보관</Badge>
                           )}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center">
+                        <td className={`px-6 py-4 whitespace-nowrap text-sm text-center ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-900'}`}>
                           {curriculum.classCount || 0}개
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
+                        <td className={`px-6 py-4 whitespace-nowrap text-sm text-center ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
                           {new Date(curriculum.createdAt).toLocaleDateString('ko-KR')}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-center">
@@ -936,50 +974,60 @@ const CurriculumManagementPage = () => {
           <div className="space-y-6">
             {/* 기본 정보 */}
             <div>
-              <h3 className="text-sm font-semibold text-gray-900 mb-3 pb-2 border-b border-gray-200">
+              <h3 className={`text-sm font-semibold mb-3 pb-2 border-b ${
+                currentTheme === 'dark'
+                  ? 'text-white border-gray-700'
+                  : 'text-gray-900 border-gray-200'
+              }`}>
                 기본 정보
               </h3>
               <div className="space-y-3">
                 <div className="flex items-start">
-                  <span className="text-sm text-gray-600 w-28 flex-shrink-0">커리큘럼명:</span>
-                  <span className="text-sm font-medium text-gray-900">{selectedCurriculum.name}</span>
+                  <span className={`text-sm w-28 flex-shrink-0 ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>커리큘럼명:</span>
+                  <span className={`text-sm font-medium ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{selectedCurriculum.name}</span>
                 </div>
                 <div className="flex items-start">
-                  <span className="text-sm text-gray-600 w-28 flex-shrink-0">프로그래밍 언어:</span>
+                  <span className={`text-sm w-28 flex-shrink-0 ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>프로그래밍 언어:</span>
                   <Badge variant="primary">{selectedCurriculum.language}</Badge>
                 </div>
                 <div className="flex items-start">
-                  <span className="text-sm text-gray-600 w-28 flex-shrink-0">주차 수:</span>
-                  <span className="text-sm font-medium text-gray-900">{selectedCurriculum.weeks}주</span>
+                  <span className={`text-sm w-28 flex-shrink-0 ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>주차 수:</span>
+                  <span className={`text-sm font-medium ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{selectedCurriculum.weeks}주</span>
                 </div>
                 <div className="flex items-start">
-                  <span className="text-sm text-gray-600 w-28 flex-shrink-0">생성일:</span>
-                  <span className="text-sm font-medium text-gray-900">
+                  <span className={`text-sm w-28 flex-shrink-0 ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>생성일:</span>
+                  <span className={`text-sm font-medium ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
                     {new Date(selectedCurriculum.createdAt).toLocaleDateString('ko-KR')}
                   </span>
                 </div>
                 <div className="flex items-start">
-                  <span className="text-sm text-gray-600 w-28 flex-shrink-0">설명:</span>
-                  <span className="text-sm text-gray-700">{selectedCurriculum.description}</span>
+                  <span className={`text-sm w-28 flex-shrink-0 ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>설명:</span>
+                  <span className={`text-sm ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>{selectedCurriculum.description}</span>
                 </div>
               </div>
             </div>
 
             {/* 사용 현황 */}
             <div>
-              <h3 className="text-sm font-semibold text-gray-900 mb-3 pb-2 border-b border-gray-200">
+              <h3 className={`text-sm font-semibold mb-3 pb-2 border-b ${
+                currentTheme === 'dark'
+                  ? 'text-white border-gray-700'
+                  : 'text-gray-900 border-gray-200'
+              }`}>
                 사용 현황
               </h3>
               <div className="space-y-3">
                 <div className="flex items-start">
-                  <span className="text-sm text-gray-600 w-28 flex-shrink-0">수강 중인 수업:</span>
-                  <span className="text-sm font-medium text-gray-900">{curriculumDetails.classCount || 0}개</span>
+                  <span className={`text-sm w-28 flex-shrink-0 ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>수강 중인 수업:</span>
+                  <span className={`text-sm font-medium ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{curriculumDetails.classCount || 0}개</span>
                 </div>
               </div>
             </div>
 
             {/* 닫기 버튼 */}
-            <div className="flex items-center justify-end pt-4 border-t border-gray-200">
+            <div className={`flex items-center justify-end pt-4 border-t ${
+              currentTheme === 'dark' ? 'border-gray-700' : 'border-gray-200'
+            }`}>
               <Button
                 variant="primary"
                 onClick={() => {
@@ -993,7 +1041,7 @@ const CurriculumManagementPage = () => {
             </div>
           </div>
         ) : (
-          <div className="text-center py-8 text-gray-500">
+          <div className={`text-center py-8 ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
             커리큘럼 정보를 불러올 수 없습니다.
           </div>
         )}
@@ -1007,7 +1055,7 @@ const CurriculumManagementPage = () => {
       >
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className={`block text-sm font-medium mb-2 ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
               커리큘럼명 <span className="text-red-500">*</span>
             </label>
             <Input
@@ -1020,7 +1068,7 @@ const CurriculumManagementPage = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className={`block text-sm font-medium mb-2 ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
               프로그래밍 언어 <span className="text-red-500">*</span>
             </label>
             <Select
@@ -1039,7 +1087,7 @@ const CurriculumManagementPage = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className={`block text-sm font-medium mb-2 ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
               주차 수 <span className="text-red-500">*</span>
             </label>
             <Input
@@ -1054,7 +1102,7 @@ const CurriculumManagementPage = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className={`block text-sm font-medium mb-2 ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
               설명 <span className="text-red-500">*</span>
             </label>
             <textarea
@@ -1062,14 +1110,20 @@ const CurriculumManagementPage = () => {
               onChange={(e) => setCreateDescription(e.target.value)}
               placeholder="커리큘럼에 대한 설명을 입력하세요"
               rows={3}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+              className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 ${
+                currentTheme === 'dark'
+                  ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400'
+                  : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
+              }`}
             />
             {createErrors.createDescription && (
               <p className="text-sm text-red-600 mt-1">{createErrors.createDescription}</p>
             )}
           </div>
 
-          <div className="flex items-center justify-end space-x-3 pt-4 border-t border-gray-200">
+          <div className={`flex items-center justify-end space-x-3 pt-4 border-t ${
+            currentTheme === 'dark' ? 'border-gray-700' : 'border-gray-200'
+          }`}>
             <Button
               variant="ghost"
               onClick={() => setIsCreateModalOpen(false)}
@@ -1096,7 +1150,7 @@ const CurriculumManagementPage = () => {
       >
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className={`block text-sm font-medium mb-2 ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
               커리큘럼명 <span className="text-red-500">*</span>
             </label>
             <Input
@@ -1109,17 +1163,21 @@ const CurriculumManagementPage = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className={`block text-sm font-medium mb-2 ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
               프로그래밍 언어
             </label>
-            <div className="px-3 py-2 border border-gray-300 rounded-lg bg-gray-50">
-              <p className="text-sm text-gray-700">{editCurriculum?.language}</p>
+            <div className={`px-3 py-2 border rounded-lg ${
+              currentTheme === 'dark'
+                ? 'bg-gray-800 border-gray-600'
+                : 'bg-gray-50 border-gray-300'
+            }`}>
+              <p className={`text-sm ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>{editCurriculum?.language}</p>
             </div>
-            <p className="text-xs text-gray-500 mt-1">프로그래밍 언어는 수정할 수 없습니다</p>
+            <p className={`text-xs mt-1 ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>프로그래밍 언어는 수정할 수 없습니다</p>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className={`block text-sm font-medium mb-2 ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
               주차 수 <span className="text-red-500">*</span>
             </label>
             <Input
@@ -1134,7 +1192,7 @@ const CurriculumManagementPage = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className={`block text-sm font-medium mb-2 ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
               설명 <span className="text-red-500">*</span>
             </label>
             <textarea
@@ -1142,14 +1200,20 @@ const CurriculumManagementPage = () => {
               onChange={(e) => setEditDescription(e.target.value)}
               placeholder="커리큘럼에 대한 설명을 입력하세요"
               rows={3}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+              className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 ${
+                currentTheme === 'dark'
+                  ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400'
+                  : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
+              }`}
             />
             {editErrors.editDescription && (
               <p className="text-sm text-red-600 mt-1">{editErrors.editDescription}</p>
             )}
           </div>
 
-          <div className="flex items-center justify-end space-x-3 pt-4 border-t border-gray-200">
+          <div className={`flex items-center justify-end space-x-3 pt-4 border-t ${
+            currentTheme === 'dark' ? 'border-gray-700' : 'border-gray-200'
+          }`}>
             <Button
               variant="ghost"
               onClick={() => setIsEditModalOpen(false)}
@@ -1196,7 +1260,7 @@ const CurriculumManagementPage = () => {
 
           {/* 관리자 비밀번호 확인 */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className={`block text-sm font-medium mb-1 ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
               관리자 비밀번호 <span className="text-error-500">*</span>
             </label>
             <Input
@@ -1210,7 +1274,7 @@ const CurriculumManagementPage = () => {
 
           {/* 커리큘럼명 확인 */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className={`block text-sm font-medium mb-1 ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
               커리큘럼명 확인 <span className="text-error-500">*</span>
             </label>
             <Input
@@ -1219,7 +1283,7 @@ const CurriculumManagementPage = () => {
               placeholder={`"${deleteCurriculum?.name}" 을(를) 입력하세요`}
               error={!!deleteError && deleteConfirmName !== deleteCurriculum?.name}
             />
-            <p className="mt-1 text-xs text-gray-500">
+            <p className={`mt-1 text-xs ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
               삭제를 확인하려면 위의 커리큘럼명을 정확히 입력하세요
             </p>
           </div>
@@ -1230,7 +1294,9 @@ const CurriculumManagementPage = () => {
             </div>
           )}
 
-          <div className="flex items-center justify-end space-x-3 pt-4 border-t border-gray-200">
+          <div className={`flex items-center justify-end space-x-3 pt-4 border-t ${
+            currentTheme === 'dark' ? 'border-gray-700' : 'border-gray-200'
+          }`}>
             <Button
               variant="ghost"
               onClick={() => {
@@ -1270,7 +1336,9 @@ const CurriculumManagementPage = () => {
             </p>
           </div>
 
-          <div className="flex items-center justify-end space-x-3 pt-4 border-t border-gray-200">
+          <div className={`flex items-center justify-end space-x-3 pt-4 border-t ${
+            currentTheme === 'dark' ? 'border-gray-700' : 'border-gray-200'
+          }`}>
             <Button
               variant="ghost"
               onClick={() => setIsBulkDeleteModalOpen(false)}
@@ -1304,11 +1372,15 @@ const CurriculumManagementPage = () => {
 
           {/* 상태 선택 */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className={`block text-sm font-medium mb-2 ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
               변경할 상태 <span className="text-error-500">*</span>
             </label>
             <div className="space-y-2">
-              <label className="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50">
+              <label className={`flex items-center p-3 border rounded-lg cursor-pointer ${
+                currentTheme === 'dark'
+                  ? 'border-gray-600 hover:bg-gray-700'
+                  : 'border-gray-300 hover:bg-gray-50'
+              }`}>
                 <input
                   type="radio"
                   value="active"
@@ -1317,11 +1389,15 @@ const CurriculumManagementPage = () => {
                   className="w-4 h-4 text-primary-600 border-gray-300 focus:ring-primary-500"
                 />
                 <div className="ml-3">
-                  <p className="text-sm font-medium text-gray-900">활성</p>
-                  <p className="text-xs text-gray-500">수업 생성 시 선택 가능</p>
+                  <p className={`text-sm font-medium ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>활성</p>
+                  <p className={`text-xs ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>수업 생성 시 선택 가능</p>
                 </div>
               </label>
-              <label className="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50">
+              <label className={`flex items-center p-3 border rounded-lg cursor-pointer ${
+                currentTheme === 'dark'
+                  ? 'border-gray-600 hover:bg-gray-700'
+                  : 'border-gray-300 hover:bg-gray-50'
+              }`}>
                 <input
                   type="radio"
                   value="archived"
@@ -1330,14 +1406,16 @@ const CurriculumManagementPage = () => {
                   className="w-4 h-4 text-primary-600 border-gray-300 focus:ring-primary-500"
                 />
                 <div className="ml-3">
-                  <p className="text-sm font-medium text-gray-900">보관</p>
-                  <p className="text-xs text-gray-500">더 이상 사용하지 않는 커리큘럼</p>
+                  <p className={`text-sm font-medium ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>보관</p>
+                  <p className={`text-xs ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>더 이상 사용하지 않는 커리큘럼</p>
                 </div>
               </label>
             </div>
           </div>
 
-          <div className="flex items-center justify-end space-x-3 pt-4 border-t border-gray-200">
+          <div className={`flex items-center justify-end space-x-3 pt-4 border-t ${
+            currentTheme === 'dark' ? 'border-gray-700' : 'border-gray-200'
+          }`}>
             <Button
               variant="ghost"
               onClick={() => setIsBulkStatusModalOpen(false)}
@@ -1366,19 +1444,19 @@ const CurriculumManagementPage = () => {
         <div className="space-y-6 max-h-[70vh] overflow-y-auto">
           {/* 개요 */}
           <section>
-            <h2 className="text-xl font-bold text-gray-900 mb-3">1. 개요</h2>
-            <p className="text-gray-700 leading-relaxed">
+            <h2 className={`text-xl font-bold mb-3 ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>1. 개요</h2>
+            <p className={`leading-relaxed ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
               이 문서는 EduVerse 플랫폼의 모든 교육 콘텐츠가 따라야 할 <strong>표준 커리큘럼 시나리오 구조</strong>를 정의합니다.
               이 표준 구조는 일관된 고품질의 학습 경험을 제공하고, 향후 새로운 프로그래밍 언어로 커리큘럼을 쉽게 확장할 수 있도록 설계되었습니다.
             </p>
-            <p className="text-gray-700 leading-relaxed mt-2">
+            <p className={`leading-relaxed mt-2 ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
               현재 목업 서비스의 시나리오는 4주차 과정으로 기획되었지만, 이 표준 구조는 상용 서비스에서 <strong>1주차부터 최대 16주차까지</strong> 교육 기간을 유동적으로 설계할 수 있는 확장성을 가집니다.
             </p>
           </section>
 
           {/* 핵심 교육 철학 */}
           <section>
-            <h2 className="text-xl font-bold text-gray-900 mb-3">2. 핵심 교육 철학</h2>
+            <h2 className={`text-xl font-bold mb-3 ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>2. 핵심 교육 철학</h2>
             <div className="space-y-4">
               <div className="p-4 bg-blue-50 rounded-lg">
                 <h3 className="font-semibold text-blue-900 mb-2">🎮 스토리텔링 기반 학습 (Story-driven Learning)</h3>
@@ -1414,14 +1492,14 @@ const CurriculumManagementPage = () => {
 
           {/* 표준 JSON 구조 */}
           <section>
-            <h2 className="text-xl font-bold text-gray-900 mb-3">3. 표준 JSON 구조</h2>
-            <p className="text-gray-700 mb-3">
-              모든 커리큘럼 시나리오는 <code className="px-2 py-1 bg-gray-100 rounded">과정(Course) → 주차(Week) → 학습 사이클(Cycle)</code>의 3단계 계층적 JSON 구조를 가집니다.
+            <h2 className={`text-xl font-bold mb-3 ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>3. 표준 JSON 구조</h2>
+            <p className={`mb-3 ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
+              모든 커리큘럼 시나리오는 <code className={`px-2 py-1 rounded ${currentTheme === 'dark' ? 'bg-gray-800 text-gray-300' : 'bg-gray-100 text-gray-900'}`}>과정(Course) → 주차(Week) → 학습 사이클(Cycle)</code>의 3단계 계층적 JSON 구조를 가집니다.
             </p>
 
             <div className="space-y-4">
               <div>
-                <h3 className="font-semibold text-gray-900 mb-2">3.1 최상위 구조 (Course)</h3>
+                <h3 className={`font-semibold mb-2 ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>3.1 최상위 구조 (Course)</h3>
                 <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto text-sm">
 {`{
   "courseTitle": "LogiCore Tech 신입 개발자 과정",
@@ -1440,7 +1518,7 @@ const CurriculumManagementPage = () => {
               </div>
 
               <div>
-                <h3 className="font-semibold text-gray-900 mb-2">3.2 주차별 구조 (Week)</h3>
+                <h3 className={`font-semibold mb-2 ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>3.2 주차별 구조 (Week)</h3>
                 <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto text-sm">
 {`{
   "week": 1,
@@ -1453,7 +1531,7 @@ const CurriculumManagementPage = () => {
               </div>
 
               <div>
-                <h3 className="font-semibold text-gray-900 mb-2">3.3 학습 사이클 구조 (Cycle)</h3>
+                <h3 className={`font-semibold mb-2 ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>3.3 학습 사이클 구조 (Cycle)</h3>
                 <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto text-sm">
 {`{
   "title": "첫 파이썬 프로그램 작성 및 실행",
@@ -1484,7 +1562,7 @@ const CurriculumManagementPage = () => {
 
           {/* 캐릭터 역할 정의 */}
           <section>
-            <h2 className="text-xl font-bold text-gray-900 mb-3">4. 캐릭터 역할 정의 (3-멘토 시스템)</h2>
+            <h2 className={`text-xl font-bold mb-3 ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>4. 캐릭터 역할 정의 (3-멘토 시스템)</h2>
             <div className="overflow-x-auto">
               <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-50">
@@ -1521,8 +1599,8 @@ const CurriculumManagementPage = () => {
 
           {/* 학습 흐름 */}
           <section>
-            <h2 className="text-xl font-bold text-gray-900 mb-3">5. 학습 흐름 (Learning Flow)</h2>
-            <p className="text-gray-700 mb-3">
+            <h2 className={`text-xl font-bold mb-3 ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>5. 학습 흐름 (Learning Flow)</h2>
+            <p className={`mb-3 ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
               학생은 하나의 학습 사이클 내에서 다음과 같은 흐름을 따라 학습을 진행합니다:
             </p>
             <div className="bg-gray-50 p-6 rounded-lg">
@@ -1585,8 +1663,8 @@ const CurriculumManagementPage = () => {
 
           {/* 언어별 적용 가이드 */}
           <section>
-            <h2 className="text-xl font-bold text-gray-900 mb-3">6. 언어별 적용 가이드</h2>
-            <p className="text-gray-700 mb-3">
+            <h2 className={`text-xl font-bold mb-3 ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>6. 언어별 적용 가이드</h2>
+            <p className={`mb-3 ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
               이 표준 구조는 다양한 언어에 적용될 수 있으며, 언어의 특성에 따라 일부 필드를 조정해야 합니다.
             </p>
 
@@ -1611,16 +1689,18 @@ const CurriculumManagementPage = () => {
           </section>
 
           {/* 결론 */}
-          <section className="border-t border-gray-200 pt-6">
-            <h2 className="text-xl font-bold text-gray-900 mb-3">7. 결론</h2>
-            <p className="text-gray-700 leading-relaxed">
+          <section className={`border-t pt-6 ${currentTheme === 'dark' ? 'border-gray-700' : 'border-gray-200'}`}>
+            <h2 className={`text-xl font-bold mb-3 ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>7. 결론</h2>
+            <p className={`leading-relaxed ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
               이 가이드는 EduVerse의 교육 콘텐츠 제작과 플랫폼 개발의 기준이 됩니다.
               모든 팀원은 이 문서를 숙지하여 일관성 있고 확장 가능한 고품질 교육 플랫폼을 함께 만들어가야 합니다.
             </p>
           </section>
         </div>
 
-        <div className="flex items-center justify-end space-x-3 pt-4 border-t border-gray-200 mt-6">
+        <div className={`flex items-center justify-end space-x-3 pt-4 border-t mt-6 ${
+          currentTheme === 'dark' ? 'border-gray-700' : 'border-gray-200'
+        }`}>
           <Button
             variant="primary"
             onClick={() => setIsStructureGuideOpen(false)}

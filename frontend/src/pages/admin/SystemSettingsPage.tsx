@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
+import { useTheme } from '@/contexts/ThemeContext'
 import { useToast } from '@/components/common'
 import DashboardLayout from '@/components/layout/DashboardLayout'
 import Card from '@/components/common/Card'
@@ -12,6 +13,7 @@ import { INPUT_LIMITS, validateInput } from '@/utils/inputValidation'
 const SystemSettingsPage = () => {
   const navigate = useNavigate()
   const { user, isLoading: authLoading } = useAuth()
+  const { currentTheme } = useTheme()
   const { addToast } = useToast()
 
   // 폼 상태
@@ -264,8 +266,8 @@ const SystemSettingsPage = () => {
       <div className="space-y-6">
         {/* 헤더 */}
         <div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">시스템 설정</h1>
-          <p className="mt-1 text-sm text-gray-600">
+          <h1 className={`text-2xl sm:text-3xl font-bold ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>시스템 설정</h1>
+          <p className={`mt-1 text-sm ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
             EduVerse 시스템의 전역 설정을 관리하세요
           </p>
         </div>
@@ -274,8 +276,12 @@ const SystemSettingsPage = () => {
         {isLoading ? (
           <div className="flex items-center justify-center py-12">
             <div className="text-center">
-              <div className="w-12 h-12 border-4 border-gray-300 border-t-primary-500 rounded-full animate-spin mx-auto"></div>
-              <p className="mt-4 text-gray-600">설정을 불러오는 중입니다...</p>
+              <div className={`w-12 h-12 border-4 rounded-full animate-spin mx-auto ${
+                currentTheme === 'dark'
+                  ? 'border-gray-600 border-t-primary-500'
+                  : 'border-gray-300 border-t-primary-500'
+              }`}></div>
+              <p className={`mt-4 ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>설정을 불러오는 중입니다...</p>
             </div>
           </div>
         ) : (
@@ -408,10 +414,10 @@ const SystemSettingsPage = () => {
 
         {/* 정보 */}
         <Card>
-          <div className="p-6 bg-blue-50">
+          <div className={`p-6 ${currentTheme === 'dark' ? 'bg-blue-900/30' : 'bg-blue-50'}`}>
             <div className="flex gap-3">
               <svg
-                className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5"
+                className={`w-5 h-5 flex-shrink-0 mt-0.5 ${currentTheme === 'dark' ? 'text-blue-400' : 'text-blue-600'}`}
                 fill="currentColor"
                 viewBox="0 0 20 20"
               >
@@ -422,10 +428,10 @@ const SystemSettingsPage = () => {
                 />
               </svg>
               <div>
-                <p className="text-sm font-medium text-blue-900">
+                <p className={`text-sm font-medium ${currentTheme === 'dark' ? 'text-blue-300' : 'text-blue-900'}`}>
                   입력 필드 길이 제한
                 </p>
-                <p className="text-sm text-blue-700 mt-1">
+                <p className={`text-sm mt-1 ${currentTheme === 'dark' ? 'text-blue-400' : 'text-blue-700'}`}>
                   각 입력 필드는 최대 글자 수 제한이 적용되어 있습니다. 글자 수
                   초과 시 자동으로 잘려집니다.
                 </p>

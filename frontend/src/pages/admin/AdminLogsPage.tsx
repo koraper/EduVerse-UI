@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
+import { useTheme } from '@/contexts/ThemeContext'
 import { useToast } from '@/components/common'
 import DashboardLayout from '@/components/layout/DashboardLayout'
 import Card from '@/components/common/Card'
@@ -107,6 +108,7 @@ const MOCK_LOGS: AdminLog[] = [
 const AdminLogsPage = () => {
   const navigate = useNavigate()
   const { user, isLoading: authLoading } = useAuth()
+  const { currentTheme } = useTheme()
   const { addToast } = useToast()
 
   // 필터 상태
@@ -391,22 +393,22 @@ const AdminLogsPage = () => {
       <div className="space-y-6">
         {/* 헤더 */}
         <div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">로그 관리</h1>
-          <p className="mt-1 text-sm text-gray-600">모든 관리자 활동을 감시하고 기록을 확인하세요</p>
+          <h1 className={`text-2xl sm:text-3xl font-bold ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>로그 관리</h1>
+          <p className={`mt-1 text-sm ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>모든 관리자 활동을 감시하고 기록을 확인하세요</p>
         </div>
 
         {/* 통계 카드 */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           <Card>
             <div className="p-4">
-              <div className="text-sm font-medium text-gray-600">전체 로그</div>
-              <div className="mt-2 text-2xl font-bold text-gray-900">{logs.length}</div>
+              <div className={`text-sm font-medium ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>전체 로그</div>
+              <div className={`mt-2 text-2xl font-bold ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{logs.length}</div>
             </div>
           </Card>
           <Card>
             <div className="p-4">
-              <div className="text-sm font-medium text-gray-600">오늘</div>
-              <div className="mt-2 text-2xl font-bold text-gray-900">
+              <div className={`text-sm font-medium ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>오늘</div>
+              <div className={`mt-2 text-2xl font-bold ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
                 {logs.filter(log => {
                   const logDate = new Date(log.timestamp)
                   const today = new Date()
@@ -417,8 +419,8 @@ const AdminLogsPage = () => {
           </Card>
           <Card>
             <div className="p-4">
-              <div className="text-sm font-medium text-gray-600">이번 주</div>
-              <div className="mt-2 text-2xl font-bold text-gray-900">
+              <div className={`text-sm font-medium ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>이번 주</div>
+              <div className={`mt-2 text-2xl font-bold ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
                 {logs.filter(log => {
                   const logDate = new Date(log.timestamp)
                   const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
@@ -429,8 +431,8 @@ const AdminLogsPage = () => {
           </Card>
           <Card>
             <div className="p-4">
-              <div className="text-sm font-medium text-gray-600">관리자</div>
-              <div className="mt-2 text-2xl font-bold text-gray-900">1</div>
+              <div className={`text-sm font-medium ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>관리자</div>
+              <div className={`mt-2 text-2xl font-bold ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>1</div>
             </div>
           </Card>
         </div>
@@ -477,12 +479,12 @@ const AdminLogsPage = () => {
             {/* 활성 필터 표시 */}
             {(actionFilter !== 'all' || dateRangeFilter !== '30d' || searchQuery) && (
               <div className="mt-4 flex flex-wrap items-center gap-2">
-                <span className="text-sm text-gray-600">활성 필터:</span>
+                <span className={`text-sm ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>활성 필터:</span>
                 {actionFilter !== 'all' && (
                   <Badge
                     variant="gray"
                     size="sm"
-                    className="cursor-pointer hover:bg-gray-300"
+                    className={`cursor-pointer ${currentTheme === 'dark' ? 'hover:bg-gray-600' : 'hover:bg-gray-300'}`}
                     onClick={() => setActionFilter('all')}
                   >
                     액션: {actionFilter === 'create' ? '생성' :
@@ -496,7 +498,7 @@ const AdminLogsPage = () => {
                   <Badge
                     variant="gray"
                     size="sm"
-                    className="cursor-pointer hover:bg-gray-300"
+                    className={`cursor-pointer ${currentTheme === 'dark' ? 'hover:bg-gray-600' : 'hover:bg-gray-300'}`}
                     onClick={() => setDateRangeFilter('30d')}
                   >
                     기간: {dateRangeFilter === '7d' ? '최근 7일' :
@@ -507,7 +509,7 @@ const AdminLogsPage = () => {
                   <Badge
                     variant="gray"
                     size="sm"
-                    className="cursor-pointer hover:bg-gray-300"
+                    className={`cursor-pointer ${currentTheme === 'dark' ? 'hover:bg-gray-600' : 'hover:bg-gray-300'}`}
                     onClick={() => setSearchQuery('')}
                   >
                     검색: {searchQuery} ✕
@@ -519,7 +521,11 @@ const AdminLogsPage = () => {
                     setDateRangeFilter('30d')
                     setSearchQuery('')
                   }}
-                  className="text-sm text-primary-600 hover:text-primary-700 font-medium"
+                  className={`text-sm font-medium ${
+                    currentTheme === 'dark'
+                      ? 'text-primary-400 hover:text-primary-300'
+                      : 'text-primary-600 hover:text-primary-700'
+                  }`}
                 >
                   모두 초기화
                 </button>
@@ -527,7 +533,7 @@ const AdminLogsPage = () => {
             )}
 
             {/* 내보내기 & 대량 작업 버튼 */}
-            <div className="mt-4 pt-4 border-t border-gray-200 space-y-3">
+            <div className={`mt-4 pt-4 border-t space-y-3 ${currentTheme === 'dark' ? 'border-gray-700' : 'border-gray-200'}`}>
               {/* 내보내기 버튼 */}
               <div className="flex flex-wrap gap-2">
                 <Button
@@ -550,8 +556,12 @@ const AdminLogsPage = () => {
 
               {/* 대량 작업 패널 */}
               {selectedLogIds.length > 0 && (
-                <div className="flex items-center gap-3 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-                  <span className="text-sm font-medium text-blue-900">
+                <div className={`flex items-center gap-3 p-3 border rounded-lg ${
+                  currentTheme === 'dark'
+                    ? 'bg-blue-900/20 border-blue-800'
+                    : 'bg-blue-50 border-blue-200'
+                }`}>
+                  <span className={`text-sm font-medium ${currentTheme === 'dark' ? 'text-blue-300' : 'text-blue-900'}`}>
                     {selectedLogIds.length}개 선택됨
                   </span>
                   <div className="flex gap-2 ml-auto">
@@ -605,7 +615,11 @@ const AdminLogsPage = () => {
         <Card>
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-gray-50 border-b border-gray-200">
+              <thead className={`border-b ${
+                currentTheme === 'dark'
+                  ? 'bg-gray-800 border-gray-700'
+                  : 'bg-gray-50 border-gray-200'
+              }`}>
                 <tr>
                   <th className="px-4 py-3 text-center w-12">
                     <input
@@ -615,30 +629,48 @@ const AdminLogsPage = () => {
                       className="w-4 h-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500"
                     />
                   </th>
-                  <th className="px-6 py-3 text-center text-sm font-semibold text-gray-700 uppercase tracking-wider">
+                  <th className={`px-6 py-3 text-center text-sm font-semibold uppercase tracking-wider ${
+                    currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'
+                  }`}>
                     시간
                   </th>
-                  <th className="px-6 py-3 text-center text-sm font-semibold text-gray-700 uppercase tracking-wider">
+                  <th className={`px-6 py-3 text-center text-sm font-semibold uppercase tracking-wider ${
+                    currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'
+                  }`}>
                     액션
                   </th>
-                  <th className="px-6 py-3 text-center text-sm font-semibold text-gray-700 uppercase tracking-wider">
+                  <th className={`px-6 py-3 text-center text-sm font-semibold uppercase tracking-wider ${
+                    currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'
+                  }`}>
                     관리자
                   </th>
-                  <th className="px-6 py-3 text-center text-sm font-semibold text-gray-700 uppercase tracking-wider">
+                  <th className={`px-6 py-3 text-center text-sm font-semibold uppercase tracking-wider ${
+                    currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'
+                  }`}>
                     대상
                   </th>
-                  <th className="px-6 py-3 text-center text-sm font-semibold text-gray-700 uppercase tracking-wider">
+                  <th className={`px-6 py-3 text-center text-sm font-semibold uppercase tracking-wider ${
+                    currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'
+                  }`}>
                     유형
                   </th>
-                  <th className="px-6 py-3 text-center text-sm font-semibold text-gray-700 uppercase tracking-wider">
+                  <th className={`px-6 py-3 text-center text-sm font-semibold uppercase tracking-wider ${
+                    currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'
+                  }`}>
                     상세
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
+              <tbody className={`divide-y ${
+                currentTheme === 'dark'
+                  ? 'bg-gray-800 divide-gray-700'
+                  : 'bg-white divide-gray-200'
+              }`}>
                 {paginatedLogs.length === 0 ? (
                   <tr>
-                    <td colSpan={7} className="px-6 py-12 text-center text-gray-500">
+                    <td colSpan={7} className={`px-6 py-12 text-center ${
+                      currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+                    }`}>
                       {searchQuery || actionFilter !== 'all' || dateRangeFilter !== '30d'
                         ? '검색 결과가 없습니다'
                         : '로그가 없습니다'}
@@ -646,7 +678,7 @@ const AdminLogsPage = () => {
                   </tr>
                 ) : (
                   paginatedLogs.map((log) => (
-                    <tr key={log.id} className="hover:bg-gray-50">
+                    <tr key={log.id} className={currentTheme === 'dark' ? 'hover:bg-gray-700' : 'hover:bg-gray-50'}>
                       <td className="px-4 py-4 text-center">
                         <input
                           type="checkbox"
@@ -655,23 +687,31 @@ const AdminLogsPage = () => {
                           className="w-4 h-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500"
                         />
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
+                      <td className={`px-6 py-4 whitespace-nowrap text-sm text-center ${
+                        currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+                      }`}>
                         <div>{formatDateTime(log.timestamp)}</div>
-                        <div className="text-xs text-gray-400">{timeAgo(log.timestamp)}</div>
+                        <div className={`text-xs ${currentTheme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`}>{timeAgo(log.timestamp)}</div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-center">
                         {getActionBadge(log.action)}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 text-center">
+                      <td className={`px-6 py-4 whitespace-nowrap text-sm font-medium text-center ${
+                        currentTheme === 'dark' ? 'text-white' : 'text-gray-900'
+                      }`}>
                         {log.adminName}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center">
+                      <td className={`px-6 py-4 whitespace-nowrap text-sm text-center ${
+                        currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-900'
+                      }`}>
                         {log.targetName}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-center">
                         {getTargetTypeBadge(log.targetType)}
                       </td>
-                      <td className="px-6 py-4 text-sm text-gray-500 max-w-xs truncate text-center">
+                      <td className={`px-6 py-4 text-sm max-w-xs truncate text-center ${
+                        currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+                      }`}>
                         {log.details || '-'}
                       </td>
                     </tr>
@@ -683,9 +723,13 @@ const AdminLogsPage = () => {
 
           {/* 페이지네이션 */}
           {totalPages > 1 && (
-            <div className="px-6 py-4 border-t border-gray-200 bg-gray-50">
+            <div className={`px-6 py-4 border-t ${
+              currentTheme === 'dark'
+                ? 'border-gray-700 bg-gray-800'
+                : 'border-gray-200 bg-gray-50'
+            }`}>
               <div className="flex items-center justify-between">
-                <div className="text-sm text-gray-700">
+                <div className={`text-sm ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
                   <span className="font-medium">{filteredLogs.length}</span>개 중{' '}
                   <span className="font-medium">{(currentPage - 1) * LOGS_PER_PAGE + 1}</span>-
                   <span className="font-medium">
@@ -700,13 +744,17 @@ const AdminLogsPage = () => {
                     disabled={currentPage === 1}
                     className={`px-4 py-2 text-sm font-medium rounded-lg border transition-colors ${
                       currentPage === 1
-                        ? 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed'
-                        : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
+                        ? currentTheme === 'dark'
+                          ? 'bg-gray-800 text-gray-600 border-gray-700 cursor-not-allowed'
+                          : 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed'
+                        : currentTheme === 'dark'
+                          ? 'bg-gray-700 text-gray-300 border-gray-600 hover:bg-gray-600'
+                          : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
                     }`}
                   >
                     이전
                   </button>
-                  <span className="text-sm text-gray-700">
+                  <span className={`text-sm ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
                     페이지 <span className="font-medium">{currentPage}</span> /{' '}
                     <span className="font-medium">{totalPages}</span>
                   </span>
@@ -715,8 +763,12 @@ const AdminLogsPage = () => {
                     disabled={currentPage === totalPages}
                     className={`px-4 py-2 text-sm font-medium rounded-lg border transition-colors ${
                       currentPage === totalPages
-                        ? 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed'
-                        : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
+                        ? currentTheme === 'dark'
+                          ? 'bg-gray-800 text-gray-600 border-gray-700 cursor-not-allowed'
+                          : 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed'
+                        : currentTheme === 'dark'
+                          ? 'bg-gray-700 text-gray-300 border-gray-600 hover:bg-gray-600'
+                          : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
                     }`}
                   >
                     다음
@@ -735,32 +787,52 @@ const AdminLogsPage = () => {
         title="일괄 로그 삭제"
       >
         <div className="space-y-4">
-          <div className="p-4 bg-error-50 border border-error-200 rounded-lg">
+          <div className={`p-4 border rounded-lg ${
+            currentTheme === 'dark'
+              ? 'bg-error-900/20 border-error-800'
+              : 'bg-error-50 border-error-200'
+          }`}>
             <div className="flex items-start">
-              <svg className="w-5 h-5 text-error-600 mt-0.5 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+              <svg className={`w-5 h-5 mt-0.5 mr-3 flex-shrink-0 ${
+                currentTheme === 'dark' ? 'text-error-400' : 'text-error-600'
+              }`} fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
               </svg>
               <div>
-                <p className="text-sm font-medium text-error-800 mb-1">
+                <p className={`text-sm font-medium mb-1 ${
+                  currentTheme === 'dark' ? 'text-error-300' : 'text-error-800'
+                }`}>
                   ⚠️ 경고: 이 작업은 되돌릴 수 없습니다
                 </p>
-                <p className="text-xs text-error-700">
+                <p className={`text-xs ${
+                  currentTheme === 'dark' ? 'text-error-400' : 'text-error-700'
+                }`}>
                   선택한 {selectedLogIds.length}개의 로그 기록이 영구적으로 삭제됩니다.
                 </p>
               </div>
             </div>
           </div>
 
-          <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+          <div className={`p-4 border rounded-lg ${
+            currentTheme === 'dark'
+              ? 'bg-blue-900/20 border-blue-800'
+              : 'bg-blue-50 border-blue-200'
+          }`}>
             <div className="flex items-start">
-              <svg className="w-5 h-5 text-blue-600 mt-0.5 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+              <svg className={`w-5 h-5 mt-0.5 mr-3 flex-shrink-0 ${
+                currentTheme === 'dark' ? 'text-blue-400' : 'text-blue-600'
+              }`} fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
               </svg>
               <div>
-                <p className="text-sm font-medium text-blue-800 mb-1">
+                <p className={`text-sm font-medium mb-1 ${
+                  currentTheme === 'dark' ? 'text-blue-300' : 'text-blue-800'
+                }`}>
                   로그 삭제 정보
                 </p>
-                <p className="text-xs text-blue-700">
+                <p className={`text-xs ${
+                  currentTheme === 'dark' ? 'text-blue-400' : 'text-blue-700'
+                }`}>
                   삭제하기 전에 중요한 로그는 먼저 내보내기(CSV/XLSX)를 해두세요.
                   감사(Audit) 목적으로 로그를 보관해야 할 수 있습니다.
                 </p>
@@ -768,7 +840,9 @@ const AdminLogsPage = () => {
             </div>
           </div>
 
-          <div className="flex items-center justify-end space-x-3 pt-4 border-t border-gray-200">
+          <div className={`flex items-center justify-end space-x-3 pt-4 border-t ${
+            currentTheme === 'dark' ? 'border-gray-700' : 'border-gray-200'
+          }`}>
             <Button
               variant="ghost"
               onClick={() => setIsBulkDeleteModalOpen(false)}
