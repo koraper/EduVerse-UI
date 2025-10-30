@@ -202,7 +202,7 @@ const CurriculumManagementPage = () => {
       if (data.status === 'success') {
         setCurriculums(data.data.curriculums)
       } else {
-        throw new Error(data.message || '커리큘럼 조회에 실패했습니다')
+        throw new Error(data.message || '커리큘럼 조회에 실패했습니다.')
       }
     } catch (error) {
       handleError(error)
@@ -228,7 +228,7 @@ const CurriculumManagementPage = () => {
       if (data.status === 'success') {
         setCurriculumDetails(data.data)
       } else {
-        throw new Error(data.message || '커리큘럼 상세 정보 조회에 실패했습니다')
+        throw new Error(data.message || '커리큘럼 상세 정보 조회에 실패했습니다.')
       }
     } catch (error) {
       handleError(error)
@@ -255,7 +255,7 @@ const CurriculumManagementPage = () => {
       errors.createLanguage = '프로그래밍 언어를 선택해주세요'
     }
     if (!createWeeks || parseInt(createWeeks) < 1 || parseInt(createWeeks) > 52) {
-      errors.createWeeks = '주차는 1-52 사이의 숫자여야 합니다'
+      errors.createWeeks = '주차는 1-52 사이의 숫자여야 합니다.'
     }
     if (!createDescription.trim()) {
       errors.createDescription = '설명을 입력해주세요'
@@ -292,7 +292,7 @@ const CurriculumManagementPage = () => {
 
       const data = await response.json()
       if (data.status === 'success') {
-        addToast('커리큘럼이 생성되었습니다', { variant: 'success' })
+        addToast('커리큘럼이 생성되었습니다.', { variant: 'success' })
         setIsCreateModalOpen(false)
         setCreateName('')
         setCreateLanguage('')
@@ -352,10 +352,10 @@ const CurriculumManagementPage = () => {
           setIsEditModalOpen(true)
         }
       } else {
-        setEditPasswordError(data.message || '비밀번호가 일치하지 않습니다')
+        setEditPasswordError(data.message || '비밀번호가 일치하지 않습니다.')
       }
     } catch (error: any) {
-      setEditPasswordError(error.message || '비밀번호 확인에 실패했습니다')
+      setEditPasswordError(error.message || '비밀번호 확인에 실패했습니다.')
     } finally {
       setIsVerifyingEditPassword(false)
     }
@@ -369,7 +369,7 @@ const CurriculumManagementPage = () => {
       errors.editName = '커리큘럼명을 입력해주세요'
     }
     if (!editWeeks || parseInt(editWeeks) < 1 || parseInt(editWeeks) > 52) {
-      errors.editWeeks = '주차는 1-52 사이의 숫자여야 합니다'
+      errors.editWeeks = '주차는 1-52 사이의 숫자여야 합니다.'
     }
     if (!editDescription.trim()) {
       errors.editDescription = '설명을 입력해주세요'
@@ -405,7 +405,7 @@ const CurriculumManagementPage = () => {
 
       const data = await response.json()
       if (data.status === 'success') {
-        addToast('커리큘럼이 수정되었습니다', { variant: 'success' })
+        addToast('커리큘럼이 수정되었습니다.', { variant: 'success' })
         setIsEditModalOpen(false)
         setEditCurriculum(null)
         setEditErrors({})
@@ -438,7 +438,7 @@ const CurriculumManagementPage = () => {
     }
 
     if (deleteConfirmName !== deleteCurriculum.name) {
-      setDeleteError('커리큘럼명이 일치하지 않습니다')
+      setDeleteError('커리큘럼명이 일치하지 않습니다.')
       return
     }
 
@@ -461,13 +461,13 @@ const CurriculumManagementPage = () => {
 
       if (!response.ok) {
         const errorData = await response.json()
-        setDeleteError(errorData.message || '삭제에 실패했습니다')
+        setDeleteError(errorData.message || '삭제에 실패했습니다.')
         return
       }
 
       const data = await response.json()
       if (data.status === 'success') {
-        addToast('커리큘럼이 삭제되었습니다', { variant: 'success' })
+        addToast('커리큘럼이 삭제되었습니다.', { variant: 'success' })
         setIsDeleteModalOpen(false)
         setDeleteCurriculum(null)
         setDeleteError('')
@@ -528,7 +528,7 @@ const CurriculumManagementPage = () => {
 
     const filename = getFilenameWithDate('커리큘럼목록', 'csv')
     exportToCSV(exportData, { filename })
-    addToast('CSV 파일이 다운로드되었습니다', { variant: 'success' })
+    addToast('CSV 파일이 다운로드되었습니다.', { variant: 'success' })
   }
 
   // XLSX 내보내기
@@ -545,7 +545,7 @@ const CurriculumManagementPage = () => {
 
     const filename = getFilenameWithDate('커리큘럼목록', 'xlsx')
     exportToXLSX(exportData, { filename, sheetName: '커리큘럼' })
-    addToast('엑셀 파일이 다운로드되었습니다', { variant: 'success' })
+    addToast('엑셀 파일이 다운로드되었습니다.', { variant: 'success' })
   }
 
   // 전체 선택/해제
@@ -1084,8 +1084,8 @@ const CurriculumManagementPage = () => {
                         </svg>
                         <p className={currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-500'}>
                           {searchTerm || filterLanguage !== 'all'
-                            ? '검색 결과가 없습니다'
-                            : '커리큘럼이 없습니다'}
+                            ? '검색 결과가 없습니다.'
+                            : '커리큘럼이 없습니다.'}
                         </p>
                       </td>
                     </tr>
@@ -1600,10 +1600,7 @@ const CurriculumManagementPage = () => {
             </p>
             <ul className="text-xs text-red-700 list-disc list-inside space-y-1">
               <li>이 작업은 되돌릴 수 없습니다</li>
-              <li>수업과 연결된 커리큘럼은 삭제할 수 없습니다</li>
-              {deleteCurriculum?.classCount && deleteCurriculum.classCount > 0 && (
-                <li className="font-bold">현재 {deleteCurriculum.classCount}개의 수업과 연결됨</li>
-              )}
+              <li>수업이 생성 된 커리큘럼은 삭제할 수 없습니다</li>
             </ul>
           </div>
 
