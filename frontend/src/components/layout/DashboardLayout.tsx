@@ -39,7 +39,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   }, [isMobile, isSidebarOpen])
 
   return (
-    <div className={`min-h-screen lg:min-w-[1280px] flex flex-col ${
+    <div className={`min-h-screen min-w-[1280px] flex flex-col ${
       currentTheme === 'dark' ? 'bg-gray-900' : 'bg-gray-50'
     }`}>
       <Header />

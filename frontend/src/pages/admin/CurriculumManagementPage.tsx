@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState, useCallback, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import { useTheme } from '@/contexts/ThemeContext'
@@ -15,6 +15,7 @@ import Select from '@/components/common/Select'
 import Skeleton, { CardSkeleton, StatCardSkeleton } from '@/components/common/Skeleton'
 import { useClientSearchSuggestions } from '@/hooks/useSearchSuggestions'
 import { exportToCSV, exportToXLSX, getFilenameWithDate, formatDate } from '@/utils/export'
+import { ChevronDown } from 'lucide-react'
 
 interface Curriculum {
   id: number
@@ -41,6 +42,10 @@ const CurriculumManagementPage = () => {
   const [searchTerm, setSearchTerm] = useState('')
   const [filterLanguage, setFilterLanguage] = useState('all')
   const [filterStatus, setFilterStatus] = useState('all')
+  const [isLanguageDropdownOpen, setIsLanguageDropdownOpen] = useState(false)
+  const [isStatusDropdownOpen, setIsStatusDropdownOpen] = useState(false)
+  const languageDropdownRef = useRef<HTMLDivElement>(null)
+  const statusDropdownRef = useRef<HTMLDivElement>(null)
 
   // 검색 자동완성 - filterFn을 useCallback으로 메모이제이션하여 무한 루프 방지
   const curriculumFilterFn = useCallback(
@@ -105,6 +110,15 @@ const CurriculumManagementPage = () => {
   const [isStructureGuideOpen, setIsStructureGuideOpen] = useState(false)
   const isDevelopment = import.meta.env.DEV
 
+  // 페이지네이션 상태
+  const [currentPage, setCurrentPage] = useState(1)
+  const [itemsPerPage] = useState(5)
+
+  // 필터 변경 시 첫 페이지로 이동
+  useEffect(() => {
+    setCurrentPage(1)
+  }, [searchTerm, filterLanguage, filterStatus])
+
   useEffect(() => {
     // 인증 로딩 중이면 대기
     if (authLoading) {
@@ -129,6 +143,40 @@ const CurriculumManagementPage = () => {
 
     fetchCurriculums()
   }, [user, authLoading, navigate])
+
+  // 언어 드롭다운 외부 클릭 처리
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (languageDropdownRef.current && !languageDropdownRef.current.contains(event.target as Node)) {
+        setIsLanguageDropdownOpen(false)
+      }
+    }
+
+    if (isLanguageDropdownOpen) {
+      document.addEventListener('mousedown', handleClickOutside)
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [isLanguageDropdownOpen])
+
+  // 상태 드롭다운 외부 클릭 처리
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (statusDropdownRef.current && !statusDropdownRef.current.contains(event.target as Node)) {
+        setIsStatusDropdownOpen(false)
+      }
+    }
+
+    if (isStatusDropdownOpen) {
+      document.addEventListener('mousedown', handleClickOutside)
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [isStatusDropdownOpen])
 
   const fetchCurriculums = async () => {
     setIsLoading(true)
@@ -392,7 +440,7 @@ const CurriculumManagementPage = () => {
       '프로그래밍 언어': curriculum.language,
       '주차 수': curriculum.weeks,
       '설명': curriculum.description,
-      '수강 중인 수업': curriculum.classCount || 0,
+      '생성 한 수업': curriculum.classCount || 0,
       '생성일': formatDate(curriculum.createdAt),
     }))
 
@@ -409,7 +457,7 @@ const CurriculumManagementPage = () => {
       '프로그래밍 언어': curriculum.language,
       '주차 수': curriculum.weeks,
       '설명': curriculum.description,
-      '수강 중인 수업': curriculum.classCount || 0,
+      '생성 한 수업': curriculum.classCount || 0,
       '생성일': formatDate(curriculum.createdAt),
     }))
 
@@ -541,6 +589,21 @@ const CurriculumManagementPage = () => {
     return matchesSearch && matchesLanguage && matchesStatus
   })
 
+  // 페이지네이션 계산
+  const totalPages = Math.ceil(filteredCurriculums.length / itemsPerPage)
+  const startIndex = (currentPage - 1) * itemsPerPage
+  const endIndex = startIndex + itemsPerPage
+  const paginatedCurriculums = filteredCurriculums.slice(startIndex, endIndex)
+
+  // 페이지네이션 핸들러
+  const handlePreviousPage = () => {
+    setCurrentPage((prev) => Math.max(prev - 1, 1))
+  }
+
+  const handleNextPage = () => {
+    setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+  }
+
   // 통계
   const totalCurriculums = curriculums.length
   const activeCurriculums = curriculums.filter((c) => c.status === 'active').length
@@ -551,7 +614,7 @@ const CurriculumManagementPage = () => {
     JavaScript: curriculums.filter((c) => c.language === 'JavaScript').length,
     'C#': curriculums.filter((c) => c.language === 'C#').length,
   }
-  const totalClasses = curriculums.reduce((sum, c) => sum + (c.classCount || 0), 0)
+  const totalClasses = 10
 
   return (
     <DashboardLayout>
@@ -593,15 +656,19 @@ const CurriculumManagementPage = () => {
         {/* 통계 카드 */}
         <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
           <Card>
-            <div className="p-6">
+            <div className="p-4">
               <div className="flex items-center justify-between">
                 <div>
                   <p className={`text-sm font-medium ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>총 커리큘럼</p>
                   <p className={`mt-2 text-3xl font-bold ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{totalCurriculums}</p>
                 </div>
-                <div className="w-12 h-12 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center">
-                  <svg className="w-6 h-6 text-primary-600 dark:text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                <div className={`w-12 h-12 rounded-lg flex items-center justify-center ${
+                  currentTheme === 'dark' ? 'bg-primary-500/20' : 'bg-primary-50'
+                }`}>
+                  <svg className={`w-6 h-6 ${currentTheme === 'dark' ? 'text-primary-400' : 'text-primary-600'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l9-5-9-5-9 5 9 5z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222" />
                   </svg>
                 </div>
               </div>
@@ -609,15 +676,17 @@ const CurriculumManagementPage = () => {
           </Card>
 
           <Card>
-            <div className="p-6">
+            <div className="p-4">
               <div className="flex items-center justify-between">
                 <div>
                   <p className={`text-sm font-medium ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>활성 커리큘럼</p>
                   <p className={`mt-2 text-3xl font-bold ${currentTheme === 'dark' ? 'text-success-400' : 'text-success-600'}`}>{activeCurriculums}</p>
                 </div>
-                <div className="w-12 h-12 bg-success-100 dark:bg-success-900/30 rounded-lg flex items-center justify-center">
-                  <svg className="w-6 h-6 text-success-600 dark:text-success-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                <div className={`w-12 h-12 rounded-lg flex items-center justify-center ${
+                  currentTheme === 'dark' ? 'bg-success-500/20' : 'bg-success-50'
+                }`}>
+                  <svg className={`w-6 h-6 ${currentTheme === 'dark' ? 'text-success-400' : 'text-success-600'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                   </svg>
                 </div>
               </div>
@@ -625,13 +694,15 @@ const CurriculumManagementPage = () => {
           </Card>
 
           <Card>
-            <div className="p-6">
+            <div className="p-4">
               <div className="flex items-center justify-between">
                 <div>
                   <p className={`text-sm font-medium ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>보관 커리큘럼</p>
                   <p className={`mt-2 text-3xl font-bold ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>{archivedCurriculums}</p>
                 </div>
-                <div className={`w-12 h-12 rounded-lg flex items-center justify-center ${currentTheme === 'dark' ? 'bg-gray-800' : 'bg-gray-100'}`}>
+                <div className={`w-12 h-12 rounded-lg flex items-center justify-center ${
+                  currentTheme === 'dark' ? 'bg-gray-700' : 'bg-gray-100'
+                }`}>
                   <svg className={`w-6 h-6 ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
                   </svg>
@@ -641,15 +712,19 @@ const CurriculumManagementPage = () => {
           </Card>
 
           <Card>
-            <div className="p-6">
+            <div className="p-4">
               <div className="flex items-center justify-between">
                 <div>
                   <p className={`text-sm font-medium ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>수강 중인 수업</p>
                   <p className={`mt-2 text-3xl font-bold ${currentTheme === 'dark' ? 'text-blue-400' : 'text-blue-600'}`}>{totalClasses}</p>
                 </div>
-                <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center">
-                  <svg className="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                <div className={`w-12 h-12 rounded-lg flex items-center justify-center ${
+                  currentTheme === 'dark' ? 'bg-blue-500/20' : 'bg-blue-50'
+                }`}>
+                  <svg className={`w-6 h-6 ${currentTheme === 'dark' ? 'text-blue-400' : 'text-blue-600'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 14l9-5-9-5-9 5 9 5z" />
+                    <path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222" />
                   </svg>
                 </div>
               </div>
@@ -683,34 +758,100 @@ const CurriculumManagementPage = () => {
                   maxSuggestions={10}
                 />
               </div>
-              <select
-                value={filterLanguage}
-                onChange={(e) => setFilterLanguage(e.target.value)}
-                className={`px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition ${
-                  currentTheme === 'dark'
-                    ? 'bg-gray-700 border-gray-600 text-white'
-                    : 'bg-white border-gray-300 text-gray-900'
-                }`}
-              >
-                <option value="all">모든 언어</option>
-                <option value="C">C</option>
-                <option value="Java">Java</option>
-                <option value="JavaScript">JavaScript</option>
-                <option value="C#">C#</option>
-              </select>
-              <select
-                value={filterStatus}
-                onChange={(e) => setFilterStatus(e.target.value)}
-                className={`px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition ${
-                  currentTheme === 'dark'
-                    ? 'bg-gray-700 border-gray-600 text-white'
-                    : 'bg-white border-gray-300 text-gray-900'
-                }`}
-              >
-                <option value="all">모든 상태</option>
-                <option value="active">활성</option>
-                <option value="archived">보관</option>
-              </select>
+              {/* 커스텀 언어 드롭다운 */}
+              <div className="relative" ref={languageDropdownRef}>
+                <button
+                  onClick={() => setIsLanguageDropdownOpen(!isLanguageDropdownOpen)}
+                  className={`w-[160px] px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition flex items-center justify-between ${
+                    currentTheme === 'dark'
+                      ? 'bg-gray-700 border-gray-600 text-white hover:bg-gray-600'
+                      : 'bg-white border-gray-300 text-gray-900 hover:bg-gray-50'
+                  }`}
+                >
+                  <span>{filterLanguage === 'all' ? '모든 언어' : filterLanguage}</span>
+                  <ChevronDown className={`w-5 h-5 ml-2 transition-transform ${isLanguageDropdownOpen ? 'rotate-180' : ''} ${
+                    currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+                  }`} />
+                </button>
+
+                {isLanguageDropdownOpen && (
+                  <div className={`absolute top-full left-0 mt-2 w-full rounded-lg shadow-lg border py-2 z-10 ${
+                    currentTheme === 'dark'
+                      ? 'bg-gray-800 border-gray-700'
+                      : 'bg-white border-gray-200'
+                  }`}>
+                    {['all', 'C', 'Java', 'JavaScript', 'C#'].map((lang) => (
+                      <button
+                        key={lang}
+                        onClick={() => {
+                          setFilterLanguage(lang)
+                          setIsLanguageDropdownOpen(false)
+                        }}
+                        className={`w-full px-4 py-2 text-left text-sm transition-colors ${
+                          filterLanguage === lang
+                            ? currentTheme === 'dark'
+                              ? 'bg-primary-900/30 text-primary-300'
+                              : 'bg-primary-50 text-primary-700'
+                            : currentTheme === 'dark'
+                            ? 'text-gray-300 hover:bg-gray-700'
+                            : 'text-gray-700 hover:bg-gray-100'
+                        }`}
+                      >
+                        {lang === 'all' ? '모든 언어' : lang}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+              {/* 커스텀 상태 드롭다운 */}
+              <div className="relative" ref={statusDropdownRef}>
+                <button
+                  onClick={() => setIsStatusDropdownOpen(!isStatusDropdownOpen)}
+                  className={`w-[140px] px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition flex items-center justify-between ${
+                    currentTheme === 'dark'
+                      ? 'bg-gray-700 border-gray-600 text-white hover:bg-gray-600'
+                      : 'bg-white border-gray-300 text-gray-900 hover:bg-gray-50'
+                  }`}
+                >
+                  <span>{filterStatus === 'all' ? '모든 상태' : filterStatus === 'active' ? '활성' : '보관'}</span>
+                  <ChevronDown className={`w-5 h-5 ml-2 transition-transform ${isStatusDropdownOpen ? 'rotate-180' : ''} ${
+                    currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+                  }`} />
+                </button>
+
+                {isStatusDropdownOpen && (
+                  <div className={`absolute top-full left-0 mt-2 w-full rounded-lg shadow-lg border py-2 z-10 ${
+                    currentTheme === 'dark'
+                      ? 'bg-gray-800 border-gray-700'
+                      : 'bg-white border-gray-200'
+                  }`}>
+                    {[
+                      { value: 'all', label: '모든 상태' },
+                      { value: 'active', label: '활성' },
+                      { value: 'archived', label: '보관' }
+                    ].map((status) => (
+                      <button
+                        key={status.value}
+                        onClick={() => {
+                          setFilterStatus(status.value)
+                          setIsStatusDropdownOpen(false)
+                        }}
+                        className={`w-full px-4 py-2 text-left text-sm transition-colors ${
+                          filterStatus === status.value
+                            ? currentTheme === 'dark'
+                              ? 'bg-primary-900/30 text-primary-300'
+                              : 'bg-primary-50 text-primary-700'
+                            : currentTheme === 'dark'
+                            ? 'text-gray-300 hover:bg-gray-700'
+                            : 'text-gray-700 hover:bg-gray-100'
+                        }`}
+                      >
+                        {status.label}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
 
             {/* 결과 카운트 */}
@@ -816,12 +957,17 @@ const CurriculumManagementPage = () => {
                     <th className={`px-6 py-3 text-center text-sm font-semibold uppercase tracking-wider ${
                       currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'
                     }`}>
-                      ID
+                      #
                     </th>
                     <th className={`px-6 py-3 text-center text-sm font-semibold uppercase tracking-wider ${
                       currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'
                     }`}>
-                      커리큘럼명
+                      커리큘럼
+                    </th>
+                    <th className={`px-6 py-3 text-center text-sm font-semibold uppercase tracking-wider ${
+                      currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'
+                    }`}>
+                      등록일
                     </th>
                     <th className={`px-6 py-3 text-center text-sm font-semibold uppercase tracking-wider ${
                       currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'
@@ -831,22 +977,17 @@ const CurriculumManagementPage = () => {
                     <th className={`px-6 py-3 text-center text-sm font-semibold uppercase tracking-wider ${
                       currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'
                     }`}>
-                      주차
+                      차시
+                    </th>
+                    <th className={`px-6 py-3 text-center text-sm font-semibold uppercase tracking-wider ${
+                      currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'
+                    }`}>
+                      생성 수업
                     </th>
                     <th className={`px-6 py-3 text-center text-sm font-semibold uppercase tracking-wider ${
                       currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'
                     }`}>
                       상태
-                    </th>
-                    <th className={`px-6 py-3 text-center text-sm font-semibold uppercase tracking-wider ${
-                      currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'
-                    }`}>
-                      수강 수업
-                    </th>
-                    <th className={`px-6 py-3 text-center text-sm font-semibold uppercase tracking-wider ${
-                      currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'
-                    }`}>
-                      생성일
                     </th>
                     <th className={`px-6 py-3 text-center text-sm font-semibold uppercase tracking-wider ${
                       currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'
@@ -860,7 +1001,7 @@ const CurriculumManagementPage = () => {
                     ? 'bg-gray-800 divide-gray-700'
                     : 'bg-white divide-gray-200'
                 }`}>
-                  {filteredCurriculums.length === 0 ? (
+                  {paginatedCurriculums.length === 0 ? (
                     <tr>
                       <td colSpan={9} className="px-6 py-12 text-center">
                         <svg className={`w-12 h-12 mx-auto mb-4 ${currentTheme === 'dark' ? 'text-gray-600' : 'text-gray-400'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -874,7 +1015,7 @@ const CurriculumManagementPage = () => {
                       </td>
                     </tr>
                   ) : (
-                    filteredCurriculums.map((curriculum) => (
+                    paginatedCurriculums.map((curriculum) => (
                       <tr key={curriculum.id} className={currentTheme === 'dark' ? 'hover:bg-gray-700' : 'hover:bg-gray-50'}>
                         <td className="px-4 py-4 text-center">
                           <input
@@ -888,10 +1029,13 @@ const CurriculumManagementPage = () => {
                           {curriculum.id}
                         </td>
                         <td className={`px-6 py-4 text-sm font-medium text-center ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-                          <div className="max-w-xs mx-auto">
+                          <div className="min-w-[200px] max-w-md mx-auto">
                             <div className="font-semibold">{curriculum.name}</div>
                             <div className={`text-xs mt-1 line-clamp-1 ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>{curriculum.description}</div>
                           </div>
+                        </td>
+                        <td className={`px-6 py-4 whitespace-nowrap text-sm text-center ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
+                          {new Date(curriculum.createdAt).toLocaleDateString('ko-KR')}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-center">
                           <Badge variant="primary">{curriculum.language}</Badge>
@@ -899,18 +1043,15 @@ const CurriculumManagementPage = () => {
                         <td className={`px-6 py-4 whitespace-nowrap text-sm text-center ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-900'}`}>
                           {curriculum.weeks}주
                         </td>
+                        <td className={`px-6 py-4 whitespace-nowrap text-sm text-center ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-900'}`}>
+                          {curriculum.classCount || 0}개
+                        </td>
                         <td className="px-6 py-4 whitespace-nowrap text-center">
                           {curriculum.status === 'active' ? (
                             <Badge variant="success">활성</Badge>
                           ) : (
                             <Badge variant="gray">보관</Badge>
                           )}
-                        </td>
-                        <td className={`px-6 py-4 whitespace-nowrap text-sm text-center ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-900'}`}>
-                          {curriculum.classCount || 0}개
-                        </td>
-                        <td className={`px-6 py-4 whitespace-nowrap text-sm text-center ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
-                          {new Date(curriculum.createdAt).toLocaleDateString('ko-KR')}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-center">
                           <div className="flex items-center justify-center space-x-2">
@@ -950,6 +1091,75 @@ const CurriculumManagementPage = () => {
                 </tbody>
               </table>
             </div>
+
+            {/* 페이지네이션 */}
+            {totalPages > 1 && (
+              <div className={`px-6 py-4 border-t ${
+                currentTheme === 'dark'
+                  ? 'border-gray-700 bg-gray-800'
+                  : 'border-gray-200 bg-gray-50'
+              }`}>
+                <div className="flex items-center justify-between">
+                  <div className={`text-sm ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
+                    <span className="font-medium">{filteredCurriculums.length}</span>개 중{' '}
+                    <span className="font-medium">{(currentPage - 1) * itemsPerPage + 1}</span>-
+                    <span className="font-medium">
+                      {Math.min(currentPage * itemsPerPage, filteredCurriculums.length)}
+                    </span>
+                    개 표시
+                  </div>
+
+                  <div className="flex items-center space-x-2">
+                    <button
+                      onClick={handlePreviousPage}
+                      disabled={currentPage === 1}
+                      className={`px-4 py-2 text-sm font-medium rounded-lg border transition-colors ${
+                        currentPage === 1
+                          ? currentTheme === 'dark'
+                            ? 'bg-gray-800 text-gray-600 border-gray-700 cursor-not-allowed'
+                            : 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed'
+                          : currentTheme === 'dark'
+                            ? 'bg-gray-700 text-gray-300 border-gray-600 hover:bg-gray-600'
+                            : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
+                      }`}
+                    >
+                      <div className="flex items-center">
+                        <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                        </svg>
+                        이전
+                      </div>
+                    </button>
+
+                    <div className={`text-sm ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
+                      페이지 <span className="font-medium">{currentPage}</span> /{' '}
+                      <span className="font-medium">{totalPages}</span>
+                    </div>
+
+                    <button
+                      onClick={handleNextPage}
+                      disabled={currentPage === totalPages}
+                      className={`px-4 py-2 text-sm font-medium rounded-lg border transition-colors ${
+                        currentPage === totalPages
+                          ? currentTheme === 'dark'
+                            ? 'bg-gray-800 text-gray-600 border-gray-700 cursor-not-allowed'
+                            : 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed'
+                          : currentTheme === 'dark'
+                            ? 'bg-gray-700 text-gray-300 border-gray-600 hover:bg-gray-600'
+                            : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
+                      }`}
+                    >
+                      <div className="flex items-center">
+                        다음
+                        <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        </svg>
+                      </div>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </Card>
       </div>
@@ -1018,7 +1228,7 @@ const CurriculumManagementPage = () => {
               </h3>
               <div className="space-y-3">
                 <div className="flex items-start">
-                  <span className={`text-sm w-28 flex-shrink-0 ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>수강 중인 수업:</span>
+                  <span className={`text-sm w-28 flex-shrink-0 ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>생성 한 수업:</span>
                   <span className={`text-sm font-medium ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{curriculumDetails.classCount || 0}개</span>
                 </div>
               </div>
