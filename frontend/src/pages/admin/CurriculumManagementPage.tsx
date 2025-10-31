@@ -16,8 +16,10 @@ import Select from '@/components/common/Select'
 import Skeleton, { CardSkeleton, StatCardSkeleton } from '@/components/common/Skeleton'
 import { useClientSearchSuggestions } from '@/hooks/useSearchSuggestions'
 import { exportToJSON, exportToXLSX, getFilenameWithDate, formatDate } from '@/utils/export'
-import { ChevronDown } from 'lucide-react'
+import { ChevronDown, Download } from 'lucide-react'
 import { INPUT_LIMITS, limitInputLength } from '@/utils/inputValidation'
+import Editor from '@monaco-editor/react'
+import ResizableEditor from '@/components/common/ResizableEditor'
 
 interface Curriculum {
   id: number
@@ -85,6 +87,11 @@ const CurriculumManagementPage = () => {
   const [isCreating, setIsCreating] = useState(false)
   const [createErrors, setCreateErrors] = useState<Record<string, string>>({})
 
+  // JSON 파일 업로드
+  const [uploadedFile, setUploadedFile] = useState<File | null>(null)
+  const [uploadedJsonData, setUploadedJsonData] = useState<any>(null)
+  const [isDragging, setIsDragging] = useState(false)
+
   // 커리큘럼 수정 - 비밀번호 확인 모달
   const [isEditPasswordModalOpen, setIsEditPasswordModalOpen] = useState(false)
   const [editPasswordCurriculum, setEditPasswordCurriculum] = useState<Curriculum | null>(null)
@@ -115,9 +122,11 @@ const CurriculumManagementPage = () => {
   const [isLoadingDetails, setIsLoadingDetails] = useState(false)
   const [curriculumDetails, setCurriculumDetails] = useState<any>(null)
 
-  // 커리큘럼 구조 가이드 모달 (개발 환경 전용)
+  // 커리큘럼 구조 가이드 모달
   const [isStructureGuideOpen, setIsStructureGuideOpen] = useState(false)
-  const isDevelopment = import.meta.env.DEV
+  const [guideActiveTab, setGuideActiveTab] = useState<'overview' | 'structure' | 'flow' | 'characters' | 'example'>('overview')
+  const [scenarioData, setScenarioData] = useState<string>('')
+  const [isLoadingScenario, setIsLoadingScenario] = useState(false)
 
   // 페이지네이션 상태
   const [currentPage, setCurrentPage] = useState(1)
@@ -239,6 +248,110 @@ const CurriculumManagementPage = () => {
     }
   }
 
+  // JSON 파일 업로드 핸들러
+  const handleFileUpload = (file: File) => {
+    if (!file.name.endsWith('.json') && !file.name.endsWith('.jsonc')) {
+      addToast('JSON 또는 JSONC 파일만 업로드할 수 있습니다.', { variant: 'error' })
+      return
+    }
+
+    const reader = new FileReader()
+    reader.onload = (e) => {
+      try {
+        const text = e.target?.result as string
+        // JSONC 주석 제거
+        const jsonText = text
+          .split('\n')
+          .filter(line => !line.trim().startsWith('//'))
+          .join('\n')
+
+        const jsonData = JSON.parse(jsonText)
+
+        // 필수 필드 검증
+        if (!jsonData.courseTitle) {
+          addToast('JSON 파일에 courseTitle 필드가 없습니다.', { variant: 'error' })
+          return
+        }
+        if (!jsonData.weeks || !Array.isArray(jsonData.weeks)) {
+          addToast('JSON 파일에 weeks 배열이 없습니다.', { variant: 'error' })
+          return
+        }
+
+        // 데이터 추출
+        setUploadedFile(file)
+        setUploadedJsonData(jsonData)
+        setCreateName(jsonData.courseTitle || '')
+        setCreateDescription(jsonData.description || '')
+        setCreateWeeks(String(jsonData.weeks.length))
+
+        // 언어 추출 (파일명이나 내용에서)
+        const filename = file.name.toLowerCase()
+        if (filename.includes('python') || filename.includes('py')) {
+          setCreateLanguage('Python')
+        } else if (filename.includes('java')) {
+          setCreateLanguage('Java')
+        } else if (filename.includes('javascript') || filename.includes('js')) {
+          setCreateLanguage('JavaScript')
+        } else if (filename.includes('csharp') || filename.includes('c#')) {
+          setCreateLanguage('C#')
+        }
+
+        addToast('JSON 파일을 성공적으로 불러왔습니다.', { variant: 'success' })
+      } catch (error) {
+        console.error('JSON 파싱 오류:', error)
+        addToast('JSON 파일 형식이 올바르지 않습니다.', { variant: 'error' })
+      }
+    }
+
+    reader.readAsText(file)
+  }
+
+  // 드래그 앤 드롭 핸들러
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault()
+    setIsDragging(true)
+  }
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault()
+    setIsDragging(false)
+  }
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault()
+    setIsDragging(false)
+
+    const files = e.dataTransfer.files
+    if (files.length > 0) {
+      handleFileUpload(files[0])
+    }
+  }
+
+  const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files
+    if (files && files.length > 0) {
+      handleFileUpload(files[0])
+    }
+  }
+
+  // 파일 제거 핸들러
+  const handleRemoveFile = () => {
+    setUploadedFile(null)
+    setUploadedJsonData(null)
+  }
+
+  // 생성 모달 닫기 핸들러
+  const handleCloseCreateModal = () => {
+    setIsCreateModalOpen(false)
+    setCreateName('')
+    setCreateLanguage('')
+    setCreateWeeks('')
+    setCreateDescription('')
+    setCreateErrors({})
+    setUploadedFile(null)
+    setUploadedJsonData(null)
+  }
+
   const handleViewDetails = (curriculum: Curriculum) => {
     setSelectedCurriculum(curriculum)
     setCurriculumDetails(null)
@@ -297,12 +410,7 @@ const CurriculumManagementPage = () => {
       const data = await response.json()
       if (data.status === 'success') {
         addToast('커리큘럼이 생성되었습니다.', { variant: 'success' })
-        setIsCreateModalOpen(false)
-        setCreateName('')
-        setCreateLanguage('')
-        setCreateWeeks('')
-        setCreateDescription('')
-        setCreateErrors({})
+        handleCloseCreateModal()
         fetchCurriculums()
       }
     } catch (error) {
@@ -314,6 +422,12 @@ const CurriculumManagementPage = () => {
 
   // 수정 - 비밀번호 확인 모달 열기
   const handleOpenEditModal = (curriculum: Curriculum) => {
+    // 생성된 수업이 있는 커리큘럼은 수정 불가
+    if (curriculum.classCount && curriculum.classCount > 0) {
+      addToast('생성된 수업이 있는 커리큘럼은 수정할 수 없습니다.', { variant: 'error' })
+      return
+    }
+
     setEditPasswordCurriculum(curriculum)
     setEditPassword('')
     setEditPasswordError('')
@@ -537,6 +651,22 @@ const CurriculumManagementPage = () => {
     addToast('JSON 파일이 다운로드되었습니다.', { variant: 'success' })
   }
 
+  // Scenario 파일 다운로드
+  const handleDownloadScenario = () => {
+    if (!scenarioData) return
+
+    const blob = new Blob([scenarioData], { type: 'application/json' })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+    link.download = 'scenario-latest.jsonc'
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    URL.revokeObjectURL(url)
+    addToast('시나리오 파일이 다운로드되었습니다.', { variant: 'success' })
+  }
+
   // XLSX 내보내기
   const handleExportXLSX = () => {
     const exportData = filteredCurriculums.map((curriculum) => ({
@@ -713,17 +843,6 @@ const CurriculumManagementPage = () => {
             <h1 className={`text-2xl sm:text-3xl font-bold ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>커리큘럼 관리</h1>
             <p className={`mt-1 text-sm ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>프로그래밍 커리큘럼을 생성, 수정, 관리하세요</p>
           </div>
-          {isDevelopment && (
-            <Button
-              variant="outline"
-              onClick={() => setIsStructureGuideOpen(true)}
-            >
-              <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              커리큘럼 구조
-            </Button>
-          )}
         </div>
 
         {/* 통계 카드 */}
@@ -934,6 +1053,17 @@ const CurriculumManagementPage = () => {
                 </svg>
                 커리큘럼
               </Button>
+              {/* 커리큘럼 구조 버튼 */}
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setIsStructureGuideOpen(true)}
+              >
+                <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                커리큘럼 구조
+              </Button>
             </div>
 
             {/* 결과 카운트 */}
@@ -1141,7 +1271,13 @@ const CurriculumManagementPage = () => {
                             </button>
                             <button
                               onClick={() => handleOpenEditModal(curriculum)}
-                              className="px-2 py-1 bg-emerald-600 text-white rounded hover:bg-emerald-700 transition-colors duration-200 text-[11px] flex items-center gap-0.5"
+                              className={`px-2 py-1 rounded transition-colors duration-200 text-[11px] flex items-center gap-0.5 ${
+                                curriculum.classCount && curriculum.classCount > 0
+                                  ? 'bg-gray-400 text-gray-200 cursor-not-allowed'
+                                  : 'bg-emerald-600 text-white hover:bg-emerald-700'
+                              }`}
+                              disabled={curriculum.classCount && curriculum.classCount > 0}
+                              title={curriculum.classCount && curriculum.classCount > 0 ? '생성된 수업이 있는 커리큘럼은 수정할 수 없습니다' : '커리큘럼 수정'}
                             >
                               <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
@@ -1339,10 +1475,85 @@ const CurriculumManagementPage = () => {
       {/* 커리큘럼 생성 모달 */}
       <Modal
         isOpen={isCreateModalOpen}
-        onClose={() => setIsCreateModalOpen(false)}
+        onClose={handleCloseCreateModal}
         title="커리큘럼 생성"
       >
         <div className="space-y-4">
+          {/* JSON 파일 업로드 섹션 */}
+          <div>
+            <label className={`block text-sm font-medium mb-2 ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
+              JSON 파일 업로드 (선택사항)
+            </label>
+
+            {!uploadedFile ? (
+              <div
+                onDragOver={handleDragOver}
+                onDragLeave={handleDragLeave}
+                onDrop={handleDrop}
+                className={`border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition-colors ${
+                  isDragging
+                    ? currentTheme === 'dark'
+                      ? 'border-primary-500 bg-primary-900/20'
+                      : 'border-primary-500 bg-primary-50'
+                    : currentTheme === 'dark'
+                    ? 'border-gray-600 hover:border-gray-500'
+                    : 'border-gray-300 hover:border-gray-400'
+                }`}
+                onClick={() => document.getElementById('file-upload')?.click()}
+              >
+                <input
+                  id="file-upload"
+                  type="file"
+                  accept=".json,.jsonc"
+                  onChange={handleFileInputChange}
+                  className="hidden"
+                />
+                <div className="flex flex-col items-center">
+                  <svg className={`w-12 h-12 mb-3 ${currentTheme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                  </svg>
+                  <p className={`text-sm font-medium mb-1 ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
+                    클릭하거나 파일을 드래그하세요
+                  </p>
+                  <p className={`text-xs ${currentTheme === 'dark' ? 'text-gray-500' : 'text-gray-500'}`}>
+                    JSON 또는 JSONC 파일 (scenario-latest.jsonc 형식)
+                  </p>
+                </div>
+              </div>
+            ) : (
+              <div className={`border rounded-lg p-4 ${
+                currentTheme === 'dark' ? 'border-gray-600 bg-gray-800' : 'border-gray-300 bg-gray-50'
+              }`}>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <svg className={`w-8 h-8 ${currentTheme === 'dark' ? 'text-green-400' : 'text-green-600'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    <div>
+                      <p className={`text-sm font-medium ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
+                        {uploadedFile.name}
+                      </p>
+                      <p className={`text-xs ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
+                        {(uploadedFile.size / 1024).toFixed(2)} KB
+                      </p>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={handleRemoveFile}
+                    className={`p-1.5 rounded hover:bg-red-100 dark:hover:bg-red-900/20 ${
+                      currentTheme === 'dark' ? 'text-red-400' : 'text-red-600'
+                    }`}
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+
           <div>
             <label className={`block text-sm font-medium mb-2 ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
               커리큘럼명 <span className="text-red-500">*</span>
@@ -1363,16 +1574,15 @@ const CurriculumManagementPage = () => {
             <Select
               value={createLanguage}
               onChange={(e) => setCreateLanguage(e.target.value)}
-            >
-              <option value="">언어를 선택하세요</option>
-              <option value="C">C</option>
-              <option value="Java">Java</option>
-              <option value="JavaScript">JavaScript</option>
-              <option value="C#">C#</option>
-            </Select>
-            {createErrors.createLanguage && (
-              <p className="text-sm text-red-600 mt-1">{createErrors.createLanguage}</p>
-            )}
+              options={[
+                { value: '', label: '언어 선택' },
+                { value: 'C', label: 'C' },
+                { value: 'Java', label: 'Java' },
+                { value: 'JavaScript', label: 'JavaScript' },
+                { value: 'C#', label: 'C#' },
+              ]}
+              error={createErrors.createLanguage}
+            />
           </div>
 
           <div>
@@ -1423,7 +1633,7 @@ const CurriculumManagementPage = () => {
           }`}>
             <Button
               variant="ghost"
-              onClick={() => setIsCreateModalOpen(false)}
+              onClick={handleCloseCreateModal}
               disabled={isCreating}
             >
               취소
@@ -1797,230 +2007,600 @@ const CurriculumManagementPage = () => {
         </div>
       </Modal>
 
-      {/* 커리큘럼 구조 가이드 모달 (개발 환경 전용) */}
+      {/* 커리큘럼 구조 가이드 모달 */}
       <Modal
         isOpen={isStructureGuideOpen}
-        onClose={() => setIsStructureGuideOpen(false)}
+        onClose={() => {
+          setIsStructureGuideOpen(false)
+          setGuideActiveTab('overview')
+        }}
         title="EduVerse 커리큘럼 시나리오 구조 가이드"
-        size="xl"
+        size="full"
       >
-        <div className="space-y-6 max-h-[70vh] overflow-y-auto">
-          {/* 개요 */}
-          <section>
-            <h2 className={`text-xl font-bold mb-3 ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>1. 개요</h2>
+        {/* 탭 네비게이션 */}
+        <div className={`flex border-b mb-6 ${currentTheme === 'dark' ? 'border-gray-700' : 'border-gray-200'}`}>
+          <button
+            onClick={() => setGuideActiveTab('overview')}
+            className={`px-6 py-3 text-sm font-medium transition-colors border-b-2 ${
+              guideActiveTab === 'overview'
+                ? currentTheme === 'dark'
+                  ? 'border-primary-500 text-primary-400'
+                  : 'border-primary-600 text-primary-600'
+                : currentTheme === 'dark'
+                ? 'border-transparent text-gray-400 hover:text-gray-300'
+                : 'border-transparent text-gray-500 hover:text-gray-700'
+            }`}
+          >
+            개요 및 철학
+          </button>
+          <button
+            onClick={() => setGuideActiveTab('structure')}
+            className={`px-6 py-3 text-sm font-medium transition-colors border-b-2 ${
+              guideActiveTab === 'structure'
+                ? currentTheme === 'dark'
+                  ? 'border-primary-500 text-primary-400'
+                  : 'border-primary-600 text-primary-600'
+                : currentTheme === 'dark'
+                ? 'border-transparent text-gray-400 hover:text-gray-300'
+                : 'border-transparent text-gray-500 hover:text-gray-700'
+            }`}
+          >
+            JSON 구조
+          </button>
+          <button
+            onClick={() => setGuideActiveTab('flow')}
+            className={`px-6 py-3 text-sm font-medium transition-colors border-b-2 ${
+              guideActiveTab === 'flow'
+                ? currentTheme === 'dark'
+                  ? 'border-primary-500 text-primary-400'
+                  : 'border-primary-600 text-primary-600'
+                : currentTheme === 'dark'
+                ? 'border-transparent text-gray-400 hover:text-gray-300'
+                : 'border-transparent text-gray-500 hover:text-gray-700'
+            }`}
+          >
+            학습 흐름
+          </button>
+          <button
+            onClick={() => setGuideActiveTab('characters')}
+            className={`px-6 py-3 text-sm font-medium transition-colors border-b-2 ${
+              guideActiveTab === 'characters'
+                ? currentTheme === 'dark'
+                  ? 'border-primary-500 text-primary-400'
+                  : 'border-primary-600 text-primary-600'
+                : currentTheme === 'dark'
+                ? 'border-transparent text-gray-400 hover:text-gray-300'
+                : 'border-transparent text-gray-500 hover:text-gray-700'
+            }`}
+          >
+            캐릭터 & 기타
+          </button>
+          <button
+            onClick={() => {
+              setGuideActiveTab('example')
+              if (!scenarioData) {
+                setIsLoadingScenario(true)
+                fetch('/scenario-latest.jsonc')
+                  .then(res => res.text())
+                  .then(text => {
+                    setScenarioData(text)
+                    setIsLoadingScenario(false)
+                  })
+                  .catch(err => {
+                    console.error('Failed to load scenario:', err)
+                    setIsLoadingScenario(false)
+                  })
+              }
+            }}
+            className={`px-6 py-3 text-sm font-medium transition-colors border-b-2 ${
+              guideActiveTab === 'example'
+                ? currentTheme === 'dark'
+                  ? 'border-primary-500 text-primary-400'
+                  : 'border-primary-600 text-primary-600'
+                : currentTheme === 'dark'
+                ? 'border-transparent text-gray-400 hover:text-gray-300'
+                : 'border-transparent text-gray-500 hover:text-gray-700'
+            }`}
+          >
+            전체 예제
+          </button>
+        </div>
+
+        <div className="space-y-6 max-h-[65vh] overflow-y-auto pr-2">
+          {/* 탭 1: 개요 및 철학 */}
+          {guideActiveTab === 'overview' && (
+            <>
+              {/* 개요 */}
+              <section>
+                <h2 className={`text-xl font-bold mb-3 ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>1. 개요</h2>
             <p className={`leading-relaxed ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
               이 문서는 EduVerse 플랫폼의 모든 교육 콘텐츠가 따라야 할 <strong>표준 커리큘럼 시나리오 구조</strong>를 정의합니다.
+              <br />
               이 표준 구조는 일관된 고품질의 학습 경험을 제공하고, 향후 새로운 프로그래밍 언어로 커리큘럼을 쉽게 확장할 수 있도록 설계되었습니다.
             </p>
             <p className={`leading-relaxed mt-2 ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
-              현재 목업 서비스의 시나리오는 4주차 과정으로 기획되었지만, 이 표준 구조는 상용 서비스에서 <strong>1주차부터 최대 16주차까지</strong> 교육 기간을 유동적으로 설계할 수 있는 확장성을 가집니다.
+              현재 참조 시나리오 (scenario-latest.jsonc)는 <strong>3주차 9개 사이클</strong>로 구성되어 있으며,
+              이 표준 구조는 상용 서비스에서 <strong>1주차부터 최대 16주차까지</strong> 교육 기간을 유동적으로 설계할 수 있는 확장성을 가집니다.
             </p>
+            <div className={`mt-3 p-4 rounded-lg ${currentTheme === 'dark' ? 'bg-blue-900/20 border border-blue-700' : 'bg-blue-50 border border-blue-200'}`}>
+              <p className={`text-sm ${currentTheme === 'dark' ? 'text-blue-300' : 'text-blue-900'}`}>
+                <strong>💡 난이도 분리 시스템:</strong> 각 학습 사이클은 <strong>초급자(기본)</strong>와 <strong>경험자(고급)</strong>
+                두 가지 난이도로 제공되어, 학습자의 수준에 맞는 맞춤형 학습이 가능합니다.
+              </p>
+            </div>
           </section>
 
           {/* 핵심 교육 철학 */}
           <section>
             <h2 className={`text-xl font-bold mb-3 ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>2. 핵심 교육 철학</h2>
             <div className="space-y-4">
-              <div className="p-4 bg-blue-50 rounded-lg">
-                <h3 className="font-semibold text-blue-900 mb-2">🎮 스토리텔링 기반 학습 (Story-driven Learning)</h3>
-                <ul className="list-disc list-inside text-gray-700 space-y-1 text-sm">
+              <div className={`p-4 rounded-lg ${currentTheme === 'dark' ? 'bg-blue-900/20 border border-blue-700' : 'bg-blue-50'}`}>
+                <h3 className={`font-semibold mb-2 ${currentTheme === 'dark' ? 'text-blue-300' : 'text-blue-900'}`}>🎮 스토리텔링 기반 학습 (Story-driven Learning)</h3>
+                <ul className={`list-disc list-inside space-y-1 text-sm ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
                   <li>모든 학습은 'LogiCore Tech'라는 가상 IT 기업의 신입사원 인턴십 과정이라는 하나의 큰 스토리 안에서 진행됩니다.</li>
                   <li>학습자는 단순한 문제 풀이가 아닌, 실제 업무와 유사한 과제를 해결하며 몰입감을 높입니다.</li>
                 </ul>
               </div>
 
-              <div className="p-4 bg-green-50 rounded-lg">
-                <h3 className="font-semibold text-green-900 mb-2">🧑‍🏫 3-멘토 시스템 (3-Mentor System)</h3>
-                <p className="text-gray-700 text-sm">
+              <div className={`p-4 rounded-lg ${currentTheme === 'dark' ? 'bg-green-900/20 border border-green-700' : 'bg-green-50'}`}>
+                <h3 className={`font-semibold mb-2 ${currentTheme === 'dark' ? 'text-green-300' : 'text-green-900'}`}>🧑‍🏫 3-멘토 시스템 (3-Mentor System)</h3>
+                <p className={`text-sm ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
                   세 명의 가상 캐릭터(팀장, 선임, 교수)가 각기 다른 관점에서 학습 콘텐츠를 제공하여 입체적인 학습을 유도합니다.
                 </p>
               </div>
 
-              <div className="p-4 bg-purple-50 rounded-lg">
-                <h3 className="font-semibold text-purple-900 mb-2">💻 실습 중심 학습 (Hands-on Practice)</h3>
-                <ul className="list-disc list-inside text-gray-700 space-y-1 text-sm">
+              <div className={`p-4 rounded-lg ${currentTheme === 'dark' ? 'bg-purple-900/20 border border-purple-700' : 'bg-purple-50'}`}>
+                <h3 className={`font-semibold mb-2 ${currentTheme === 'dark' ? 'text-purple-300' : 'text-purple-900'}`}>💻 실습 중심 학습 (Hands-on Practice)</h3>
+                <ul className={`list-disc list-inside space-y-1 text-sm ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
                   <li>모든 학습 단위는 실제 코드를 작성하고 실행하는 실습으로 구성됩니다.</li>
                   <li>브라우저 내에서 코드 작성, 실행, 테스트가 모두 가능하여 별도의 개발 환경 설정이 필요 없습니다.</li>
                 </ul>
               </div>
 
-              <div className="p-4 bg-yellow-50 rounded-lg">
-                <h3 className="font-semibold text-yellow-900 mb-2">⚡ 즉각적인 피드백 (Instant Feedback)</h3>
-                <p className="text-gray-700 text-sm">
+              <div className={`p-4 rounded-lg ${currentTheme === 'dark' ? 'bg-yellow-900/20 border border-yellow-700' : 'bg-yellow-50'}`}>
+                <h3 className={`font-semibold mb-2 ${currentTheme === 'dark' ? 'text-yellow-300' : 'text-yellow-900'}`}>⚡ 즉각적인 피드백 (Instant Feedback)</h3>
+                <p className={`text-sm ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
                   자동화된 테스트를 통해 코드의 정답 여부를 즉시 확인하고, 성공/실패에 대한 명확하고 구체적인 피드백을 받습니다.
                 </p>
               </div>
-            </div>
-          </section>
 
-          {/* 표준 JSON 구조 */}
-          <section>
-            <h2 className={`text-xl font-bold mb-3 ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>3. 표준 JSON 구조</h2>
-            <p className={`mb-3 ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
-              모든 커리큘럼 시나리오는 <code className={`px-2 py-1 rounded ${currentTheme === 'dark' ? 'bg-gray-800 text-gray-300' : 'bg-gray-100 text-gray-900'}`}>과정(Course) → 주차(Week) → 학습 사이클(Cycle)</code>의 3단계 계층적 JSON 구조를 가집니다.
-            </p>
-
-            <div className="space-y-4">
-              <div>
-                <h3 className={`font-semibold mb-2 ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>3.1 최상위 구조 (Course)</h3>
-                <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto text-sm">
-{`{
-  "courseTitle": "LogiCore Tech 신입 개발자 과정",
-  "language": "Python",
-  "languageVersion": "3.10",
-  "installationGuide": {
-    "windows": "...",
-    "macos": "...",
-    "linux": "..."
-  },
-  "weeks": [
-    // 주차별 데이터
-  ]
-}`}
-                </pre>
-              </div>
-
-              <div>
-                <h3 className={`font-semibold mb-2 ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>3.2 주차별 구조 (Week)</h3>
-                <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto text-sm">
-{`{
-  "week": 1,
-  "title": "신입사원 온보딩 및 개발 환경 구축",
-  "cycles": [
-    // 학습 사이클 데이터
-  ]
-}`}
-                </pre>
-              </div>
-
-              <div>
-                <h3 className={`font-semibold mb-2 ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>3.3 학습 사이클 구조 (Cycle)</h3>
-                <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto text-sm">
-{`{
-  "title": "첫 파이썬 프로그램 작성 및 실행",
-  "syntax_key": "print_statement",
-  "filename": "welcome.py",
-  "starterCode": "# 이 파일에 코드를 작성하세요.",
-  "testCode": "assert 'expected_output' in result",
-  "expectedPrintOutput": "Hello, LogiCore Tech!",
-  "task": { "..." },
-  "briefing": { "..." },
-  "lecture": { "..." },
-  "feedback": { "..." }
-}`}
-                </pre>
-                <ul className="mt-3 space-y-1 text-sm text-gray-700">
-                  <li><code className="px-1 py-0.5 bg-gray-100 rounded">title</code>: 해당 사이클의 학습 소주제</li>
-                  <li><code className="px-1 py-0.5 bg-gray-100 rounded">syntax_key</code>: 학습할 핵심 문법 키워드 (분류 및 검색용)</li>
-                  <li><code className="px-1 py-0.5 bg-gray-100 rounded">filename</code>: 실습에 사용될 가상 파일명</li>
-                  <li><code className="px-1 py-0.5 bg-gray-100 rounded">starterCode</code>: 학생에게 제공되는 초기 코드 템플릿</li>
-                  <li><code className="px-1 py-0.5 bg-gray-100 rounded">task</code>: 팀장(Alex)이 부여하는 실무 과제</li>
-                  <li><code className="px-1 py-0.5 bg-gray-100 rounded">briefing</code>: 선임(Sena)이 제공하는 실무 팁</li>
-                  <li><code className="px-1 py-0.5 bg-gray-100 rounded">lecture</code>: 교수(Prof. Kim)가 설명하는 이론 강의</li>
-                  <li><code className="px-1 py-0.5 bg-gray-100 rounded">feedback</code>: 테스트 결과에 따른 성공/실패 피드백</li>
+              <div className={`p-4 rounded-lg ${currentTheme === 'dark' ? 'bg-orange-900/20 border border-orange-700' : 'bg-orange-50'}`}>
+                <h3 className={`font-semibold mb-2 ${currentTheme === 'dark' ? 'text-orange-300' : 'text-orange-900'}`}>🎯 적응형 난이도 시스템 (Adaptive Difficulty)</h3>
+                <ul className={`list-disc list-inside space-y-1 text-sm ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
+                  <li><strong>초급자 모드:</strong> 기본적인 코드 작성에 집중하며, 상세한 힌트와 단계별 가이드를 제공합니다.</li>
+                  <li><strong>경험자 모드:</strong> 함수, 클래스 등 더 복잡한 구조를 활용하며, 더 엄격한 테스트와 실무적인 과제를 제공합니다.</li>
+                  <li>학습자는 자신의 수준에 맞는 난이도를 선택하여 맞춤형 학습 경험을 받을 수 있습니다.</li>
                 </ul>
               </div>
             </div>
           </section>
+            </>
+          )}
 
+          {/* 탭 2: JSON 구조 */}
+          {guideActiveTab === 'structure' && (
+            <>
+          {/* 표준 JSON 구조 */}
+          <section>
+            <h2 className={`text-xl font-bold mb-3 ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>3. 표준 JSON 구조</h2>
+            <p className={`mb-3 ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
+              모든 커리큘럼 시나리오는 <code className={`px-2 py-1 rounded ${currentTheme === 'dark' ? 'bg-gray-800 text-gray-300' : 'bg-gray-100 text-gray-900'}`}>과정(Course) → 차시(Week) → 학습 사이클(Cycle) → 과제(Task)</code>의 4단계 계층적 JSON 구조를 가집니다.
+            </p>
+
+            <div className="space-y-4">
+              <div>
+                <h3 className={`font-semibold mb-2 ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>3.1 커리큘럼 구조 (Course)</h3>
+                <div className={`rounded-lg overflow-hidden border ${currentTheme === 'dark' ? 'border-gray-700' : 'border-gray-200'}`}>
+                  <Editor
+                    height="180px"
+                    language="json"
+                    value={`{
+  // 커리큘럼명
+  "courseTitle": "LogiCore Tech 신입 개발자 과정",
+  // 커리큘럼 설명
+  "description": "LogiCore Tech 신입 개발자 과정을 통해 파이썬 프로그래밍의 기초부터...",
+
+  // 주차별 시나리오 목록
+  "weeks": [
+    // 차시별 데이터 (아래 참고)
+  ]
+}`}
+                    theme={currentTheme === 'dark' ? 'vs-dark' : 'light'}
+                    options={{
+                      readOnly: true,
+                      minimap: { enabled: false },
+                      fontSize: 13,
+                      lineNumbers: 'on',
+                      scrollBeyondLastLine: false,
+                      automaticLayout: true,
+                      wordWrap: 'off',
+                      folding: false,
+                      scrollbar: {
+                        vertical: 'hidden',
+                        horizontal: 'auto'
+                      }
+                    }}
+                  />
+                </div>
+                <div className={`mt-2 p-3 rounded-lg ${currentTheme === 'dark' ? 'bg-gray-800/50' : 'bg-gray-50'}`}>
+                  <p className={`text-sm ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
+                    <strong>courseTitle</strong>: 커리큘럼의 제목<br />
+                    <strong>description</strong>: 커리큘럼에 대한 전체적인 설명 (학습 목표, 내용 개요 등)<br />
+                    <strong>weeks</strong>: 차시별 학습 내용을 담은 배열
+                  </p>
+                </div>
+              </div>
+
+              <div>
+                <h3 className={`font-semibold mb-2 ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>3.2 차시별 구조 (Week)</h3>
+                <div className={`rounded-lg overflow-hidden border ${currentTheme === 'dark' ? 'border-gray-700' : 'border-gray-200'}`}>
+                  <Editor
+                    height="150px"
+                    language="json"
+                    value={`{
+  // 주차 번호
+  "week": 1,
+  // 주차 제목
+  "title": "첫 코드 작성과 데이터 저장",
+  // 해당 주차의 사이클(과제) 목록
+  "cycles": [
+    // 학습 사이클 데이터 (아래 참고)
+  ]
+}`}
+                    theme={currentTheme === 'dark' ? 'vs-dark' : 'light'}
+                    options={{
+                      readOnly: true,
+                      minimap: { enabled: false },
+                      fontSize: 13,
+                      lineNumbers: 'on',
+                      scrollBeyondLastLine: false,
+                      automaticLayout: true,
+                      wordWrap: 'off',
+                      folding: false,
+                      scrollbar: {
+                        vertical: 'hidden',
+                        horizontal: 'auto'
+                      }
+                    }}
+                  />
+                </div>
+              </div>
+
+              <div>
+                <h3 className={`font-semibold mb-2 ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>3.3 학습 사이클 구조 (Cycle)</h3>
+                <div className={`rounded-lg overflow-hidden border ${currentTheme === 'dark' ? 'border-gray-700' : 'border-gray-200'}`}>
+                  <ResizableEditor
+                    language="json"
+                    value={`{
+  // 과제 제목
+  "title": "첫 파이썬 프로그램 작성 (print)",
+  // 문법 키 (객체 형태로 변경)
+  "syntax_key": {
+    "syntax_title": "print 문",
+    "syntax_comment": "화면에 출력하는 함수입니다.",
+    "syntax_code": "print('Hello, World!')"
+  },
+  // 파일 이름(에디터 탭에 표시될 이름)
+  "filename": "hello.py",
+
+  // 초급자 시작 코드
+  "starterCode": "# TODO: 코드 작성\\nprint()\\n",
+  // 경험자 시작 코드
+  "starterCode_adv": "# 함수 기반 시작 코드\\ndef print_welcome():\\n    ...",
+  // 초급자 테스트 코드
+  "testCode": "import io; ...; assert output == expected, ...",
+  // 경험자 테스트 코드
+  "testCode_adv": "assert callable(print_welcome), ...",
+
+  // 초급자 과제 설명
+  "task": {
+    "character": "alex",
+    "subtitle": "팀장 과업 지시",
+    "title": "환영 메시지 출력 함수 완성",
+    "content": "과제 설명..."
+  },
+  // 경험자 과제 설명
+  "task_adv": {
+    "character": "alex",
+    "subtitle": "팀장 과업 지시",
+    "title": "환영 메시지 출력 함수 완성",
+    "content": "고급 과제 설명..."
+  },
+
+  // 초급자 브리핑
+  "briefing": { "character": "sena", ... },
+  // 경험자 브리핑
+  "briefing_adv": { "character": "sena", ... },
+
+  // 교수 강의 노트 (모든 난이도 공통)
+  "lecture": {
+    "character": "profKim",
+    "title": "강의 노트: print() 함수와 문자열",
+    "keyTakeaway": "핵심 요약 한 줄",
+    "sandboxCode": "print(\\"파이썬, 반가워!\\")",
+    "sections": [...]
+  },
+
+  // 초급자 피드백
+  "feedback": {
+    "success": { "character": "alex", ... },
+    "failure_logical": { "character": "sena", ... },
+    "failure_runtime": { "character": "sena", ... }
+  },
+  // 경험자 피드백
+  "feedback_adv": {
+    "success": { "character": "alex", ... },
+    "failure_logical": { "character": "sena", ... },
+    "failure_runtime": { "character": "sena", ... }
+  }
+}`}
+                    theme={currentTheme === 'dark' ? 'vs-dark' : 'light'}
+                    options={{
+                      readOnly: true,
+                      minimap: { enabled: false },
+                      fontSize: 13,
+                      lineNumbers: 'on',
+                      scrollBeyondLastLine: false,
+                      automaticLayout: true,
+                      wordWrap: 'off',
+                      folding: true,
+                      scrollbar: {
+                        vertical: 'auto',
+                        horizontal: 'auto',
+                        verticalScrollbarSize: 10,
+                        horizontalScrollbarSize: 10
+                      }
+                    }}
+                    initialHeight={500}
+                    minHeight={200}
+                    maxHeight={800}
+                  />
+                </div>
+                <div className="mt-3 space-y-3">
+                  <div>
+                    <h4 className={`text-sm font-semibold mb-1 ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>📌 공통 필수 키</h4>
+                    <ul className={`space-y-1 text-sm ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
+                      <li><code className={`px-1 py-0.5 rounded ${currentTheme === 'dark' ? 'bg-gray-800' : 'bg-gray-100'}`}>title</code>: 해당 사이클의 학습 소주제</li>
+                      <li><code className={`px-1 py-0.5 rounded ${currentTheme === 'dark' ? 'bg-gray-800' : 'bg-gray-100'}`}>syntax_key</code>: 학습할 핵심 문법 객체 (syntax_title, syntax_comment, syntax_code 포함)</li>
+                      <li><code className={`px-1 py-0.5 rounded ${currentTheme === 'dark' ? 'bg-gray-800' : 'bg-gray-100'}`}>filename</code>: 실습에 사용될 가상 파일명</li>
+                      <li><code className={`px-1 py-0.5 rounded ${currentTheme === 'dark' ? 'bg-gray-800' : 'bg-gray-100'}`}>lecture</code>: 교수(Prof. Kim)가 설명하는 이론 강의 (모든 난이도 공통)</li>
+                    </ul>
+                  </div>
+
+                  <div>
+                    <h4 className={`text-sm font-semibold mb-1 ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>🔰 초급자 키 (기본 난이도)</h4>
+                    <ul className={`space-y-1 text-sm ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
+                      <li><code className={`px-1 py-0.5 rounded ${currentTheme === 'dark' ? 'bg-gray-800' : 'bg-gray-100'}`}>starterCode</code>: 초급자 시작 코드 템플릿</li>
+                      <li><code className={`px-1 py-0.5 rounded ${currentTheme === 'dark' ? 'bg-gray-800' : 'bg-gray-100'}`}>testCode</code>: 초급자 코드 검증 로직</li>
+                      <li><code className={`px-1 py-0.5 rounded ${currentTheme === 'dark' ? 'bg-gray-800' : 'bg-gray-100'}`}>task</code>: 팀장이 부여하는 기본 과제</li>
+                      <li><code className={`px-1 py-0.5 rounded ${currentTheme === 'dark' ? 'bg-gray-800' : 'bg-gray-100'}`}>briefing</code>: 선임이 제공하는 기본 팁</li>
+                      <li><code className={`px-1 py-0.5 rounded ${currentTheme === 'dark' ? 'bg-gray-800' : 'bg-gray-100'}`}>feedback</code>: 기본 피드백 (success, failure_logical, failure_runtime)</li>
+                    </ul>
+                  </div>
+
+                  <div>
+                    <h4 className={`text-sm font-semibold mb-1 ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>⚡ 경험자 키 (고급 난이도)</h4>
+                    <ul className={`space-y-1 text-sm ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
+                      <li><code className={`px-1 py-0.5 rounded ${currentTheme === 'dark' ? 'bg-gray-800' : 'bg-gray-100'}`}>starterCode_adv</code>: 경험자 시작 코드 (더 복잡한 구조)</li>
+                      <li><code className={`px-1 py-0.5 rounded ${currentTheme === 'dark' ? 'bg-gray-800' : 'bg-gray-100'}`}>testCode_adv</code>: 경험자 코드 검증 로직 (더 엄격한 테스트)</li>
+                      <li><code className={`px-1 py-0.5 rounded ${currentTheme === 'dark' ? 'bg-gray-800' : 'bg-gray-100'}`}>task_adv</code>: 팀장이 부여하는 고급 과제</li>
+                      <li><code className={`px-1 py-0.5 rounded ${currentTheme === 'dark' ? 'bg-gray-800' : 'bg-gray-100'}`}>briefing_adv</code>: 선임이 제공하는 고급 팁</li>
+                      <li><code className={`px-1 py-0.5 rounded ${currentTheme === 'dark' ? 'bg-gray-800' : 'bg-gray-100'}`}>feedback_adv</code>: 고급 피드백 (success, failure_logical, failure_runtime)</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <h3 className={`font-semibold mb-2 ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>3.4 세부 객체 구조</h3>
+                <p className={`mb-2 text-sm ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
+                  각 학습 사이클 내의 task, task_adv, briefing, briefing_adv, feedback, feedback_adv, lecture는 아래와 같은 구조를 가진 객체입니다.
+                </p>
+                <div className={`rounded-lg overflow-hidden border ${currentTheme === 'dark' ? 'border-gray-700' : 'border-gray-200'}`}>
+                  <ResizableEditor
+                    language="json"
+                    value={`// task 또는 task_adv 구조
+{
+  // 과제 지시 캐릭터
+  "character": "alex",
+  // 과제 지시 부제목
+  "subtitle": "팀장 과업 지시",
+  // 과제 지시 제목
+  "title": "환영 메시지 출력 함수 완성",
+  // 과제 지시 내용 (HTML 포함 가능)
+  "content": "\${userName}님, 환영합니다! 개발자로서의 첫 임무는..."
+}
+
+// briefing 또는 briefing_adv 구조
+{
+  // 브리핑 캐릭터
+  "character": "sena",
+  // 브리핑 부제목
+  "subtitle": "직속 선임의 힌트",
+  // 브리핑 제목
+  "title": "화면에 글자 출력하기",
+  // 브리핑 내용 (HTML 포함 가능)
+  "content": "세나 선임이에요! 반갑습니다. 화면에 글자를..."
+}
+
+// feedback 또는 feedback_adv 구조
+{
+  // 성공 피드백
+  "success": {
+    "character": "alex",
+    "subtitle": "업무 완료 피드백",
+    "title": "첫 코드 실행 성공!",
+    "content": "환영 메시지가 정확하게 출력되었군요..."
+  },
+  // 논리적 오류 피드백
+  "failure_logical": {
+    "character": "sena",
+    "subtitle": "문제 해결 지원",
+    "title": "출력 내용을 확인해볼까요?",
+    "content": "앗, 출력된 메시지가 요청한 것과..."
+  },
+  // 런타임 오류 피드백
+  "failure_runtime": {
+    "character": "sena",
+    "subtitle": "문제 해결 지원",
+    "title": "앗, 문법 오류!",
+    "content": "어이쿠, 코드를 실행하다가 오류가..."
+  }
+}
+
+// lecture 구조 (모든 난이도 공통)
+{
+  // 강의 캐릭터
+  "character": "profKim",
+  // 강의 제목
+  "title": "강의 노트: print() 함수와 문자열",
+  // 핵심 요약
+  "keyTakeaway": "\`print()\` 함수는 괄호 안의 내용을 화면에 보여주는...",
+  // 샌드박스 코드
+  "sandboxCode": "print(\\"파이썬, 반가워!\\")",
+  // 강의 섹션 목록
+  "sections": [
+    {
+      // 섹션 제목
+      "heading": "핵심 개념",
+      // 섹션 내용
+      "text": "프로그램은 컴퓨터에 내리는 '명령문'들의...",
+      // 섹션 코드 예시 (선택사항)
+      "code": "# 큰따옴표 사용\\nprint(\\"Hello, World!\\")\\n..."
+    }
+  ]
+}`}
+                    theme={currentTheme === 'dark' ? 'vs-dark' : 'light'}
+                    options={{
+                      readOnly: true,
+                      minimap: { enabled: false },
+                      fontSize: 13,
+                      lineNumbers: 'on',
+                      scrollBeyondLastLine: false,
+                      automaticLayout: true,
+                      wordWrap: 'off',
+                      folding: true,
+                      scrollbar: {
+                        vertical: 'auto',
+                        horizontal: 'auto',
+                        verticalScrollbarSize: 10,
+                        horizontalScrollbarSize: 10
+                      }
+                    }}
+                    initialHeight={600}
+                    minHeight={300}
+                    maxHeight={900}
+                  />
+                </div>
+              </div>
+            </div>
+          </section>
+            </>
+          )}
+
+          {/* 탭 3: 학습 흐름 */}
+          {guideActiveTab === 'flow' && (
+            <section>
+              <h2 className={`text-xl font-bold mb-3 ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>5. 학습 흐름 (Learning Flow)</h2>
+              <p className={`mb-3 ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
+                학생은 하나의 학습 사이클 내에서 다음과 같은 흐름을 따라 학습을 진행합니다:
+              </p>
+              <div className={`p-6 rounded-lg ${currentTheme === 'dark' ? 'bg-gray-800' : 'bg-gray-50'}`}>
+                <div className="flex flex-col space-y-3">
+                  <div className="flex items-center">
+                    <div className="w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center text-sm font-bold">1</div>
+                    <div className="ml-4">
+                      <div className={`font-semibold ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>🎯 과제 확인 (Alex)</div>
+                      <div className={`text-sm ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>팀장이 실무 과제를 부여합니다 (난이도별로 다른 과제 제공)</div>
+                    </div>
+                  </div>
+                  <div className={`ml-4 border-l-2 h-6 ${currentTheme === 'dark' ? 'border-gray-600' : 'border-gray-300'}`}></div>
+
+                  <div className="flex items-center">
+                    <div className="w-8 h-8 bg-green-500 text-white rounded-full flex items-center justify-center text-sm font-bold">2</div>
+                    <div className="ml-4">
+                      <div className={`font-semibold ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>💡 힌트 습득 (Sena)</div>
+                      <div className={`text-sm ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>선임이 실무 팁을 제공합니다 (난이도별 맞춤 힌트)</div>
+                    </div>
+                  </div>
+                  <div className={`ml-4 border-l-2 h-6 ${currentTheme === 'dark' ? 'border-gray-600' : 'border-gray-300'}`}></div>
+
+                  <div className="flex items-center">
+                    <div className="w-8 h-8 bg-purple-500 text-white rounded-full flex items-center justify-center text-sm font-bold">3</div>
+                    <div className="ml-4">
+                      <div className={`font-semibold ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>📖 이론 학습 (Prof. Kim)</div>
+                      <div className={`text-sm ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>교수가 이론적 배경을 설명합니다 (모든 난이도 공통)</div>
+                    </div>
+                  </div>
+                  <div className={`ml-4 border-l-2 h-6 ${currentTheme === 'dark' ? 'border-gray-600' : 'border-gray-300'}`}></div>
+
+                  <div className="flex items-center">
+                    <div className="w-8 h-8 bg-yellow-500 text-white rounded-full flex items-center justify-center text-sm font-bold">4</div>
+                    <div className="ml-4">
+                      <div className={`font-semibold ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>💻 코드 작성 (학생)</div>
+                      <div className={`text-sm ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>학생이 직접 코드를 작성합니다 (난이도별 시작 코드 제공)</div>
+                    </div>
+                  </div>
+                  <div className={`ml-4 border-l-2 h-6 ${currentTheme === 'dark' ? 'border-gray-600' : 'border-gray-300'}`}></div>
+
+                  <div className="flex items-center">
+                    <div className="w-8 h-8 bg-red-500 text-white rounded-full flex items-center justify-center text-sm font-bold">5</div>
+                    <div className="ml-4">
+                      <div className={`font-semibold ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>▶️ 실행/테스트</div>
+                      <div className={`text-sm ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>자동 테스트를 통해 코드를 검증합니다 (난이도별 테스트 기준)</div>
+                    </div>
+                  </div>
+                  <div className={`ml-4 border-l-2 h-6 ${currentTheme === 'dark' ? 'border-gray-600' : 'border-gray-300'}`}></div>
+
+                  <div className="flex items-center">
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold text-white ${currentTheme === 'dark' ? 'bg-gray-600' : 'bg-gray-500'}`}>6</div>
+                    <div className="ml-4">
+                      <div className={`font-semibold ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>🎉 피드백</div>
+                      <div className={`text-sm ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>성공 시 다음 사이클로, 실패 시 오류 수정 후 재시도 (난이도별 피드백)</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+          )}
+
+          {/* 탭 4: 캐릭터 & 기타 */}
+          {guideActiveTab === 'characters' && (
+            <>
           {/* 캐릭터 역할 정의 */}
           <section>
             <h2 className={`text-xl font-bold mb-3 ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>4. 캐릭터 역할 정의 (3-멘토 시스템)</h2>
             <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
+              <table className={`min-w-full divide-y ${currentTheme === 'dark' ? 'divide-gray-700' : 'divide-gray-200'}`}>
+                <thead className={currentTheme === 'dark' ? 'bg-gray-800' : 'bg-gray-50'}>
                   <tr>
-                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">캐릭터</th>
-                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">역할</th>
-                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">컨셉</th>
-                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">목적</th>
+                    <th className={`px-4 py-3 text-left text-xs font-medium uppercase ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>캐릭터</th>
+                    <th className={`px-4 py-3 text-left text-xs font-medium uppercase ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>역할</th>
+                    <th className={`px-4 py-3 text-left text-xs font-medium uppercase ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>컨셉</th>
+                    <th className={`px-4 py-3 text-left text-xs font-medium uppercase ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>목적</th>
                   </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
+                <tbody className={`divide-y ${currentTheme === 'dark' ? 'bg-gray-900 divide-gray-700' : 'bg-white divide-gray-200'}`}>
                   <tr>
-                    <td className="px-4 py-3 text-sm font-medium text-gray-900">Alex (팀장)</td>
-                    <td className="px-4 py-3 text-sm text-gray-700">과제 부여</td>
-                    <td className="px-4 py-3 text-sm text-gray-700">친근하고 목표 지향적인 리더</td>
-                    <td className="px-4 py-3 text-sm text-gray-700"><strong>What</strong>: "무엇을" 해야 하는지 명확한 목표 제시</td>
+                    <td className={`px-4 py-3 text-sm font-medium ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Alex (팀장)</td>
+                    <td className={`px-4 py-3 text-sm ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>과제 부여</td>
+                    <td className={`px-4 py-3 text-sm ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>친근하고 목표 지향적인 리더</td>
+                    <td className={`px-4 py-3 text-sm ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}><strong>What</strong>: "무엇을" 해야 하는지 명확한 목표 제시</td>
                   </tr>
                   <tr>
-                    <td className="px-4 py-3 text-sm font-medium text-gray-900">Sena (선임)</td>
-                    <td className="px-4 py-3 text-sm text-gray-700">실무 OJT</td>
-                    <td className="px-4 py-3 text-sm text-gray-700">실용적이고 도움을 주는 동료</td>
-                    <td className="px-4 py-3 text-sm text-gray-700"><strong>How</strong>: "어떻게" 문제를 해결하는지 실용적인 팁 제공</td>
+                    <td className={`px-4 py-3 text-sm font-medium ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Sena (선임)</td>
+                    <td className={`px-4 py-3 text-sm ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>실무 OJT</td>
+                    <td className={`px-4 py-3 text-sm ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>실용적이고 도움을 주는 동료</td>
+                    <td className={`px-4 py-3 text-sm ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}><strong>How</strong>: "어떻게" 문제를 해결하는지 실용적인 팁 제공</td>
                   </tr>
                   <tr>
-                    <td className="px-4 py-3 text-sm font-medium text-gray-900">Prof. Kim (교수)</td>
-                    <td className="px-4 py-3 text-sm text-gray-700">이론 강의</td>
-                    <td className="px-4 py-3 text-sm text-gray-700">전문적이고 깊이 있는 멘토</td>
-                    <td className="px-4 py-3 text-sm text-gray-700"><strong>Why</strong>: "왜" 그렇게 동작하는지 이론적 배경과 원리 설명</td>
+                    <td className={`px-4 py-3 text-sm font-medium ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Prof. Kim (교수)</td>
+                    <td className={`px-4 py-3 text-sm ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>이론 강의</td>
+                    <td className={`px-4 py-3 text-sm ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>전문적이고 깊이 있는 멘토</td>
+                    <td className={`px-4 py-3 text-sm ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}><strong>Why</strong>: "왜" 그렇게 동작하는지 이론적 배경과 원리 설명</td>
                   </tr>
                 </tbody>
               </table>
-            </div>
-          </section>
-
-          {/* 학습 흐름 */}
-          <section>
-            <h2 className={`text-xl font-bold mb-3 ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>5. 학습 흐름 (Learning Flow)</h2>
-            <p className={`mb-3 ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
-              학생은 하나의 학습 사이클 내에서 다음과 같은 흐름을 따라 학습을 진행합니다:
-            </p>
-            <div className="bg-gray-50 p-6 rounded-lg">
-              <div className="flex flex-col space-y-3">
-                <div className="flex items-center">
-                  <div className="w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center text-sm font-bold">1</div>
-                  <div className="ml-4">
-                    <div className="font-semibold text-gray-900">🎯 과제 확인 (Alex)</div>
-                    <div className="text-sm text-gray-600">팀장이 실무 과제를 부여합니다</div>
-                  </div>
-                </div>
-                <div className="ml-4 border-l-2 border-gray-300 h-6"></div>
-
-                <div className="flex items-center">
-                  <div className="w-8 h-8 bg-green-500 text-white rounded-full flex items-center justify-center text-sm font-bold">2</div>
-                  <div className="ml-4">
-                    <div className="font-semibold text-gray-900">💡 힌트 습득 (Sena)</div>
-                    <div className="text-sm text-gray-600">선임이 실무 팁을 제공합니다</div>
-                  </div>
-                </div>
-                <div className="ml-4 border-l-2 border-gray-300 h-6"></div>
-
-                <div className="flex items-center">
-                  <div className="w-8 h-8 bg-purple-500 text-white rounded-full flex items-center justify-center text-sm font-bold">3</div>
-                  <div className="ml-4">
-                    <div className="font-semibold text-gray-900">📖 이론 학습 (Prof. Kim)</div>
-                    <div className="text-sm text-gray-600">교수가 이론적 배경을 설명합니다</div>
-                  </div>
-                </div>
-                <div className="ml-4 border-l-2 border-gray-300 h-6"></div>
-
-                <div className="flex items-center">
-                  <div className="w-8 h-8 bg-yellow-500 text-white rounded-full flex items-center justify-center text-sm font-bold">4</div>
-                  <div className="ml-4">
-                    <div className="font-semibold text-gray-900">💻 코드 작성 (학생)</div>
-                    <div className="text-sm text-gray-600">학생이 직접 코드를 작성합니다</div>
-                  </div>
-                </div>
-                <div className="ml-4 border-l-2 border-gray-300 h-6"></div>
-
-                <div className="flex items-center">
-                  <div className="w-8 h-8 bg-red-500 text-white rounded-full flex items-center justify-center text-sm font-bold">5</div>
-                  <div className="ml-4">
-                    <div className="font-semibold text-gray-900">▶️ 실행/테스트</div>
-                    <div className="text-sm text-gray-600">자동 테스트를 통해 코드를 검증합니다</div>
-                  </div>
-                </div>
-                <div className="ml-4 border-l-2 border-gray-300 h-6"></div>
-
-                <div className="flex items-center">
-                  <div className="w-8 h-8 bg-gray-500 text-white rounded-full flex items-center justify-center text-sm font-bold">6</div>
-                  <div className="ml-4">
-                    <div className="font-semibold text-gray-900">🎉 피드백</div>
-                    <div className="text-sm text-gray-600">성공 시 다음 사이클로, 실패 시 오류 수정 후 재시도</div>
-                  </div>
-                </div>
-              </div>
             </div>
           </section>
 
@@ -2032,20 +2612,20 @@ const CurriculumManagementPage = () => {
             </p>
 
             <div className="space-y-3">
-              <div className="p-4 border border-gray-200 rounded-lg">
-                <h4 className="font-semibold text-gray-900 mb-2">실행 환경</h4>
-                <ul className="list-disc list-inside text-sm text-gray-700 space-y-1">
+              <div className={`p-4 border rounded-lg ${currentTheme === 'dark' ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-white'}`}>
+                <h4 className={`font-semibold mb-2 ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>실행 환경</h4>
+                <ul className={`list-disc list-inside text-sm space-y-1 ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
                   <li><strong>인터프리터 언어 (Python, JavaScript)</strong>: 브라우저 내에서 즉시 실행 (Pyodide, Native JS)</li>
                   <li><strong>컴파일 언어 (C, Java, C#)</strong>: 외부 API(Piston 등)를 통한 컴파일 및 실행</li>
                   <li><strong>마크업 언어 (HTML)</strong>: 브라우저의 렌더링 결과를 DOM으로 분석</li>
                 </ul>
               </div>
 
-              <div className="p-4 border border-gray-200 rounded-lg">
-                <h4 className="font-semibold text-gray-900 mb-2">코드 검증 방식</h4>
-                <ul className="list-disc list-inside text-sm text-gray-700 space-y-1">
-                  <li><code className="px-1 py-0.5 bg-gray-100 rounded">expectedPrintOutput</code>: 코드가 특정 문자열을 정확히 출력해야 할 때 사용</li>
-                  <li><code className="px-1 py-0.5 bg-gray-100 rounded">testCode</code>: 더 복잡한 로직 검증이 필요할 때 사용 (assert 문 또는 단위 테스트)</li>
+              <div className={`p-4 border rounded-lg ${currentTheme === 'dark' ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-white'}`}>
+                <h4 className={`font-semibold mb-2 ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>코드 검증 방식</h4>
+                <ul className={`list-disc list-inside text-sm space-y-1 ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
+                  <li><code className={`px-1 py-0.5 rounded ${currentTheme === 'dark' ? 'bg-gray-900' : 'bg-gray-100'}`}>testCode / testCode_adv</code>: 난이도별로 다른 테스트 코드 실행 (assert 문 또는 단위 테스트)</li>
+                  <li>초급자는 기본적인 출력 검증, 경험자는 함수 호출, 타입 검사 등 더 복잡한 검증 수행</li>
                 </ul>
               </div>
             </div>
@@ -2056,9 +2636,88 @@ const CurriculumManagementPage = () => {
             <h2 className={`text-xl font-bold mb-3 ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>7. 결론</h2>
             <p className={`leading-relaxed ${currentTheme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
               이 가이드는 EduVerse의 교육 콘텐츠 제작과 플랫폼 개발의 기준이 됩니다.
+              <br />
               모든 팀원은 이 문서를 숙지하여 일관성 있고 확장 가능한 고품질 교육 플랫폼을 함께 만들어가야 합니다.
             </p>
           </section>
+          </>
+          )}
+
+          {/* 탭 5: 전체 예제 */}
+          {guideActiveTab === 'example' && (
+            <>
+              <section>
+                <div className="flex items-center justify-between mb-4">
+                  <div>
+                    <h2 className={`text-xl font-bold mb-1 ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
+                      전체 시나리오 예제 (scenario-latest.jsonc)
+                    </h2>
+                    <p className={`text-sm ${currentTheme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
+                      아래는 실제 커리큘럼 시나리오 파일의 전체 내용입니다.
+                      이 구조를 참고하여 새로운 커리큘럼을 작성할 수 있습니다.
+                    </p>
+                  </div>
+                  {scenarioData && (
+                    <Button
+                      variant="outline"
+                      onClick={handleDownloadScenario}
+                      className="flex items-center gap-2"
+                    >
+                      <Download size={16} />
+                      다운로드
+                    </Button>
+                  )}
+                </div>
+
+                {isLoadingScenario ? (
+                  <div className={`flex items-center justify-center h-[500px] rounded-lg ${
+                    currentTheme === 'dark' ? 'bg-gray-900 text-gray-400' : 'bg-gray-50 text-gray-600'
+                  }`}>
+                    <div className="text-center">
+                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 mx-auto mb-2"></div>
+                      <p className="text-sm">시나리오 파일 로딩 중...</p>
+                    </div>
+                  </div>
+                ) : scenarioData ? (
+                  <div className={`rounded-lg overflow-hidden border ${
+                    currentTheme === 'dark' ? 'border-gray-700' : 'border-gray-200'
+                  }`}>
+                    <ResizableEditor
+                      language="json"
+                      value={scenarioData}
+                      theme={currentTheme === 'dark' ? 'vs-dark' : 'light'}
+                      options={{
+                        readOnly: true,
+                        minimap: { enabled: true },
+                        fontSize: 13,
+                        lineNumbers: 'on',
+                        scrollBeyondLastLine: false,
+                        automaticLayout: true,
+                        wordWrap: 'off',
+                        folding: true,
+                        renderLineHighlight: 'all',
+                        scrollbar: {
+                          vertical: 'auto',
+                          horizontal: 'auto',
+                          verticalScrollbarSize: 10,
+                          horizontalScrollbarSize: 10
+                        }
+                      }}
+                      initialHeight={500}
+                      minHeight={300}
+                      maxHeight={1000}
+                    />
+                  </div>
+                ) : (
+                  <div className={`p-4 rounded-lg text-center ${
+                    currentTheme === 'dark' ? 'bg-red-900/20 text-red-400' : 'bg-red-50 text-red-600'
+                  }`}>
+                    시나리오 파일을 불러올 수 없습니다.
+                  </div>
+                )}
+              </section>
+            </>
+          )}
         </div>
 
         <div className={`flex items-center justify-end space-x-3 pt-4 border-t mt-6 ${
