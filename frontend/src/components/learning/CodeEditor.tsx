@@ -1,6 +1,7 @@
 import { useTheme } from '@/contexts/ThemeContext'
 import { Card } from '@/components/common'
 import { Code, RotateCcw, Type } from 'lucide-react'
+import Editor from '@monaco-editor/react'
 
 interface CodeEditorProps {
   code: string
@@ -24,13 +25,25 @@ const CodeEditor = ({
     { value: 'cpp', label: 'C++' }
   ] as const
 
+  // Monaco Editor 언어 맵핑
+  const getMonacoLanguage = (lang: typeof language): string => {
+    const languageMap: Record<typeof language, string> = {
+      python: 'python',
+      javascript: 'javascript',
+      java: 'java',
+      cpp: 'cpp'
+    }
+    return languageMap[lang]
+  }
+
   const handleReset = () => {
     // TODO: 시작 코드로 리셋
     onCodeChange('')
   }
 
   const handleFormat = () => {
-    // TODO: 코드 포맷팅 (prettier 등)
+    // Monaco Editor의 포맷팅 기능 사용
+    // 에디터 인스턴스에서 직접 호출하도록 수정 필요
     console.log('Formatting code...')
   }
 
@@ -98,36 +111,44 @@ const CodeEditor = ({
           </div>
         </div>
 
-        {/* 에디터 영역 */}
-        <div className={`relative ${
-          currentTheme === 'dark' ? 'bg-gray-900' : 'bg-gray-50'
-        }`}>
-          <textarea
+        {/* Monaco Editor 영역 */}
+        <div className={currentTheme === 'dark' ? 'bg-gray-900' : 'bg-white'}>
+          <Editor
+            height="400px"
+            language={getMonacoLanguage(language)}
             value={code}
-            onChange={(e) => onCodeChange(e.target.value)}
-            placeholder={`${languages.find(l => l.value === language)?.label} 코드를 작성하세요...`}
-            className={`w-full min-h-[400px] p-4 font-mono text-sm resize-none focus:outline-none transition-colors ${
-              currentTheme === 'dark'
-                ? 'bg-gray-900 text-gray-100 placeholder-gray-600'
-                : 'bg-gray-50 text-gray-900 placeholder-gray-400'
-            }`}
-            spellCheck={false}
-            style={{
+            onChange={(value) => onCodeChange(value || '')}
+            theme={currentTheme === 'dark' ? 'vs-dark' : 'light'}
+            options={{
+              minimap: { enabled: false },
+              fontSize: 14,
+              lineNumbers: 'on',
+              roundedSelection: true,
+              scrollBeyondLastLine: false,
+              automaticLayout: true,
               tabSize: 4,
-              lineHeight: '1.6'
+              wordWrap: 'on',
+              padding: { top: 16, bottom: 16 },
+              suggestOnTriggerCharacters: true,
+              quickSuggestions: true,
+              scrollbar: {
+                vertical: 'auto',
+                horizontal: 'auto',
+                verticalScrollbarSize: 10,
+                horizontalScrollbarSize: 10
+              }
             }}
-          />
-
-          {/* 라인 넘버 (추후 Monaco Editor로 대체) */}
-          <div className={`absolute top-0 left-0 p-4 pr-2 select-none pointer-events-none font-mono text-sm ${
-            currentTheme === 'dark' ? 'text-gray-600' : 'text-gray-400'
-          }`}>
-            {code.split('\n').map((_, index) => (
-              <div key={index} style={{ lineHeight: '1.6' }}>
-                {index + 1}
+            loading={
+              <div className={`flex items-center justify-center h-[400px] ${
+                currentTheme === 'dark' ? 'bg-gray-900 text-gray-400' : 'bg-white text-gray-600'
+              }`}>
+                <div className="text-center">
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 mx-auto mb-2"></div>
+                  <p className="text-sm">에디터 로딩 중...</p>
+                </div>
               </div>
-            ))}
-          </div>
+            }
+          />
         </div>
 
         {/* 에디터 푸터 */}

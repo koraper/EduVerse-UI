@@ -24,7 +24,13 @@
       "Bash(find:*)",
       "Bash(xargs -I {} bash -c 'echo \"\"\"\"=== {} ===\"\"\"\" && grep -n \"\"\"\"다[\\x27\\\"\"\"\">]\"\"\"\" {} | grep -v \"\"\"\"다\\.\"\"\"\" | head -20')",
       "Bash(node analyze_scenario.js:*)",
-      "Bash(node add_feedback_adv.js:*)"
+      "Bash(node add_feedback_adv.js:*)",
+      "Bash(node analyze_structure.js:*)",
+      "Read(//d/**)",
+      "Bash(node convert_syntax_keys.js:*)",
+      "Bash(node reorder_fields.js:*)",
+      "Bash(tasklist:*)",
+      "Bash(findstr:*)"
     ],
     "deny": [],
     "ask": []

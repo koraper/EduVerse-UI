@@ -13,8 +13,10 @@ const Modal = ({
   closeOnBackdropClick = true,
   closeOnEsc = true,
   showCloseButton = true,
+  forceDarkMode = false,
 }: ModalProps) => {
   const { currentTheme } = useTheme()
+  const isDark = forceDarkMode || currentTheme === 'dark'
   // ESC 키로 닫기
   useEffect(() => {
     if (!closeOnEsc || !isOpen) return
@@ -62,12 +64,14 @@ const Modal = ({
 
   const modalContent = (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-start justify-center pt-4 pb-4 bg-black bg-opacity-50 backdrop-blur-sm overflow-y-auto"
       onClick={handleBackdropClick}
     >
       <div
-        className={`rounded-lg shadow-xl w-full ${sizeStyles[size]} max-h-[90vh] flex flex-col ${
-          currentTheme === 'dark'
+        className={`rounded-lg shadow-xl w-full ${sizeStyles[size]} ${
+          size === 'full' ? 'min-h-[96vh]' : ''
+        } flex flex-col my-auto ${
+          isDark
             ? 'bg-gray-800'
             : 'bg-white'
         }`}
@@ -76,17 +80,17 @@ const Modal = ({
         {/* Header */}
         {(title || showCloseButton) && (
           <div className={`flex items-center justify-between px-6 py-4 border-b ${
-            currentTheme === 'dark'
+            isDark
               ? 'border-gray-700'
               : 'border-gray-200'
           }`}>
             {title && (
-              <h2 className={`text-xl font-semibold ${currentTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{title}</h2>
+              <h2 className={`text-xl font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>{title}</h2>
             )}
             {showCloseButton && (
               <button
                 onClick={onClose}
-                className={`transition-colors ${currentTheme === 'dark' ? 'text-gray-500 hover:text-gray-400' : 'text-gray-400 hover:text-gray-600'}`}
+                className={`transition-colors ${isDark ? 'text-gray-500 hover:text-gray-400' : 'text-gray-400 hover:text-gray-600'}`}
                 aria-label="닫기"
               >
                 <svg
@@ -108,14 +112,14 @@ const Modal = ({
         )}
 
         {/* Body */}
-        <div className={`px-6 py-4 overflow-y-auto flex-1 ${currentTheme === 'dark' ? 'text-gray-200' : 'text-gray-900'}`}>
+        <div className={`px-6 py-4 overflow-y-auto flex-1 ${isDark ? 'text-gray-200' : 'text-gray-900'}`}>
           {children}
         </div>
 
         {/* Footer */}
         {footer && (
           <div className={`px-6 py-4 border-t rounded-b-lg ${
-            currentTheme === 'dark'
+            isDark
               ? 'border-gray-700 bg-gray-700'
               : 'border-gray-200 bg-gray-50'
           }`}>

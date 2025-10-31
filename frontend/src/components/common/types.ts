@@ -65,6 +65,7 @@ export interface ModalProps {
   closeOnBackdropClick?: boolean
   closeOnEsc?: boolean
   showCloseButton?: boolean
+  forceDarkMode?: boolean
 }
 
 // Card 컴포넌트 타입

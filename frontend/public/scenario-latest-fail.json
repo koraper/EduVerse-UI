@@ -1,55 +1,7 @@
 {
   "courseTitle": "LogiCore Tech 신입 개발자 과정",
-  "weeks": [
-    {
-      "week": 1,
-      "title": "첫 코드 작성과 데이터 저장",
-      "cycles": [
-        {
-          "title": "첫 파이썬 프로그램 작성 (print)",
-          "syntax_key": "print_statement",
-          "filename": "hello.py",
-          "starterCode": "# TODO: 괄호 안에 \"Welcome to LogiCore Tech!\" 를 따옴표와 함께 그대로 입력하세요.\nprint()\n",
-          "starterCode_adv": "# 아래 함수는 환영 메시지를 반환합니다.\n# TODO: 함수 본문에서 \"Welcome to LogiCore Tech!\" 문자열을 print() 함수로 출력하도록 수정하세요.\ndef print_welcome():\n    message = \"Welcome to LogiCore Tech!\"\n    # 여기에 코드를 작성하여 message 변수를 출력하세요.\n\n\n# 함수 호출 (이 부분은 수정하지 마세요)\nprint_welcome()\n",
-          "testCode": "import io; from contextlib import redirect_stdout; f = io.StringIO(); with redirect_stdout(f): source_code = student_code; exec(source_code); output = f.getvalue().strip(); expected = 'Welcome to LogiCore Tech!'; assert output == expected, f\"출력된 메시지가 요청과 다릅니다. 기대값: '{expected}', 실제 출력값: '{output}'\"",
-          "testCode_adv": "import io; from contextlib import redirect_stdout; assert callable(print_welcome), 'print_welcome 함수가 정의되지 않았습니다.'; f = io.StringIO(); with redirect_stdout(f): print_welcome(); output = f.getvalue().strip(); expected = 'Welcome to LogiCore Tech!'; assert output == expected, f\"함수 호출 시 출력된 메시지가 요청과 다릅니다. 기대값: '{expected}', 실제 출력값: '{output}'\"",
-          "task": {
-            "character": "alex",
-            "subtitle": "팀장 과업 지시",
-            "title": "환영 메시지 출력 함수 완성",
-            "content": "${userName}님, 환영합니다! 개발자로서의 첫 임무는 간단합니다. 화면에 <span class='font-bold text-yellow-300'>\"Welcome to LogiCore Tech!\"</span> 라는 환영 메시지를 출력하는 파이썬 코드를 작성해주세요. 개발 환경은 이미 준비되어 있습니다."
-          },
-          "task_adv": {
-            "character": "alex",
-            "subtitle": "팀장 과업 지시",
-            "title": "환영 메시지 출력 함수 완성",
-            "content": "${userName}님, 환영합니다! 첫 업무로, 이미 작성된 `print_welcome` 함수가 <span class='font-bold text-yellow-300'>\"Welcome to LogiCore Tech!\"</span> 메시지를 화면에 출력하도록 완성해주세요. 함수 구조는 이미 잡혀있으니, 핵심 출력 부분만 구현하면 됩니다."
-          },
-          "briefing": {
-            "character": "sena",
-            "subtitle": "직속 선임의 힌트",
-            "title": "화면에 글자 출력하기",
-            "content": "세나 선임이에요! 반갑습니다. 화면에 글자를 출력하려면 <span class='font-bold text-teal-300'>`print()`</span> 라는 명령어를 써요. `starterCode`에 보면 `print()` 괄호가 비어있죠? 그 안에 <span class='font-bold text-teal-300'>`\"Welcome to LogiCore Tech!\"`</span> 라고 큰따옴표까지 똑같이 입력해보세요. 그러면 화면에 그 글자가 나타날 거예요!"
-          },
-          "briefing_adv": {
-            "character": "sena",
-            "subtitle": "직속 선임의 팁",
-            "title": "함수 안에서 출력하기",
-            "content": "함수 안에서 값을 화면에 보여줄 때도 똑같이 <span class='font-bold text-teal-300'>`print()` 함수</span>를 쓰면 돼요. 이미 `message` 변수에 원하는 문자열이 들어있으니, 그 변수를 `print()` 함수에 넘겨주기만 하면 되겠네요!"
-          },
-          "lecture": {
-            "character": "profKim",
-            "title": "강의 노트: print() 함수와 문자열",
-            "keyTakeaway": "`print()` 함수는 괄호 안의 내용을 화면에 보여주는 가장 기본적인 명령입니다.",
-            "sandboxCode": "print(\"파이썬, 반가워!\")",
-            "sections": [
-              {
-                "heading": "핵심 개념",
-                "text": "프로그램은 컴퓨터에 내리는 '명령문'들의 순차적인 나열입니다[cite: 871]. `print()`는 파이썬이 기본으로 제공하는 '함수'이며, 괄호 안에 주어진 값을 화면(터미널)에 출력하라는 명령을 수행합니다[cite: 586, 872].",
-                "code": null
-              },
-              {
-                "heading": "기본 문법",
+  "description": "LogiCore Tech 신입 개발자 과정을 통해 파이썬 프로그래밍의 기초부터 실무 적용까지 단계별로 학습합니다. 각 주차별로 실습 중심의 과제를 수행하며, 변수, 자료형, 연산자, 제어문 등 핵심 개념을 익히고, 실제 업무에 활용할 수 있는 능력을 키웁니다.",
+  "             "heading": "기본 문법",
                 "text": "따옴표 안에 출력하고 싶은 문장을 넣어 함수를 호출합니다[cite: 937, 940].",
                 "code": "# 큰따옴표 사용\nprint(\"Hello, World!\")\n\n# 작은따옴표도 가능\nprint('Hello, Python!')"
               },

@@ -10,8 +10,20 @@ interface DashboardLayoutProps {
 
 const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   const { currentTheme } = useTheme()
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true)
   const [isMobile, setIsMobile] = useState(false)
+
+  // localStorage에서 사이드바 상태 불러오기
+  const [isSidebarOpen, setIsSidebarOpen] = useState(() => {
+    const saved = localStorage.getItem('sidebarOpen')
+    return saved !== null ? saved === 'true' : true
+  })
+
+  // 사이드바 상태 변경 시 localStorage에 저장
+  const handleToggleSidebar = () => {
+    const newState = !isSidebarOpen
+    setIsSidebarOpen(newState)
+    localStorage.setItem('sidebarOpen', String(newState))
+  }
 
   // 화면 크기 감지
   useEffect(() => {
@@ -65,7 +77,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
             {/* 배경 오버레이 */}
             <div
               className="fixed inset-0 bg-black bg-opacity-50 z-40"
-              onClick={() => setIsSidebarOpen(false)}
+              onClick={handleToggleSidebar}
             />
 
             {/* 사이드바 */}
@@ -79,7 +91,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
 
         {/* 사이드바 토글 버튼 - 화면에 고정 */}
         <button
-          onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+          onClick={handleToggleSidebar}
           className={`fixed top-[106px] ${isSidebarOpen ? 'left-64' : 'left-0'} -translate-x-1/2 z-30 p-2 border rounded-full shadow-md transition-all duration-300 ${
             currentTheme === 'dark'
               ? 'bg-gray-800 border-gray-600 text-gray-400 hover:text-primary-400 hover:border-primary-500'

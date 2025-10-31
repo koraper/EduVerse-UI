@@ -1,7 +1,7 @@
 {
   // 커리큐럼명
   "courseTitle": "LogiCore Tech 신입 개발자 과정",
-  
+  "description": "LogiCore Tech 신입 개발자 과정을 통해 파이썬 프로그래밍의 기초부터 실무 적용까지 단계별로 학습합니다. 각 주차별로 실습 중심의 과제를 수행하며, 변수, 자료형, 연산자, 제어문 등 핵심 개념을 익히고, 실제 업무에 활용할 수 있는 능력을 키웁니다.",
   // 주차별 시나리오 목록
   "weeks": [
     {
@@ -15,7 +15,7 @@
           // 과제 제목
           "title": "첫 파이썬 프로그램 작성 (print)",
           // 문법 키
-          "syntax_key": "print_statement",
+          "syntax_key": ["print_statement", "basic_syntax", "string_handling"],
           // 파일 이름(에디터 탭에 표시될 이름)
           "filename": "hello.py",
           // 초급자 시작 코드

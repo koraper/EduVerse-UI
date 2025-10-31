@@ -1006,7 +1006,7 @@ const CreateCurriculumPage = () => {
               <div className="w-1/5 bg-gray-800 border-r border-gray-700 overflow-y-auto flex flex-col">
                 {/* 과제 유형 선택 섹션 */}
                 <div className="border-b border-gray-700">
-                  <div className="p-0 pb-0">
+                  <div className="p-6 pb-0">
                     <div className="flex items-center justify-between mb-4">
                       <h2 className="text-lg font-bold flex items-center gap-2 text-white">
                         <div className="w-8 h-8 rounded-full flex items-center justify-center bg-gradient-to-br from-blue-500 to-blue-600">
@@ -1019,8 +1019,8 @@ const CreateCurriculumPage = () => {
                     </div>
                   </div>
 
-                  <div className="px-6 pb-6">
-                    <div className="relative bg-gray-700 rounded-full p-0.5">
+                  <div className="pb-6 ml-6">
+                    <div className="relative bg-gray-700 rounded-full p-0.5 w-32 ml-10">
                       <div className="flex relative z-10">
                         <button
                           onClick={() => setActiveTab('beginner')}
