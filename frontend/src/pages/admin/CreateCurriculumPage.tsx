@@ -997,9 +997,10 @@ const CreateCurriculumPage = () => {
         title={selectedWeek ? `${selectedWeek.week}차시: ${selectedWeek.title}` : '차시 상세'}
         size="full"
         forceDarkMode={true}
+        noPadding={true}
       >
         {selectedWeek && (
-          <div className="flex flex-col h-full bg-gray-900">
+          <div className="h-full w-full bg-gray-100 flex flex-col">
             {/* 3열 레이아웃 - 20% / 55% / 25% */}
             <div className="flex-1 flex overflow-hidden">
               {/* 1열: 사이드바 (20%) */}
@@ -1014,13 +1015,13 @@ const CreateCurriculumPage = () => {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                           </svg>
                         </div>
-                        과제 유형
+                        학습 목표
                       </h2>
                     </div>
                   </div>
 
-                  <div className="pb-6 ml-6">
-                    <div className="relative bg-gray-700 rounded-full p-0.5 w-32 ml-10">
+                  <div className="px-6 pb-6 flex justify-center">
+                    <div className="relative bg-gray-700 rounded-full p-0.5 w-4/5">
                       <div className="flex relative z-10">
                         <button
                           onClick={() => setActiveTab('beginner')}
@@ -1374,7 +1375,7 @@ const CreateCurriculumPage = () => {
             </div>
 
             {/* 하단: 닫기 버튼 (우측 정렬) */}
-            <div className="px-6 py-4 border-t border-gray-700 bg-gray-900">
+            <div className="px-6 py-4 border-t border-gray-700 bg-gray-800">
               <div className="flex justify-end">
                 <Button variant="secondary" onClick={handleCloseWeekDetailModal}>
                   닫기

@@ -14,6 +14,7 @@ const Modal = ({
   closeOnEsc = true,
   showCloseButton = true,
   forceDarkMode = false,
+  noPadding = false,
 }: ModalProps) => {
   const { currentTheme } = useTheme()
   const isDark = forceDarkMode || currentTheme === 'dark'
@@ -112,7 +113,7 @@ const Modal = ({
         )}
 
         {/* Body */}
-        <div className={`px-6 py-4 overflow-y-auto flex-1 ${isDark ? 'text-gray-200' : 'text-gray-900'}`}>
+        <div className={`${noPadding ? '' : 'px-6 py-4'} overflow-y-auto flex-1 ${isDark ? 'text-gray-200' : 'text-gray-900'}`}>
           {children}
         </div>
 
